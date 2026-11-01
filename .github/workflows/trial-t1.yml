@@ -1,0 +1,100 @@
+# Trial T1 (graph): does @viz-js/viz render DOT under Bun and Node 22 on three systems?
+# Throwaway trial workflow. Runs only on a push to the trial branch. No secrets, no publish.
+name: trial-t1
+
+on:
+  push:
+    branches:
+      - trial/t1-graph
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    name: measure (${{ matrix.os }}, ${{ matrix.runtime }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        runtime: [bun, node]
+    defaults:
+      run:
+        shell: bash
+        working-directory: trials/t1-graph
+    steps:
+      - name: Check out the trial commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun 1.4.4
+        if: matrix.runtime == 'bun'
+        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+        with:
+          bun-version: "1.4.4"
+
+      - name: Set up Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Put TEMP and TMP under the runner temp folder (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Add-Content -Path $env:GITHUB_ENV -Value "TEMP=$env:RUNNER_TEMP"
+          Add-Content -Path $env:GITHUB_ENV -Value "TMP=$env:RUNNER_TEMP"
+
+      - name: Install the pinned viz package
+        run: npm ci --no-audit --no-fund
+
+      - name: Install the Graphviz CLI (Ubuntu only)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+          mkdir -p results
+          dot -V > results/graphviz-cli-version.txt 2>&1
+          cat results/graphviz-cli-version.txt
+
+      - name: Measure viz.js
+        run: |
+          mkdir -p out results
+          if [ "${{ matrix.runtime }}" = "bun" ]; then
+            bun --version
+            bun measure.mjs --svg-dir out > "results/${{ matrix.runtime }}.jsonl"
+          else
+            node --version
+            node measure.mjs --svg-dir out > "results/${{ matrix.runtime }}.jsonl"
+          fi
+          cat "results/${{ matrix.runtime }}.jsonl"
+
+      - name: Render the same sources with the Graphviz CLI and compare (Ubuntu only)
+        if: runner.os == 'Linux'
+        run: |
+          : > results/cli-timing.txt
+          for f in small probe large100 large200; do
+            start=$(date +%s%N)
+            dot -Tsvg "$f.dot" -o "out/cli.$f.svg"
+            end=$(date +%s%N)
+            echo "$f $(( (end - start) / 1000000 )) ms" >> results/cli-timing.txt
+          done
+          cat results/cli-timing.txt
+          for f in small large100 large200; do
+            node compare-layout.mjs "out/${{ matrix.runtime }}.$f.viz.svg" "out/cli.$f.svg" > "results/layout-$f.${{ matrix.runtime }}.json"
+            cat "results/layout-$f.${{ matrix.runtime }}.json"
+          done
+
+      - name: Upload the results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: t1-${{ matrix.os }}-${{ matrix.runtime }}
+          path: |
+            trials/t1-graph/results/
+            trials/t1-graph/out/
+          if-no-files-found: warn
+          retention-days: 7

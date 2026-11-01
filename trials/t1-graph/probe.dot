@@ -1,0 +1,5 @@
+digraph Probe {
+  node [shape=box];
+  p [label="image probe" image="probe-image.png"];
+  p -> q;
+}
