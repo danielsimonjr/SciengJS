@@ -1,0 +1,6 @@
+digraph Small {
+  rankdir=LR;
+  a -> b -> c;
+  a -> c;
+  b [label="B node"];
+}

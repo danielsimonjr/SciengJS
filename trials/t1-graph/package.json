@@ -1,0 +1,10 @@
+{
+  "name": "sciengjs-trial-t1-graph",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Trial T1: does @viz-js/viz render DOT under Bun and Node 22?",
+  "dependencies": {
+    "@viz-js/viz": "3.31.0"
+  }
+}
