@@ -8,4 +8,4 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 - The design of the engine: `docs/superpowers/specs/2026-11-01-scieng-engine-design.md`.
 - The incremental, subagent-driven build plan: `docs/superpowers/plans/2026-11-01-scieng-engine-build.md`.
-- `README.md`, `LICENSE` (MIT) and this changelog.
+- `README.md`, `LICENSE` (MIT), `todo.md` and this changelog.
