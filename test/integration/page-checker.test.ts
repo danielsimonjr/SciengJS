@@ -1,0 +1,44 @@
+import { describe, expect, test } from "bun:test";
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { checkPage } from "../support/page-checker.ts";
+
+const FIXTURES = fileURLToPath(new URL("../fixtures/pages/", import.meta.url));
+const browserPath = process.env.SCIENG_BROWSER ?? "";
+const haveBrowser = browserPath !== "" && existsSync(browserPath);
+
+// CI must name a browser and must never skip these tests. Locally a missing browser skips them with a reason.
+if (process.env.CI && !haveBrowser) {
+  throw new Error(`SCIENG_BROWSER must name an existing browser in CI, got "${browserPath}"`);
+}
+if (!haveBrowser) {
+  console.log(`page checker tests skipped: SCIENG_BROWSER is ${browserPath === "" ? "not set" : `not an existing file (${browserPath})`}`);
+}
+
+describe.skipIf(!haveBrowser)("page checker", () => {
+  test("passes a good drawing", async () => {
+    const result = await checkPage({
+      browserPath,
+      htmlPath: `${FIXTURES}good.html`,
+      drawingSelectors: ["#drawing"],
+    });
+    expect(result.problems).toEqual([]);
+    expect(result.ok).toBe(true);
+  }, 60000);
+
+  test("fails a page with a script error", async () => {
+    const result = await checkPage({ browserPath, htmlPath: `${FIXTURES}script-error.html` });
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.includes("deliberate defect in the drawing script"))).toBe(true);
+  }, 60000);
+
+  test("fails a page whose drawing is empty", async () => {
+    const result = await checkPage({
+      browserPath,
+      htmlPath: `${FIXTURES}empty-drawing.html`,
+      drawingSelectors: ["#drawing"],
+    });
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
+  }, 60000);
+});

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>deliberate script error</title></head>
+<body>
+<div id="drawing">
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60"><rect x="5" y="5" width="110" height="50" fill="#4a90d9"/></svg>
+</div>
+<script>
+  // Deliberate defect: the checker must report this exception.
+  throw new Error("deliberate defect in the drawing script");
+</script>
+</body>
+</html>
