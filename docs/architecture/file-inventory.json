@@ -1,0 +1,250 @@
+{
+  "totalFiles": 32,
+  "byDisposition": {
+    "reachable": 0,
+    "build-entry": 20,
+    "test-only": 0,
+    "orphan": 0,
+    "test": 12,
+    "tool": 0,
+    "config": 0,
+    "bench": 0,
+    "example": 0
+  },
+  "byArea": {
+    "src": 20,
+    "tests": 12
+  },
+  "byPackage": {
+    "@danielsimonjr/sciengjs": 20,
+    "(root)": 12
+  },
+  "files": [
+    {
+      "file": "src/browser/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/config.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 223
+    },
+    {
+      "file": "src/core.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 103
+    },
+    {
+      "file": "src/errors.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 37
+    },
+    {
+      "file": "src/graph/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/html/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 28
+    },
+    {
+      "file": "src/math/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/mermaid/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/mesh/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/pairs.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 52
+    },
+    {
+      "file": "src/plot/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/raster/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/registry.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 18
+    },
+    {
+      "file": "src/sysml/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/tex/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
+    },
+    {
+      "file": "src/types.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 69
+    },
+    {
+      "file": "src/worker/entry.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 31
+    },
+    {
+      "file": "src/worker/protocol.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 24
+    },
+    {
+      "file": "src/worker/run.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 66
+    },
+    {
+      "file": "test/integration/page-checker.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 44
+    },
+    {
+      "file": "test/smoke/smoke.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 56
+    },
+    {
+      "file": "test/support/bun-scan.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 62
+    },
+    {
+      "file": "test/support/page-checker.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 250
+    },
+    {
+      "file": "test/support/stubs/stub-dot.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 19
+    },
+    {
+      "file": "test/support/svg-compare.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 74
+    },
+    {
+      "file": "test/support/test-registry.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 26
+    },
+    {
+      "file": "test/unit/config.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 188
+    },
+    {
+      "file": "test/unit/errors.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 34
+    },
+    {
+      "file": "test/unit/no-bun-api.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 39
+    },
+    {
+      "file": "test/unit/render.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 150
+    },
+    {
+      "file": "test/unit/svg-compare.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 63
+    }
+  ],
+  "skippedLinks": [],
+  "warnings": []
+}

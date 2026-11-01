@@ -27,11 +27,23 @@ This project uses the Agentic Context File Suite (ACFS). The following files exi
 
 ## Environment Setup
 
-The setup commands arrive with increment I0 of the [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md). Development uses Bun. The package runs on Node 22 LTS or later.
+Install Bun 1.4.4 and Node 22 or later. Run `bun install --frozen-lockfile` in the repository root.
+
+The page checker tests need a Chrome or Chromium executable. Set `SCIENG_BROWSER` to its absolute path. Without it, those tests skip with a printed reason. In CI they never skip.
 
 ## Build & Test Commands
 
-The commands arrive with increment I0. Each increment runs the gates in the section "Gates common to every increment" of the build plan.
+| Command | Purpose |
+|---|---|
+| `bun test` | Run the full suite. |
+| `bun run typecheck` | Typecheck `src/` and `test/`. |
+| `bun run build` | Emit the ESM package into `dist/`. |
+| `bun run smoke` | Pack the build, install the tarball in a fresh folder and run the Node smoke test. |
+| `repo-tools check . --docs=docs/architecture` | Check the drift gate of the architecture documents. |
+| `repo-tools docs check src` | Check the doc comments of `src/`. |
+| `repo-tools ste <file>` | Check one document in Simplified Technical English. |
+
+Each increment runs the gates in the section "Gates common to every increment" of the build plan.
 
 ## Code Conventions
 

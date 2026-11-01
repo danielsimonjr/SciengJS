@@ -1,0 +1,498 @@
+metadata:
+  name: i0
+  schemaVersion: 2.0.0
+  language: typescript
+  totalFiles: 32
+  totalModules: 2
+  totalExports: 66
+modules:
+  src:
+    src/browser/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/config.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs/promises
+        - node:os
+        - node:path
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - NetworkPolicy
+        - SciengConfig
+        - ConfigDeps
+        - loadConfig
+    src/core.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/config.ts
+          imports:
+            - loadConfig
+            - ConfigDeps
+            - SciengConfig
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/pairs.ts
+          imports:
+            - PAIRS
+            - findPair
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - registryKey
+            - Registry
+          typeOnly: false
+        - file: src/worker/run.ts
+          imports:
+            - runInWorker
+          typeOnly: false
+        - file: src/types.ts
+          imports:
+            - BINARY_INPUT_TYPES
+            - INPUT_TYPES
+            - OUTPUT_FORMATS
+            - Capability
+            - OutputFormat
+            - RenderOptions
+            - RenderRequest
+            - RenderResult
+          typeOnly: false
+      exports:
+        - renderWithRegistry
+        - capabilitiesWithRegistry
+    src/errors.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - RENDER_ERROR_CODES
+        - RenderErrorCode
+        - RenderErrorPosition
+        - RenderError
+    src/graph/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/html/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - capabilitiesWithRegistry
+            - renderWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - SciengConfig
+          typeOnly: true
+        - file: src/types.ts
+          imports:
+            - Capability
+            - RenderRequest
+            - RenderResult
+          typeOnly: true
+        - file: src/errors.ts
+          imports:
+            - RenderError
+            - RENDER_ERROR_CODES
+            - RenderErrorCode
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - loadConfig
+            - SciengConfig
+            - NetworkPolicy
+          typeOnly: false
+        - file: src/types.ts
+          imports:
+            - INPUT_TYPES
+            - OUTPUT_FORMATS
+            - InputType
+            - OutputFormat
+            - RenderOptions
+            - RenderRequest
+            - RenderResult
+            - RenderAsset
+            - Capability
+          typeOnly: false
+      exports:
+        - RenderError
+        - RENDER_ERROR_CODES
+        - RenderErrorCode
+        - loadConfig
+        - SciengConfig
+        - NetworkPolicy
+        - INPUT_TYPES
+        - OUTPUT_FORMATS
+        - InputType
+        - OutputFormat
+        - RenderOptions
+        - RenderRequest
+        - RenderResult
+        - RenderAsset
+        - Capability
+        - render
+        - capabilities
+    src/math/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/mermaid/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/mesh/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/pairs.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/types.ts
+          imports:
+            - InputType
+            - OutputFormat
+          typeOnly: true
+      exports:
+        - PairSpec
+        - PAIRS
+        - findPair
+    src/plot/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/raster/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/registry.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - BackendEntry
+        - Registry
+        - DEFAULT_REGISTRY
+        - registryKey
+    src/sysml/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/tex/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/types.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - INPUT_TYPES
+        - InputType
+        - OUTPUT_FORMATS
+        - OutputFormat
+        - BINARY_INPUT_TYPES
+        - RenderOptions
+        - RenderRequest
+        - RenderAsset
+        - RenderResult
+        - Capability
+    src/worker/entry.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:worker_threads
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+            - RENDER_ERROR_CODES
+            - RenderErrorCode
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+            - WorkerMessage
+          typeOnly: true
+      exports: []
+    src/worker/protocol.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/types.ts
+          imports:
+            - InputType
+            - OutputFormat
+            - RenderOptions
+          typeOnly: true
+      exports:
+        - WorkerJob
+        - BackendOutput
+        - WorkerMessage
+    src/worker/run.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:path
+        - node:url
+        - node:worker_threads
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+            - WorkerMessage
+          typeOnly: true
+      exports:
+        - WorkerLimits
+        - runInWorker
+  tests:
+    test/integration/page-checker.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: test/support/page-checker.ts
+          imports:
+            - checkPage
+          typeOnly: false
+      exports: []
+    test/smoke/smoke.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports: []
+    test/support/bun-scan.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+      internalDependencies: []
+      exports:
+        - BUN_GLOBAL
+        - BunHit
+        - scanForBunGlobal
+        - makePlantedTree
+        - removeTree
+        - assertNoBunGlobal
+    test/support/page-checker.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports:
+        - PageCheckOptions
+        - PageCheckResult
+        - checkPage
+    test/support/stubs/stub-dot.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - FIXED_SVG
+        - render
+    test/support/svg-compare.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - normalizeSvg
+        - SvgComparison
+        - compareSvg
+    test/support/test-registry.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:url
+      internalDependencies:
+        - file: src/config.ts
+          imports:
+            - ConfigDeps
+          typeOnly: true
+        - file: src/registry.ts
+          imports:
+            - Registry
+          typeOnly: true
+        - file: test/support/stubs/stub-dot.ts
+          imports:
+            - FIXED_SVG
+          typeOnly: false
+      exports:
+        - FIXED_SVG
+        - TEST_REGISTRY
+        - ISOLATED_CONFIG_DEPS
+    test/unit/config.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/config.ts
+          imports:
+            - loadConfig
+            - ConfigDeps
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports: []
+    test/unit/errors.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+            - RENDER_ERROR_CODES
+          typeOnly: false
+      exports: []
+    test/unit/no-bun-api.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: test/support/bun-scan.ts
+          imports:
+            - assertNoBunGlobal
+            - makePlantedTree
+            - removeTree
+            - scanForBunGlobal
+          typeOnly: false
+      exports: []
+    test/unit/render.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - renderWithRegistry
+            - capabilitiesWithRegistry
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/types.ts
+          imports:
+            - RenderRequest
+          typeOnly: true
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+            - TEST_REGISTRY
+            - FIXED_SVG
+          typeOnly: false
+      exports: []
+    test/unit/svg-compare.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: test/support/svg-compare.ts
+          imports:
+            - compareSvg
+            - normalizeSvg
+          typeOnly: false
+      exports: []
+statistics:
+  totalTypeScriptFiles: 32
+  totalSourceFiles: 32
+  totalModules: 2
+  totalLinesOfCode: 1676
+  totalExports: 66
+  entryRoots: 20
+  reachableFiles: 20
+  dormantFiles: 0
+  orphanedFiles: 0
+  testOnlyFiles: 0
+  runtimeCircularDeps: 0
+  typeOnlyCircularDeps: 0
+  totalTypeOnlyImports: 9
+  noImporterFileCount: 0
+  unusedExportsCount: 6
+  circularDepsTruncated: false
+  runtimeCyclicComponents: 0
+  typeOnlyCyclicComponents: 0
+  runtimeFilesInCycles: 0
+  typeOnlyFilesInCycles: 0
+  totalClasses: 1
+  totalInterfaces: 16
+  totalFunctions: 16
+  totalTypeGuards: 0
+  totalEnums: 0
+  totalConstants: 10
+  totalReExports: 16
+reachability:
+  roots:
+    - src/index.ts
+    - src/graph/index.ts
+    - src/mermaid/index.ts
+    - src/math/index.ts
+    - src/tex/index.ts
+    - src/plot/index.ts
+    - src/sysml/index.ts
+    - src/mesh/index.ts
+    - src/browser/index.ts
+    - src/html/index.ts
+    - src/raster/index.ts
+    - src/config.ts
+    - src/core.ts
+    - src/errors.ts
+    - src/pairs.ts
+    - src/registry.ts
+    - src/types.ts
+    - src/worker/entry.ts
+    - src/worker/protocol.ts
+    - src/worker/run.ts
+  reachableCount: 20
+  dormantCount: 0
+  orphaned: []
+  testOnly: []
+warnings: []
