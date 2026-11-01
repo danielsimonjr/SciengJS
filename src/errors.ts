@@ -10,8 +10,10 @@ export const RENDER_ERROR_CODES = [
   "E_INTERNAL",
 ] as const;
 
+/** One of the eight codes of a render error. */
 export type RenderErrorCode = (typeof RENDER_ERROR_CODES)[number];
 
+/** The optional position of a render error in its source. */
 export interface RenderErrorPosition {
   /** The one-based source line, when the failure has one. */
   line?: number;

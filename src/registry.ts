@@ -12,6 +12,7 @@ export type Registry = Record<string, BackendEntry>;
 /** The backends of this build. I0 ships none; each increment adds its entries. */
 export const DEFAULT_REGISTRY: Registry = {};
 
+/** Builds the registry key of a pair. */
 export function registryKey(type: string, format: string): string {
   return `${type}:${format}`;
 }

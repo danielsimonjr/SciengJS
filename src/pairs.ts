@@ -46,6 +46,7 @@ export const PAIRS: readonly PairSpec[] = [
   { type: "html", format: "md", stage: "html" },
 ];
 
+/** Returns the pair of the table, or undefined when the design does not list it. */
 export function findPair(type: InputType, format: OutputFormat): PairSpec | undefined {
   return PAIRS.find((p) => p.type === type && p.format === format);
 }

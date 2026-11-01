@@ -13,11 +13,13 @@ export const INPUT_TYPES = [
   "html",
 ] as const;
 
+/** One input type of the design. */
 export type InputType = (typeof INPUT_TYPES)[number];
 
 /** The output formats of the design. */
 export const OUTPUT_FORMATS = ["svg", "png", "pdf", "html", "md", "glb", "stl"] as const;
 
+/** One output format of the design. */
 export type OutputFormat = (typeof OUTPUT_FORMATS)[number];
 
 /** Input types whose source is bytes, not text. */
@@ -26,6 +28,7 @@ export const BINARY_INPUT_TYPES: readonly InputType[] = ["step", "iges", "brep"]
 /** Per-type options. Each increment types its own keys. I0 keeps the bag open. */
 export type RenderOptions = Record<string, unknown>;
 
+/** One render request. The source is text, or bytes for the binary input types. */
 export interface RenderRequest {
   type: InputType;
   /** Text for text formats, bytes for step, iges and brep. */
@@ -34,12 +37,14 @@ export interface RenderRequest {
   options?: RenderOptions;
 }
 
+/** One extracted asset, for example an image. */
 export interface RenderAsset {
   name: string;
   bytes: Uint8Array;
   mime: string;
 }
 
+/** The result of one render. */
 export interface RenderResult {
   bytes: Uint8Array;
   mime: string;
@@ -51,6 +56,7 @@ export interface RenderResult {
   assets?: RenderAsset[];
 }
 
+/** One supported pair with its stage and its readiness. */
 export interface Capability {
   type: InputType;
   format: OutputFormat;

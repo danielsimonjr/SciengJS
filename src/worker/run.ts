@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { RenderError } from "../errors.ts";
 import type { BackendOutput, WorkerJob, WorkerMessage } from "./protocol.ts";
 
+/** The limits of one worker render. */
 export interface WorkerLimits {
   /** The time limit of one render, in milliseconds. */
   timeoutMs: number;
