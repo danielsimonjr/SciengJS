@@ -100,7 +100,7 @@ async function waitForDevToolsPort(profile: string, deadline: number): Promise<n
  * process can differ from the browser (Chrome relaunches itself), so the port is the signal, not the process.
  * Throws when the port still answers at the deadline.
  */
-async function closeBrowser(port: number | undefined, child: ChildProcess | undefined, stopTimeoutMs: number): Promise<void> {
+async function closeBrowser(port: number | undefined, stopTimeoutMs: number): Promise<void> {
   if (port !== undefined && (await portAnswers(port))) {
     try {
       const info = (await (await fetch(`http://127.0.0.1:${port}/json/version`)).json()) as { webSocketDebuggerUrl: string };
@@ -114,20 +114,6 @@ async function closeBrowser(port: number | undefined, child: ChildProcess | unde
   const deadline = Date.now() + stopTimeoutMs;
   if (port !== undefined) {
     while (Date.now() < deadline && (await portAnswers(port))) await sleep(POLL_MS);
-  }
-  if (child !== undefined && child.exitCode === null && child.signalCode === null) {
-    // A hard kill of the browser orphans its helper processes, so the launched process gets time to exit first.
-    const exited = await new Promise<boolean>((resolve) => {
-      const timer = setTimeout(() => resolve(false), Math.max(0, deadline - Date.now()));
-      child.once("exit", () => {
-        clearTimeout(timer);
-        resolve(true);
-      });
-    });
-    if (!exited) {
-      child.kill("SIGKILL");
-      throw new Error(`the browser process did not exit within ${stopTimeoutMs} ms and was killed`);
-    }
   }
   if (port !== undefined && (await portAnswers(port))) {
     throw new Error(`the browser on port ${port} did not stop within ${stopTimeoutMs} ms`);
@@ -242,9 +228,14 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
   } finally {
     socket?.close();
     try {
-      await closeBrowser(port, child, stopTimeoutMs);
+      await closeBrowser(port, stopTimeoutMs);
     } finally {
-      await removeProfile(profile, PROFILE_DELETE_DEADLINE_MS);
+      try {
+        // The profile can be removed only when no browser process holds it. The launched process is stopped last.
+        await removeProfile(profile, PROFILE_DELETE_DEADLINE_MS);
+      } finally {
+        if (child !== undefined && child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+      }
     }
   }
 }

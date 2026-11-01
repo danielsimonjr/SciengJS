@@ -3,7 +3,7 @@ import { readFile as fsReadFile } from "node:fs/promises";
 import path from "node:path";
 import { RenderError } from "./errors.ts";
 
-/** The network uses that a render may make. The design lists these three values only. */
+/** The network uses that a render may make. The design lists these three network values only. */
 export type NetworkPolicy = "none" | "tex-bundles" | "tex-bundles,images";
 
 /** The resolved configuration. Every field has one default, set in this file only. */
@@ -87,7 +87,7 @@ function nonEmpty(value: string | undefined): string | undefined {
   return value === undefined || value === "" ? undefined : value;
 }
 
-/** The defaults. This is the only place that holds them. */
+/** The defaults. This file is the only place that holds the defaults. */
 function defaults(d: ConfigDeps): Required<Omit<SciengConfig, "browser">> {
   const { cacheBase } = platformFolders(d);
   const p = d.platform === "win32" ? path.win32 : path.posix;
@@ -107,7 +107,7 @@ function defaultConfigPath(d: ConfigDeps): string {
   return p.join(configBase, APP_FOLDER, CONFIG_FILE_NAME);
 }
 
-/** Checks one value against the type of its key. Returns the value, or throws E_CONFIG. */
+/** Checks one value against the type of the key. Returns the value, or throws E_CONFIG. */
 function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfig[ConfigKey] {
   const fail = (why: string): never => {
     throw new RenderError("E_CONFIG", `${source}: ${key} ${why}`);
@@ -133,7 +133,7 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
   }
 }
 
-/** Converts an environment text to a value of its key. Numbers must be whole and positive. */
+/** Converts an environment text to a value of the key. Numbers must be whole and positive. */
 function fromEnvText(key: ConfigKey, text: string, envName: string): SciengConfig[ConfigKey] {
   if (key === "timeoutMs" || key === "maxSourceBytes" || key === "maxMemoryMb") {
     if (!/^\d+$/.test(text)) {
@@ -186,7 +186,7 @@ async function readConfigFile(
 
 /**
  * Resolves the configuration. Precedence: call option, then environment, then file, then default.
- * Any unreadable or invalid source rejects with E_CONFIG. The loader never falls back to defaults for it.
+ * Any unreadable or invalid source rejects with E_CONFIG. The loader never falls back to defaults for the source.
  */
 export async function loadConfig(
   options: Partial<SciengConfig> = {},

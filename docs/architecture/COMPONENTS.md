@@ -110,7 +110,7 @@ export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<Backe
 
 ## `src/worker/entry.ts`
 
-Purpose: the worker side. The module has no export. It reads `workerData`, imports the backend module, runs it and posts one `WorkerMessage`.
+Purpose: the worker side. The module has no export. The module reads `workerData`. The module imports the backend module. The module runs the backend module. The module posts one `WorkerMessage`.
 
 ## `src/worker/protocol.ts`
 

@@ -3,7 +3,7 @@ import { RenderError, RENDER_ERROR_CODES, type RenderErrorCode } from "../errors
 import type { BackendOutput, WorkerJob, WorkerMessage } from "./protocol.ts";
 
 /**
- * The worker side of a render. It loads the backend module, runs one request and posts one message.
+ * The worker side of a render. The worker loads the backend module, runs one request and posts one message.
  * A backend error that is a RenderError keeps its code. Any other error maps to E_INTERNAL.
  */
 async function run(job: WorkerJob): Promise<WorkerMessage> {

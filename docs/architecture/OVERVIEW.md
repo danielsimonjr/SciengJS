@@ -1,6 +1,6 @@
 # sciengjs overview
 
-`@danielsimonjr/sciengjs` is a TypeScript library. It renders science and engineering sources to SVG, PNG, PDF, HTML and Markdown. It runs on the local machine. It sends no source to a web service.
+`@danielsimonjr/sciengjs` is a TypeScript library. The library renders science and engineering sources to SVG, PNG, PDF, HTML, and Markdown. The library runs on the local machine. The library sends no source to a web service.
 
 Status: increment I0, the skeleton. The package renders no input yet. The package has the public API, the configuration loader, the worker runner, the stage registry and the test harnesses. The first backend, DOT to SVG, arrives with increment I1.
 
@@ -30,15 +30,15 @@ Status: increment I0, the skeleton. The package renders no input yet. The packag
 
 ## Numbers
 
-The table below holds the values that `repo-tools map` measures. The gate checks each value against a new parse of `src/`.
+`repo-tools map` measures the values in the table below. The gate checks each value against a new `src/` parse.
 
 Regenerate: `repo-tools map . --out=docs/architecture` · Check: `repo-tools check . --docs=docs/architecture`
 
 ## Verification
 
-Two tools measure this repository. The two tools use different scopes.
+Two tools measure the repository. The tools use different scopes.
 
-The table holds `repo-tools map` metrics. `repo-tools map` parses the source tree of `src/`. The gate compares each row with a fresh parse.
+The table lists `repo-tools map` metrics. `repo-tools map` parses the `src/` source tree. The gate compares each row with a new parse.
 
 | Claim | Value | Source |
 |---|---|---|

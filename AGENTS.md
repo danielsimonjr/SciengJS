@@ -29,7 +29,7 @@ This project uses the Agentic Context File Suite (ACFS). The following files exi
 
 Install Bun 1.4.4 and Node 22 or later. Run `bun install --frozen-lockfile` in the repository root.
 
-The page checker tests need a Chrome or Chromium executable. Set `SCIENG_BROWSER` to its absolute path. Without it, those tests skip with a printed reason. In CI they never skip.
+The page checker tests need a Chrome or Chromium executable. Set `SCIENG_BROWSER` to the absolute path of the executable. Without the executable, those tests skip with a printed reason. In CI, the tests never skip.
 
 ## Build & Test Commands
 
@@ -43,7 +43,7 @@ The page checker tests need a Chrome or Chromium executable. Set `SCIENG_BROWSER
 | `repo-tools docs check src` | Check the doc comments of `src/`. |
 | `repo-tools ste <file>` | Check one document in Simplified Technical English. |
 
-Each increment runs the gates in the section "Gates common to every increment" of the build plan.
+Each increment runs the gates in the "Gates common to every increment" section.
 
 ## Code Conventions
 
