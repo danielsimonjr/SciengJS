@@ -199,14 +199,14 @@ describe("loadConfig failures", () => {
 
 describe("platform defaults are resolved only when needed", () => {
   test("Windows without LOCALAPPDATA loads when cacheDir is set", async () => {
-    const env = { APPDATA: "C:\R\Roaming", SCIENG_CACHE_DIR: "D:\cache" };
-    const cfg = await loadConfig({}, deps({ env, platform: "win32", homedir: "C:\R" }));
-    expect(cfg.cacheDir).toBe("D:\cache");
+    const env = { APPDATA: "C:\\R\\Roaming", SCIENG_CACHE_DIR: "D:\\cache" };
+    const cfg = await loadConfig({}, deps({ env, platform: "win32", homedir: "C:\\R" }));
+    expect(cfg.cacheDir).toBe("D:\\cache");
   });
 
   test("Windows without LOCALAPPDATA fails when the cache default is needed", async () => {
-    const env = { APPDATA: "C:\R\Roaming" };
-    const err = await rejectionOf(loadConfig({}, deps({ env, platform: "win32", homedir: "C:\R" })));
+    const env = { APPDATA: "C:\\R\\Roaming" };
+    const err = await rejectionOf(loadConfig({}, deps({ env, platform: "win32", homedir: "C:\\R" })));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("LOCALAPPDATA");
   });
