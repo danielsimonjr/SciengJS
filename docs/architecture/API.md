@@ -14,7 +14,7 @@ Renders one source to one format.
 
 Returns `Promise<RenderResult>`. The result holds `bytes`, `mime`, `backend`, `warnings` and, when present, `assets`.
 
-Rejects with `RenderError`. The codes are: `E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY` and `E_INTERNAL`. The render never falls back to another format.
+Rejects with `RenderError`. The codes are: `E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY` and `E_INTERNAL`. The render never falls back to another format. `E_LIMIT` covers the source size and the heap limit of the render worker. A worker crash for any other reason is `E_INTERNAL`.
 
 ### `capabilities(config?)`
 

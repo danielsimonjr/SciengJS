@@ -11,7 +11,7 @@
    2. The output format is known. Otherwise the render rejects with `E_INPUT`.
    3. The pair is in the table. Otherwise the render rejects with `E_UNSUPPORTED`.
    4. The source kind matches the input type. Otherwise the render rejects with `E_INPUT`.
-   5. The source size is within `maxSourceBytes`. Otherwise the render rejects with `E_LIMIT`.
+   5. The source size is within `maxSourceBytes`. Otherwise the render rejects with `E_LIMIT`. Heap exhaustion of the render worker also rejects with `E_LIMIT`.
    6. The registry has a backend for the pair. Otherwise the render rejects with `E_UNSUPPORTED`.
    7. The browser path exists when the stage needs a browser. Otherwise the render rejects with `E_STAGE_MISSING`.
 5. `runInWorker` in `src/worker/run.ts` starts a worker. The worker runs `src/worker/entry.ts`.
