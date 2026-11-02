@@ -1,2 +1,3 @@
-/** The graph subpath. DOT to SVG arrives with increment I1. */
-export {};
+/** The graph stage: DOT to SVG through the viz library, which holds Graphviz. */
+export { dotToSvg } from "./dot.ts";
+export type { DotSvgResult } from "./dot.ts";

@@ -1,0 +1,13 @@
+digraph Basic {
+  rankdir=LR;
+  start [shape=circle];
+  parse [label="Parse input"];
+  check [shape=diamond, label="Valid?"];
+  emit [label="Emit output"];
+  stop [shape=doublecircle];
+  start -> parse [label="read"];
+  parse -> check;
+  check -> emit [label="yes"];
+  check -> parse [label="no", style=dashed];
+  emit -> stop;
+}

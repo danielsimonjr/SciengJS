@@ -6,7 +6,8 @@ import { RenderError } from "../../src/errors.ts";
 import { TEST_REGISTRY } from "../support/test-registry.ts";
 
 const moduleUrl = TEST_REGISTRY["dot:svg"]!.moduleUrl;
-const OK_JOB = { moduleUrl, backend: "test/fixed", request: { type: "dot" as const, format: "svg" as const, source: "ok", options: {} } };
+const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined };
+const OK_JOB = { moduleUrl, backend: "test/fixed", request: { type: "dot" as const, format: "svg" as const, source: "ok", options: {}, settings: SETTINGS } };
 
 /** A worker double. It answers with one ok message and lets the test choose how terminate behaves. */
 function fakeWorkerWith(terminate: () => Promise<number>): () => Worker {
@@ -23,7 +24,7 @@ describe("runInWorker", () => {
     const exits: { exitCode: number }[] = [];
     let settledAfterExit = false;
     const promise = runInWorker(
-      { moduleUrl, backend: "test/fixed", request: { type: "dot", format: "svg", source: "loop", options: {} } },
+      { moduleUrl, backend: "test/fixed", request: { type: "dot", format: "svg", source: "loop", options: {}, settings: SETTINGS } },
       {
         timeoutMs: 300,
         maxMemoryMb: 512,

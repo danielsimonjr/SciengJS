@@ -16,6 +16,8 @@ export interface SciengConfig {
   maxSourceBytes: number;
   maxMemoryMb: number;
   allowNetwork: NetworkPolicy;
+  /** Path of a TrueType or OpenType file that the raster stage uses in place of the bundled font. */
+  rasterFont?: string;
 }
 
 /** The inputs of the loader. A caller injects them in a test. */
@@ -36,6 +38,7 @@ const ENV = {
   maxSourceBytes: "SCIENG_MAX_SOURCE_BYTES",
   maxMemoryMb: "SCIENG_MAX_MEMORY_MB",
   allowNetwork: "SCIENG_ALLOW_NETWORK",
+  rasterFont: "SCIENG_RASTER_FONT",
 } as const;
 
 const RELEASE_URL_BASE = "https://github.com/danielsimonjr/sciengjs/releases/download";
@@ -82,7 +85,7 @@ function nonEmpty(value: string | undefined): string | undefined {
 }
 
 /** The defaults that need no platform folder. This file is the only place that holds the defaults. */
-function defaults(engineVersion: string): Required<Omit<SciengConfig, "browser" | "cacheDir">> {
+function defaults(engineVersion: string): Required<Omit<SciengConfig, "browser" | "cacheDir" | "rasterFont">> {
   return {
     texBundleUrl: `${RELEASE_URL_BASE}/v${engineVersion}/`,
     timeoutMs: 60000,
@@ -106,6 +109,7 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
     case "browser":
     case "cacheDir":
     case "texBundleUrl":
+    case "rasterFont":
       if (typeof value !== "string" || value === "") return fail("must be a non-empty string");
       return value;
     case "timeoutMs":
@@ -142,6 +146,7 @@ const ENV_KEYS: Record<Exclude<ConfigKey, never>, string> = {
   maxSourceBytes: ENV.maxSourceBytes,
   maxMemoryMb: ENV.maxMemoryMb,
   allowNetwork: ENV.allowNetwork,
+  rasterFont: ENV.rasterFont,
 };
 
 /** Reads the config file. A missing file is fine only at the default path. */

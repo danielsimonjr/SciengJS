@@ -1,0 +1,8 @@
+graph Layout {
+  layout=neato;
+  overlap=false;
+  a -- b -- c -- d -- a;
+  a -- c [len=2.5];
+  b -- d [len=2.5];
+  e -- a;
+}

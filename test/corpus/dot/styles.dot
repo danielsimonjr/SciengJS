@@ -1,0 +1,10 @@
+digraph Styles {
+  node [style=filled, fillcolor="#f2f6fa", color="#3a5a80", fontname="Times-Roman"];
+  edge [color="#8a4b00", arrowhead=vee];
+  a [shape=box, style="rounded,filled"];
+  b [shape=ellipse, style=bold];
+  c [shape=hexagon, fillcolor=lightyellow];
+  a -> b [style=dashed, penwidth=2];
+  b -> c [color=red, label="warn"];
+  a -> c [arrowhead=diamond];
+}
