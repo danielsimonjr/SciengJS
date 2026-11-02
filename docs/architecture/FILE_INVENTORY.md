@@ -64,8 +64,8 @@ This report lists each source file that the map census finds, with a disposition
 | `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 24 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 117 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 111 |
-| `test/mutation/run-mutants.mjs` | (root) | tests | test | 193 |
-| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 123 |
+| `test/mutation/run-mutants.mjs` | (root) | tests | test | 237 |
+| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 163 |
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |

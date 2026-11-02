@@ -172,14 +172,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 193
+      "loc": 237
     },
     {
       "file": "test/mutation/run-mutants.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 123
+      "loc": 163
     },
     {
       "file": "test/node/backends/heap.mjs",

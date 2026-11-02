@@ -300,6 +300,7 @@ modules:
       externalDependencies: []
       nodeDependencies:
         - node:child_process
+        - node:crypto
         - node:fs
         - node:path
       internalDependencies: []
@@ -571,7 +572,7 @@ statistics:
   totalTypeScriptFiles: 43
   totalSourceFiles: 43
   totalModules: 2
-  totalLinesOfCode: 2558
+  totalLinesOfCode: 2642
   totalExports: 77
   entryRoots: 20
   reachableFiles: 20
