@@ -45,9 +45,9 @@ The file `cylinder1.brep` has no licence header of its own.
 
 The trial searched these sources for another IGES file:
 
-- The `occt-import-js` test files. Only `cube-10x10mm` exists.
-- The `CadQuery/cadquery` and `FreeCAD/FreeCAD` trees. They hold no IGES file.
-- The `Open-Cascade-SAS/OCCT` data folder. It holds two IGES files, `data/iges/hammer.iges` (about 1.04 MB) and `data/iges/bearing.iges` (about 1.28 MB). Their header names MATRA-DATAVISION as the writer, which is the same kind of origin as the current file. Both are larger than the sample size range of the trial.
+- The `occt-import-js` test files hold only `cube-10x10mm`.
+- The `CadQuery/cadquery` and `FreeCAD/FreeCAD` trees hold no IGES file.
+- The `Open-Cascade-SAS/OCCT` data folder holds two IGES files, `data/iges/hammer.iges` (about 1.04 MB) and `data/iges/bearing.iges` (about 1.28 MB). Their header names MATRA-DATAVISION as the writer, which is the same kind of origin as the current file. Both are larger than the sample size range of the trial.
 - A code search for `*.igs` files. The results were test files of other projects. The `f3d-app/f3d` files are Git LFS pointers in the API and were not checked further.
 
 No IGES file with a clearer origin was found. The current file stays.

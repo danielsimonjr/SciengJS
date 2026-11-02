@@ -134,7 +134,7 @@ The three small samples are committed in `trials/t2-mesh/samples/`. The licence 
 | `samples/cube-10x10mm.igs` | `kovacsv/occt-import-js` at `45619237ab5576f190f11a7c66f76ad93c5690fb`, path `test/testfiles/cube-10x10mm/Cube 10x10.igs` | LGPL-2.1 | `8bcbc86a044f592ba2a1a18f89a905358a85aa5093c0dd0756771b1b022b4c6f` | 11421 |
 | `samples/cylinder1.brep` | `FreeCAD/FreeCAD` at `46ec224b04e20f682f1fa179b4ede39ebf43b3fc`, path `data/tests/ModelRefineTests/cylinder1.brep` | LGPL-2.0-or-later | `0b167ee0ffa6d587c411080cc32f2aaf44036fd40c85ca4161687e9e2af06dad` | 11166 |
 
-The large sample is not committed. The workflow downloads it at the start of each job from `Open-Cascade-SAS/OCCT` at commit `7fd59977dfb3a75f75670474b59dfc0f3f5f90ba`, path `data/step/linkrods.step`. The job fails if the SHA-256 differs.
+The large sample is not committed. The workflow downloads the file at the start of each job from `Open-Cascade-SAS/OCCT` at commit `7fd59977dfb3a75f75670474b59dfc0f3f5f90ba`, path `data/step/linkrods.step`. The job fails if the SHA-256 differs.
 
 | Sample file | Source | Licence | SHA-256 | Size (bytes) |
 |---|---|---|---|---|
@@ -191,11 +191,11 @@ Job ids of run `41389917486`: Windows Bun `125098816511`, Windows Node `12509881
 
 ## Deviations
 
-1. The script sends the messages of the WASM to an array. The messages are not written to stdout. In all six jobs the array holds 42 messages. The distinct texts are "Total number of loaded entities 36." and an empty string. The trial does not record which read writes each message.
+1. The script stores the WASM messages in an array. The messages are not written to stdout. In all six jobs the array holds 42 messages. The distinct texts are "Total number of loaded entities 36." and an empty string. The trial does not record which read operation writes each message.
 2. The IGES sample has the file name `cube-10x10mm.igs`. The source name is `Cube 10x10.igs`. The space is removed. The bytes are not changed. The SHA-256 is the SHA-256 of the source file.
 3. The IGES sample has no licence text of its own. The repository licence applies. The header of the file names "Autodesk Inventor 2019" as the writer.
 4. The OCCT commit of the large sample has no licence file at its root. The LGPL-2.1 text in `samples/LICENSES/LGPL-2.1.occt.txt` comes from a later commit of the same repository, `53706f78a8640c4407bdcc6752df13a270b159f2`.
-5. The peak values are sampled values. The script samples after the load and after each read. The peak between two samples is not measured.
+5. The peak values are sampled values. The script reads the memory after the load and after each read. The peak between two samples is not measured.
 6. Node 22 runs only in CI. The local runs of the trial used Node v26.13.0 and Bun 1.4.4 during development. Their numbers are not in this report.
 7. The options of the STEP sample are `null` (default), `{"linearUnit":"millimeter"}` and `{"linearUnit":"meter"}`. The IGES, BREP and large STEP samples use `null`.
 8. The large sample uses 5 warm reads. The small samples use 20. The brief set this count.
