@@ -474,26 +474,15 @@ function runCommand(argv, timeoutMs) {
   });
 }
 
-/** The process ids of the root and all its descendants, from a "pid ppid" table. */
-function treeOf(processText, rootPid) {
-  const children = new Map();
+/**
+ * The process ids of the browser tree. Every process of one render carries its profile path in its command line,
+ * so the profile path names the tree. A parent-process walk is not used: a Windows process id can be reused.
+ */
+function treeOf(processText, profile) {
+  const tree = new Set();
   for (const line of processText.split(/\r?\n/)) {
-    const m = line.trim().match(/^(\d+)\s+(\d+)$/);
-    if (!m) continue;
-    const ppid = Number(m[2]);
-    if (!children.has(ppid)) children.set(ppid, []);
-    children.get(ppid).push(Number(m[1]));
-  }
-  const tree = new Set([rootPid]);
-  const stack = [rootPid];
-  while (stack.length) {
-    const p = stack.pop();
-    for (const c of children.get(p) ?? []) {
-      if (!tree.has(c)) {
-        tree.add(c);
-        stack.push(c);
-      }
-    }
+    const m = line.trim().match(/^(\d+)\s+(.*)$/);
+    if (m && m[2].includes(profile)) tree.add(Number(m[1]));
   }
   return tree;
 }
@@ -548,9 +537,9 @@ function parseSockets(text) {
 }
 
 /** One sample: the sockets that the browser process tree owns, and the ones that leave the host. */
-async function sampleOnce(cfg, rootPid) {
+async function sampleOnce(cfg, profile) {
   const timeout = cfg.sampler.commandTimeoutMs;
-  const tree = treeOf(await runCommand(commandFor(cfg.sampler.processTable, "process table"), timeout), rootPid);
+  const tree = treeOf(await runCommand(commandFor(cfg.sampler.processTable, "process table"), timeout), profile);
   const sockets = parseSockets(await runCommand(commandFor(cfg.sampler.sockets, "socket table"), timeout));
   const owned = sockets.filter((s) => tree.has(s.pid));
   const external = owned.filter((s) => s.peer !== null && !isLoopbackOrUnspecified(hostAndPort(s.peer).host));
@@ -564,13 +553,13 @@ async function sampleOnce(cfg, rootPid) {
 }
 
 /** Samples the browser process tree from launch to stop. A failed sample is recorded, never ignored. */
-function startSampler(cfg, rootPid) {
+function startSampler(cfg, profile) {
   const acc = { count: 0, errors: [], maxTree: 0, maxOwned: 0, external: new Set(), dns: new Set(), maxDns: 0 };
   let running = true;
   const loop = (async () => {
     while (running) {
       try {
-        const s = await sampleOnce(cfg, rootPid);
+        const s = await sampleOnce(cfg, profile);
         acc.count++;
         acc.maxTree = Math.max(acc.maxTree, s.tree);
         acc.maxOwned = Math.max(acc.maxOwned, s.owned);
@@ -636,7 +625,7 @@ async function renderOnce(ctx, job) {
     handle.child.on("error", (err) => {
       spawnError = err;
     });
-    sampler = startSampler(cfg, handle.child.pid);
+    sampler = startSampler(cfg, handle.profile);
     handle.port = await readPort(handle.profile, Date.now() + cfg.timeouts.portMs, cfg.pollMs, () => spawnError);
     const version = await (await fetch(`http://127.0.0.1:${handle.port}/json/version`)).json();
     rec.browserVersion = version.Browser;
