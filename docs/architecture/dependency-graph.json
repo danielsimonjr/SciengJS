@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "name": "t2",
+    "name": "t4",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 47,
+    "totalFiles": 49,
     "totalModules": 2,
     "totalExports": 77
   },
@@ -416,6 +416,26 @@
           "node:fs",
           "node:path",
           "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t4-browser/assets/pinned.js": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t4-browser/measure.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:net",
+          "node:os",
+          "node:path",
+          "node:url",
+          "node:zlib"
         ],
         "internalDependencies": [],
         "exports": []
@@ -843,20 +863,20 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 47,
-    "totalSourceFiles": 47,
+    "totalTypeScriptFiles": 49,
+    "totalSourceFiles": 49,
     "totalModules": 2,
-    "totalLinesOfCode": 3042,
+    "totalLinesOfCode": 3684,
     "totalExports": 77,
     "entryRoots": 20,
     "reachableFiles": 20,
-    "dormantFiles": 4,
-    "orphanedFiles": 4,
+    "dormantFiles": 6,
+    "orphanedFiles": 6,
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 9,
-    "noImporterFileCount": 4,
+    "noImporterFileCount": 6,
     "unusedExportsCount": 7,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
@@ -895,12 +915,14 @@
       "src/worker/run.ts"
     ],
     "reachableCount": 20,
-    "dormantCount": 4,
+    "dormantCount": 6,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",
       "trials/t1-graph/make-sources.mjs",
       "trials/t1-graph/measure.mjs",
-      "trials/t2-mesh/measure.mjs"
+      "trials/t2-mesh/measure.mjs",
+      "trials/t4-browser/assets/pinned.js",
+      "trials/t4-browser/measure.mjs"
     ],
     "testOnly": []
   },

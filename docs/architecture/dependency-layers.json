@@ -656,6 +656,77 @@
         "workspaceDependencies": [],
         "exports": []
       }
+    },
+    "trials/t4-browser": {
+      "trials/t4-browser/assets/pinned.js": {
+        "description": "The local copy of the pinned asset. The client serves it for the pinned URL in config.json.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      },
+      "trials/t4-browser/measure.mjs": {
+        "description": "Trial T4: a minimal Chrome DevTools Protocol client. It starts the browser named by SCIENG_BROWSER",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "child_process",
+            "imports": [
+              "spawn"
+            ]
+          },
+          {
+            "module": "net",
+            "imports": [
+              "createServer"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "existsSync",
+              "mkdirSync",
+              "mkdtempSync",
+              "readFileSync",
+              "rmSync",
+              "writeFileSync",
+              "appendFileSync"
+            ]
+          },
+          {
+            "module": "os",
+            "imports": [
+              "arch",
+              "platform",
+              "release",
+              "tmpdir"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          },
+          {
+            "module": "zlib",
+            "imports": [
+              "inflateSync"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
     }
   },
   "cyclicComponents": {
@@ -760,6 +831,13 @@
       "name": "Trials/t2-mesh",
       "files": [
         "trials/t2-mesh/measure.mjs"
+      ]
+    },
+    {
+      "name": "Trials/t4-browser",
+      "files": [
+        "trials/t4-browser/assets/pinned.js",
+        "trials/t4-browser/measure.mjs"
       ]
     }
   ]
