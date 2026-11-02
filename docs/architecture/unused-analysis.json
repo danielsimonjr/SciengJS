@@ -11,7 +11,7 @@
     "unreferencedAnywhereCount": 2,
     "referencedInModuleCount": 5,
     "unclassifiedExportCount": 0,
-    "noImporterFileCount": 0
+    "noImporterFileCount": 3
   },
   "unreferencedAnywhere": {
     "src/index.ts": [
@@ -41,5 +41,9 @@
     ]
   },
   "unclassifiedExports": {},
-  "noImporterFiles": []
+  "noImporterFiles": [
+    "trials/t1-graph/compare-layout.mjs",
+    "trials/t1-graph/make-sources.mjs",
+    "trials/t1-graph/measure.mjs"
+  ]
 }

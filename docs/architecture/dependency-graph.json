@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "name": "i0",
+    "name": "t1",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 43,
+    "totalFiles": 46,
     "totalModules": 2,
     "totalExports": 77
   },
@@ -379,6 +379,35 @@
           "WorkerLimits",
           "runInWorker"
         ]
+      },
+      "trials/t1-graph/compare-layout.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t1-graph/make-sources.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t1-graph/measure.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:crypto",
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
       }
     },
     "tests": {
@@ -803,20 +832,20 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 43,
-    "totalSourceFiles": 43,
+    "totalTypeScriptFiles": 46,
+    "totalSourceFiles": 46,
     "totalModules": 2,
-    "totalLinesOfCode": 2642,
+    "totalLinesOfCode": 2864,
     "totalExports": 77,
     "entryRoots": 20,
     "reachableFiles": 20,
-    "dormantFiles": 0,
-    "orphanedFiles": 0,
+    "dormantFiles": 3,
+    "orphanedFiles": 3,
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 9,
-    "noImporterFileCount": 0,
+    "noImporterFileCount": 3,
     "unusedExportsCount": 7,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
@@ -855,8 +884,12 @@
       "src/worker/run.ts"
     ],
     "reachableCount": 20,
-    "dormantCount": 0,
-    "orphaned": [],
+    "dormantCount": 3,
+    "orphaned": [
+      "trials/t1-graph/compare-layout.mjs",
+      "trials/t1-graph/make-sources.mjs",
+      "trials/t1-graph/measure.mjs"
+    ],
     "testOnly": []
   },
   "warnings": []

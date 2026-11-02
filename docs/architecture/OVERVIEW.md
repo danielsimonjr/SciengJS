@@ -30,7 +30,7 @@ Status: increment I0, the skeleton. The package renders no input yet. The packag
 
 ## Numbers
 
-`repo-tools map` measures the values in the table below. The gate checks each value against a new `src/` parse.
+`repo-tools map` measures the values in the table below. The gate checks each value against a new parse.
 
 Regenerate: `repo-tools map . --out=docs/architecture` · Check: `repo-tools check . --docs=docs/architecture`
 
@@ -38,12 +38,12 @@ Regenerate: `repo-tools map . --out=docs/architecture` · Check: `repo-tools che
 
 Two tools measure the repository. The tools use different scopes.
 
-The table lists `repo-tools map` metrics. `repo-tools map` parses the `src/` source tree. The gate compares each row with a new parse.
+The table lists `repo-tools map` metrics. `repo-tools map` parses each source file that git tracks, in `src/`, `test/` and `trials/`. The gate compares each row with a new parse.
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 43 | repo-tools map |
-| totalLinesOfCode | 2642 | repo-tools map |
+| totalSourceFiles | 46 | repo-tools map |
+| totalLinesOfCode | 2864 | repo-tools map |
 | totalExports | 77 | repo-tools map |
 | totalTypeOnlyImports | 9 | repo-tools map |
 | totalModules | 2 | repo-tools map |
