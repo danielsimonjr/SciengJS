@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 
 const RUNNER = resolve(import.meta.dir, "run-mutants.mjs");
 const BACKUP_SUFFIX = ".mutation-backup";
+const HASH_SUFFIX = ".mutation-hash";
 const WAIT_MS = 60000;
 const POLL_MS = 100;
 
@@ -71,6 +72,35 @@ async function waitUntil(check: () => boolean, label: string): Promise<void> {
 }
 
 const isMutated = (source: string) => (): boolean => readFileSync(source, "utf8").includes("MUTATED");
+
+describe("run-mutants does not overwrite an edit that it did not make", () => {
+  test(
+    "an edit made after a hard kill is kept, and the next run exits non-zero before it runs a mutant",
+    async () => {
+      const { root, source } = makeFixture();
+      try {
+        const first = startRunner(root);
+        await waitUntil(isMutated(source), "the mutant to be applied");
+        first.child.kill("SIGKILL");
+        await first.exited;
+        const edit = "export const value = 7; // a deliberate edit after the hard kill\n";
+        writeFileSync(source, edit);
+
+        const second = startRunner(root);
+        const { code } = await second.exited;
+        expect(code).not.toBe(0);
+        expect(readFileSync(source, "utf8")).toBe(edit);
+        expect(existsSync(source + BACKUP_SUFFIX)).toBe(true);
+        expect(existsSync(source + HASH_SUFFIX)).toBe(true);
+        expect(second.output()).toContain(source + BACKUP_SUFFIX);
+        expect(second.output()).toContain(source + HASH_SUFFIX);
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    },
+    WAIT_MS * 2,
+  );
+});
 
 describe("run-mutants restores the source when the run is interrupted", () => {
   test.skipIf(process.platform === "win32")(

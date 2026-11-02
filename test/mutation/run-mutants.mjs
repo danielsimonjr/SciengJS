@@ -3,10 +3,12 @@
 // a failing test (a "(fail)" line) and exits non-zero. A passing baseline runs before the first mutant and
 // after the last one; the run stops when a baseline fails.
 //
-// Each file is copied to a backup (the file name plus BACKUP_SUFFIX) before a mutant is written. The backup
-// restores the file on every exit path: normal end, SIGINT, SIGTERM, an uncaught exception, and process exit.
-// A hard kill (for example SIGKILL, or TerminateProcess on Windows) cannot run a handler, so the next start
-// restores any file that a backup still covers, before it runs anything else.
+// Each file is copied to a backup (the file name plus BACKUP_SUFFIX) before a mutant is written. The SHA-256
+// of the mutated text goes to a hash file (the file name plus HASH_SUFFIX). The backup restores the file on
+// every exit path: normal end, SIGINT, SIGTERM, an uncaught exception, and process exit. A restore happens only
+// when the file still holds the recorded mutation. A hard kill (for example SIGKILL, or TerminateProcess on
+// Windows) cannot run a handler, so the next start restores such a file before it runs anything else. A file
+// that differs from the recorded mutation is left alone, and the run exits non-zero so that a person decides.
 //
 // Options (flag, then environment variable, then default):
 //   --root=<dir>         MUTATION_ROOT        the repository root (default: the current directory)
@@ -17,8 +19,10 @@
 import { copyFileSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const BACKUP_SUFFIX = ".mutation-backup";
+const HASH_SUFFIX = ".mutation-hash";
 
 const args = process.argv.slice(2);
 function option(name, envName, fallback) {
@@ -41,15 +45,48 @@ if (!Array.isArray(mutants) || mutants.length === 0) {
 }
 
 const backupOf = (path) => `${path}${BACKUP_SUFFIX}`;
+const hashOf = (path) => `${path}${HASH_SUFFIX}`;
+const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
-/** Restores every file that a backup covers, then removes the backup. Safe to call more than once. */
-function restoreFromBackups() {
+/**
+ * Restores each file that a backup covers, but only when the file still holds the mutation that this runner
+ * wrote, which the hash file records. A file that differs is not touched: the run reports both paths and leaves
+ * the backup and the hash file in place for a person to decide. Returns the number of files restored and the
+ * conflicts. Safe to call more than once.
+ */
+function restoreFromBackups({ quiet = false } = {}) {
+  let restored = 0;
+  const conflicts = [];
   for (const m of mutants) {
     const path = resolve(root, m.file);
     if (!existsSync(backupOf(path))) continue;
+    const current = existsSync(path) ? sha256(readFileSync(path)) : "";
+    // A file that already equals its backup is an original: only the leftovers go.
+    if (current === sha256(readFileSync(backupOf(path)))) {
+      rmSync(backupOf(path), { force: true });
+      rmSync(hashOf(path), { force: true });
+      continue;
+    }
+    const expected = existsSync(hashOf(path)) ? readFileSync(hashOf(path), "utf8").trim() : "";
+    if (expected === "" || current !== expected) {
+      conflicts.push({ path, backup: backupOf(path), hash: hashOf(path) });
+      continue;
+    }
     copyFileSync(backupOf(path), path);
     rmSync(backupOf(path), { force: true });
+    rmSync(hashOf(path), { force: true });
+    restored += 1;
   }
+  if (!quiet) {
+    for (const c of conflicts) {
+      console.error(
+        `left ${c.path} alone: it differs from the mutation that an earlier run wrote. ` +
+          `The original is in ${c.backup}, and the mutation hash is in ${c.hash}. ` +
+          "Keep your edit, or copy the original back. Then delete both files.",
+      );
+    }
+  }
+  return { restored, conflicts };
 }
 
 // The child that runs now. A stop signal kills it, so no bun test outlives the runner.
@@ -68,7 +105,7 @@ process.on("uncaughtException", (err) => {
   console.error(err);
   stop("uncaught exception", 1);
 });
-process.on("exit", () => restoreFromBackups());
+process.on("exit", () => restoreFromBackups({ quiet: true }));
 
 function runBun(testFile) {
   return new Promise((resolveRun, rejectRun) => {
@@ -107,9 +144,13 @@ function lineAt(text, number) {
 }
 
 async function main() {
-  const recovered = mutants.map((m) => resolve(root, m.file)).filter((path) => existsSync(backupOf(path)));
-  restoreFromBackups();
-  if (recovered.length > 0) console.error(`restored ${recovered.length} file(s) that an interrupted run had mutated`);
+  // A leftover from an interrupted run is restored only when it still holds that run's mutation.
+  const { restored, conflicts } = restoreFromBackups();
+  if (restored > 0) console.error(`restored ${restored} file(s) that an interrupted run had mutated`);
+  if (conflicts.length > 0) {
+    console.error("the run did not start: resolve the files named above first");
+    process.exit(1);
+  }
 
   const testFiles = [...new Set(mutants.map((m) => m.test))];
   const before = await baseline(testFiles);
@@ -131,8 +172,10 @@ async function main() {
     const mutated = original.slice(0, index) + m.replacement + original.slice(index + m.original.length);
     const line = lineNumber(original, index);
     copyFileSync(path, backupOf(path));
+    const mutatedBytes = Buffer.from(mutated, "utf8");
+    writeFileSync(hashOf(path), sha256(mutatedBytes));
     try {
-      writeFileSync(path, mutated);
+      writeFileSync(path, mutatedBytes);
       const run = await runBun(m.test);
       const killed = !run.passed && run.failedLine;
       results.push({
@@ -143,7 +186,8 @@ async function main() {
         result: killed ? "killed" : "survived",
       });
     } finally {
-      restoreFromBackups();
+      const { conflicts } = restoreFromBackups();
+      if (conflicts.length > 0) throw new Error("a mutated file changed during the run; the run stops");
     }
   }
 
