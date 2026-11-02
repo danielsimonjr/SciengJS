@@ -1,7 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { checkPage } from "../support/page-checker.ts";
+import { checkPage, PROFILE_PREFIX } from "../support/page-checker.ts";
+import { listCommandLines } from "../support/process-list.ts";
 
 const FIXTURES = fileURLToPath(new URL("../fixtures/pages/", import.meta.url));
 const browserPath = process.env.SCIENG_BROWSER ?? "";
@@ -86,5 +87,13 @@ describe.skipIf(!haveBrowser)("page checker on svg drawings", () => {
     const result = await checkPage({ browserPath, htmlPath: `${FIXTURES}empty-foreignobject.html`, drawingSelectors: ["#drawing"] });
     expect(result.ok).toBe(false);
     expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
+  }, 60000);
+});
+
+describe.skipIf(!haveBrowser)("page checker teardown", () => {
+  test("leaves no running process that holds a check profile", async () => {
+    await checkPage({ browserPath, htmlPath: `${FIXTURES}good.html` });
+    const held = listCommandLines().filter((line) => line.includes(PROFILE_PREFIX));
+    expect(held).toEqual([]);
   }, 60000);
 });

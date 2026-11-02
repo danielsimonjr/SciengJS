@@ -39,6 +39,8 @@ const DEFAULT_STOP_TIMEOUT_MS = 20000;
 const POLL_MS = 100;
 const PROFILE_DELETE_DEADLINE_MS = 30000;
 const LAUNCHED_EXIT_GRACE_MS = 5000;
+/** The prefix of every profile folder that a check creates. The leak check looks for it. */
+export const PROFILE_PREFIX = "sciengjs-page-check-";
 const CHROME_ARGS = [
   "--headless=new",
   "--remote-debugging-port=0",
@@ -210,7 +212,7 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
   const settleMs = options.settleMs ?? DEFAULT_SETTLE_MS;
   const stopTimeoutMs = options.stopTimeoutMs ?? DEFAULT_STOP_TIMEOUT_MS;
   const problems: string[] = [];
-  const profile = mkdtempSync(join(tmpdir(), "sciengjs-page-check-"));
+  const profile = mkdtempSync(join(tmpdir(), PROFILE_PREFIX));
   let child: ChildProcess | undefined;
   let port: number | undefined;
   let socket: WebSocket | undefined;
@@ -297,12 +299,27 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
     return { ok: problems.length === 0, problems };
   } finally {
     socket?.close();
-    try {
-      await closeBrowser(port, stopTimeoutMs);
-    } finally {
-      // The launched process holds the profile files until it exits, so it stops before the profile is removed.
-      await stopLaunched(child, LAUNCHED_EXIT_GRACE_MS);
-      await removeProfile(profile, PROFILE_DELETE_DEADLINE_MS);
-    }
+    await teardownLaunch({
+      close: () => closeBrowser(port, stopTimeoutMs),
+      stop: () => stopLaunched(child, LAUNCHED_EXIT_GRACE_MS),
+      remove: () => removeProfile(profile, PROFILE_DELETE_DEADLINE_MS),
+    });
+  }
+}
+
+/**
+ * Closes the browser, then stops the launched process, then removes the profile. The launched process holds
+ * the profile files until it exits. The last two steps run even when close throws, and close's error is rethrown.
+ */
+export async function teardownLaunch(steps: {
+  close: () => Promise<void>;
+  stop: () => Promise<void>;
+  remove: () => Promise<void>;
+}): Promise<void> {
+  try {
+    await steps.close();
+  } finally {
+    await steps.stop();
+    await steps.remove();
   }
 }
