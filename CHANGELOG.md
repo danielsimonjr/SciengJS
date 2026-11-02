@@ -15,6 +15,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Fixed
 
+- Page checker: a browser that publishes no DevTools port now gives its exit state and the tail of its stderr in the error. Before, the error gave no cause.
 - A render settles only after its worker has exited. A heap exhaustion rejects with `E_LIMIT`. Other worker crashes stay `E_INTERNAL`.
 - A platform cache default is resolved only when no source gives `cacheDir` a value. Each platform folder needs only its own variable.
 - A missing or failing browser path rejects with the path in the message. The page checker no longer waits for a DevTools port that never opens.

@@ -73,7 +73,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
 | `test/smoke/smoke.mjs` | (root) | tests | test | 56 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
-| `test/support/page-checker.ts` | (root) | tests | test | 328 |
+| `test/support/page-checker.ts` | (root) | tests | test | 357 |
 | `test/support/process-list.ts` | (root) | tests | test | 34 |
 | `test/support/stubs/stub-dot.ts` | (root) | tests | test | 19 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
@@ -81,7 +81,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/config.test.ts` | (root) | tests | test | 213 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 34 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
-| `test/unit/page-checker-io.test.ts` | (root) | tests | test | 78 |
+| `test/unit/page-checker-io.test.ts` | (root) | tests | test | 112 |
 | `test/unit/process-list.test.ts` | (root) | tests | test | 51 |
 | `test/unit/render.test.ts` | (root) | tests | test | 150 |
 | `test/unit/svg-compare.test.ts` | (root) | tests | test | 74 |

@@ -2,7 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { removeProfile, waitForDevToolsPort } from "../support/page-checker.ts";
+import { spawn } from "node:child_process";
+import { launchEvidence, removeProfile, waitForDevToolsPort } from "../support/page-checker.ts";
 
 function errnoError(code: string): NodeJS.ErrnoException {
   const err = new Error(`${code}: test`) as NodeJS.ErrnoException;
@@ -73,6 +74,39 @@ describe("waitForDevToolsPort names the last error when the deadline passes", ()
       expect(port).toBe(9222);
     } finally {
       rmSync(profile, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("launchEvidence records why a launched process gave no port", () => {
+  test("it holds the exit code and the stderr text of a process that died", async () => {
+    const child = spawn(process.execPath, ["-e", "console.error('profile is locked'); process.exit(3)"], {
+      stdio: ["ignore", "ignore", "pipe"],
+    });
+    const evidence = launchEvidence(child);
+    await new Promise((resolve) => child.once("close", resolve));
+    const text = evidence.describe();
+    expect(text).toContain("exit code 3");
+    expect(text).toContain("profile is locked");
+  });
+
+  test("it keeps only the tail of a long stderr", async () => {
+    const child = spawn(process.execPath, ["-e", "process.stderr.write('x'.repeat(20000) + 'END')"], {
+      stdio: ["ignore", "ignore", "pipe"],
+    });
+    const evidence = launchEvidence(child, 100);
+    await new Promise((resolve) => child.once("close", resolve));
+    const text = evidence.describe();
+    expect(text).toContain("END");
+    expect(text.length).toBeLessThan(400);
+  });
+
+  test("a process that still runs is reported as running", () => {
+    const child = spawn(process.execPath, ["-e", "setTimeout(() => {}, 5000)"], { stdio: ["ignore", "ignore", "pipe"] });
+    try {
+      expect(launchEvidence(child).describe()).toContain("still running");
+    } finally {
+      child.kill();
     }
   });
 });
