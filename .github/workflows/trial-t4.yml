@@ -94,6 +94,9 @@ jobs:
         run: |
           sysctl kernel.apparmor_restrict_unprivileged_userns || true
           unshare --user --map-root-user true && echo "unprivileged user namespaces: allowed" || echo "unprivileged user namespaces: refused"
+          echo "browser path: $(readlink -f "$SCIENG_BROWSER")"
+          ls /etc/apparmor.d/ | grep -i chrome || echo "no chrome apparmor profile file"
+          grep -l "userns" /etc/apparmor.d/*chrome* 2>/dev/null || echo "no userns line in a chrome profile"
 
       - name: Create a loopback-only network namespace (Ubuntu)
         if: runner.os == 'Linux'
