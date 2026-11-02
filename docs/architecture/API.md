@@ -29,7 +29,7 @@ The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5.
 
 ### Graph size and `timeoutMs`
 
-The default `timeoutMs` is 60000. The graph stage renders a 100-node graph in 0.79 s to 0.89 s warm, on one development host. The measured graph has two edges per node, drawn from a fixed seed. The same host renders 200 nodes in 3.3 s warm. The trial report T1 measured 200-node graphs at 12 s to 51 s, and 153 s in one run. A large graph can therefore pass `timeoutMs`. Such a render rejects with `E_TIMEOUT`. The caller raises `timeoutMs` for that graph.
+The default `timeoutMs` is 60000. On one development host, the graph stage renders a 100-node seeded random graph in 0.79 s to 1.21 s warm. It renders a 200-node seeded random graph in 3.3 s to 6.6 s warm. The random graphs have two edges per node, drawn from a fixed seed. The times come from five runs. The trial graph `large200.dot` has 200 nodes and 399 edges. It takes 40 s to 44 s per warm render on the same host. The trial report T1 measured it at 12 s to 51 s per warm render, and at 153 s in one local run. Layout time depends on the graph, not only on the node count. A large graph can therefore pass `timeoutMs`. Such a render rejects with `E_TIMEOUT`. The caller raises `timeoutMs` for that graph.
 
 ### `capabilities(config?)`
 
