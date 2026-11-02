@@ -27,17 +27,19 @@ const round = (x) => Math.round(x * 1000) / 1000;
 const exited = (child) => child.exitCode !== null || child.signalCode !== null;
 
 function parseArgs(argv) {
-  const args = { out: undefined, runs: undefined };
+  const args = { out: undefined, runs: undefined, mode: "main" };
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === "--out") args.out = argv[++i];
     else if (argv[i] === "--runs") args.runs = Number(argv[++i]);
+    else if (argv[i] === "--mode") args.mode = argv[++i];
     else throw new Error(`unknown argument: ${argv[i]}`);
   }
   if (!args.out) throw new Error("--out <dir> is required");
+  if (args.mode !== "main" && args.mode !== "negative") throw new Error(`unknown --mode ${args.mode}`);
   return args;
 }
 
-const REQUIRED_KEYS = ["pageUrl", "testPage", "chromeArgs", "profilePrefix", "runs", "viewport", "bigViewport", "boxCenter", "pinnedBoxColor", "pollMs", "timeouts"];
+const REQUIRED_KEYS = ["pageUrl", "testPage", "chromeArgs", "forcedArgs", "profilePrefix", "runs", "viewport", "bigViewport", "huge", "boxCenter", "pinnedBoxColor", "pollMs", "timeouts", "sampler"];
 
 function loadConfig() {
   const path = process.env.T4_CONFIG || join(HERE, "config.json");
@@ -60,12 +62,13 @@ function browserPath() {
   return path;
 }
 
-function buildPage(cfg) {
+function buildPage(cfg, noise) {
   let html = readFileSync(join(HERE, cfg.testPage.pageTemplate), "utf8");
   const values = {
     "{{UNLISTED_IMAGE}}": cfg.testPage.unlistedImage,
     "{{UNLISTED_SCRIPT}}": cfg.testPage.unlistedScript,
     "{{PINNED_URL}}": cfg.testPage.pinnedUrl,
+    "{{NOISE}}": noise ? "true" : "false",
   };
   for (const [key, value] of Object.entries(values)) html = html.split(key).join(value);
   if (/\{\{[A-Z_]+\}\}/.test(html)) throw new Error("the page template has a placeholder with no value");
@@ -76,7 +79,20 @@ function dataUrl(html) {
   return `data:text/html;charset=utf-8;base64,${Buffer.from(html, "utf8").toString("base64")}`;
 }
 
-/** A proxy that counts every connection the browser opens to it. It forwards nothing. */
+/** The host named by the first line of a proxied request: a CONNECT target or an absolute URL. */
+function proxyHost(line) {
+  if (line === null) return "(connection without data)";
+  const connect = line.match(/^CONNECT\s+([^\s:]+)/);
+  if (connect) return connect[1];
+  const absolute = line.match(/^[A-Z]+\s+https?:\/\/([^/\s:]+)/);
+  if (absolute) return absolute[1];
+  return `(other) ${line.slice(0, 40)}`;
+}
+
+/**
+ * A proxy that refuses every connection. It records each attempt (the first line of the request)
+ * and answers 403 with no tunnel. It forwards nothing.
+ */
 async function startProxy(cfg) {
   const log = [];
   const sockets = new Set();
@@ -90,7 +106,7 @@ async function startProxy(cfg) {
     socket.once("data", (chunk) => {
       clearTimeout(timer);
       entry.line = chunk.toString("latin1").split(/\r?\n/)[0].slice(0, 200);
-      socket.destroy();
+      socket.end("HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 0\r\n\r\n");
     });
   });
   await new Promise((resolve, reject) => {
@@ -100,7 +116,7 @@ async function startProxy(cfg) {
   return {
     port: server.address().port,
     count: () => log.length,
-    entries: (from) => log.slice(from).map((e) => e.line ?? "(connection without data)"),
+    entries: (from) => log.slice(from).map((e) => e.line),
     close: () =>
       new Promise((resolve) => {
         for (const s of sockets) s.destroy();
@@ -416,6 +432,177 @@ function pngStats(buf, box) {
   };
 }
 
+/** The arguments that force the browser through the refusing proxy. The negative control gets none. */
+function forcedArgs(ctx, job) {
+  if (job.negative) return [];
+  return ctx.cfg.forcedArgs.map((a) => a.split("{proxyPort}").join(String(ctx.proxy.port)));
+}
+
+const PLATFORM = process.platform;
+
+function commandFor(map, name) {
+  const argv = map[PLATFORM];
+  if (!argv) throw new Error(`the sampler has no ${name} command for ${PLATFORM}`);
+  return argv;
+}
+
+/** Runs one command with a time limit and returns its standard output. */
+function runCommand(argv, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(argv[0], argv.slice(1), { stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
+    let out = "";
+    let err = "";
+    const timer = setTimeout(() => {
+      child.kill();
+      reject(new Error(`${argv[0]} timed out`));
+    }, timeoutMs);
+    child.stdout.on("data", (d) => {
+      out += d.toString();
+    });
+    child.stderr.on("data", (d) => {
+      err += d.toString();
+    });
+    child.on("error", (e) => {
+      clearTimeout(timer);
+      reject(e);
+    });
+    child.on("close", (code) => {
+      clearTimeout(timer);
+      if (code !== 0 && out === "") reject(new Error(`${argv[0]} exited ${code}: ${err.slice(0, 200)}`));
+      else resolve(out);
+    });
+  });
+}
+
+/** The process ids of the root and all its descendants, from a "pid ppid" table. */
+function treeOf(processText, rootPid) {
+  const children = new Map();
+  for (const line of processText.split(/\r?\n/)) {
+    const m = line.trim().match(/^(\d+)\s+(\d+)$/);
+    if (!m) continue;
+    const ppid = Number(m[2]);
+    if (!children.has(ppid)) children.set(ppid, []);
+    children.get(ppid).push(Number(m[1]));
+  }
+  const tree = new Set([rootPid]);
+  const stack = [rootPid];
+  while (stack.length) {
+    const p = stack.pop();
+    for (const c of children.get(p) ?? []) {
+      if (!tree.has(c)) {
+        tree.add(c);
+        stack.push(c);
+      }
+    }
+  }
+  return tree;
+}
+
+function hostAndPort(addr) {
+  if (!addr || addr === "*" || addr === "*:*") return { host: "*", port: null };
+  const i = addr.lastIndexOf(":");
+  if (i < 0) return { host: addr, port: null };
+  const port = Number(addr.slice(i + 1));
+  return { host: addr.slice(0, i).replace(/^\[|\]$/g, ""), port: Number.isInteger(port) ? port : null };
+}
+
+function isLoopbackOrUnspecified(host) {
+  return host === "localhost" || host.startsWith("127.") || host === "::1" || host === "*" || host === "0.0.0.0" || host === "::" || host === "";
+}
+
+/** The sockets of one socket table, one entry per owning process id. Each platform has its own layout. */
+function parseSockets(text) {
+  const out = [];
+  const lines = text.split(/\r?\n/);
+  if (PLATFORM === "linux") {
+    // ss -H -tuna -p: netid state recv send local peer users:(("name",pid=N,fd=N))
+    for (const line of lines) {
+      const t = line.trim().split(/\s+/);
+      if (t.length < 6) continue;
+      for (const m of line.matchAll(/pid=(\d+)/g)) out.push({ proto: t[0].toLowerCase(), pid: Number(m[1]), local: t[4], peer: t[5] });
+    }
+  } else if (PLATFORM === "darwin") {
+    // lsof -nP -iTCP -iUDP -FpnP: p = pid, P = protocol, n = name (local->peer)
+    let pid = null;
+    let proto = null;
+    for (const line of lines) {
+      const tag = line[0];
+      const value = line.slice(1);
+      if (tag === "p") pid = Number(value);
+      else if (tag === "P") proto = value.toLowerCase();
+      else if (tag === "n" && pid !== null) {
+        const [, peer] = value.split("->");
+        out.push({ proto, pid, local: value, peer: peer ?? null });
+      }
+    }
+  } else if (PLATFORM === "win32") {
+    // netstat -ano: proto local foreign [state] pid
+    for (const line of lines) {
+      const t = line.trim().split(/\s+/);
+      if (t.length < 4 || (t[0] !== "TCP" && t[0] !== "UDP")) continue;
+      const pid = Number(t[t.length - 1]);
+      if (Number.isInteger(pid)) out.push({ proto: t[0].toLowerCase(), pid, local: t[1], peer: t[2] });
+    }
+  }
+  return out;
+}
+
+/** One sample: the sockets that the browser process tree owns, and the ones that leave the host. */
+async function sampleOnce(cfg, rootPid) {
+  const timeout = cfg.sampler.commandTimeoutMs;
+  const tree = treeOf(await runCommand(commandFor(cfg.sampler.processTable, "process table"), timeout), rootPid);
+  const sockets = parseSockets(await runCommand(commandFor(cfg.sampler.sockets, "socket table"), timeout));
+  const owned = sockets.filter((s) => tree.has(s.pid));
+  const external = owned.filter((s) => s.peer !== null && !isLoopbackOrUnspecified(hostAndPort(s.peer).host));
+  const dns = owned.filter((s) => s.proto === "udp" && hostAndPort(s.peer).port === 53);
+  return {
+    tree: tree.size,
+    owned: owned.length,
+    external: external.map((s) => `${s.proto} ${s.peer}`),
+    dns: dns.map((s) => `${s.proto} ${s.peer}`),
+  };
+}
+
+/** Samples the browser process tree from launch to stop. A failed sample is recorded, never ignored. */
+function startSampler(cfg, rootPid) {
+  const acc = { count: 0, errors: [], maxTree: 0, maxOwned: 0, external: new Set(), dns: new Set(), maxDns: 0 };
+  let running = true;
+  const loop = (async () => {
+    while (running) {
+      try {
+        const s = await sampleOnce(cfg, rootPid);
+        acc.count++;
+        acc.maxTree = Math.max(acc.maxTree, s.tree);
+        acc.maxOwned = Math.max(acc.maxOwned, s.owned);
+        for (const e of s.external) acc.external.add(e);
+        for (const e of s.dns) acc.dns.add(e);
+        acc.maxDns = Math.max(acc.maxDns, s.dns.length);
+      } catch (err) {
+        acc.errors.push(err.message);
+      }
+      if (running) await sleep(cfg.sampler.intervalMs);
+    }
+  })();
+  return {
+    stop: async () => {
+      running = false;
+      await loop;
+      return {
+        platform: PLATFORM,
+        samples: acc.count,
+        sampleErrors: acc.errors.length,
+        firstSampleErrors: acc.errors.slice(0, 3),
+        maxTreeProcesses: acc.maxTree,
+        maxOwnedSockets: acc.maxOwned,
+        externalEndpointCount: acc.external.size,
+        externalEndpoints: [...acc.external].slice(0, 50),
+        dnsUdp53Endpoints: [...acc.dns],
+        maxDnsUdp53: acc.maxDns,
+      };
+    },
+  };
+}
+
 /** One full render: a new profile, a launch, one page load, one capture, a stop and a removal. */
 async function renderOnce(ctx, job) {
   const { cfg } = ctx;
@@ -436,18 +623,20 @@ async function renderOnce(ctx, job) {
   };
   const proxyFrom = ctx.proxy.count();
   let buf;
+  let sampler;
   try {
     handle.profile = mkdtempSync(join(tmpdir(), cfg.profilePrefix));
     const t0 = performance.now();
     let spawnError;
     handle.child = spawn(
       ctx.browser,
-      [...cfg.chromeArgs, `--user-data-dir=${handle.profile}`, `--proxy-server=http://127.0.0.1:${ctx.proxy.port}`, "about:blank"],
+      [...cfg.chromeArgs, ...forcedArgs(ctx, job), `--user-data-dir=${handle.profile}`, "about:blank"],
       { stdio: "ignore", windowsHide: true },
     );
     handle.child.on("error", (err) => {
       spawnError = err;
     });
+    sampler = startSampler(cfg, handle.child.pid);
     handle.port = await readPort(handle.profile, Date.now() + cfg.timeouts.portMs, cfg.pollMs, () => spawnError);
     const version = await (await fetch(`http://127.0.0.1:${handle.port}/json/version`)).json();
     rec.browserVersion = version.Browser;
@@ -474,7 +663,7 @@ async function renderOnce(ctx, job) {
         const id = params.requestId;
         if (url === cfg.pageUrl) {
           net.fulfilled.push(url);
-          fulfil(cdp, sessionId, net, id, "text/html; charset=utf-8", Buffer.from(ctx.html, "utf8"));
+          fulfil(cdp, sessionId, net, id, "text/html; charset=utf-8", Buffer.from(pageHtml, "utf8"));
         } else if (url === cfg.testPage.pinnedUrl) {
           net.fulfilled.push(url);
           fulfil(cdp, sessionId, net, id, "application/javascript; charset=utf-8", ctx.pinned);
@@ -489,11 +678,12 @@ async function renderOnce(ctx, job) {
     await cdp.send("Page.enable", {}, sessionId);
     await cdp.send("Network.enable", {}, sessionId);
     await cdp.send("Emulation.setDeviceMetricsOverride", { width: vp.width, height: vp.height, deviceScaleFactor: vp.scale, mobile: false }, sessionId);
-    if (!job.control) {
+    if (!job.control && !job.negative) {
       await cdp.send("Fetch.enable", { patterns: [{ urlPattern: "*", requestStage: "Request" }] }, sessionId);
     }
 
-    const url = job.control ? dataUrl(ctx.html) : cfg.pageUrl;
+    const pageHtml = job.noise ? ctx.noiseHtml : ctx.html;
+    const url = job.control || job.negative ? dataUrl(pageHtml) : cfg.pageUrl;
     const tNav = performance.now();
     const nav = await cdp.send("Page.navigate", { url }, sessionId);
     if (nav.errorText) throw new Error(`navigation failed: ${nav.errorText}`);
@@ -512,6 +702,7 @@ async function renderOnce(ctx, job) {
       const r = await cdp.send("Page.captureScreenshot", { format: "png" }, sessionId);
       rec.renderMs = round(performance.now() - t);
       buf = Buffer.from(r.data, "base64");
+      rec.base64Chars = r.data.length;
       const box = { x: Math.round(cfg.boxCenter.x * vp.scale), y: Math.round(cfg.boxCenter.y * vp.scale) };
       rec.png = pngStats(buf, box);
       rec.png.boxIsPinnedColour = JSON.stringify(rec.png.boxRgb) === JSON.stringify(cfg.pinnedBoxColor);
@@ -521,6 +712,7 @@ async function renderOnce(ctx, job) {
   } catch (err) {
     rec.error = err.message;
   } finally {
+    if (sampler) rec.sampling = await sampler.stop();
     await stopBrowser(handle, cfg, rec);
   }
   rec.refused = net.refused;
@@ -532,6 +724,9 @@ async function renderOnce(ctx, job) {
   rec.networkSentUrls = [...net.sentUrls];
   rec.proxyConnections = ctx.proxy.count() - proxyFrom;
   rec.proxyLines = ctx.proxy.entries(proxyFrom);
+  rec.proxyHosts = rec.proxyLines.map(proxyHost);
+  rec.negative = job.negative === true;
+  rec.noise = job.noise === true;
   rec.netErrors = net.errors;
   return { rec, buf };
 }
@@ -553,8 +748,39 @@ function median(values) {
   return xs.length % 2 ? xs[m] : (xs[m - 1] + xs[m]) / 2;
 }
 
+function countBy(items) {
+  const out = {};
+  for (const item of items) out[item] = (out[item] ?? 0) + 1;
+  return out;
+}
+
+function samplingSummary(records) {
+  const withSampling = records.filter((r) => r.sampling && r.sampling.samples > 0);
+  const external = new Set();
+  const dns = new Set();
+  for (const r of records) {
+    if (!r.sampling) continue;
+    for (const e of r.sampling.externalEndpoints) external.add(e);
+    for (const e of r.sampling.dnsUdp53Endpoints) dns.add(e);
+  }
+  return {
+    rendersSampled: records.filter((r) => r.sampling).length,
+    rendersWithSamples: withSampling.length,
+    samples: records.reduce((a, r) => a + (r.sampling?.samples ?? 0), 0),
+    sampleErrors: records.reduce((a, r) => a + (r.sampling?.sampleErrors ?? 0), 0),
+    firstSampleErrors: records.flatMap((r) => r.sampling?.firstSampleErrors ?? []).slice(0, 3),
+    maxTreeProcesses: Math.max(0, ...records.map((r) => r.sampling?.maxTreeProcesses ?? 0)),
+    maxOwnedSockets: Math.max(0, ...records.map((r) => r.sampling?.maxOwnedSockets ?? 0)),
+    externalEndpointCount: external.size,
+    externalEndpoints: [...external].slice(0, 50),
+    maxDnsUdp53: Math.max(0, ...records.map((r) => r.sampling?.maxDnsUdp53 ?? 0)),
+    dnsUdp53Endpoints: [...dns].slice(0, 20),
+  };
+}
+
 function summarize(records) {
   const ok = records.filter((r) => r.label === "main" && !r.error);
+  const main = records.filter((r) => r.label === "main");
   const summary = {
     type: "summary",
     runtime: RUNTIME,
@@ -564,6 +790,10 @@ function summarize(records) {
     browserVersion: records.find((r) => r.browserVersion)?.browserVersion ?? null,
     failedRenders: records.filter((r) => r.error).length,
     kinds: {},
+    proxyAttemptsPerRenderMain: [...new Set(main.map((r) => r.proxyConnections))],
+    proxyHostsMain: countBy(main.flatMap((r) => r.proxyHosts)),
+    pageResourceHostHitsMain: main.reduce((a, r) => a + r.proxyHosts.filter((h) => /python\.org|jquery|jsdelivr/.test(h)).length, 0),
+    sampling: samplingSummary(main),
   };
   for (const kind of ["png", "pdf"]) {
     const rs = ok.filter((r) => r.kind === kind).sort((a, b) => a.run - b.run);
@@ -580,7 +810,22 @@ function summarize(records) {
         bytes: median(warm.map((r) => r.bytes)),
       },
       refusedCounts: [...new Set(rs.map((r) => r.refusedCount))],
-      proxyConnectionCounts: [...new Set(rs.map((r) => r.proxyConnections))],
+    };
+  }
+  const huge = records.find((r) => r.label === "huge");
+  if (huge) {
+    summary.huge = {
+      error: huge.error,
+      width: huge.png?.width ?? null,
+      height: huge.png?.height ?? null,
+      pngBytes: huge.bytes ?? null,
+      base64Chars: huge.base64Chars ?? null,
+      wsMaxBytes: huge.wsStats?.maxBytes ?? null,
+      wsParseErrors: huge.wsStats?.parseErrors ?? null,
+      wsCloseCode: huge.wsStats?.closeCode ?? null,
+      notBlank: huge.png?.notBlank ?? null,
+      boxIsPinnedColour: huge.png?.boxIsPinnedColour ?? null,
+      arrivedWhole: Boolean(huge.bytes && huge.wsStats && huge.wsStats.parseErrors === 0 && huge.base64Chars > 10000000),
     };
   }
   return summary;
@@ -591,13 +836,14 @@ async function main() {
   const cfg = loadConfig();
   if (args.runs !== undefined) cfg.runs = args.runs;
   const browser = browserPath();
-  const html = buildPage(cfg);
+  const html = buildPage(cfg, false);
+  const noiseHtml = buildPage(cfg, true);
   const pinned = readFileSync(join(HERE, cfg.testPage.pinnedFile));
   mkdirSync(args.out, { recursive: true });
   const jsonl = join(args.out, `${RUNTIME}.jsonl`);
   writeFileSync(jsonl, "");
   const proxy = await startProxy(cfg);
-  const ctx = { cfg, html, pinned, proxy, browser };
+  const ctx = { cfg, html, noiseHtml, pinned, proxy, browser };
   const records = [];
   const emit = (rec) => {
     records.push(rec);
@@ -605,27 +851,50 @@ async function main() {
     appendFileSync(jsonl, line + "\n");
     console.log(line);
   };
+  let summary;
   try {
-    for (let i = 0; i < cfg.runs; i++) {
-      for (const kind of ["png", "pdf"]) {
-        const { rec, buf } = await renderOnce(ctx, { kind, viewport: cfg.viewport, run: i, label: "main", control: false });
-        emit(rec);
-        if (i === 0 && buf) writeFileSync(join(args.out, kind === "png" ? "first.png" : "first.pdf"), buf);
+    if (args.mode === "negative") {
+      // No forced flags, no interception: the page's external hosts must fail for lack of a network.
+      const neg = await renderOnce(ctx, { kind: "png", viewport: cfg.viewport, run: 0, label: "negative", control: false, negative: true });
+      emit(neg.rec);
+      const failedUrls = neg.rec.loadingFailed.map((f) => f.url);
+      summary = {
+        type: "summary",
+        mode: "negative",
+        runtime: RUNTIME,
+        platform: platform(),
+        imageFailed: failedUrls.includes(cfg.testPage.unlistedImage),
+        scriptFailed: failedUrls.includes(cfg.testPage.unlistedScript),
+        pinnedFailed: failedUrls.includes(cfg.testPage.pinnedUrl),
+        loadingFailed: neg.rec.loadingFailed,
+        renderError: neg.rec.error,
+      };
+    } else {
+      for (let i = 0; i < cfg.runs; i++) {
+        for (const kind of ["png", "pdf"]) {
+          const { rec, buf } = await renderOnce(ctx, { kind, viewport: cfg.viewport, run: i, label: "main", control: false });
+          emit(rec);
+          if (i === 0 && buf) writeFileSync(join(args.out, kind === "png" ? "first.png" : "first.pdf"), buf);
+        }
       }
+      const big = await renderOnce(ctx, { kind: "png", viewport: cfg.bigViewport, run: 0, label: "big", control: false });
+      emit(big.rec);
+      if (big.buf) writeFileSync(join(args.out, "big.png"), big.buf);
+      // Huge: a 4000 by 3000 device-pixel page of seeded noise, so that the screenshot message is over 10 MB.
+      const huge = await renderOnce(ctx, { kind: "png", viewport: cfg.huge.viewport, run: 0, label: "huge", control: false, noise: true });
+      emit(huge.rec);
+      if (huge.buf) writeFileSync(join(args.out, "huge.png"), huge.buf);
+      // Control: the same page with no interception. The external hosts must reach the proxy.
+      const control = await renderOnce(ctx, { kind: "png", viewport: cfg.viewport, run: 0, label: "control", control: true });
+      emit(control.rec);
+      summary = summarize(records);
     }
-    const big = await renderOnce(ctx, { kind: "png", viewport: cfg.bigViewport, run: 0, label: "big", control: false });
-    emit(big.rec);
-    if (big.buf) writeFileSync(join(args.out, "big.png"), big.buf);
-    // Control: the same page with no interception. The external hosts must reach the proxy.
-    const control = await renderOnce(ctx, { kind: "png", viewport: cfg.viewport, run: 0, label: "control", control: true });
-    emit(control.rec);
   } finally {
     await proxy.close();
   }
-  const summary = summarize(records);
   appendFileSync(jsonl, JSON.stringify(summary) + "\n");
   console.log(JSON.stringify(summary));
-  process.exit(summary.failedRenders > 0 ? 1 : 0);
+  process.exit(summary.failedRenders > 0 || summary.renderError ? 1 : 0);
 }
 
 main().catch((err) => {

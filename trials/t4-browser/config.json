@@ -62,5 +62,62 @@
     "stopMs": 20000,
     "exitGraceMs": 5000,
     "removeMs": 30000
+  },
+  "forcedArgs": [
+    "--proxy-server=http://127.0.0.1:{proxyPort}",
+    "--proxy-bypass-list=<-loopback>",
+    "--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1",
+    "--force-webrtc-ip-handling-policy=disable_non_proxied_udp"
+  ],
+  "huge": {
+    "viewport": {
+      "width": 2000,
+      "height": 1500,
+      "scale": 2
+    }
+  },
+  "sampler": {
+    "intervalMs": 250,
+    "commandTimeoutMs": 20000,
+    "processTable": {
+      "linux": [
+        "ps",
+        "-A",
+        "-o",
+        "pid=,ppid="
+      ],
+      "darwin": [
+        "ps",
+        "-A",
+        "-o",
+        "pid=,ppid="
+      ],
+      "win32": [
+        "powershell",
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        "Get-CimInstance Win32_Process | ForEach-Object { \"$($_.ProcessId) $($_.ParentProcessId)\" }"
+      ]
+    },
+    "sockets": {
+      "linux": [
+        "ss",
+        "-H",
+        "-tuna",
+        "-p"
+      ],
+      "darwin": [
+        "lsof",
+        "-nP",
+        "-iTCP",
+        "-iUDP",
+        "-FpnP"
+      ],
+      "win32": [
+        "netstat",
+        "-ano"
+      ]
+    }
   }
 }
