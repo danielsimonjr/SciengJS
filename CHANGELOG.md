@@ -21,6 +21,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The design and the architecture documents state that `E_LIMIT` covers the worker heap limit, and that `E_INTERNAL` covers other worker crashes.
 - The platform-default tests write their Windows paths with escaped backslashes.
 - The mutation audit runner and its mutant list are in `test/mutation/`.
+- The mutation runner restores each mutated file on SIGINT, SIGTERM, an uncaught exception and exit. After a hard kill, the next run restores the file first.
+- The leak check polls only the profile folder of its own check, for up to 5 seconds. A process of an earlier run cannot fail it.
 
 ### Added
 

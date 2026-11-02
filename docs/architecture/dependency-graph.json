@@ -3,9 +3,9 @@
     "name": "i0",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 42,
+    "totalFiles": 43,
     "totalModules": 2,
-    "totalExports": 75
+    "totalExports": 77
   },
   "modules": {
     "src": {
@@ -394,15 +394,14 @@
           {
             "file": "test/support/page-checker.ts",
             "imports": [
-              "checkPage",
-              "PROFILE_PREFIX"
+              "checkPage"
             ],
             "typeOnly": false
           },
           {
             "file": "test/support/process-list.ts",
             "imports": [
-              "listCommandLines"
+              "processesHolding"
             ],
             "typeOnly": false
           }
@@ -414,6 +413,19 @@
         "nodeDependencies": [
           "node:child_process",
           "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/mutation/run-mutants.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
           "node:path"
         ],
         "internalDependencies": [],
@@ -510,7 +522,9 @@
         ],
         "internalDependencies": [],
         "exports": [
-          "listCommandLines"
+          "listCommandLines",
+          "holdsFolder",
+          "processesHolding"
         ]
       },
       "test/support/stubs/stub-dot.ts": {
@@ -655,7 +669,9 @@
           "bun:test"
         ],
         "nodeDependencies": [
-          "node:child_process"
+          "node:child_process",
+          "node:os",
+          "node:path"
         ],
         "internalDependencies": [
           {
@@ -668,7 +684,9 @@
           {
             "file": "test/support/process-list.ts",
             "imports": [
-              "listCommandLines"
+              "holdsFolder",
+              "listCommandLines",
+              "processesHolding"
             ],
             "typeOnly": false
           }
@@ -784,11 +802,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 42,
-    "totalSourceFiles": 42,
+    "totalTypeScriptFiles": 43,
+    "totalSourceFiles": 43,
     "totalModules": 2,
-    "totalLinesOfCode": 2305,
-    "totalExports": 75,
+    "totalLinesOfCode": 2558,
+    "totalExports": 77,
     "entryRoots": 20,
     "reachableFiles": 20,
     "dormantFiles": 0,
@@ -806,7 +824,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 1,
     "totalInterfaces": 17,
-    "totalFunctions": 23,
+    "totalFunctions": 25,
     "totalTypeGuards": 0,
     "totalEnums": 0,
     "totalConstants": 11,

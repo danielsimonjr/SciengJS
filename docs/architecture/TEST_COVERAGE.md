@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 20 |
-| Total Test Files | 10 |
+| Total Test Files | 11 |
 | Source Files with Tests | 5 |
 | Source Files without Tests | 15 |
 | Coverage (raw, direct-import) | **25.0%** |
@@ -89,6 +89,7 @@ The following 15 source files are not directly imported by any test file:
 | Test File | Imports from Source |
 |-----------|---------------------|
 | `integration/page-checker.test.ts` | 0 files |
+| `mutation/run-mutants.test.ts` | 0 files |
 | `unit/config.test.ts` | 2 files |
 | `unit/errors.test.ts` | 1 files |
 | `unit/no-bun-api.test.ts` | 0 files |

@@ -1,11 +1,11 @@
 {
-  "totalFiles": 42,
+  "totalFiles": 43,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
     "orphan": 0,
-    "test": 22,
+    "test": 23,
     "tool": 0,
     "config": 0,
     "bench": 0,
@@ -13,11 +13,11 @@
   },
   "byArea": {
     "src": 20,
-    "tests": 22
+    "tests": 23
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 22
+    "(root)": 23
   },
   "files": [
     {
@@ -165,14 +165,21 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 99
+      "loc": 111
     },
     {
       "file": "test/mutation/run-mutants.mjs",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 124
+      "loc": 193
+    },
+    {
+      "file": "test/mutation/run-mutants.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 123
     },
     {
       "file": "test/node/backends/heap.mjs",
@@ -221,14 +228,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 325
+      "loc": 328
     },
     {
       "file": "test/support/process-list.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 17
+      "loc": 34
     },
     {
       "file": "test/support/stubs/stub-dot.ts",
@@ -284,7 +291,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 22
+      "loc": 51
     },
     {
       "file": "test/unit/render.test.ts",

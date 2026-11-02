@@ -2,9 +2,9 @@ metadata:
   name: i0
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 42
+  totalFiles: 43
   totalModules: 2
-  totalExports: 75
+  totalExports: 77
 modules:
   src:
     src/browser/index.ts:
@@ -290,11 +290,10 @@ modules:
         - file: test/support/page-checker.ts
           imports:
             - checkPage
-            - PROFILE_PREFIX
           typeOnly: false
         - file: test/support/process-list.ts
           imports:
-            - listCommandLines
+            - processesHolding
           typeOnly: false
       exports: []
     test/mutation/run-mutants.mjs:
@@ -302,6 +301,16 @@ modules:
       nodeDependencies:
         - node:child_process
         - node:fs
+        - node:path
+      internalDependencies: []
+      exports: []
+    test/mutation/run-mutants.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:os
         - node:path
       internalDependencies: []
       exports: []
@@ -380,6 +389,8 @@ modules:
       internalDependencies: []
       exports:
         - listCommandLines
+        - holdsFolder
+        - processesHolding
     test/support/stubs/stub-dot.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -476,6 +487,8 @@ modules:
         - bun:test
       nodeDependencies:
         - node:child_process
+        - node:os
+        - node:path
       internalDependencies:
         - file: test/support/page-checker.ts
           imports:
@@ -483,7 +496,9 @@ modules:
           typeOnly: false
         - file: test/support/process-list.ts
           imports:
+            - holdsFolder
             - listCommandLines
+            - processesHolding
           typeOnly: false
       exports: []
     test/unit/render.test.ts:
@@ -553,11 +568,11 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 42
-  totalSourceFiles: 42
+  totalTypeScriptFiles: 43
+  totalSourceFiles: 43
   totalModules: 2
-  totalLinesOfCode: 2305
-  totalExports: 75
+  totalLinesOfCode: 2558
+  totalExports: 77
   entryRoots: 20
   reachableFiles: 20
   dormantFiles: 0
@@ -575,7 +590,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 1
   totalInterfaces: 17
-  totalFunctions: 23
+  totalFunctions: 25
   totalTypeGuards: 0
   totalEnums: 0
   totalConstants: 11

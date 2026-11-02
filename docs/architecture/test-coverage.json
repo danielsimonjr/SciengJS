@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 20,
-    "totalTestFiles": 10,
+    "totalTestFiles": 11,
     "testedCount": 5,
     "untestedCount": 15,
     "coveragePercent": "25.0",
@@ -78,6 +78,7 @@
   },
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
+    "test/mutation/run-mutants.test.ts": [],
     "test/unit/config.test.ts": [
       "src/config.ts",
       "src/errors.ts"
