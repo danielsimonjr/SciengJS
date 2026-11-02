@@ -1,23 +1,24 @@
 {
-  "totalFiles": 49,
+  "totalFiles": 56,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
-    "orphan": 6,
+    "orphan": 7,
     "test": 23,
-    "tool": 0,
+    "tool": 6,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "src": 26,
-    "tests": 23
+    "src": 27,
+    "tests": 23,
+    "tools": 6
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 29
+    "(root)": 36
   },
   "files": [
     {
@@ -348,6 +349,55 @@
       "area": "src",
       "disposition": "orphan",
       "loc": 178
+    },
+    {
+      "file": "trials/t3-tex/shim/index.cjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 87
+    },
+    {
+      "file": "trials/t3-tex/tools/build-format.cjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 53
+    },
+    {
+      "file": "trials/t3-tex/tools/collect.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 22
+    },
+    {
+      "file": "trials/t3-tex/tools/make-bundle.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 31
+    },
+    {
+      "file": "trials/t3-tex/tools/measure.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 154
+    },
+    {
+      "file": "trials/t3-tex/tools/sizes.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 17
+    },
+    {
+      "file": "trials/t3-tex/tools/tex-engine.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 62
     },
     {
       "file": "trials/t4-browser/assets/pinned.js",

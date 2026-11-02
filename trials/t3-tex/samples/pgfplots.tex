@@ -1,0 +1,9 @@
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\begin{document}
+\begin{tikzpicture}
+  \begin{axis}[xlabel={$x$}, ylabel={$y$}, width=8cm, height=6cm]
+    \addplot[blue, thick] {x^2 - 2*x + 1};
+  \end{axis}
+\end{tikzpicture}
+\end{document}

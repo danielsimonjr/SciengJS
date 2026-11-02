@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 26,
+    "totalSourceFiles": 27,
     "totalTestFiles": 11,
     "testedCount": 5,
-    "untestedCount": 21,
-    "coveragePercent": "19.2",
+    "untestedCount": 22,
+    "coveragePercent": "18.5",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 26,
+      "activeFiles": 27,
       "testedActive": 5,
-      "activeUntested": 21,
+      "activeUntested": 22,
       "excludedTotal": 0,
-      "percent": "19.2",
+      "percent": "18.5",
       "breakdown": {
-        "active_untested": 21
+        "active_untested": 22
       }
     }
   },
@@ -37,6 +37,7 @@
     "trials/t1-graph/make-sources.mjs",
     "trials/t1-graph/measure.mjs",
     "trials/t2-mesh/measure.mjs",
+    "trials/t3-tex/shim/index.cjs",
     "trials/t4-browser/assets/pinned.js",
     "trials/t4-browser/measure.mjs"
   ],
@@ -85,6 +86,7 @@
     "trials/t1-graph/make-sources.mjs": [],
     "trials/t1-graph/measure.mjs": [],
     "trials/t2-mesh/measure.mjs": [],
+    "trials/t3-tex/shim/index.cjs": [],
     "trials/t4-browser/assets/pinned.js": [],
     "trials/t4-browser/measure.mjs": []
   },
@@ -188,6 +190,10 @@
     },
     {
       "file": "trials/t2-mesh/measure.mjs",
+      "category": null
+    },
+    {
+      "file": "trials/t3-tex/shim/index.cjs",
       "category": null
     },
     {

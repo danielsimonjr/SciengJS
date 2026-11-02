@@ -11,7 +11,7 @@
     "unreferencedAnywhereCount": 2,
     "referencedInModuleCount": 5,
     "unclassifiedExportCount": 0,
-    "noImporterFileCount": 6
+    "noImporterFileCount": 7
   },
   "unreferencedAnywhere": {
     "src/index.ts": [
@@ -46,6 +46,7 @@
     "trials/t1-graph/make-sources.mjs",
     "trials/t1-graph/measure.mjs",
     "trials/t2-mesh/measure.mjs",
+    "trials/t3-tex/shim/index.cjs",
     "trials/t4-browser/assets/pinned.js",
     "trials/t4-browser/measure.mjs"
   ]

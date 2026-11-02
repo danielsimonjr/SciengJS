@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 26 |
+| Total Source Files | 27 |
 | Total Test Files | 11 |
 | Source Files with Tests | 5 |
-| Source Files without Tests | 21 |
-| Coverage (raw, direct-import) | **19.2%** |
+| Source Files without Tests | 22 |
+| Coverage (raw, direct-import) | **18.5%** |
 ---
 
 ## Source Files Without Test Coverage
 
-The following 21 source files are not directly imported by any test file:
+The following 22 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -79,6 +79,10 @@ The following 21 source files are not directly imported by any test file:
 ### t2-mesh/
 
 - `trials/t2-mesh/measure.mjs`
+
+### t3-tex/
+
+- `trials/t3-tex/shim/index.cjs`
 
 ### t4-browser/
 

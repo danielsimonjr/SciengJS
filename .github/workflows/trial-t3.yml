@@ -1,0 +1,229 @@
+# Trial T3 (tex): can the TikZJax toolchain (web2js, e-TeX 2.6) build a format with tikz and circuitikz,
+# run outside a browser under Bun 1.4.4 and Node 22, and give SVG? Throwaway trial workflow.
+# Runs only on a push to the trial branch. No secrets, no publish. Every action is pinned to a commit.
+name: trial-t3
+
+on:
+  push:
+    branches:
+      - trial/t3-tex
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build the format (ubuntu-latest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+        working-directory: trials/t3-tex
+    steps:
+      - name: Check out the trial commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      # The TeX Live packages come from the Ubuntu archive of the runner (24.04, TeX Live 2023).
+      # apt does not pin them. The installed versions are recorded in the artifact.
+      - name: Install TeX Live and binaryen
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            texlive texlive-latex-extra texlive-latex-recommended texlive-plain-generic \
+            texlive-pictures binaryen
+          mkdir -p build/out/results
+          dpkg-query -W -f='${Package} ${Version}\n' 'texlive*' binaryen > build/out/results/apt-versions.txt
+          kpsewhich --version | head -1 > build/out/results/kpsewhich-version.txt
+          wasm-opt --version > build/out/results/wasm-opt-version.txt
+
+      - name: Install the pinned npm packages without install scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Clone web2js at the pinned commit
+        run: |
+          set -euo pipefail
+          repo=$(node -p "require('./config.json').web2js.repository")
+          sha=$(node -p "require('./config.json').web2js.commit")
+          git clone --quiet "$repo" build/web2js
+          git -C build/web2js checkout --quiet "$sha"
+          test "$(git -C build/web2js rev-parse HEAD)" = "$sha"
+          git -C build/web2js rev-parse HEAD > build/out/results/web2js-commit.txt
+
+      - name: Build tex.web with the e-TeX change files, then the WASM engine
+        run: |
+          set -euo pipefail
+          timing="$PWD/build/out/results/build-timing.txt"
+          : > "$timing"
+          stage() {
+            local name="$1"; shift
+            local s; s=$(date +%s%3N)
+            "$@"
+            echo "$name ms=$(( $(date +%s%3N) - s ))" >> "$timing"
+          }
+          cd build/web2js
+          stage jison node ../../node_modules/.bin/jison parser.jison
+          stage tie tie -m tex.web texk/tex.web $(cat changes/change-order)
+          stage tangle tangle -underline tex.web
+          export NODE_OPTIONS=--max-old-space-size=8192
+          stage compile node compile.js tex.p out.wasm
+          stage wasm-opt wasm-opt --asyncify --pass-arg=asyncify-ignore-indirect --pass-arg=asyncify-imports@library.reset,library.getfilesize -O4 out.wasm -o tex.wasm
+          ls -l tex.wasm out.wasm tex.p tex.pool
+          grep -n -m2 "banner==\|eTeX_banner" tex.web | tee "$GITHUB_WORKSPACE/trials/t3-tex/build/out/results/engine-banner-lines.txt"
+          grep -n "eTeX_version_string==" etexdir/etex.ch | tee -a "$GITHUB_WORKSPACE/trials/t3-tex/build/out/results/engine-banner-lines.txt"
+
+      - name: Build the format with tikz and circuitikz in two passes
+        env:
+          SCIENG_WEB2JS_DIR: ${{ github.workspace }}/trials/t3-tex/build/web2js
+          SCIENG_FORMAT_CONFIG: ${{ github.workspace }}/trials/t3-tex/config.json
+          SCIENG_BUILD_OUT: ${{ github.workspace }}/trials/t3-tex/build/format-raw
+          SCIENG_TEX_LOOKUP: kpsewhich
+          NODE_OPTIONS: --max-old-space-size=8192
+        run: |
+          set -euo pipefail
+          mkdir -p build/format-raw
+          s=$(date +%s%3N)
+          (cd build/web2js && cp tex.wasm "$SCIENG_BUILD_OUT/tex.wasm" && node "$GITHUB_WORKSPACE/trials/t3-tex/tools/build-format.cjs")
+          echo "format ms=$(( $(date +%s%3N) - s ))" >> build/out/results/build-timing.txt
+          cp build/web2js/*.log build/out/results/ 2>/dev/null || true
+          ls -l build/format-raw
+
+      - name: Measure the format and build the bundles
+        env:
+          SCIENG_WEB2JS_DIR: ${{ github.workspace }}/trials/t3-tex/build/web2js
+          SCIENG_TEX_LOOKUP: kpsewhich
+        run: |
+          set -euo pipefail
+          mkdir -p build/out/format build/out/bundles
+          node tools/sizes.mjs build/format-raw/core.dump build/format-raw/tex.wasm > build/out/results/sizes-raw.jsonl
+          cp build/format-raw/tex.wasm build/format-raw/initex-files.json build/out/format/
+          gzip -9 -c build/format-raw/core.dump > build/out/format/core.dump.gz
+          node tools/sizes.mjs build/out/format/core.dump.gz > build/out/results/sizes-gz.jsonl
+          node tools/make-bundle.mjs build/format-raw/initex-files.json build/out/bundles/base > build/out/results/base-bundle.json
+          node tools/collect.mjs build/format-raw samples/pgfplots.tex build/collect-work build/used-pgfplots.json | tee build/out/results/collect-pgfplots.json
+          node tools/make-bundle.mjs build/used-pgfplots.json build/out/bundles/pgfplots build/out/bundles/base/manifest.json | tee build/out/results/pgfplots-bundle.json
+          node tools/sizes.mjs build/out/bundles/pgfplots/files/* > build/out/results/pgfplots-bundle-sizes.jsonl
+          rm build/format-raw/core.dump
+
+      - name: Collect the licence files of the toolchain packages
+        run: |
+          set -euo pipefail
+          out=build/out/results/licences
+          mkdir -p "$out"
+          for p in texlive-latex-base texlive-latex-extra texlive-latex-recommended texlive-pictures texlive-fonts-recommended texlive-binaries texlive-plain-generic binaryen; do
+            f="/usr/share/doc/$p/copyright"
+            if [ -f "$f" ]; then cp "$f" "$out/$p.copyright"; else echo "missing $f" >> "$out/missing.txt"; fi
+          done
+          cp build/web2js/LICENSE.md "$out/web2js-LICENSE.md"
+          node -p "require('./build/web2js/package.json').license" > "$out/web2js-package-license.txt"
+          node -p "JSON.parse(require('fs').readFileSync('node_modules/@drgrice1/dvi2html/package.json', 'utf8')).license" > "$out/dvi2html-package-license.txt"
+          cp node_modules/@drgrice1/dvi2html/LICENSE "$out/dvi2html-LICENSE" 2>/dev/null || echo "no LICENSE file in the npm package" > "$out/dvi2html-LICENSE-note.txt"
+
+      - name: Record the tool versions
+        run: |
+          set -euo pipefail
+          node --version > build/out/results/node-version.txt
+          node -p "require('./package.json').dependencies['@drgrice1/dvi2html']" > build/out/results/dvi2html-pin.txt
+
+      - name: Upload the format, the bundles and the build results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: t3-tex-format
+          path: trials/t3-tex/build/out
+          if-no-files-found: error
+          retention-days: 14
+
+  measure:
+    name: render (${{ matrix.os }}, ${{ matrix.runtime }})
+    needs: build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        runtime: [bun, node]
+    defaults:
+      run:
+        shell: bash
+        working-directory: trials/t3-tex
+    steps:
+      - name: Check out the trial commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun 1.4.4
+        if: matrix.runtime == 'bun'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+
+      - name: Set up Node 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Put TEMP and TMP under the runner temp folder (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Add-Content -Path $env:GITHUB_ENV -Value "TEMP=$env:RUNNER_TEMP"
+          Add-Content -Path $env:GITHUB_ENV -Value "TMP=$env:RUNNER_TEMP"
+
+      - name: Install the pinned npm packages without install scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Clone web2js at the pinned commit (library.js and commonMemory.js only)
+        run: |
+          set -euo pipefail
+          repo=$(node -p "require('./config.json').web2js.repository")
+          sha=$(node -p "require('./config.json').web2js.commit")
+          git clone --quiet "$repo" build/web2js
+          git -C build/web2js checkout --quiet "$sha"
+          test "$(git -C build/web2js rev-parse HEAD)" = "$sha"
+
+      - name: Download the format and the bundles
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: t3-tex-format
+          path: trials/t3-tex/build/out
+
+      - name: Record the runtime versions
+        run: |
+          set -euo pipefail
+          mkdir -p build/results
+          node --version | tee build/results/node-version.txt
+          if [ "${{ matrix.runtime }}" = "bun" ]; then bun --version | tee build/results/bun-version.txt; fi
+
+      - name: Render the samples under the runtime
+        env:
+          SCIENG_WEB2JS_DIR: ${{ github.workspace }}/trials/t3-tex/build/web2js
+          SCIENG_FORMAT_DIR: ${{ github.workspace }}/trials/t3-tex/build/out/format
+          SCIENG_BUNDLE_ROOT: ${{ github.workspace }}/trials/t3-tex/build/out/bundles
+          SCIENG_WORKDIR: ${{ github.workspace }}/trials/t3-tex/build/work
+          SCIENG_OUT: ${{ github.workspace }}/trials/t3-tex/build/results
+        run: |
+          set -euo pipefail
+          if [ "${{ matrix.runtime }}" = "bun" ]; then
+            bun tools/measure.mjs
+          else
+            node tools/measure.mjs
+          fi
+
+      - name: Upload the render results and the SVG files
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: t3-${{ matrix.os }}-${{ matrix.runtime }}
+          path: trials/t3-tex/build/results/
+          if-no-files-found: warn
+          retention-days: 14
