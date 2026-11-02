@@ -16,16 +16,16 @@ Exit numbers:
 
 **The network claim holds with the forced browser flags. The round 1 finding F1 is closed.**
 
-- The client forces every browser connection through a local proxy that refuses it. In CI, the browser process tree owned no socket to a non-loopback address in any of the six jobs. The browser sends its connection attempts to the proxy, and the proxy forwards none.
-- The Ubuntu renders ran in a network namespace with only loopback. All 42 main renders per job passed. A negative render without the flags failed to load the external image, the external script and the pinned asset with `ERR_INTERNET_DISCONNECTED`, in both runtimes. The namespace blocks the network, and the flags do not depend on it.
+- The client forces every browser connection through a local proxy that refuses the connection. In CI, the browser process tree owned no socket to a non-loopback address in any of the six jobs. The browser sends its connection attempts to the proxy, and the proxy forwards none.
+- The Ubuntu renders ran in a network namespace with only loopback. All 42 main renders per job passed. A negative render without the flags failed to load the external image, the external script and the pinned asset with `ERR_INTERNET_DISCONNECTED`, in both runtimes. The namespace blocks the network, and the flags do not depend on the namespace.
 - The page made exactly 2 refused requests in every main render. The pinned asset was served from the process in every render.
-- A screenshot of 4000 by 3000 device pixels gave a base64 message of about 47.8 million characters. It arrived whole under Bun 1.4.4 and under Node 22.23.4, on all three systems.
+- A screenshot of 4000 by 3000 device pixels gave a base64 message of about 47.8 million characters. The message arrived whole under Bun 1.4.4 and under Node 22.23.4, on all three systems.
 - Limit: on Windows the sampler took about one sample per render, so the Windows socket count is weaker evidence than the Linux count. The DNS count is not reliable on Windows and macOS, because the sampler sees only connected UDP sockets there. See the deviations.
 
 ## Round history
 
 - **Round 1** (run `41391924914`, head `86acd97`): six green jobs. The page had 2 refused requests. The browser opened 11 to 17 connections per render that the Fetch domain did not see (finding F1).
-- **Round 2 attempt 1** (run `41393034051`, head `6049645`): the forced flags and the samplers ran. The Windows Node job reported 18 external endpoints. The tree had 153 processes. The cause was the parent-process walk. Windows reuses process ids, so the walk took in unrelated processes. The sockets of a runner service were counted. The finding is F2. The sampler now attributes sockets by profile path.
+- **Round 2 attempt 1** (run `41393034051`, head `6049645`): the forced flags and the samplers ran. The Windows Node job reported 18 external endpoints. The tree had 153 processes. The cause was the parent-process walk. Windows reuses process ids, so the walk took in unrelated processes. The sampler counted the sockets of a runner service. The finding is F2. The sampler now attributes sockets by profile path.
 - **Round 2, final** (run `41393386824`, head `b4f083f`): six green jobs, with the profile-path attribution. All numbers in this report come from this run, except where the table says round 1.
 
 ## Platform and versions
@@ -131,7 +131,7 @@ Run `41394751235`, head `fc2fc4c`. Job ids are the GitHub job ids.
 
 "Renderer processes" counts the processes of each browser tree whose command line has `--type=renderer`. "Processes with --no-sandbox" counts the processes of the tree whose command line has `--no-sandbox`. The count is zero in every sample of every job. On Windows and macOS the UDP/53 count is not a measurement (see the deviations).
 
-The Ubuntu negative control is not a sandbox failure. It runs without the forced flags, and the namespace has no route, so the external resources fail. The namespace renders pass with the sandbox on.
+The Ubuntu negative control is not a sandbox failure. The control runs without the forced flags. The namespace has no route, so the external resources fail. The namespace renders pass with the sandbox on.
 
 Round 3 Windows Bun used Chrome 156.0.8078.80. Round 2 used .48. The runner image changed between runs. Each job records the version it used.
 
