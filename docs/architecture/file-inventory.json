@@ -214,7 +214,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 253
+      "loc": 283
     },
     {
       "file": "test/support/stubs/stub-dot.ts",

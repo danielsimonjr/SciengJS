@@ -70,7 +70,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
 | `test/smoke/smoke.mjs` | (root) | tests | test | 56 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
-| `test/support/page-checker.ts` | (root) | tests | test | 253 |
+| `test/support/page-checker.ts` | (root) | tests | test | 283 |
 | `test/support/stubs/stub-dot.ts` | (root) | tests | test | 19 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
 | `test/support/test-registry.ts` | (root) | tests | test | 26 |

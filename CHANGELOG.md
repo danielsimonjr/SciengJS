@@ -12,6 +12,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - An SVG drawing with no drawn child, or with only zero-size children, fails the drawing check.
 - Node 22 runs the worker path of the built package: `test/node/worker.node.mjs`, run by `bun run test:node` and by the CI smoke job. Bun does not enforce the heap limit, so the heap limit holds only under Node.
 - The SVG comparison and the config loader have mutation-audit tests. Each test kills a mutant that the earlier tests let through.
+- The page checker stops the launched browser before it removes the profile. A Windows run no longer waits for a locked profile and loses its result.
+- The page checker treats a locked DevTools port file as "not yet" and polls again.
 
 ### Added
 

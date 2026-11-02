@@ -38,6 +38,7 @@ const DEFAULT_SETTLE_MS = 500;
 const DEFAULT_STOP_TIMEOUT_MS = 20000;
 const POLL_MS = 100;
 const PROFILE_DELETE_DEADLINE_MS = 30000;
+const LAUNCHED_EXIT_GRACE_MS = 5000;
 const CHROME_ARGS = [
   "--headless=new",
   "--remote-debugging-port=0",
@@ -82,13 +83,31 @@ async function portAnswers(port: number): Promise<boolean> {
   }
 }
 
+/**
+ * Reads the port from the DevTools file. On Windows the browser holds the file while it writes it,
+ * so a read can fail with EBUSY or EPERM. Such a read is not yet a port: the caller polls again.
+ * Any other read error is a real failure and is thrown.
+ */
+function readPortFile(file: string): number | undefined {
+  let text: string;
+  try {
+    text = readFileSync(file, "utf8");
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code === "EBUSY" || code === "EPERM" || code === "ENOENT") return undefined;
+    throw err;
+  }
+  const port = Number(text.split(/\r?\n/)[0]);
+  return Number.isInteger(port) && port > 0 ? port : undefined;
+}
+
 /** Polls the profile folder until the browser has published its DevTools port. */
 async function waitForDevToolsPort(profile: string, deadline: number): Promise<number> {
   const file = join(profile, "DevToolsActivePort");
   while (Date.now() < deadline) {
     if (existsSync(file)) {
-      const port = Number(readFileSync(file, "utf8").split(/\r?\n/)[0]);
-      if (Number.isInteger(port) && port > 0) return port;
+      const port = readPortFile(file);
+      if (port !== undefined) return port;
     }
     await sleep(POLL_MS);
   }
@@ -117,6 +136,20 @@ async function closeBrowser(port: number | undefined, stopTimeoutMs: number): Pr
   }
   if (port !== undefined && (await portAnswers(port))) {
     throw new Error(`the browser on port ${port} did not stop within ${stopTimeoutMs} ms`);
+  }
+}
+
+/**
+ * Waits for the launched process to exit. After the grace time it is killed, and the wait for its exit
+ * repeats. A process that already exited returns at once.
+ */
+async function stopLaunched(child: ChildProcess | undefined, graceMs: number): Promise<void> {
+  if (child === undefined || (child.exitCode !== null) || child.signalCode !== null) return;
+  const exited = new Promise<void>((resolve) => child.once("exit", () => resolve()));
+  await Promise.race([exited, sleep(graceMs)]);
+  if (child.exitCode === null && child.signalCode === null) {
+    child.kill("SIGKILL");
+    await Promise.race([exited, sleep(graceMs)]);
   }
 }
 
@@ -242,12 +275,9 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
     try {
       await closeBrowser(port, stopTimeoutMs);
     } finally {
-      try {
-        // The profile can be removed only when no browser process holds it. The launched process is stopped last.
-        await removeProfile(profile, PROFILE_DELETE_DEADLINE_MS);
-      } finally {
-        if (child !== undefined && child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
-      }
+      // The launched process holds the profile files until it exits, so it stops before the profile is removed.
+      await stopLaunched(child, LAUNCHED_EXIT_GRACE_MS);
+      await removeProfile(profile, PROFILE_DELETE_DEADLINE_MS);
     }
   }
 }
