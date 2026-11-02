@@ -55,24 +55,18 @@ async function readEngineVersion(): Promise<string> {
   return version;
 }
 
-/** The default platform folders. A missing platform variable fails loudly. */
-function platformFolders(d: ConfigDeps): { configBase: string; cacheBase: string } {
-  const p = d.platform === "win32" ? path.win32 : path.posix;
-  if (d.platform === "win32") {
-    const appData = requireVar(d.env, "APPDATA", "Windows");
-    const localAppData = requireVar(d.env, "LOCALAPPDATA", "Windows");
-    return { configBase: appData, cacheBase: localAppData };
-  }
-  if (d.platform === "darwin") {
-    return {
-      configBase: p.join(d.homedir, "Library", "Application Support"),
-      cacheBase: p.join(d.homedir, "Library", "Caches"),
-    };
-  }
-  return {
-    configBase: nonEmpty(d.env.XDG_CONFIG_HOME) ?? p.join(d.homedir, ".config"),
-    cacheBase: nonEmpty(d.env.XDG_CACHE_HOME) ?? p.join(d.homedir, ".cache"),
-  };
+/** The platform folder for configuration. A missing platform variable fails loudly. */
+function configBaseDir(d: ConfigDeps): string {
+  if (d.platform === "win32") return requireVar(d.env, "APPDATA", "Windows");
+  if (d.platform === "darwin") return path.posix.join(d.homedir, "Library", "Application Support");
+  return nonEmpty(d.env.XDG_CONFIG_HOME) ?? path.posix.join(d.homedir, ".config");
+}
+
+/** The platform folder for the cache. A missing platform variable fails loudly. */
+function cacheBaseDir(d: ConfigDeps): string {
+  if (d.platform === "win32") return requireVar(d.env, "LOCALAPPDATA", "Windows");
+  if (d.platform === "darwin") return path.posix.join(d.homedir, "Library", "Caches");
+  return nonEmpty(d.env.XDG_CACHE_HOME) ?? path.posix.join(d.homedir, ".cache");
 }
 
 function requireVar(env: Record<string, string | undefined>, name: string, platform: string): string {
@@ -87,13 +81,10 @@ function nonEmpty(value: string | undefined): string | undefined {
   return value === undefined || value === "" ? undefined : value;
 }
 
-/** The defaults. This file is the only place that holds the defaults. */
-function defaults(d: ConfigDeps): Required<Omit<SciengConfig, "browser">> {
-  const { cacheBase } = platformFolders(d);
-  const p = d.platform === "win32" ? path.win32 : path.posix;
+/** The defaults that need no platform folder. This file is the only place that holds the defaults. */
+function defaults(engineVersion: string): Required<Omit<SciengConfig, "browser" | "cacheDir">> {
   return {
-    cacheDir: p.join(cacheBase, APP_FOLDER),
-    texBundleUrl: `${RELEASE_URL_BASE}/v${d.engineVersion}/`,
+    texBundleUrl: `${RELEASE_URL_BASE}/v${engineVersion}/`,
     timeoutMs: 60000,
     maxSourceBytes: 10485760,
     maxMemoryMb: 2048,
@@ -102,9 +93,8 @@ function defaults(d: ConfigDeps): Required<Omit<SciengConfig, "browser">> {
 }
 
 function defaultConfigPath(d: ConfigDeps): string {
-  const { configBase } = platformFolders(d);
   const p = d.platform === "win32" ? path.win32 : path.posix;
-  return p.join(configBase, APP_FOLDER, CONFIG_FILE_NAME);
+  return p.join(configBaseDir(d), APP_FOLDER, CONFIG_FILE_NAME);
 }
 
 /** Checks one value against the type of the key. Returns the value, or throws E_CONFIG. */
@@ -203,7 +193,7 @@ export async function loadConfig(
   const explicitPath = nonEmpty(d.env[ENV.configFile]);
   const filePath = explicitPath ?? defaultConfigPath(d);
   const fromFile = await readConfigFile(filePath, explicitPath !== undefined, d);
-  const base = defaults(d);
+  const base = defaults(d.engineVersion);
 
   const resolved: Partial<Record<ConfigKey, unknown>> = { ...base };
   for (const key of Object.keys(ENV_KEYS) as ConfigKey[]) {
@@ -218,6 +208,11 @@ export async function loadConfig(
   for (const key of Object.keys(options) as ConfigKey[]) {
     const value = options[key];
     if (value !== undefined) resolved[key] = checkValue(key, value, "call option");
+  }
+  // The cache folder depends on the platform. Resolve it only when no source gave a value.
+  if (resolved.cacheDir === undefined) {
+    const p = d.platform === "win32" ? path.win32 : path.posix;
+    resolved.cacheDir = p.join(cacheBaseDir(d), APP_FOLDER);
   }
   return resolved as unknown as SciengConfig;
 }
