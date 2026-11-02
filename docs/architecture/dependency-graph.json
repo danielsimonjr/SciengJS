@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "name": "t4",
+    "name": "t3",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 49,
-    "totalModules": 2,
-    "totalExports": 77
+    "totalFiles": 56,
+    "totalModules": 3,
+    "totalExports": 81
   },
   "modules": {
     "src": {
@@ -417,6 +417,12 @@
           "node:path",
           "node:url"
         ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t3-tex/shim/index.cjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
         "internalDependencies": [],
         "exports": []
       },
@@ -860,23 +866,113 @@
         ],
         "exports": []
       }
+    },
+    "tools": {
+      "trials/t3-tex/tools/build-format.cjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t3-tex/tools/collect.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t3-tex/tools/tex-engine.mjs",
+            "imports": [
+              "loadEngine",
+              "renderTex",
+              "setCoreDump"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t3-tex/tools/make-bundle.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t3-tex/tools/measure.mjs": {
+        "externalDependencies": [
+          "@drgrice1/dvi2html"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:perf_hooks",
+          "node:stream",
+          "node:url",
+          "node:zlib"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t3-tex/tools/tex-engine.mjs",
+            "imports": [
+              "loadEngine",
+              "renderTex",
+              "setCoreDump",
+              "requiredEnv"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t3-tex/tools/sizes.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url",
+          "node:zlib"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t3-tex/tools/tex-engine.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:module",
+          "node:path",
+          "node:perf_hooks"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "requiredEnv",
+          "loadEngine",
+          "setCoreDump",
+          "renderTex"
+        ]
+      }
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 49,
-    "totalSourceFiles": 49,
-    "totalModules": 2,
-    "totalLinesOfCode": 3962,
-    "totalExports": 77,
+    "totalTypeScriptFiles": 56,
+    "totalSourceFiles": 56,
+    "totalModules": 3,
+    "totalLinesOfCode": 4388,
+    "totalExports": 81,
     "entryRoots": 20,
     "reachableFiles": 20,
-    "dormantFiles": 6,
-    "orphanedFiles": 6,
+    "dormantFiles": 7,
+    "orphanedFiles": 7,
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 9,
-    "noImporterFileCount": 6,
+    "noImporterFileCount": 7,
     "unusedExportsCount": 7,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
@@ -885,7 +981,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 1,
     "totalInterfaces": 17,
-    "totalFunctions": 25,
+    "totalFunctions": 29,
     "totalTypeGuards": 0,
     "totalEnums": 0,
     "totalConstants": 11,
@@ -915,12 +1011,13 @@
       "src/worker/run.ts"
     ],
     "reachableCount": 20,
-    "dormantCount": 6,
+    "dormantCount": 7,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",
       "trials/t1-graph/make-sources.mjs",
       "trials/t1-graph/measure.mjs",
       "trials/t2-mesh/measure.mjs",
+      "trials/t3-tex/shim/index.cjs",
       "trials/t4-browser/assets/pinned.js",
       "trials/t4-browser/measure.mjs"
     ],

@@ -29,11 +29,12 @@ This document provides a comprehensive dependency graph of all files, components
 15. [Worker Dependencies](#worker-dependencies)
 16. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
 17. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-18. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-19. [Dependency Matrix](#dependency-matrix)
-20. [Circular Dependency Analysis](#circular-dependency-analysis)
-21. [Visual Dependency Graph](#visual-dependency-graph)
-22. [Summary Statistics](#summary-statistics)
+18. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+19. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+20. [Dependency Matrix](#dependency-matrix)
+21. [Circular Dependency Analysis](#circular-dependency-analysis)
+22. [Visual Dependency Graph](#visual-dependency-graph)
+23. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -57,6 +58,7 @@ The codebase is organized into the following modules:
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
 - **trials/t2-mesh**: 1 file
+- **trials/t3-tex**: 1 file
 - **trials/t4-browser**: 2 files
 
 ---
@@ -361,6 +363,14 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="trials-t3-tex-dependencies"></a>
+
+## Trials/t3 tex Dependencies
+
+### `trials/t3-tex/shim/index.cjs` - Stand-in for the node-kpathsea addon that web2js library.js requires.
+
+---
+
 <a id="trials-t4-browser-dependencies"></a>
 
 ## Trials/t4 browser Dependencies
@@ -415,6 +425,7 @@ The codebase is organized into the following modules:
 | `trials/t1-graph/make-sources.mjs` | 0 files | 0 files |
 | `trials/t1-graph/measure.mjs` | 0 files | 0 files |
 | `trials/t2-mesh/measure.mjs` | 0 files | 0 files |
+| `trials/t3-tex/shim/index.cjs` | 0 files | 0 files |
 | `trials/t4-browser/assets/pinned.js` | 0 files | 0 files |
 | `trials/t4-browser/measure.mjs` | 0 files | 0 files |
 
@@ -500,9 +511,13 @@ graph TD
         N23[measure.mjs]
     end
 
+    subgraph Trials/t3-tex
+        N24[index.cjs]
+    end
+
     subgraph Trials/t4-browser
-        N24[pinned.js]
-        N25[measure.mjs]
+        N25[pinned.js]
+        N26[measure.mjs]
     end
 
     N1 --> N3
@@ -532,14 +547,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 49 |
-| Subsystems | 16 |
-| Total Lines of Code | 3962 |
-| Total Exports | 77 |
+| Total Source Files | 56 |
+| Subsystems | 17 |
+| Total Lines of Code | 4388 |
+| Total Exports | 81 |
 | Total Re-exports | 16 |
 | Total Classes | 1 |
 | Total Interfaces | 17 |
-| Total Functions | 25 |
+| Total Functions | 29 |
 | Total Type Guards | 0 |
 | Total Enums | 0 |
 | Type-only Imports | 9 |

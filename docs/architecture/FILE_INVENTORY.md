@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 49
+**Total files**: 56
 
 ## Disposition counts
 
@@ -17,26 +17,27 @@ This report lists each source file that the map census finds, with a disposition
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
 | `build-entry` | 20 | A `src`-area file that is an entry root. |
 | `test-only` | 0 | A `src`-area file that only a test reaches. |
-| `orphan` | 6 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
+| `orphan` | 7 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
 | `test` | 23 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
-| `tool` | 0 | A file in a `tools/` or `scripts/` folder outside `src/`. |
+| `tool` | 6 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **49** | |
+| **Total** | **56** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 26 |
+| `src` | 27 |
 | `tests` | 23 |
+| `tools` | 6 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 29 |
+| `(root)` | 36 |
 | `@danielsimonjr/sciengjs` | 20 |
 
 ## All files
@@ -90,6 +91,13 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |
 | `trials/t1-graph/measure.mjs` | (root) | src | orphan | 129 |
 | `trials/t2-mesh/measure.mjs` | (root) | src | orphan | 178 |
+| `trials/t3-tex/shim/index.cjs` | (root) | src | orphan | 87 |
+| `trials/t3-tex/tools/build-format.cjs` | (root) | tools | tool | 53 |
+| `trials/t3-tex/tools/collect.mjs` | (root) | tools | tool | 22 |
+| `trials/t3-tex/tools/make-bundle.mjs` | (root) | tools | tool | 31 |
+| `trials/t3-tex/tools/measure.mjs` | (root) | tools | tool | 154 |
+| `trials/t3-tex/tools/sizes.mjs` | (root) | tools | tool | 17 |
+| `trials/t3-tex/tools/tex-engine.mjs` | (root) | tools | tool | 62 |
 | `trials/t4-browser/assets/pinned.js` | (root) | src | orphan | 8 |
 | `trials/t4-browser/measure.mjs` | (root) | src | orphan | 912 |
 

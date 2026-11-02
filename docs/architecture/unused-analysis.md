@@ -6,9 +6,9 @@
 
 ## Summary
 
-- **Files with no in-repo importer**: 6
-- **Dormant files**: 6
-  - **Orphaned (reachable from nothing)**: 6
+- **Files with no in-repo importer**: 7
+- **Dormant files**: 7
+  - **Orphaned (reachable from nothing)**: 7
   - **Test-only (only a test reaches them)**: 0
 - **Potentially unused exports**: 7
   - **Unreferenced anywhere**: 2
@@ -31,6 +31,7 @@ Source files that no root and no test reaches. Verify each one before you delete
 - `trials/t1-graph/make-sources.mjs`
 - `trials/t1-graph/measure.mjs`
 - `trials/t2-mesh/measure.mjs`
+- `trials/t3-tex/shim/index.cjs`
 - `trials/t4-browser/assets/pinned.js`
 - `trials/t4-browser/measure.mjs`
 
@@ -48,6 +49,7 @@ No file of this repository imports these files. Do not use the list as a deletio
 - `trials/t1-graph/make-sources.mjs`
 - `trials/t1-graph/measure.mjs`
 - `trials/t2-mesh/measure.mjs`
+- `trials/t3-tex/shim/index.cjs`
 - `trials/t4-browser/assets/pinned.js`
 - `trials/t4-browser/measure.mjs`
 

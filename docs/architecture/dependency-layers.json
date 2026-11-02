@@ -657,6 +657,16 @@
         "exports": []
       }
     },
+    "trials/t3-tex": {
+      "trials/t3-tex/shim/index.cjs": {
+        "description": "Stand-in for the node-kpathsea addon that web2js library.js requires.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
     "trials/t4-browser": {
       "trials/t4-browser/assets/pinned.js": {
         "description": "The local copy of the pinned asset. The client serves it for the pinned URL in config.json.",
@@ -831,6 +841,12 @@
       "name": "Trials/t2-mesh",
       "files": [
         "trials/t2-mesh/measure.mjs"
+      ]
+    },
+    {
+      "name": "Trials/t3-tex",
+      "files": [
+        "trials/t3-tex/shim/index.cjs"
       ]
     },
     {

@@ -162,7 +162,7 @@ The converter (`src/text.ts`, lines 149-150) writes `<text font-family="...">`. 
 
 ## Font set
 
-The font set in the run is Computer Modern, through the TFM metrics of TeX Live (for example `cmr10.tfm`). The bundle holds metrics only. The browser build of the fork uses the Bakoma OpenType outlines. The CTAN page for Bakoma gives the licence field "Shareware: A fee is required". The trial did not fetch the Bakoma files. A glyph-to-path step needs outline fonts under a licence that the engine accepts.
+The font set in the run is Computer Modern, through the TFM metrics of TeX Live (for example `cmr10.tfm`). The bundle holds metrics only. The browser build of the fork uses the Bakoma OpenType outlines. The CTAN page for Bakoma gives the licence field "Shareware: A fee is required". The trial does not fetch the Bakoma files. A glyph-to-path step needs outline fonts under a licence that the engine accepts.
 
 ## Licences
 
