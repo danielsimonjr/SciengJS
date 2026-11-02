@@ -112,6 +112,64 @@ The round 2 claim holds with the flags on. Without the flags, the claim does not
 
 The first round 2 run attributed sockets by walking the parent-process chain. Windows reuses process ids. The sampler then reported 18 external endpoints for the Windows Node job (run `41393034051`, job `125108338487`). The fix attributes each process by the profile path in its command line. Every browser process of a render carries that path. The numbers of the superseded run are not used.
 
+## Round 3: the Chrome sandbox is on
+
+Round 3 removes `--no-sandbox` from the trial configuration. The client never passes it. Every render runs with the Chrome sandbox on.
+
+Run `41394751235`, head `fc2fc4c`. Job ids are the GitHub job ids.
+
+### Table 4: sandbox evidence, one row per job
+
+| OS | Runtime | Job id | Browser | Renders | Errors | Renderer processes (max) | Processes with `--no-sandbox` (max) | Samples | External endpoints | UDP/53 endpoints | Namespace renders | Negative control |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Windows | Bun 1.4.4 | 125113560248 | Chrome 156.0.8078.80 | 45 | 0 | 6 | 0 | 42 | 0 | 0 (not measured) | not run | not run |
+| Windows | Node 22.23.4 | 125113560094 | Chrome 156.0.8078.48 | 45 | 0 | 6 | 0 | 42 | 0 | 0 (not measured) | not run | not run |
+| Ubuntu | Bun 1.4.4 | 125113559827 | Chrome 156.0.8078.47 | 45 | 0 | 6 | 0 | 86 | 0 | 0 | 45 renders, 0 errors | failed, as expected |
+| Ubuntu | Node 22.23.4 | 125113560083 | Chrome 156.0.8078.47 | 45 | 0 | 6 | 0 | 86 | 0 | 0 | 45 renders, 0 errors | failed, as expected |
+| macOS (arm64) | Bun 1.4.4 | 125113560153 | Chrome 156.0.8078.48 | 45 | 0 | 6 | 0 | 169 | 0 | 0 (not measured) | not run | not run |
+| macOS (arm64) | Node 22.23.4 | 125113560005 | Chrome 156.0.8078.48 | 45 | 0 | 6 | 0 | 149 | 0 | 0 (not measured) | not run | not run |
+
+"Renderer processes" counts the processes of each browser tree whose command line has `--type=renderer`. "Processes with --no-sandbox" counts the processes of the tree whose command line has `--no-sandbox`. The count is zero in every sample of every job. On Windows and macOS the UDP/53 count is not a measurement (see the deviations).
+
+The Ubuntu negative control is not a sandbox failure. It runs without the forced flags, and the namespace has no route, so the external resources fail. The namespace renders pass with the sandbox on.
+
+Round 3 Windows Bun used Chrome 156.0.8078.80. Round 2 used .48. The runner image changed between runs. Each job records the version it used.
+
+### Table 5: Ubuntu and the user namespace
+
+| Check | Result | Source |
+|---|---|---|
+| `kernel.apparmor_restrict_unprivileged_userns` | 1 | Ubuntu job, diagnostic step |
+| `unshare --user --map-root-user true` (a plain user namespace) | refused, `uid_map: Operation not permitted` | Ubuntu job, diagnostic step |
+| Chrome profile `/etc/apparmor.d/chrome` | exists, and contains a `userns` rule | Ubuntu job, diagnostic step |
+| Chrome sandbox on the normal renders | starts, 6 renderer processes, 0 render errors | Table 4 |
+
+The sandbox starts on the Ubuntu runner without any change to the host. The Chrome package installs its own AppArmor profile, which allows the Chrome binary to create user namespaces. The `unshare` binary has no such profile. The `unshare` command is refused. The diagnostic step printed the profile file but not its attachment line. The claim that the profile names the Chrome binary is not measured.
+
+### The Ubuntu decision
+
+The trial considered three options. The trial takes none of them.
+
+- **Chosen: none.** The Chrome package profile already allows the Chrome binary to use user namespaces. The sandbox starts, and the renderer count and the zero `--no-sandbox` count show it.
+- **Rejected: `sysctl kernel.apparmor_restrict_unprivileged_userns=0`.** It turns off a host restriction for every program on the runner. The sandbox does not need it.
+- **Not needed: an AppArmor profile for the Chrome binary.** The package already ships one. A host without that package would need one. Such a profile would be narrower than the sysctl. The trial did not write one.
+
+The first round 3 CI run (`41394176941`, head `df0b1e4`) failed the Ubuntu jobs. The failure came from the namespace step only. Chrome refused to run as root with the sandbox on. The normal Ubuntu renders in that run passed with 0 errors. The fix runs the namespace steps as the runner user through `sudo -u`. The run that followed (`41394464642`) passed all six jobs.
+
+### Namespace run as the runner user
+
+The namespace steps run as the runner user with `sudo ip netns exec t4ns sudo -u "$USER" env ...`. The renders pass there, and the negative control fails as expected. The browser runs as a non-root user, so the sandbox starts.
+
+### Sandbox status page (chrome://sandbox)
+
+The client does not read `chrome://sandbox`. The proof is the process table: renderer processes exist, and none carries `--no-sandbox`. This trial did not add the page read, so the status page is not measured.
+
+### Failure path: a host where the sandbox cannot start
+
+The first round 3 run is the measured failure. The browser exited with code 1 before it published its DevTools port. The client rejected each render in less than a second with the message `the browser exited with 1 before it published its DevTools port`. The client did not wait for the port timeout.
+
+The design rule "A host where the sandbox cannot start rejects the render" holds on the trial path. The mapping to `E_STAGE_MISSING` is not measured. The trial has no stage error codes.
+
 ## Proposed replacement for the design section "browser"
 
 The design file is not edited by this trial. The text below replaces the section "browser", lines 130 to 137 of `docs/superpowers/specs/2026-11-01-scieng-engine-design.md`.
@@ -127,6 +185,7 @@ The design file is not edited by this trial. The text below replaces the section
   - `--proxy-bypass-list=<-loopback>` sends loopback connections through the same proxy.
   - `--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1` stops every DNS lookup.
   - `--force-webrtc-ip-handling-policy=disable_non_proxied_udp` stops WebRTC from using a route that bypasses the proxy.
+- The client never passes `--no-sandbox`. A host where the sandbox cannot start rejects the render with `E_STAGE_MISSING`.
 - The client intercepts every request through the `Fetch` domain. The client fulfils two kinds of request from the process: the page that the client loads, and each exact pinned URL of the engine asset list. The client refuses every other request.
 - A page keeps its pinned CDN URLs, so the page also works in a normal browser. A render through the client sends no request out of the process.
 - I4 gate, network: on Linux, the renders run in a network namespace with only loopback. The renders pass there. A negative render without the forced flags fails to load an external image and an external script.
@@ -145,7 +204,10 @@ The gate test for the proxy refusal is the namespace run plus the socket samplin
 - **One client commit covers items 1 to 3.** The round 2 client changes are in one commit, `86347b9`. They cover the forced flags, the sampler, the huge render and the negative mode. The changes share one file and the page template. The attribution fix is commit `b4f083f`. The workflow changes are in `6049645`.
 - **Node 22 ran only in CI.** The local host has Node v26.13.0. Local runs under Node 26 were smoke tests, and CI is the authority for Node 22.
 - **The runners' Chrome was used.** The trial did not install a pinned Chrome for Testing build. Chrome 156 is the version on all three runners.
-- **The namespace ran as root.** The renders in the namespace ran under `sudo ip netns exec`. Chrome runs with `--no-sandbox`, as in round 1.
+- **The namespace ran as the runner user.** Round 2 ran the namespace renders as root with `--no-sandbox`. Round 3 runs them as the runner user through `sudo -u`, with the sandbox on.
+- **The status page was not read.** The client does not read `chrome://sandbox`. The sandbox proof is the process table.
+- **The Ubuntu profile attachment is not measured.** The diagnostic step printed the profile file but not its attachment line.
+- **The E_STAGE_MISSING mapping is not measured.** The trial has no stage error codes. The measured failure is a browser exit before the DevTools port is published.
 
 ## Files
 
