@@ -539,13 +539,25 @@ function parseSockets(text) {
 /** One sample: the sockets that the browser process tree owns, and the ones that leave the host. */
 async function sampleOnce(cfg, profile) {
   const timeout = cfg.sampler.commandTimeoutMs;
-  const tree = treeOf(await runCommand(commandFor(cfg.sampler.processTable, "process table"), timeout), profile);
+  const procText = await runCommand(commandFor(cfg.sampler.processTable, "process table"), timeout);
+  const tree = treeOf(procText, profile);
+  // The sandbox proof: renderer processes of this render, and any tree process that carries the disabling flag.
+  let renderers = 0;
+  let noSandbox = 0;
+  for (const line of procText.split(/\r?\n/)) {
+    const m = line.trim().match(/^(\d+)\s+(.*)$/);
+    if (!m || !tree.has(Number(m[1]))) continue;
+    if (m[2].includes("--type=renderer")) renderers++;
+    if (m[2].includes("--no-sandbox")) noSandbox++;
+  }
   const sockets = parseSockets(await runCommand(commandFor(cfg.sampler.sockets, "socket table"), timeout));
   const owned = sockets.filter((s) => tree.has(s.pid));
   const external = owned.filter((s) => s.peer !== null && !isLoopbackOrUnspecified(hostAndPort(s.peer).host));
   const dns = owned.filter((s) => s.proto === "udp" && hostAndPort(s.peer).port === 53);
   return {
     tree: tree.size,
+    renderers,
+    noSandbox,
     owned: owned.length,
     external: external.map((s) => `${s.proto} ${s.peer}`),
     dns: dns.map((s) => `${s.proto} ${s.peer}`),
@@ -554,7 +566,7 @@ async function sampleOnce(cfg, profile) {
 
 /** Samples the browser process tree from launch to stop. A failed sample is recorded, never ignored. */
 function startSampler(cfg, profile) {
-  const acc = { count: 0, errors: [], maxTree: 0, maxOwned: 0, external: new Set(), dns: new Set(), maxDns: 0 };
+  const acc = { count: 0, errors: [], maxTree: 0, maxOwned: 0, external: new Set(), dns: new Set(), maxDns: 0, maxRenderers: 0, maxNoSandbox: 0 };
   let running = true;
   const loop = (async () => {
     while (running) {
@@ -563,6 +575,8 @@ function startSampler(cfg, profile) {
         acc.count++;
         acc.maxTree = Math.max(acc.maxTree, s.tree);
         acc.maxOwned = Math.max(acc.maxOwned, s.owned);
+        acc.maxRenderers = Math.max(acc.maxRenderers, s.renderers);
+        acc.maxNoSandbox = Math.max(acc.maxNoSandbox, s.noSandbox);
         for (const e of s.external) acc.external.add(e);
         for (const e of s.dns) acc.dns.add(e);
         acc.maxDns = Math.max(acc.maxDns, s.dns.length);
@@ -583,6 +597,8 @@ function startSampler(cfg, profile) {
         firstSampleErrors: acc.errors.slice(0, 3),
         maxTreeProcesses: acc.maxTree,
         maxOwnedSockets: acc.maxOwned,
+        maxRendererProcesses: acc.maxRenderers,
+        maxNoSandboxProcesses: acc.maxNoSandbox,
         externalEndpointCount: acc.external.size,
         externalEndpoints: [...acc.external].slice(0, 50),
         dnsUdp53Endpoints: [...acc.dns],
@@ -626,7 +642,9 @@ async function renderOnce(ctx, job) {
       spawnError = err;
     });
     sampler = startSampler(cfg, handle.profile);
-    handle.port = await readPort(handle.profile, Date.now() + cfg.timeouts.portMs, cfg.pollMs, () => spawnError);
+    // A browser that exits before it publishes its port has failed to start (for example, the sandbox cannot start).
+    const startFailure = () => spawnError ?? (exited(handle.child) ? new Error(`the browser exited with ${handle.child.exitCode ?? handle.child.signalCode} before it published its DevTools port`) : undefined);
+    handle.port = await readPort(handle.profile, Date.now() + cfg.timeouts.portMs, cfg.pollMs, startFailure);
     const version = await (await fetch(`http://127.0.0.1:${handle.port}/json/version`)).json();
     rec.browserVersion = version.Browser;
     const cdp = new Cdp(version.webSocketDebuggerUrl, cfg.timeouts);
@@ -760,6 +778,8 @@ function samplingSummary(records) {
     firstSampleErrors: records.flatMap((r) => r.sampling?.firstSampleErrors ?? []).slice(0, 3),
     maxTreeProcesses: Math.max(0, ...records.map((r) => r.sampling?.maxTreeProcesses ?? 0)),
     maxOwnedSockets: Math.max(0, ...records.map((r) => r.sampling?.maxOwnedSockets ?? 0)),
+    maxRendererProcesses: Math.max(0, ...records.map((r) => r.sampling?.maxRendererProcesses ?? 0)),
+    maxNoSandboxProcesses: Math.max(0, ...records.map((r) => r.sampling?.maxNoSandboxProcesses ?? 0)),
     externalEndpointCount: external.size,
     externalEndpoints: [...external].slice(0, 50),
     maxDnsUdp53: Math.max(0, ...records.map((r) => r.sampling?.maxDnsUdp53 ?? 0)),
