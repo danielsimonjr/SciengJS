@@ -72,7 +72,7 @@ Source: each job's `results/*.jsonl` file in the artifact `t1-<os>-<runtime>`, r
 | L2 | Bun 1.4.4 | 251.307 | 1.377 | 1957.282 | 50761.353 | `agent-t1/local-bun-v2.jsonl` |
 | L3 | Node v26.13.0 | 117.030 | 1.296 | 2189.770 | 44029.160 | `agent-t1/local-node-v26.jsonl` |
 
-L1 used 20 warm renders for the 200-node graph. L2 and L3 used 3. L1 is the first run of the trial. It is not reproducible: L2 on the same machine gave 51 s. Node 22 was not run locally. Node v26 is the local Node runtime.
+L1 used 20 warm renders for the 200-node graph. L2 and L3 used 3. L1 is the first run of the trial. The L1 time is not reproducible: L2 on the same machine gave 51 s. Node 22 was not run locally. Node v26 is the local Node runtime.
 
 ### Table 3: other fixed facts
 
@@ -101,7 +101,7 @@ The Linux CI job renders the same committed sources with `dot -Tsvg`. The compar
 | large100 | 100 | 100 | 0 of 100 | 395.1 pt | no |
 | large200 | 200 | 200 | 0 of 200 | 1147 pt | no |
 
-The result is the same in the Bun job and the Node job, because the viz SVG is the same and the CLI runs once per job. Source: `results/layout-*.json` in the artifacts for `t1-ubuntu-latest-bun` and `t1-ubuntu-latest-node`.
+The Bun job and the Node job give the same result. The viz SVG is the same in both jobs, and the CLI runs once in each job. Source: `results/layout-*.json` in the artifacts for `t1-ubuntu-latest-bun` and `t1-ubuntu-latest-node`.
 
 The node sets are equal. Every node exists in both outputs. The positions differ. The likely cause is the version gap, Graphviz 16.1.0 against 2.43.0. The trial did not test this cause. A test would need a Graphviz 16.1.0 CLI build.
 
@@ -116,7 +116,7 @@ Each CLI time is one run, including process start.
 | large100 | 569 ms | 420 ms | 698.470 ms | 572.605 ms |
 | large200 | 14861 ms | 12201 ms | 14770.277 ms | 12941.728 ms |
 
-The CLI is about as fast as viz on the 200-node graph. The layout work dominates the time. The WASM build adds no visible cost on this graph. The small-graph CLI time includes process start, so it is larger than the viz warm time.
+The CLI is about as fast as viz on the 200-node graph. The layout work dominates the time. The WASM build adds no visible cost on this graph. The small-graph CLI time includes process start. Thus the CLI time is larger than the viz warm time.
 
 ## Image attribute probe
 
@@ -156,7 +156,7 @@ dot -Tsvg large200.dot -o out/cli.large200.svg
 node compare-layout.mjs out/bun.small.viz.svg out/cli.small.svg
 ```
 
-The CI workflow is `.github/workflows/trial-t1.yml`. It runs only on a push to `trial/t1-graph`. Run `41363808474` used head `660792f`.
+The CI workflow is `.github/workflows/trial-t1.yml`. The workflow runs only on a push to `trial/t1-graph`. Run `41363808474` used head `660792f`.
 
 ## Limits of the trial
 
