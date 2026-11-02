@@ -38,6 +38,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Added
 
+- Trial T5 (tex build): the report `docs/analysis/t5-tex-build.md` and its sources in `trials/t5-tex-build/`. An own tangler and an own Pascal to WASM compiler build `tex.web`. The build passes the trip test; only the banner line differs. The build runs under Bun 1.4.4 and Node 22 on three systems and makes `plain.fmt`. Each glyph of the SVG is a `<path>` from the AMS Type 1 fonts. LaTeX, `tikz` and `circuitikz` need e-TeX, so the format of the design cannot build on `tex.web` alone.
 - Trial T4 round 3: the client never passes `--no-sandbox`. Renders run with the Chrome sandbox on, on three systems.
 - Trial T4 (browser): the report `docs/analysis/t4-browser.md` and its sources in `trials/t4-browser/`. The protocol client starts Chrome under Bun 1.4.4 and Node 22 on three systems. It renders a PNG and a PDF, and it refuses the page's unlisted requests. A forced refusing proxy and an Ubuntu network namespace close the connection gap (finding F1).
 - Trial T1 (graph): the report `docs/analysis/t1-graph.md` and its sources in `trials/t1-graph/`. `@viz-js/viz` 3.31.0 renders DOT under Bun 1.4.4 and Node 22 on three systems, with the same SVG bytes in all six jobs. The layout differs from the Graphviz CLI 2.43.0. A 200-node graph takes 13 s to 42 s for each warm render.

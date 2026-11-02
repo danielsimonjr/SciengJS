@@ -31,10 +31,11 @@ This document provides a comprehensive dependency graph of all files, components
 17. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
 18. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
 19. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-20. [Dependency Matrix](#dependency-matrix)
-21. [Circular Dependency Analysis](#circular-dependency-analysis)
-22. [Visual Dependency Graph](#visual-dependency-graph)
-23. [Summary Statistics](#summary-statistics)
+20. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+21. [Dependency Matrix](#dependency-matrix)
+22. [Circular Dependency Analysis](#circular-dependency-analysis)
+23. [Visual Dependency Graph](#visual-dependency-graph)
+24. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -60,6 +61,7 @@ The codebase is organized into the following modules:
 - **trials/t2-mesh**: 1 file
 - **trials/t3-tex**: 1 file
 - **trials/t4-browser**: 2 files
+- **trials/t5-tex-build**: 6 files
 
 ---
 
@@ -394,6 +396,70 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="trials-t5-tex-build-dependencies"></a>
+
+## Trials/t5 tex build Dependencies
+
+### `trials/t5-tex-build/runtime/dvi2svg.mjs` - a font with no PFB keeps its TFM advances, and each of its glyphs goes in the missing list
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./tfm.mjs` | `readTfm` | Import |
+| `./type1.mjs` | `readType1` | Import |
+
+**Exports:**
+- Functions: `dviToSvg`
+
+---
+
+### `trials/t5-tex-build/runtime/host.mjs` - Host functions of the T5 trial: the Pascal file model on a virtual file system.
+
+**Exports:**
+- Classes: `ExitSignal`, `Host`
+
+---
+
+### `trials/t5-tex-build/runtime/run.mjs` - Run one compiled Pascal program on the virtual file system.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./host.mjs` | `Host, ExitSignal` | Import |
+
+**Exports:**
+- Functions: `runProgram`
+
+---
+
+### `trials/t5-tex-build/runtime/tfm.mjs` - TFM reader of the trial: the character widths and the design size.
+
+**Exports:**
+- Functions: `readTfm`
+
+---
+
+### `trials/t5-tex-build/runtime/type1.mjs` - Type 1 font reader of the trial: PFB (or PFA) to SVG path data for each glyph.
+
+**Exports:**
+- Functions: `readType1`
+
+---
+
+### `trials/t5-tex-build/runtime/vfs.mjs` - A virtual file system for the TeX runs of the trial. Reads come from an
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `fs` | `default` |
+| `path` | `default` |
+
+**Exports:**
+- Classes: `TreeFS`
+- Constants: `flatName`
+
+---
+
 <a id="dependency-matrix"></a>
 ## Dependency Matrix
 
@@ -411,6 +477,11 @@ The codebase is organized into the following modules:
 | `src/pairs` | 1 file | 1 file |
 | `src/registry` | 0 files | 2 files |
 | `src/worker/entry` | 2 files | 0 files |
+| `trials/t5-tex-build/runtime/dvi2svg.mjs` | 2 files | 0 files |
+| `trials/t5-tex-build/runtime/host.mjs` | 0 files | 1 file |
+| `trials/t5-tex-build/runtime/run.mjs` | 1 file | 0 files |
+| `trials/t5-tex-build/runtime/tfm.mjs` | 0 files | 1 file |
+| `trials/t5-tex-build/runtime/type1.mjs` | 0 files | 1 file |
 | `src/browser/index` | 0 files | 0 files |
 | `src/graph/index` | 0 files | 0 files |
 | `src/html/index` | 0 files | 0 files |
@@ -428,6 +499,7 @@ The codebase is organized into the following modules:
 | `trials/t3-tex/shim/index.cjs` | 0 files | 0 files |
 | `trials/t4-browser/assets/pinned.js` | 0 files | 0 files |
 | `trials/t4-browser/measure.mjs` | 0 files | 0 files |
+| `trials/t5-tex-build/runtime/vfs.mjs` | 0 files | 0 files |
 
 ---
 
@@ -520,6 +592,15 @@ graph TD
         N26[measure.mjs]
     end
 
+    subgraph Trials/t5-tex-build
+        N27[dvi2svg.mjs]
+        N28[host.mjs]
+        N29[run.mjs]
+        N30[tfm.mjs]
+        N31[type1.mjs]
+        N32[vfs.mjs]
+    end
+
     N1 --> N3
     N2 --> N1
     N2 --> N3
@@ -538,6 +619,9 @@ graph TD
     N18 --> N6
     N19 --> N3
     N19 --> N18
+    N27 --> N30
+    N27 --> N31
+    N29 --> N28
 ```
 
 ---
@@ -547,14 +631,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 56 |
-| Subsystems | 17 |
-| Total Lines of Code | 4451 |
-| Total Exports | 82 |
+| Total Source Files | 78 |
+| Subsystems | 18 |
+| Total Lines of Code | 7890 |
+| Total Exports | 106 |
 | Total Re-exports | 16 |
-| Total Classes | 1 |
+| Total Classes | 5 |
 | Total Interfaces | 17 |
-| Total Functions | 30 |
+| Total Functions | 43 |
 | Total Type Guards | 0 |
 | Total Enums | 0 |
 | Type-only Imports | 9 |

@@ -7,9 +7,9 @@
 ## Summary
 
 - **Files with no in-repo importer**: 7
-- **Dormant files**: 7
-  - **Orphaned (reachable from nothing)**: 7
-  - **Test-only (only a test reaches them)**: 0
+- **Dormant files**: 13
+  - **Orphaned (reachable from nothing)**: 11
+  - **Test-only (only a test reaches them)**: 2
 - **Potentially unused exports**: 7
   - **Unreferenced anywhere**: 2
   - **Referenced in their own module**: 5
@@ -34,12 +34,17 @@ Source files that no root and no test reaches. Verify each one before you delete
 - `trials/t3-tex/shim/index.cjs`
 - `trials/t4-browser/assets/pinned.js`
 - `trials/t4-browser/measure.mjs`
+- `trials/t5-tex-build/runtime/dvi2svg.mjs`
+- `trials/t5-tex-build/runtime/host.mjs`
+- `trials/t5-tex-build/runtime/run.mjs`
+- `trials/t5-tex-build/runtime/vfs.mjs`
 
 ## Dormant files: test-only
 
 Source files that only a test reaches. They ship nothing, but a test uses them.
 
-_None._
+- `trials/t5-tex-build/runtime/tfm.mjs`
+- `trials/t5-tex-build/runtime/type1.mjs`
 
 ## Files with no in-repo importer
 
