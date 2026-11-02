@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { spawn, type ChildProcess } from "node:child_process";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -150,4 +150,14 @@ describe("run-mutants restores the source when the run is interrupted", () => {
     },
     WAIT_MS * 3,
   );
+});
+
+describe("the leftovers of an interrupted run are never committed", () => {
+  test("a backup and a hash file are ignored by git", () => {
+    const repo = resolve(import.meta.dir, "..", "..");
+    for (const leftover of [`src/value.ts${BACKUP_SUFFIX}`, `src/value.ts${HASH_SUFFIX}`]) {
+      const check = spawnSync("git", ["check-ignore", "-q", "--no-index", leftover], { cwd: repo });
+      expect(check.status).toBe(0);
+    }
+  });
 });
