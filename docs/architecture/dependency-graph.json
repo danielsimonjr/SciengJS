@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "name": "agent-accf745efccdf0916",
+    "name": "agent-a7c2187ff35d645cc",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 78,
+    "totalFiles": 89,
     "totalModules": 3,
-    "totalExports": 106
+    "totalExports": 126
   },
   "modules": {
     "src": {
@@ -522,6 +522,15 @@
           "TreeFS",
           "flatName"
         ]
+      },
+      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "unitPerPt",
+          "createSpecials"
+        ]
       }
     },
     "tests": {
@@ -946,6 +955,22 @@
         ],
         "exports": []
       },
+      "trials/t5-tex-build/test/tangle.test.mjs": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/tangle.mjs",
+            "imports": [
+              "tangle"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "trials/t5-tex-build/test/trip-gate.test.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
@@ -987,6 +1012,63 @@
             "file": "trials/t5-tex-build/runtime/tfm.mjs",
             "imports": [
               "readTfm"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/test/dvisvgm-specials.test.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
+            "imports": [
+              "createSpecials"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/test/etrip-gate.test.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t6-etex-build/tools/etrip-gate.mjs",
+            "imports": [
+              "judgeFile",
+              "parseReferenceDiffs",
+              "etripConstants",
+              "etripMessageOf",
+              "dropEchoText"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/test/primitives.test.mjs": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t6-etex-build/tools/primitives.mjs",
+            "imports": [
+              "addedPrimitives"
             ],
             "typeOnly": false
           }
@@ -1083,13 +1165,12 @@
           "renderTex"
         ]
       },
-      "trials/t5-tex-build/tools/build.mjs": {
+      "trials/t5-tex-build/tools/build-lib.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
           "node:crypto",
           "node:fs",
           "node:path",
-          "node:url",
           "node:zlib"
         ],
         "internalDependencies": [
@@ -1104,6 +1185,31 @@
             "file": "trials/t5-tex-build/tools/pascal.mjs",
             "imports": [
               "compile"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "sha",
+          "fetchPinned",
+          "buildProgram",
+          "runtimeName"
+        ]
+      },
+      "trials/t5-tex-build/tools/build.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/build-lib.mjs",
+            "imports": [
+              "fetchPinned",
+              "buildProgram",
+              "runtimeName"
             ],
             "typeOnly": false
           }
@@ -1170,7 +1276,8 @@
         "externalDependencies": [],
         "nodeDependencies": [
           "node:fs",
-          "node:path"
+          "node:path",
+          "node:url"
         ],
         "internalDependencies": [
           {
@@ -1309,7 +1416,7 @@
           "tripGate"
         ]
       },
-      "trials/t5-tex-build/tools/trip.mjs": {
+      "trials/t5-tex-build/tools/trip-steps.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
           "node:fs",
@@ -1336,12 +1443,47 @@
               "lineDiff"
             ],
             "typeOnly": false
+          }
+        ],
+        "exports": [
+          "latin",
+          "flatName",
+          "loadProgram",
+          "plRoundTrip",
+          "texRun",
+          "dvitypeRun"
+        ]
+      },
+      "trials/t5-tex-build/tools/trip.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/linediff.mjs",
+            "imports": [
+              "lineDiff"
+            ],
+            "typeOnly": false
           },
           {
             "file": "trials/t5-tex-build/tools/trip-gate.mjs",
             "imports": [
               "tripGate",
               "buildBanner"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "trials/t5-tex-build/tools/trip-steps.mjs",
+            "imports": [
+              "latin",
+              "loadProgram",
+              "plRoundTrip",
+              "texRun",
+              "dvitypeRun"
             ],
             "typeOnly": false
           }
@@ -1362,25 +1504,123 @@
           "f64bytes",
           "ModuleBuilder"
         ]
+      },
+      "trials/t6-etex-build/tools/build.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/build-lib.mjs",
+            "imports": [
+              "fetchPinned",
+              "buildProgram",
+              "runtimeName",
+              "sha"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "trials/t6-etex-build/tools/primitives.mjs",
+            "imports": [
+              "addedPrimitives"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/tools/etrip-gate.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/linediff.mjs",
+            "imports": [
+              "lineDiff"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "COMPARISONS",
+          "etripConstants",
+          "parseReferenceDiffs",
+          "dropEchoText",
+          "etripMessageOf",
+          "judgeFile",
+          "etripGate"
+        ]
+      },
+      "trials/t6-etex-build/tools/etrip.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/linediff.mjs",
+            "imports": [
+              "lineDiff"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "trials/t5-tex-build/tools/trip-steps.mjs",
+            "imports": [
+              "latin",
+              "loadProgram",
+              "plRoundTrip",
+              "texRun",
+              "dvitypeRun"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "trials/t6-etex-build/tools/etrip-gate.mjs",
+            "imports": [
+              "etripGate",
+              "COMPARISONS"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/tools/primitives.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "addedPrimitives"
+        ]
       }
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 78,
-    "totalSourceFiles": 78,
+    "totalTypeScriptFiles": 89,
+    "totalSourceFiles": 89,
     "totalModules": 3,
-    "totalLinesOfCode": 7890,
-    "totalExports": 106,
+    "totalLinesOfCode": 8916,
+    "totalExports": 126,
     "entryRoots": 20,
     "reachableFiles": 20,
-    "dormantFiles": 13,
+    "dormantFiles": 14,
     "orphanedFiles": 11,
-    "testOnlyFiles": 2,
+    "testOnlyFiles": 3,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 9,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 7,
+    "unusedExportsCount": 8,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -1388,10 +1628,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 5,
     "totalInterfaces": 17,
-    "totalFunctions": 43,
+    "totalFunctions": 57,
     "totalTypeGuards": 0,
     "totalEnums": 0,
-    "totalConstants": 18,
+    "totalConstants": 24,
     "totalReExports": 16
   },
   "reachability": {
@@ -1418,7 +1658,7 @@
       "src/worker/run.ts"
     ],
     "reachableCount": 20,
-    "dormantCount": 13,
+    "dormantCount": 14,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",
       "trials/t1-graph/make-sources.mjs",
@@ -1434,7 +1674,8 @@
     ],
     "testOnly": [
       "trials/t5-tex-build/runtime/tfm.mjs",
-      "trials/t5-tex-build/runtime/type1.mjs"
+      "trials/t5-tex-build/runtime/type1.mjs",
+      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
     ]
   },
   "warnings": []

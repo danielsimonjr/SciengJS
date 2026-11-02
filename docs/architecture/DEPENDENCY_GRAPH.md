@@ -32,10 +32,11 @@ This document provides a comprehensive dependency graph of all files, components
 18. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
 19. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
 20. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-21. [Dependency Matrix](#dependency-matrix)
-22. [Circular Dependency Analysis](#circular-dependency-analysis)
-23. [Visual Dependency Graph](#visual-dependency-graph)
-24. [Summary Statistics](#summary-statistics)
+21. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+22. [Dependency Matrix](#dependency-matrix)
+23. [Circular Dependency Analysis](#circular-dependency-analysis)
+24. [Visual Dependency Graph](#visual-dependency-graph)
+25. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -62,6 +63,7 @@ The codebase is organized into the following modules:
 - **trials/t3-tex**: 1 file
 - **trials/t4-browser**: 2 files
 - **trials/t5-tex-build**: 6 files
+- **trials/t6-etex-build**: 1 file
 
 ---
 
@@ -460,6 +462,18 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="trials-t6-etex-build-dependencies"></a>
+
+## Trials/t6 etex build Dependencies
+
+### `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` - The SVG unit of the specials of dvisvgm: the big point (72 bp = 72.27 pt).
+
+**Exports:**
+- Functions: `createSpecials`
+- Constants: `unitPerPt`
+
+---
+
 <a id="dependency-matrix"></a>
 ## Dependency Matrix
 
@@ -500,6 +514,7 @@ The codebase is organized into the following modules:
 | `trials/t4-browser/assets/pinned.js` | 0 files | 0 files |
 | `trials/t4-browser/measure.mjs` | 0 files | 0 files |
 | `trials/t5-tex-build/runtime/vfs.mjs` | 0 files | 0 files |
+| `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` | 0 files | 0 files |
 
 ---
 
@@ -601,6 +616,10 @@ graph TD
         N32[vfs.mjs]
     end
 
+    subgraph Trials/t6-etex-build
+        N33[dvisvgm-specials.mjs]
+    end
+
     N1 --> N3
     N2 --> N1
     N2 --> N3
@@ -631,14 +650,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 78 |
-| Subsystems | 18 |
-| Total Lines of Code | 7890 |
-| Total Exports | 106 |
+| Total Source Files | 89 |
+| Subsystems | 19 |
+| Total Lines of Code | 8916 |
+| Total Exports | 126 |
 | Total Re-exports | 16 |
 | Total Classes | 5 |
 | Total Interfaces | 17 |
-| Total Functions | 43 |
+| Total Functions | 57 |
 | Total Type Guards | 0 |
 | Total Enums | 0 |
 | Type-only Imports | 9 |

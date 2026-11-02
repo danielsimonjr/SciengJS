@@ -6,6 +6,9 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Changed
 
+- Trial T6: the T5 compiler builds `tex.web` with `etex.ch` and five utility primitives (`\expanded`, `\filesize`, `\pdfstrcmp`, `\creationdate`, `\shellescape`). The build passes the e-TRIP gate, makes the LaTeX format in extended mode with the pgf driver `pgfsys-dvisvgm.def`, and renders a `circuitikz` circuit with each glyph as a `<path>` under Bun and Node. Report: `docs/analysis/t6-etex-build.md`.
+- Trial T5 tools: the tangler starts a module at a line that ends in `@`. The download, the program build and the trip steps move into shared modules. The T5 results do not change.
+
 - Design, tex stage: the build tangles `tex.web` with `etex.ch`, then one engine change file per concern. The engine writes the utility primitives that the LaTeX kernel needs from their published behaviour. The build never uses the name TeX or e-TeX. CI runs the trip test and the e-TRIP test (trial T5).
 - Build plan: trial T6 measures the e-TeX build, the primitive set and the pgf DVI driver. I12 takes its change files and format from T6. A new risk row covers the e-TRIP test.
 - Design and build plan: STE fixes in the tex stage text and in two risk rows of the plan.

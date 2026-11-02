@@ -857,6 +857,25 @@
           "flatName"
         ]
       }
+    },
+    "trials/t6-etex-build": {
+      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": {
+        "description": "The SVG unit of the specials of dvisvgm: the big point (72 bp = 72.27 pt).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "unitPerPt",
+          "createSpecials"
+        ],
+        "functions": [
+          "createSpecials"
+        ],
+        "constants": [
+          "unitPerPt"
+        ]
+      }
     }
   },
   "cyclicComponents": {
@@ -985,6 +1004,12 @@
         "trials/t5-tex-build/runtime/tfm.mjs",
         "trials/t5-tex-build/runtime/type1.mjs",
         "trials/t5-tex-build/runtime/vfs.mjs"
+      ]
+    },
+    {
+      "name": "Trials/t6-etex-build",
+      "files": [
+        "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
       ]
     }
   ]

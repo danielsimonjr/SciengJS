@@ -8,11 +8,11 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 33 |
-| Total Test Files | 13 |
-| Source Files with Tests | 7 |
+| Total Source Files | 34 |
+| Total Test Files | 17 |
+| Source Files with Tests | 8 |
 | Source Files without Tests | 26 |
-| Coverage (raw, direct-import) | **21.2%** |
+| Coverage (raw, direct-import) | **23.5%** |
 ---
 
 ## Source Files Without Test Coverage
@@ -109,6 +109,7 @@ The following 26 source files are not directly imported by any test file:
 | `worker/run.ts` | `worker-run.test.ts` |
 | `runtime/tfm.mjs` | `type1.test.mjs` |
 | `runtime/type1.mjs` | `type1.test.mjs` |
+| `runtime/dvisvgm-specials.mjs` | `dvisvgm-specials.test.mjs` |
 
 ---
 
@@ -127,5 +128,9 @@ The following 26 source files are not directly imported by any test file:
 | `unit/svg-compare.test.ts` | 0 files |
 | `unit/teardown.test.ts` | 0 files |
 | `unit/worker-run.test.ts` | 2 files |
+| `test/tangle.test.mjs` | 0 files |
 | `test/trip-gate.test.mjs` | 0 files |
 | `test/type1.test.mjs` | 2 files |
+| `test/dvisvgm-specials.test.mjs` | 1 files |
+| `test/etrip-gate.test.mjs` | 0 files |
+| `test/primitives.test.mjs` | 0 files |

@@ -1,24 +1,24 @@
 {
-  "totalFiles": 78,
+  "totalFiles": 89,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
-    "test-only": 2,
+    "test-only": 3,
     "orphan": 11,
-    "test": 25,
-    "tool": 20,
+    "test": 29,
+    "tool": 26,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "src": 33,
-    "tests": 25,
-    "tools": 20
+    "src": 34,
+    "tests": 29,
+    "tools": 26
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 58
+    "(root)": 69
   },
   "files": [
     {
@@ -418,7 +418,7 @@
       "package": "(root)",
       "area": "src",
       "disposition": "orphan",
-      "loc": 120
+      "loc": 133
     },
     {
       "file": "trials/t5-tex-build/runtime/host.mjs",
@@ -453,7 +453,14 @@
       "package": "(root)",
       "area": "src",
       "disposition": "orphan",
-      "loc": 44
+      "loc": 46
+    },
+    {
+      "file": "trials/t5-tex-build/test/tangle.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 21
     },
     {
       "file": "trials/t5-tex-build/test/trip-gate.test.mjs",
@@ -470,11 +477,18 @@
       "loc": 43
     },
     {
+      "file": "trials/t5-tex-build/tools/build-lib.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 71
+    },
+    {
       "file": "trials/t5-tex-build/tools/build.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 79
+      "loc": 37
     },
     {
       "file": "trials/t5-tex-build/tools/compare-builds.mjs",
@@ -509,7 +523,7 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 78
+      "loc": 88
     },
     {
       "file": "trials/t5-tex-build/tools/run-texware.mjs",
@@ -537,14 +551,14 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 530
+      "loc": 531
     },
     {
       "file": "trials/t5-tex-build/tools/tex-run.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 35
+      "loc": 38
     },
     {
       "file": "trials/t5-tex-build/tools/trip-gate.mjs",
@@ -554,11 +568,18 @@
       "loc": 65
     },
     {
+      "file": "trials/t5-tex-build/tools/trip-steps.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 55
+    },
+    {
       "file": "trials/t5-tex-build/tools/trip.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 128
+      "loc": 90
     },
     {
       "file": "trials/t5-tex-build/tools/wasm.mjs",
@@ -566,6 +587,62 @@
       "area": "tools",
       "disposition": "tool",
       "loc": 177
+    },
+    {
+      "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "test-only",
+      "loc": 160
+    },
+    {
+      "file": "trials/t6-etex-build/test/dvisvgm-specials.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 52
+    },
+    {
+      "file": "trials/t6-etex-build/test/etrip-gate.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 130
+    },
+    {
+      "file": "trials/t6-etex-build/test/primitives.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 22
+    },
+    {
+      "file": "trials/t6-etex-build/tools/build.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 76
+    },
+    {
+      "file": "trials/t6-etex-build/tools/etrip-gate.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 376
+    },
+    {
+      "file": "trials/t6-etex-build/tools/etrip.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 81
+    },
+    {
+      "file": "trials/t6-etex-build/tools/primitives.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 33
     }
   ],
   "skippedLinks": [],

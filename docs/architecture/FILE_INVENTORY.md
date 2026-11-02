@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 78
+**Total files**: 89
 
 ## Disposition counts
 
@@ -16,28 +16,28 @@ This report lists each source file that the map census finds, with a disposition
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
 | `build-entry` | 20 | A `src`-area file that is an entry root. |
-| `test-only` | 2 | A `src`-area file that only a test reaches. |
+| `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 25 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
-| `tool` | 20 | A file in a `tools/` or `scripts/` folder outside `src/`. |
+| `test` | 29 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `tool` | 26 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **78** | |
+| **Total** | **89** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 33 |
-| `tests` | 25 |
-| `tools` | 20 |
+| `src` | 34 |
+| `tests` | 29 |
+| `tools` | 26 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 58 |
+| `(root)` | 69 |
 | `@danielsimonjr/sciengjs` | 20 |
 
 ## All files
@@ -100,28 +100,39 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t3-tex/tools/tex-engine.mjs` | (root) | tools | tool | 62 |
 | `trials/t4-browser/assets/pinned.js` | (root) | src | orphan | 8 |
 | `trials/t4-browser/measure.mjs` | (root) | src | orphan | 912 |
-| `trials/t5-tex-build/runtime/dvi2svg.mjs` | (root) | src | orphan | 120 |
+| `trials/t5-tex-build/runtime/dvi2svg.mjs` | (root) | src | orphan | 133 |
 | `trials/t5-tex-build/runtime/host.mjs` | (root) | src | orphan | 212 |
 | `trials/t5-tex-build/runtime/run.mjs` | (root) | src | orphan | 41 |
 | `trials/t5-tex-build/runtime/tfm.mjs` | (root) | src | test-only | 23 |
 | `trials/t5-tex-build/runtime/type1.mjs` | (root) | src | test-only | 236 |
-| `trials/t5-tex-build/runtime/vfs.mjs` | (root) | src | orphan | 44 |
+| `trials/t5-tex-build/runtime/vfs.mjs` | (root) | src | orphan | 46 |
+| `trials/t5-tex-build/test/tangle.test.mjs` | (root) | tests | test | 21 |
 | `trials/t5-tex-build/test/trip-gate.test.mjs` | (root) | tests | test | 80 |
 | `trials/t5-tex-build/test/type1.test.mjs` | (root) | tests | test | 43 |
-| `trials/t5-tex-build/tools/build.mjs` | (root) | tools | tool | 79 |
+| `trials/t5-tex-build/tools/build-lib.mjs` | (root) | tools | tool | 71 |
+| `trials/t5-tex-build/tools/build.mjs` | (root) | tools | tool | 37 |
 | `trials/t5-tex-build/tools/compare-builds.mjs` | (root) | tools | tool | 13 |
 | `trials/t5-tex-build/tools/compile-cli.mjs` | (root) | tools | tool | 18 |
 | `trials/t5-tex-build/tools/linediff.mjs` | (root) | tools | tool | 53 |
 | `trials/t5-tex-build/tools/pascal.mjs` | (root) | tools | tool | 1402 |
-| `trials/t5-tex-build/tools/render.mjs` | (root) | tools | tool | 78 |
+| `trials/t5-tex-build/tools/render.mjs` | (root) | tools | tool | 88 |
 | `trials/t5-tex-build/tools/run-texware.mjs` | (root) | tools | tool | 32 |
 | `trials/t5-tex-build/tools/sizes.mjs` | (root) | tools | tool | 12 |
 | `trials/t5-tex-build/tools/tangle-cli.mjs` | (root) | tools | tool | 18 |
-| `trials/t5-tex-build/tools/tangle.mjs` | (root) | tools | tool | 530 |
-| `trials/t5-tex-build/tools/tex-run.mjs` | (root) | tools | tool | 35 |
+| `trials/t5-tex-build/tools/tangle.mjs` | (root) | tools | tool | 531 |
+| `trials/t5-tex-build/tools/tex-run.mjs` | (root) | tools | tool | 38 |
 | `trials/t5-tex-build/tools/trip-gate.mjs` | (root) | tools | tool | 65 |
-| `trials/t5-tex-build/tools/trip.mjs` | (root) | tools | tool | 128 |
+| `trials/t5-tex-build/tools/trip-steps.mjs` | (root) | tools | tool | 55 |
+| `trials/t5-tex-build/tools/trip.mjs` | (root) | tools | tool | 90 |
 | `trials/t5-tex-build/tools/wasm.mjs` | (root) | tools | tool | 177 |
+| `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` | (root) | src | test-only | 160 |
+| `trials/t6-etex-build/test/dvisvgm-specials.test.mjs` | (root) | tests | test | 52 |
+| `trials/t6-etex-build/test/etrip-gate.test.mjs` | (root) | tests | test | 130 |
+| `trials/t6-etex-build/test/primitives.test.mjs` | (root) | tests | test | 22 |
+| `trials/t6-etex-build/tools/build.mjs` | (root) | tools | tool | 76 |
+| `trials/t6-etex-build/tools/etrip-gate.mjs` | (root) | tools | tool | 376 |
+| `trials/t6-etex-build/tools/etrip.mjs` | (root) | tools | tool | 81 |
+| `trials/t6-etex-build/tools/primitives.mjs` | (root) | tools | tool | 33 |
 
 ## Skipped links
 

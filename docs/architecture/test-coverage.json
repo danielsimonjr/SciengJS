@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "totalSourceFiles": 33,
-    "totalTestFiles": 13,
-    "testedCount": 7,
+    "totalSourceFiles": 34,
+    "totalTestFiles": 17,
+    "testedCount": 8,
     "untestedCount": 26,
-    "coveragePercent": "21.2",
+    "coveragePercent": "23.5",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 33,
-      "testedActive": 7,
+      "activeFiles": 34,
+      "testedActive": 8,
       "activeUntested": 26,
       "excludedTotal": 0,
-      "percent": "21.2",
+      "percent": "23.5",
       "breakdown": {
         "active_untested": 26
       }
@@ -52,7 +52,8 @@
     "src/types.ts",
     "src/worker/run.ts",
     "trials/t5-tex-build/runtime/tfm.mjs",
-    "trials/t5-tex-build/runtime/type1.mjs"
+    "trials/t5-tex-build/runtime/type1.mjs",
+    "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
   ],
   "coverageMap": {
     "src/browser/index.ts": [],
@@ -104,7 +105,10 @@
     "trials/t5-tex-build/runtime/type1.mjs": [
       "trials/t5-tex-build/test/type1.test.mjs"
     ],
-    "trials/t5-tex-build/runtime/vfs.mjs": []
+    "trials/t5-tex-build/runtime/vfs.mjs": [],
+    "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": [
+      "trials/t6-etex-build/test/dvisvgm-specials.test.mjs"
+    ]
   },
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
@@ -130,11 +134,17 @@
       "src/worker/run.ts",
       "src/errors.ts"
     ],
+    "trials/t5-tex-build/test/tangle.test.mjs": [],
     "trials/t5-tex-build/test/trip-gate.test.mjs": [],
     "trials/t5-tex-build/test/type1.test.mjs": [
       "trials/t5-tex-build/runtime/type1.mjs",
       "trials/t5-tex-build/runtime/tfm.mjs"
-    ]
+    ],
+    "trials/t6-etex-build/test/dvisvgm-specials.test.mjs": [
+      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
+    ],
+    "trials/t6-etex-build/test/etrip-gate.test.mjs": [],
+    "trials/t6-etex-build/test/primitives.test.mjs": []
   },
   "classifiedUntested": [
     {
