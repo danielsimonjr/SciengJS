@@ -1,0 +1,30 @@
+{
+  "sources": {
+    "base": "https://mirrors.ctan.org/systems/knuth/dist/",
+    "files": [
+      { "path": "tex/tex.web", "sha256": "c62ab513ef167e93f71a23bd34f311e243210afd7c7a0f9b779614b71e398324" },
+      { "path": "tex/trip.tex", "sha256": "15f15c2ca1470085299056ec89dea5f51e9fe9303ef25581b2f2eaf7809ae97b" },
+      { "path": "tex/trip.pl", "sha256": "93b38cc794f0c4a462667e25ef34a83552cbcdd62a42b10f739a431166525a79" },
+      { "path": "tex/tripin.log", "sha256": "ba01328756a8901d7c38162c9012014e9540322bf0963e105286f2a6ccb494cc" },
+      { "path": "tex/tripin.fot", "sha256": "10531728b618cd95e60552753c4d3c321373ca625ccfae1933c1ad545b71f922" },
+      { "path": "tex/trip.log", "sha256": "61a653523bdccab9fd3f9aa61d170d0198c322c951938327b7daef9b70f26d8b" },
+      { "path": "tex/trip.fot", "sha256": "89e275ac12d025c06022e8dd6eb556b765954af2654b39ac2fbd451cf631b370" },
+      { "path": "tex/trip.typ", "sha256": "64efc62b962c592c2973f8c45a78e9e5d473f8b9da53ee53bc275a98041675cc" },
+      { "path": "texware/pltotf.web", "sha256": "52a02570db6abb14a25c396db6dc86e83254a5714a18f3c524cc24c2028fe522" },
+      { "path": "texware/tftopl.web", "sha256": "1670918787b215e91dfd9c5ac234e5e0f4017b025ec23928f0cd22ede180eb41" },
+      { "path": "texware/dvitype.web", "sha256": "3a2bef07d6613fdb3693b7c3a8bf39f1a220b5cdd19f74275c578be1c287d218" },
+      { "path": "lib/plain.tex", "sha256": "7c1223b880fa513542a616b86c4fa02d5ee703839427951982d7e311fd9049b2" },
+      { "path": "lib/hyphen.tex", "sha256": "2c18acdc04c1a066aeb1759905e7ca449f0616c314b5ed6aebe55b9d4a89b8d4" }
+    ]
+  },
+  "programs": [
+    { "name": "textrip", "web": "tex/tex.web", "changes": ["changes/tex-system.ch", "changes/tex-trip.ch"], "realBytes": 4 },
+    { "name": "texprod", "web": "tex/tex.web", "changes": ["changes/tex-system.ch", "changes/tex-prod.ch"], "realBytes": 4 },
+    { "name": "pltotf", "web": "texware/pltotf.web", "changes": [], "realBytes": 8 },
+    { "name": "tftopl", "web": "texware/tftopl.web", "changes": [], "realBytes": 8 },
+    { "name": "dvitype", "web": "texware/dvitype.web", "changes": ["changes/dvitype.ch"], "realBytes": 8 }
+  ],
+  "compilerFiles": ["tools/tangle.mjs", "tools/pascal.mjs", "tools/wasm.mjs"],
+  "runtimeFiles": ["runtime/host.mjs", "runtime/run.mjs", "runtime/vfs.mjs", "runtime/tfm.mjs", "runtime/type1.mjs", "runtime/dvi2svg.mjs"],
+  "render": { "sample": "samples/labels.tex", "repeats": 20 }
+}
