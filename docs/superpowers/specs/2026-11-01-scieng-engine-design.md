@@ -19,7 +19,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 ## Principles
 
 1. **Local.** No render sends a source to a web service. The one network access is the first download of a WASM TeX bundle. The download comes from a configured URL. A pinned sha256 checks each bundle.
-2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows an engine only when that engine is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Each borrowed engine is a WASM build.
+2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows an engine only when that engine is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only the program source, `tex.web`, and builds it to WASM with its own tools.
 3. **One input drives one output.** A backend is a pure function of its source and options. The same request gives the same bytes.
 4. **Configurable, never hard-coded.** Every path, URL, limit and timeout comes from the configuration (section "Configuration"). A missing required value fails with an error that names the value. No backend guesses a path.
 5. **Untrusted input is the default.** Every backend accepts a source from an unknown author. No backend executes code from a source.
@@ -50,6 +50,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 - An HTTP server. A later version can add one with `node:http`, behind an option, bound to 127.0.0.1.
 - The OpenSCAD language. A later version can add an OpenSCAD reader as a second front end of the CAD document.
 - TeX text in a language other than English. A fork can add the language packages.
+- TeX packages with the GPL as their only licence. Section "tex" gives the replacement of each.
 - SVG output for meshes.
 - Mermaid diagram types other than class, state and sequence in the native layout. These types use the browser stage.
 
@@ -111,7 +112,7 @@ A stage is a shared service that several backends use. Each stage loads on first
 |---|---|---|---|
 | graph | `@viz-js/viz` (Graphviz compiled to WASM) | wrapper MIT; Graphviz EPL-2.0 | the adapters that turn Mermaid, SysML into DOT |
 | math | `@mathjax/src` 4.x | Apache-2.0 | the request wrapper and the SVG clean-up |
-| tex | TeX compiled to WASM by the TikZJax toolchain | TikZJax LPPL-1.3c (the licence of each other toolchain part is a T3 exit item); the TeX packages carry their own licences, mostly LPPL | the format build, the bundle manager, the package detection, the DVI to SVG converter |
+| tex | `tex.web` (the TeX program source), compiled to WASM by the engine | `tex.web`: the licence of its author; the TeX packages: LPPL; the outline fonts: OFL or GFL (see "tex") | the Pascal to WASM compiler, the change files, the WASM host functions, the format build, the bundle manager, the package detection, the DVI to SVG converter with glyph paths |
 | mesh | `occt-import-js` (OpenCascade, WASM); `manifold-3d` | LGPL-2.1; Apache-2.0 | the CSG document reader, the glTF and STL writers, the Three.js viewer page |
 | browser | the installed Chromium or Chrome | (system program) | the Chrome DevTools Protocol client |
 | raster | `@resvg/resvg-wasm` | MPL-2.0 | the call wrapper |
@@ -120,7 +121,7 @@ A stage is a shared service that several backends use. Each stage loads on first
 
 `three` (MIT) loads inside the viewer page. `three` is not a Node dependency of the engine.
 
-The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. The engine package ships `THIRD_PARTY_NOTICES.md` with the EPL-2.0 notice of Graphviz, the LGPL-2.1 notice of OpenCascade and the MPL-2.0 notice of resvg. The LGPL and MPL parts stay separate, unmodified WASM files.
+The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. The engine package ships `THIRD_PARTY_NOTICES.md` with the EPL-2.0 notice of Graphviz, the LGPL-2.1 notice of OpenCascade and the MPL-2.0 notice of resvg. The notices also give the licence of `tex.web`, the LPPL of the TeX packages and the font licences. The LGPL and MPL parts stay separate, unmodified WASM files.
 
 ### graph
 
@@ -151,15 +152,33 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 ### tex
 
 - Input: a TikZ picture or a picture environment of a supported package. Output: SVG.
-- The format holds TeX, `tikz` and `circuitikz`. The text language is English only.
+- Build:
+  - `tangle` writes Pascal from `tex.web` and the change files of the engine. `tangle` is a build tool. The engine package does not hold `tangle`.
+  - The engine compiler (in `tools/`, build time only) compiles the Pascal of `tex.web` to WASM. The compiler accepts the Pascal subset that `tex.web` uses.
+  - The build uses no part of another TeX to WASM toolchain.
+- Name: the author of `tex.web` permits a changed program to use the name TeX only when the program passes the trip test. CI runs the trip test on each WASM build. A build that fails the trip test does not ship.
+- Runtime: the engine writes the host functions of the WASM module: file open, read and write on the virtual file system, and the terminal output.
+- The format holds LaTeX, `standalone`, `xcolor`, `tikz` and `circuitikz`. The text language is English only. No bundle holds `latex.fmt`.
+- The format and the bundles build from the packages of one pinned TeX Live year.
+- Licence rule: a package goes into a bundle only under the LPPL or in the public domain. A package that offers the LPPL as one option also qualifies. For a package with a licence choice, the engine uses the LPPL. A package with the GPL as its only licence does not go into a bundle. A font goes into a bundle only under the OFL or the GFL.
 - Extra bundles hold the rest of the package set:
-  - diagrams: `pgfplots`, `tikz-cd`, `tikz-3dplot`, `smartdiagram`, `pgf-umlsd`, `xy`, the `hobby` TikZ library;
+  - diagrams: `tikz-cd`, `tikz-3dplot`, `smartdiagram`, the `hobby` TikZ library;
   - science: `chemfig`, `mhchem`, `bussproofs`;
-  - math and color: the AMS set, `esvect`, `mathrsfs`, `xcolor`.
-- Package detection: the backend scans the source for environments and commands, and loads only the bundles that the source needs. The method follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT), with credit.
+  - math and color: the AMS set, `xcolor`.
+- These packages have the GPL as their only licence. No bundle holds them. Each has a replacement:
+
+  | Package | Replacement |
+  |---|---|
+  | `pgfplots` | the `plotly` input type and the plot stage |
+  | `pgf-umlsd` | a Mermaid sequence diagram |
+  | `xy` | `tikz-cd` |
+  | `esvect` | `\vec` or `\overrightarrow` |
+  | `mathrsfs` | `\mathscr` from the AMS `eucal` package |
+
+- Package detection: the backend scans the source for environments and commands, and loads only the bundles that the source needs. The method follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT), with credit. A source that loads a package that no bundle holds rejects with `E_UNSUPPORTED`. The message names the package and its replacement when the table above gives one.
 - Bundles download on first use from `SCIENG_TEX_BUNDLE_URL` into `SCIENG_CACHE_DIR`. Each bundle has a pinned sha256 in the engine package. A hash mismatch deletes the download and rejects with `E_INTEGRITY`.
 - TeX runs on a virtual file system that holds only the bundles and the source. `\write18` is off. `\openin` and `\input` see only the virtual tree.
-- DVI to SVG: the engine reads the DVI output and writes SVG with the glyphs as paths from the outline fonts of the bundle.
+- DVI to SVG: the engine reads the DVI output and writes SVG with each glyph as a `<path>`. The outlines come from the Type 1 Computer Modern fonts of the AMS (OFL). Latin Modern (GFL) supplies the fonts that the AMS set does not hold. The engine uses no font with a shareware licence.
 
 ### mesh
 
@@ -292,4 +311,4 @@ The engine is not a sandbox for a hostile process. The worker limits stop a runa
 
 ## Licence
 
-The engine and the adapter are MIT. The borrowed engines keep their licences, listed in "Stages".
+The engine and the adapter are MIT. The borrowed engines, the TeX packages and the fonts keep their licences, listed in "Stages" and "tex". No part with the GPL as its only licence is in the engine package or in a TeX bundle.
