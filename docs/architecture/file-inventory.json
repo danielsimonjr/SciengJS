@@ -229,7 +229,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 355
+      "loc": 357
     },
     {
       "file": "test/support/process-list.ts",

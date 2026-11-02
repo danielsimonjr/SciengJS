@@ -57,6 +57,8 @@ const CHROME_ARGS = [
   // No crash reporter: its helper process holds files in the profile after the browser has stopped.
   "--disable-breakpad",
   "--disable-crash-reporter",
+  // Chrome writes its own log to stderr, so a start failure shows what the browser did.
+  "--enable-logging=stderr",
 ];
 
 interface CdpMessage {
