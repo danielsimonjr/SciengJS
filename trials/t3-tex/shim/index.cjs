@@ -48,7 +48,8 @@ function findWithKpsewhich(name, format) {
   const args = format === FILE_FORMAT.TEX ? [name] : ['-format', format, name];
   try {
     const out = cp.execFileSync('kpsewhich', args, { encoding: 'utf8' }).trim();
-    return out === '' ? undefined : out;
+    // kpsewhich prints a path relative to the working directory for files in "."; keep it absolute.
+    return out === '' ? undefined : path.resolve(out);
   } catch {
     return undefined;
   }
