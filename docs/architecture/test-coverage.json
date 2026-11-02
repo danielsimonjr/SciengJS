@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 20,
+    "totalSourceFiles": 23,
     "totalTestFiles": 11,
     "testedCount": 5,
-    "untestedCount": 15,
-    "coveragePercent": "25.0",
+    "untestedCount": 18,
+    "coveragePercent": "21.7",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 20,
+      "activeFiles": 23,
       "testedActive": 5,
-      "activeUntested": 15,
+      "activeUntested": 18,
       "excludedTotal": 0,
-      "percent": "25.0",
+      "percent": "21.7",
       "breakdown": {
-        "active_untested": 15
+        "active_untested": 18
       }
     }
   },
@@ -32,7 +32,10 @@
     "src/sysml/index.ts",
     "src/tex/index.ts",
     "src/worker/entry.ts",
-    "src/worker/protocol.ts"
+    "src/worker/protocol.ts",
+    "trials/t1-graph/compare-layout.mjs",
+    "trials/t1-graph/make-sources.mjs",
+    "trials/t1-graph/measure.mjs"
   ],
   "testedFiles": [
     "src/config.ts",
@@ -74,7 +77,10 @@
     "src/worker/protocol.ts": [],
     "src/worker/run.ts": [
       "test/unit/worker-run.test.ts"
-    ]
+    ],
+    "trials/t1-graph/compare-layout.mjs": [],
+    "trials/t1-graph/make-sources.mjs": [],
+    "trials/t1-graph/measure.mjs": []
   },
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
@@ -160,6 +166,18 @@
     },
     {
       "file": "src/worker/protocol.ts",
+      "category": null
+    },
+    {
+      "file": "trials/t1-graph/compare-layout.mjs",
+      "category": null
+    },
+    {
+      "file": "trials/t1-graph/make-sources.mjs",
+      "category": null
+    },
+    {
+      "file": "trials/t1-graph/measure.mjs",
       "category": null
     }
   ]

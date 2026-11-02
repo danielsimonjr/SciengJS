@@ -27,10 +27,11 @@ This document provides a comprehensive dependency graph of all files, components
 13. [Sysml Dependencies](#sysml-dependencies)
 14. [Tex Dependencies](#tex-dependencies)
 15. [Worker Dependencies](#worker-dependencies)
-16. [Dependency Matrix](#dependency-matrix)
-17. [Circular Dependency Analysis](#circular-dependency-analysis)
-18. [Visual Dependency Graph](#visual-dependency-graph)
-19. [Summary Statistics](#summary-statistics)
+16. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+17. [Dependency Matrix](#dependency-matrix)
+18. [Circular Dependency Analysis](#circular-dependency-analysis)
+19. [Visual Dependency Graph](#visual-dependency-graph)
+20. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -52,6 +53,7 @@ The codebase is organized into the following modules:
 - **sysml**: 1 file
 - **tex**: 1 file
 - **worker**: 3 files
+- **trials/t1-graph**: 3 files
 
 ---
 
@@ -303,6 +305,42 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="trials-t1-graph-dependencies"></a>
+
+## Trials/t1 graph Dependencies
+
+### `trials/t1-graph/compare-layout.mjs` - Trial T1: compare the node layout of two Graphviz SVG files of the same DOT source.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `fs` | `readFileSync` |
+
+---
+
+### `trials/t1-graph/make-sources.mjs` - Writes the generated DOT sources of trial T1. The measurement script and the
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `fs` | `writeFileSync` |
+| `path` | `dirname, join` |
+| `url` | `fileURLToPath` |
+
+---
+
+### `trials/t1-graph/measure.mjs` - Trial T1: measure @viz-js/viz on Bun or Node. Runs unchanged under both.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash` |
+| `fs` | `existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync` |
+| `path` | `dirname, join` |
+| `url` | `fileURLToPath` |
+
+---
+
 <a id="dependency-matrix"></a>
 ## Dependency Matrix
 
@@ -330,6 +368,9 @@ The codebase is organized into the following modules:
 | `src/raster/index` | 0 files | 0 files |
 | `src/sysml/index` | 0 files | 0 files |
 | `src/tex/index` | 0 files | 0 files |
+| `trials/t1-graph/compare-layout.mjs` | 0 files | 0 files |
+| `trials/t1-graph/make-sources.mjs` | 0 files | 0 files |
+| `trials/t1-graph/measure.mjs` | 0 files | 0 files |
 
 ---
 
@@ -403,6 +444,12 @@ graph TD
         N19[run]
     end
 
+    subgraph Trials/t1-graph
+        N20[compare-layout.mjs]
+        N21[make-sources.mjs]
+        N22[measure.mjs]
+    end
+
     N1 --> N3
     N2 --> N1
     N2 --> N3
@@ -430,9 +477,9 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 43 |
-| Subsystems | 13 |
-| Total Lines of Code | 2642 |
+| Total Source Files | 46 |
+| Subsystems | 14 |
+| Total Lines of Code | 2864 |
 | Total Exports | 77 |
 | Total Re-exports | 16 |
 | Total Classes | 1 |

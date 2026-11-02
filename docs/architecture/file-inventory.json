@@ -1,10 +1,10 @@
 {
-  "totalFiles": 43,
+  "totalFiles": 46,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
-    "orphan": 0,
+    "orphan": 3,
     "test": 23,
     "tool": 0,
     "config": 0,
@@ -12,12 +12,12 @@
     "example": 0
   },
   "byArea": {
-    "src": 20,
+    "src": 23,
     "tests": 23
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 23
+    "(root)": 26
   },
   "files": [
     {
@@ -320,6 +320,27 @@
       "area": "tests",
       "disposition": "test",
       "loc": 83
+    },
+    {
+      "file": "trials/t1-graph/compare-layout.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 74
+    },
+    {
+      "file": "trials/t1-graph/make-sources.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 19
+    },
+    {
+      "file": "trials/t1-graph/measure.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 129
     }
   ],
   "skippedLinks": [],

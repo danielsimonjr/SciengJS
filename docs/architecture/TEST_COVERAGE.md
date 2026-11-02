@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 20 |
+| Total Source Files | 23 |
 | Total Test Files | 11 |
 | Source Files with Tests | 5 |
-| Source Files without Tests | 15 |
-| Coverage (raw, direct-import) | **25.0%** |
+| Source Files without Tests | 18 |
+| Coverage (raw, direct-import) | **21.7%** |
 ---
 
 ## Source Files Without Test Coverage
 
-The following 15 source files are not directly imported by any test file:
+The following 18 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -69,6 +69,12 @@ The following 15 source files are not directly imported by any test file:
 
 - `src/worker/entry.ts`
 - `src/worker/protocol.ts`
+
+### t1-graph/
+
+- `trials/t1-graph/compare-layout.mjs`
+- `trials/t1-graph/make-sources.mjs`
+- `trials/t1-graph/measure.mjs`
 
 ---
 

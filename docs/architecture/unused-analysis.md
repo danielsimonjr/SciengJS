@@ -6,9 +6,9 @@
 
 ## Summary
 
-- **Files with no in-repo importer**: 0
-- **Dormant files**: 0
-  - **Orphaned (reachable from nothing)**: 0
+- **Files with no in-repo importer**: 3
+- **Dormant files**: 3
+  - **Orphaned (reachable from nothing)**: 3
   - **Test-only (only a test reaches them)**: 0
 - **Potentially unused exports**: 7
   - **Unreferenced anywhere**: 2
@@ -27,7 +27,9 @@
 
 Source files that no root and no test reaches. Verify each one before you delete it.
 
-_None._
+- `trials/t1-graph/compare-layout.mjs`
+- `trials/t1-graph/make-sources.mjs`
+- `trials/t1-graph/measure.mjs`
 
 ## Dormant files: test-only
 
@@ -39,7 +41,9 @@ _None._
 
 No file of this repository imports these files. Do not use the list as a deletion list.
 
-_None._
+- `trials/t1-graph/compare-layout.mjs`
+- `trials/t1-graph/make-sources.mjs`
+- `trials/t1-graph/measure.mjs`
 
 ## Exports unreferenced anywhere
 

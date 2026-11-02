@@ -534,6 +534,90 @@
           "runInWorker"
         ]
       }
+    },
+    "trials/t1-graph": {
+      "trials/t1-graph/compare-layout.mjs": {
+        "description": "Trial T1: compare the node layout of two Graphviz SVG files of the same DOT source.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      },
+      "trials/t1-graph/make-sources.mjs": {
+        "description": "Writes the generated DOT sources of trial T1. The measurement script and the",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "writeFileSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      },
+      "trials/t1-graph/measure.mjs": {
+        "description": "Trial T1: measure @viz-js/viz on Bun or Node. Runs unchanged under both.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "existsSync",
+              "mkdirSync",
+              "readFileSync",
+              "readdirSync",
+              "statSync",
+              "writeFileSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
     }
   },
   "cyclicComponents": {
@@ -624,6 +708,14 @@
         "src/worker/entry.ts",
         "src/worker/protocol.ts",
         "src/worker/run.ts"
+      ]
+    },
+    {
+      "name": "Trials/t1-graph",
+      "files": [
+        "trials/t1-graph/compare-layout.mjs",
+        "trials/t1-graph/make-sources.mjs",
+        "trials/t1-graph/measure.mjs"
       ]
     }
   ]
