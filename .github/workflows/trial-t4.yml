@@ -1,0 +1,137 @@
+# Trial T4 (browser): does the protocol client start the configured browser under Bun 1.4.4 and Node 22,
+# render a PNG and a PDF, and refuse the network? Throwaway trial workflow. Runs only on a push to the trial
+# branch. No secrets, no publish.
+name: trial-t4
+
+on:
+  push:
+    branches:
+      - trial/t4-browser
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    name: measure (${{ matrix.os }}, ${{ matrix.runtime }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            runtime: bun
+            browser: C:/Program Files/Google/Chrome/Application/chrome.exe
+          - os: windows-latest
+            runtime: node
+            browser: C:/Program Files/Google/Chrome/Application/chrome.exe
+          - os: ubuntu-latest
+            runtime: bun
+            browser: /usr/bin/google-chrome
+          - os: ubuntu-latest
+            runtime: node
+            browser: /usr/bin/google-chrome
+          - os: macos-latest
+            runtime: bun
+            browser: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+          - os: macos-latest
+            runtime: node
+            browser: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+    env:
+      SCIENG_BROWSER: ${{ matrix.browser }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: trials/t4-browser
+    steps:
+      - name: Check out the trial commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun 1.4.4
+        if: matrix.runtime == 'bun'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+
+      - name: Set up Node 22
+        if: matrix.runtime == 'node'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Put TEMP and TMP under the runner temp folder (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          echo "TEMP=$RUNNER_TEMP" >> "$GITHUB_ENV"
+          echo "TMP=$RUNNER_TEMP" >> "$GITHUB_ENV"
+
+      - name: Check that the browser exists
+        run: |
+          set -euo pipefail
+          if [ ! -e "$SCIENG_BROWSER" ]; then
+            echo "SCIENG_BROWSER does not name a browser: $SCIENG_BROWSER" >&2
+            exit 1
+          fi
+
+      - name: Record the runtime and the browser
+        run: |
+          if [ "${{ matrix.runtime }}" = "bun" ]; then bun --version; else node --version; fi
+
+      - name: Measure the browser client
+        run: |
+          if [ "${{ matrix.runtime }}" = "bun" ]; then
+            bun measure.mjs --out results
+          else
+            node measure.mjs --out results
+          fi
+
+      - name: Record the unprivileged user namespace setting (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sysctl kernel.apparmor_restrict_unprivileged_userns || true
+          unshare --user --map-root-user true && echo "unprivileged user namespaces: allowed" || echo "unprivileged user namespaces: refused"
+          echo "browser path: $(readlink -f "$SCIENG_BROWSER")"
+          ls /etc/apparmor.d/ | grep -i chrome || echo "no chrome apparmor profile file"
+          grep -l "userns" /etc/apparmor.d/*chrome* 2>/dev/null || echo "no userns line in a chrome profile"
+
+      - name: Create a loopback-only network namespace (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          sudo ip netns add t4ns
+          sudo ip netns exec t4ns ip link set lo up
+          sudo ip netns exec t4ns ip -brief addr show lo
+
+      - name: Measure in the loopback-only namespace (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          sudo ip netns exec t4ns sudo -u "$USER" env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --out results-netns
+
+      - name: Negative control in the loopback-only namespace (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          sudo ip netns exec t4ns sudo -u "$USER" env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --mode negative --out results-negative
+          grep -q '"imageFailed":true' results-negative/*.jsonl
+          grep -q '"scriptFailed":true' results-negative/*.jsonl
+
+      - name: Remove the network namespace (Ubuntu)
+        if: always() && runner.os == 'Linux'
+        run: sudo ip netns del t4ns || true
+
+      - name: Upload the results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: t4-${{ matrix.os }}-${{ matrix.runtime }}
+          path: |
+            trials/t4-browser/results/
+            trials/t4-browser/results-netns/
+            trials/t4-browser/results-negative/
+          if-no-files-found: warn
+          retention-days: 7

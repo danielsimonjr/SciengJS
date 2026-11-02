@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>T4 test page</title>
+<link rel="icon" href="data:,">
+<style>
+  body { margin: 0; background: #ffffff; font-family: sans-serif; }
+  #box { position: absolute; left: 100px; top: 100px; width: 200px; height: 100px; background: #ff0000; }
+  p { position: absolute; left: 20px; top: 300px; margin: 0; color: #000000; font-size: 24px; }
+</style>
+<script>
+  window.__t4 = { imgDone: false, scriptDone: false, pinnedRan: false, pinnedError: false, settled: false };
+  function mark(key) {
+    var t = window.__t4;
+    t[key] = true;
+    t.settled = t.imgDone && t.scriptDone && (t.pinnedRan || t.pinnedError);
+  }
+</script>
+</head>
+<body>
+<canvas id="noise" style="position:absolute; left:0; top:0; z-index:-1"></canvas>
+<script>
+  // When the noise flag is on, the canvas fills the page with seeded pseudo-random pixels.
+  // Random pixels make the PNG large, so that the screenshot message is large.
+  if ({{NOISE}}) {
+    var c = document.getElementById("noise");
+    var w = Math.round(innerWidth * devicePixelRatio);
+    var h = Math.round(innerHeight * devicePixelRatio);
+    c.width = w;
+    c.height = h;
+    c.style.width = innerWidth + "px";
+    c.style.height = innerHeight + "px";
+    var ctx = c.getContext("2d");
+    var img = ctx.createImageData(w, h);
+    var d = img.data;
+    // xorshift32: its bytes do not repeat, so the PNG stays large.
+    var x = 2463534242;
+    for (var i = 0; i < d.length; i += 4) {
+      x ^= x << 13;
+      x ^= x >>> 17;
+      x ^= x << 5;
+      d[i] = x & 255;
+      d[i + 1] = (x >>> 8) & 255;
+      d[i + 2] = (x >>> 16) & 255;
+      d[i + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+</script>
+<div id="box"></div>
+<p>T4 test page</p>
+<img src="{{UNLISTED_IMAGE}}" width="120" height="60" alt=""
+     onload="mark('imgDone')" onerror="mark('imgDone')">
+<script src="{{UNLISTED_SCRIPT}}" onload="mark('scriptDone')" onerror="mark('scriptDone')"></script>
+<script src="{{PINNED_URL}}" onerror="window.__t4.pinnedError = true; mark('pinnedError')"></script>
+</body>
+</html>

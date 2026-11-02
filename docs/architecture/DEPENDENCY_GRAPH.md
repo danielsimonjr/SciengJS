@@ -29,10 +29,11 @@ This document provides a comprehensive dependency graph of all files, components
 15. [Worker Dependencies](#worker-dependencies)
 16. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
 17. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-18. [Dependency Matrix](#dependency-matrix)
-19. [Circular Dependency Analysis](#circular-dependency-analysis)
-20. [Visual Dependency Graph](#visual-dependency-graph)
-21. [Summary Statistics](#summary-statistics)
+18. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+19. [Dependency Matrix](#dependency-matrix)
+20. [Circular Dependency Analysis](#circular-dependency-analysis)
+21. [Visual Dependency Graph](#visual-dependency-graph)
+22. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -56,6 +57,7 @@ The codebase is organized into the following modules:
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
 - **trials/t2-mesh**: 1 file
+- **trials/t4-browser**: 2 files
 
 ---
 
@@ -359,6 +361,29 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="trials-t4-browser-dependencies"></a>
+
+## Trials/t4 browser Dependencies
+
+### `trials/t4-browser/assets/pinned.js` - The local copy of the pinned asset. The client serves it for the pinned URL in config.json.
+
+---
+
+### `trials/t4-browser/measure.mjs` - A proxy that refuses every connection. It records each attempt (the first line of the request)
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `child_process` | `spawn` |
+| `net` | `createServer` |
+| `fs` | `existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync, appendFileSync` |
+| `os` | `arch, platform, release, tmpdir` |
+| `path` | `dirname, join` |
+| `url` | `fileURLToPath` |
+| `zlib` | `inflateSync` |
+
+---
+
 <a id="dependency-matrix"></a>
 ## Dependency Matrix
 
@@ -390,6 +415,8 @@ The codebase is organized into the following modules:
 | `trials/t1-graph/make-sources.mjs` | 0 files | 0 files |
 | `trials/t1-graph/measure.mjs` | 0 files | 0 files |
 | `trials/t2-mesh/measure.mjs` | 0 files | 0 files |
+| `trials/t4-browser/assets/pinned.js` | 0 files | 0 files |
+| `trials/t4-browser/measure.mjs` | 0 files | 0 files |
 
 ---
 
@@ -473,6 +500,11 @@ graph TD
         N23[measure.mjs]
     end
 
+    subgraph Trials/t4-browser
+        N24[pinned.js]
+        N25[measure.mjs]
+    end
+
     N1 --> N3
     N2 --> N1
     N2 --> N3
@@ -500,9 +532,9 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 47 |
-| Subsystems | 15 |
-| Total Lines of Code | 3042 |
+| Total Source Files | 49 |
+| Subsystems | 16 |
+| Total Lines of Code | 3962 |
 | Total Exports | 77 |
 | Total Re-exports | 16 |
 | Total Classes | 1 |

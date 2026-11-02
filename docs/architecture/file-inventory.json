@@ -1,10 +1,10 @@
 {
-  "totalFiles": 47,
+  "totalFiles": 49,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
-    "orphan": 4,
+    "orphan": 6,
     "test": 23,
     "tool": 0,
     "config": 0,
@@ -12,12 +12,12 @@
     "example": 0
   },
   "byArea": {
-    "src": 24,
+    "src": 26,
     "tests": 23
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 27
+    "(root)": 29
   },
   "files": [
     {
@@ -348,6 +348,20 @@
       "area": "src",
       "disposition": "orphan",
       "loc": 178
+    },
+    {
+      "file": "trials/t4-browser/assets/pinned.js",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 8
+    },
+    {
+      "file": "trials/t4-browser/measure.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 912
     }
   ],
   "skippedLinks": [],

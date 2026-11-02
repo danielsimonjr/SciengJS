@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 24,
+    "totalSourceFiles": 26,
     "totalTestFiles": 11,
     "testedCount": 5,
-    "untestedCount": 19,
-    "coveragePercent": "20.8",
+    "untestedCount": 21,
+    "coveragePercent": "19.2",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 24,
+      "activeFiles": 26,
       "testedActive": 5,
-      "activeUntested": 19,
+      "activeUntested": 21,
       "excludedTotal": 0,
-      "percent": "20.8",
+      "percent": "19.2",
       "breakdown": {
-        "active_untested": 19
+        "active_untested": 21
       }
     }
   },
@@ -36,7 +36,9 @@
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
     "trials/t1-graph/measure.mjs",
-    "trials/t2-mesh/measure.mjs"
+    "trials/t2-mesh/measure.mjs",
+    "trials/t4-browser/assets/pinned.js",
+    "trials/t4-browser/measure.mjs"
   ],
   "testedFiles": [
     "src/config.ts",
@@ -82,7 +84,9 @@
     "trials/t1-graph/compare-layout.mjs": [],
     "trials/t1-graph/make-sources.mjs": [],
     "trials/t1-graph/measure.mjs": [],
-    "trials/t2-mesh/measure.mjs": []
+    "trials/t2-mesh/measure.mjs": [],
+    "trials/t4-browser/assets/pinned.js": [],
+    "trials/t4-browser/measure.mjs": []
   },
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
@@ -184,6 +188,14 @@
     },
     {
       "file": "trials/t2-mesh/measure.mjs",
+      "category": null
+    },
+    {
+      "file": "trials/t4-browser/assets/pinned.js",
+      "category": null
+    },
+    {
+      "file": "trials/t4-browser/measure.mjs",
       "category": null
     }
   ]
