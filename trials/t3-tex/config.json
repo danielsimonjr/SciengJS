@@ -6,11 +6,11 @@
   "format": {
     "name": "latex-tikz-circuitikz",
     "preamble": [
-      "\documentclass[margin=0pt]{standalone}",
-      "\def\pgfsysdriver{pgfsys-ximera.def}",
-      "\usepackage[svgnames]{xcolor}",
-      "\usepackage{tikz}",
-      "\usepackage{circuitikz}"
+      "\\documentclass[margin=0pt]{standalone}",
+      "\\def\\pgfsysdriver{pgfsys-ximera.def}",
+      "\\usepackage[svgnames]{xcolor}",
+      "\\usepackage{tikz}",
+      "\\usepackage{circuitikz}"
     ]
   },
   "samples": [
