@@ -618,6 +618,44 @@
         "workspaceDependencies": [],
         "exports": []
       }
+    },
+    "trials/t2-mesh": {
+      "trials/t2-mesh/measure.mjs": {
+        "description": "Trial T2: measure occt-import-js on Bun or Node. Runs unchanged under both.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync",
+              "readdirSync",
+              "statSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
     }
   },
   "cyclicComponents": {
@@ -716,6 +754,12 @@
         "trials/t1-graph/compare-layout.mjs",
         "trials/t1-graph/make-sources.mjs",
         "trials/t1-graph/measure.mjs"
+      ]
+    },
+    {
+      "name": "Trials/t2-mesh",
+      "files": [
+        "trials/t2-mesh/measure.mjs"
       ]
     }
   ]

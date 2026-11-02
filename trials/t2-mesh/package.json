@@ -1,0 +1,10 @@
+{
+  "name": "sciengjs-trial-t2-mesh",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Trial T2: does occt-import-js read STEP, IGES and BREP under Bun and Node 22?",
+  "dependencies": {
+    "occt-import-js": "0.0.23"
+  }
+}
