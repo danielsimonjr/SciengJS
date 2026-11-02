@@ -6,6 +6,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Changed
 
+- Design, tex stage: the build tangles `tex.web` with `etex.ch`, then one engine change file per concern. The engine writes the utility primitives that the LaTeX kernel needs from their published behaviour. The build never uses the name TeX or e-TeX. CI runs the trip test and the e-TRIP test (trial T5).
+- Build plan: trial T6 measures the e-TeX build, the primitive set and the pgf DVI driver. I12 takes its change files and format from T6. A new risk row covers the e-TRIP test.
 - Design and build plan: STE fixes in the tex stage text and in two risk rows of the plan.
 - Design, tex stage: the engine compiles `tex.web` to WASM with its own compiler and runtime, and CI runs the trip test on each build. Bundles hold only packages under the LPPL or in the public domain. The five packages with the GPL as their only licence leave the package set, each with a replacement. Glyphs become paths from the AMS Type 1 fonts (OFL) and Latin Modern (GFL) (trial T3).
 - Build plan: trial T5 measures the TeX build of the engine. I12 builds on T5. The I12 gate adds the trip test, the glyph paths and the rejection of a GPL-only package.

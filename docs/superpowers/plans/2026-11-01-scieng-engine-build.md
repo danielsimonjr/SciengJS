@@ -69,7 +69,7 @@ Each increment runs the steps below in order. The skills named in brackets hold 
 - **Gate:** a stub backend renders through the worker. A source that loops rejects with `E_TIMEOUT` inside the limit plus one second. The loader rejects an unreadable configuration file with `E_CONFIG`. The page checker fails its deliberate-defect page. CI passes on all six jobs.
 - **Release:** no npm publish. The first publish is I1.
 
-### T1 to T5: trial builds
+### T1 to T6: trial builds
 
 Each trial build is a short branch that answers one question with numbers. Its report gives the numbers, the commands and the platform. A trial that fails its question returns the plan to planning for that stage.
 
@@ -80,6 +80,7 @@ Each trial build is a short branch that answers one question with numbers. Its r
 | T3 tex | Can the TikZJax toolchain build a format with `tikz` and `circuitikz`, run it outside a browser, and give SVG with glyph paths? | format size compressed, first-render time, warm-render time of one `circuitikz` circuit, render time of one `pgfplots` plot with its bundle, SVG glyph check, the exact TeX engine of the toolchain, the licence of each toolchain part and of the font set |
 | T5 tex build | Does the engine compiler build `tex.web` to WASM that passes the trip test? Can that build make the format and render one `circuitikz` circuit under Bun and Node 22, with each glyph as a `<path>`? | the trip test result (the differences from the reference logs), the size of the compiler in lines, the WASM size, the format build time, the format size compressed, the first-render and warm-render time of the circuit, the glyph check, the licence of each build input and of each bundle |
 | T4 browser | Does the protocol client start the configured browser under Node 22 and Bun, render a PNG and a PDF, and block the network? | start time, PNG time, PDF time, the count of refused requests on the test page (expected 2) |
+| T6 e-TeX build | Does the T5 toolchain build `tex.web` with `etex.ch` and the utility primitives to WASM that passes the trip test and the e-TRIP test? Can that build make the LaTeX format in extended mode and render one `circuitikz` circuit under Bun and Node 22, with each glyph as a `<path>`? | the trip and e-TRIP results (the differences from the reference logs), the set of utility primitives and the kernel test that needs each, the pgf DVI driver file that the format selects, the WASM size, the format build time, the format size compressed, the first-render and warm-render time of the circuit, the glyph check |
 
 ### I1: graph stage and the DOT backend
 
@@ -243,8 +244,8 @@ Each trial build is a short branch that answers one question with numbers. Its r
 
 - **Scope:**
   - `./tex`.
-  - The engine compiler and the change files from T5.
-  - The format and the extra bundles from T5.
+  - The engine compiler from T5, and the change files from T5 and T6.
+  - The format and the extra bundles from T6.
   - The bundle manager with pinned hashes.
   - Package detection.
   - The DVI to SVG converter.
@@ -254,7 +255,7 @@ Each trial build is a short branch that answers one question with numbers. Its r
   - `\write18` and a file read outside the virtual tree fail.
   - A `circuitikz` circuit, a `tikz-cd` diagram and a `chemfig` molecule match their expected SVG files.
   - Each glyph of each expected SVG file is a `<path>`.
-  - The trip test passes in CI on each WASM build.
+  - The trip test and the e-TRIP test pass in CI on each WASM build. Each log differs from the reference only in the banner line.
   - A source that loads a package with the GPL as its only licence rejects with `E_UNSUPPORTED`. The message names the replacement.
   - The render times stay inside the T5 numbers plus a stated margin.
 - **Release:** sciengjs 0.10.0. Then **A**: the `tikz` command; the `circuit` command gains a TikZ route.
@@ -282,6 +283,7 @@ Increments with disjoint scope can run at the same time, each in its own worktre
 | The TeX format with the full package set is too large or too slow in WASM | T3, T5 | Split the bundles further, or limit the package set. The plan changes at I12. |
 | The AMS Type 1 fonts and Latin Modern do not cover a glyph that a bundle uses | T5 | add a font under the OFL or the GFL, or remove the package from its bundle |
 | The engine compiler does not accept the Pascal of `tex.web`, or the build fails the trip test | T5 | Correct the compiler. I12 waits for a build that passes the trip test. |
+| The build with `etex.ch` fails the e-TRIP test, or the LaTeX kernel needs a primitive that the engine cannot write from its published behaviour | T6 | Correct the change files. I12 waits for a build that passes both tests and loads LaTeX. |
 | `occt-import-js` is too slow or too large under Node | T2 | limit the mesh stage to STEP, or change the reader |
 | A large STEP part reads slowly: a 1.8 MB part takes about 1 s for each read, and parts over 1.8 MB are not measured | T2 | measure a larger part in I9, set the default timeout from that number, and document the part size that it covers |
 | The browser client behaves differently per system | T4 and the I4 CI matrix | per-system fixes in the client, never a hard-coded path |
