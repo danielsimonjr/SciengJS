@@ -89,11 +89,40 @@ jobs:
             node measure.mjs --out results
           fi
 
+      - name: Create a loopback-only network namespace (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          sudo ip netns add t4ns
+          sudo ip netns exec t4ns ip link set lo up
+          sudo ip netns exec t4ns ip -brief addr show lo
+
+      - name: Measure in the loopback-only namespace (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          sudo ip netns exec t4ns env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --out results-netns
+
+      - name: Negative control in the loopback-only namespace (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          sudo ip netns exec t4ns env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --mode negative --out results-negative
+          grep -q '"imageFailed":true' results-negative/*.jsonl
+          grep -q '"scriptFailed":true' results-negative/*.jsonl
+
+      - name: Remove the network namespace (Ubuntu)
+        if: always() && runner.os == 'Linux'
+        run: sudo ip netns del t4ns || true
+
       - name: Upload the results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: t4-${{ matrix.os }}-${{ matrix.runtime }}
-          path: trials/t4-browser/results/
+          path: |
+            trials/t4-browser/results/
+            trials/t4-browser/results-netns/
+            trials/t4-browser/results-negative/
           if-no-files-found: warn
           retention-days: 7
