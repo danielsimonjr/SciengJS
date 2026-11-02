@@ -427,7 +427,7 @@
     },
     "worker": {
       "src/worker/entry.ts": {
-        "description": "The worker side of a render. It loads the backend module, runs one request and posts one message.",
+        "description": "The worker side of a render. The worker loads the backend module, runs one request and posts one message.",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -483,7 +483,7 @@
         ]
       },
       "src/worker/run.ts": {
-        "description": "The entry file sits next to this module. Its extension follows this module:",
+        "description": "The heap limit of the worker, in megabytes. Node enforces it. Bun 1.4.4 accepts the option",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -527,6 +527,7 @@
           "runInWorker"
         ],
         "interfaces": [
+          "WorkerExit",
           "WorkerLimits"
         ],
         "functions": [

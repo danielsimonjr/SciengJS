@@ -9,15 +9,15 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 20 |
-| Total Test Files | 6 |
-| Source Files with Tests | 4 |
-| Source Files without Tests | 16 |
-| Coverage (raw, direct-import) | **20.0%** |
+| Total Test Files | 7 |
+| Source Files with Tests | 5 |
+| Source Files without Tests | 15 |
+| Coverage (raw, direct-import) | **25.0%** |
 ---
 
 ## Source Files Without Test Coverage
 
-The following 16 source files are not directly imported by any test file:
+The following 15 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -69,7 +69,6 @@ The following 16 source files are not directly imported by any test file:
 
 - `src/worker/entry.ts`
 - `src/worker/protocol.ts`
-- `src/worker/run.ts`
 
 ---
 
@@ -79,8 +78,9 @@ The following 16 source files are not directly imported by any test file:
 |-------------|------------|
 | `src/config.ts` | `config.test.ts` |
 | `src/core.ts` | `render.test.ts` |
-| `src/errors.ts` | `config.test.ts`, `errors.test.ts`, `render.test.ts` |
+| `src/errors.ts` | `config.test.ts`, `errors.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `src/types.ts` | `render.test.ts` |
+| `worker/run.ts` | `worker-run.test.ts` |
 
 ---
 
@@ -94,3 +94,4 @@ The following 16 source files are not directly imported by any test file:
 | `unit/no-bun-api.test.ts` | 0 files |
 | `unit/render.test.ts` | 3 files |
 | `unit/svg-compare.test.ts` | 0 files |
+| `unit/worker-run.test.ts` | 2 files |

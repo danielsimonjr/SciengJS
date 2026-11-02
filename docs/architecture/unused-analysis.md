@@ -10,9 +10,9 @@
 - **Dormant files**: 0
   - **Orphaned (reachable from nothing)**: 0
   - **Test-only (only a test reaches them)**: 0
-- **Potentially unused exports**: 6
+- **Potentially unused exports**: 7
   - **Unreferenced anywhere**: 2
-  - **Referenced in their own module**: 4
+  - **Referenced in their own module**: 5
   - **Not classified**: 0
 
 ## Caveats
@@ -59,7 +59,7 @@ No other file imports these names, but their own module uses them.
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/pairs.ts`: `PairSpec`
 - `src/registry.ts`: `BackendEntry`
-- `src/worker/run.ts`: `WorkerLimits`
+- `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`
 
 ## Exports not classified
 

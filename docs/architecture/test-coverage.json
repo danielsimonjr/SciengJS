@@ -1,19 +1,19 @@
 {
   "metadata": {
     "totalSourceFiles": 20,
-    "totalTestFiles": 6,
-    "testedCount": 4,
-    "untestedCount": 16,
-    "coveragePercent": "20.0",
+    "totalTestFiles": 7,
+    "testedCount": 5,
+    "untestedCount": 15,
+    "coveragePercent": "25.0",
     "effectiveCoverage": {
       "policyLoaded": false,
       "activeFiles": 20,
-      "testedActive": 4,
-      "activeUntested": 16,
+      "testedActive": 5,
+      "activeUntested": 15,
       "excludedTotal": 0,
-      "percent": "20.0",
+      "percent": "25.0",
       "breakdown": {
-        "active_untested": 16
+        "active_untested": 15
       }
     }
   },
@@ -32,14 +32,14 @@
     "src/sysml/index.ts",
     "src/tex/index.ts",
     "src/worker/entry.ts",
-    "src/worker/protocol.ts",
-    "src/worker/run.ts"
+    "src/worker/protocol.ts"
   ],
   "testedFiles": [
     "src/config.ts",
     "src/core.ts",
     "src/errors.ts",
-    "src/types.ts"
+    "src/types.ts",
+    "src/worker/run.ts"
   ],
   "coverageMap": {
     "src/browser/index.ts": [],
@@ -52,7 +52,8 @@
     "src/errors.ts": [
       "test/unit/config.test.ts",
       "test/unit/errors.test.ts",
-      "test/unit/render.test.ts"
+      "test/unit/render.test.ts",
+      "test/unit/worker-run.test.ts"
     ],
     "src/graph/index.ts": [],
     "src/html/index.ts": [],
@@ -71,7 +72,9 @@
     ],
     "src/worker/entry.ts": [],
     "src/worker/protocol.ts": [],
-    "src/worker/run.ts": []
+    "src/worker/run.ts": [
+      "test/unit/worker-run.test.ts"
+    ]
   },
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
@@ -88,7 +91,11 @@
       "src/errors.ts",
       "src/types.ts"
     ],
-    "test/unit/svg-compare.test.ts": []
+    "test/unit/svg-compare.test.ts": [],
+    "test/unit/worker-run.test.ts": [
+      "src/worker/run.ts",
+      "src/errors.ts"
+    ]
   },
   "classifiedUntested": [
     {
@@ -149,10 +156,6 @@
     },
     {
       "file": "src/worker/protocol.ts",
-      "category": null
-    },
-    {
-      "file": "src/worker/run.ts",
       "category": null
     }
   ]

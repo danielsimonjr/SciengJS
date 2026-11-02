@@ -1,11 +1,11 @@
 {
-  "totalFiles": 32,
+  "totalFiles": 33,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
     "orphan": 0,
-    "test": 12,
+    "test": 13,
     "tool": 0,
     "config": 0,
     "bench": 0,
@@ -13,11 +13,11 @@
   },
   "byArea": {
     "src": 20,
-    "tests": 12
+    "tests": 13
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 12
+    "(root)": 13
   },
   "files": [
     {
@@ -32,7 +32,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 223
+      "loc": 218
     },
     {
       "file": "src/core.ts",
@@ -158,14 +158,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 66
+      "loc": 89
     },
     {
       "file": "test/integration/page-checker.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 44
+      "loc": 71
     },
     {
       "file": "test/smoke/smoke.mjs",
@@ -186,7 +186,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 250
+      "loc": 253
     },
     {
       "file": "test/support/stubs/stub-dot.ts",
@@ -214,7 +214,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 188
+      "loc": 203
     },
     {
       "file": "test/unit/errors.test.ts",
@@ -243,6 +243,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 63
+    },
+    {
+      "file": "test/unit/worker-run.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 29
     }
   ],
   "skippedLinks": [],

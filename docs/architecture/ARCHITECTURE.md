@@ -28,7 +28,7 @@ The engine writes no file on its own. A later stage writes a cache, for example 
 
 Each render starts a `worker_threads` worker with one job. The main thread holds the timer. A render that passes its time limit ends its worker and rejects with `E_TIMEOUT`. A worker that exits before it returns rejects with `E_INTERNAL`. The next render starts a new worker, so a crash does not affect the next render.
 
-The heap limit comes from `maxMemoryMb`. Node 26 enforces it. Bun 1.4.4 accepts the option and does not enforce it in the measurement of increment I0. A test under Bun does not check the heap limit.
+The heap limit comes from `maxMemoryMb`. Node enforces it, and Node is the release runtime. Bun 1.4.4 accepts the option and does not enforce it. The heap limit therefore holds only under Node. The Bun suite checks the time limit and the crash only. The Node test `test/node/worker.node.mjs` checks the heap limit against the built package.
 
 ### The registry is data
 

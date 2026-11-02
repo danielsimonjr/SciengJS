@@ -105,3 +105,6 @@ jobs:
 
       - name: Pack, install in a fresh folder and import under Node 22
         run: node test/smoke/smoke.mjs
+
+      - name: Worker path of the built package under Node 22 (heap and time limits)
+        run: node --test test/node/worker.node.mjs

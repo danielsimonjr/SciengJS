@@ -254,7 +254,7 @@ The codebase is organized into the following modules:
 
 ## Worker Dependencies
 
-### `src/worker/entry.ts` - The worker side of a render. It loads the backend module, runs one request and posts one message.
+### `src/worker/entry.ts` - The worker side of a render. The worker loads the backend module, runs one request and posts one message.
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -282,7 +282,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/worker/run.ts` - The entry file sits next to this module. Its extension follows this module:
+### `src/worker/run.ts` - The heap limit of the worker, in megabytes. Node enforces it. Bun 1.4.4 accepts the option
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -298,7 +298,7 @@ The codebase is organized into the following modules:
 | `./protocol.ts` | `BackendOutput, WorkerJob, WorkerMessage` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `WorkerLimits`
+- Interfaces: `WorkerExit`, `WorkerLimits`
 - Functions: `runInWorker`
 
 ---
@@ -430,13 +430,13 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 32 |
+| Total Source Files | 33 |
 | Subsystems | 13 |
-| Total Lines of Code | 1676 |
-| Total Exports | 66 |
+| Total Lines of Code | 1768 |
+| Total Exports | 67 |
 | Total Re-exports | 16 |
 | Total Classes | 1 |
-| Total Interfaces | 16 |
+| Total Interfaces | 17 |
 | Total Functions | 16 |
 | Total Type Guards | 0 |
 | Total Enums | 0 |

@@ -2,9 +2,9 @@ metadata:
   name: i0
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 32
+  totalFiles: 33
   totalModules: 2
-  totalExports: 66
+  totalExports: 67
 modules:
   src:
     src/browser/index.ts:
@@ -276,6 +276,7 @@ modules:
             - WorkerMessage
           typeOnly: true
       exports:
+        - WorkerExit
         - WorkerLimits
         - runInWorker
   tests:
@@ -441,12 +442,30 @@ modules:
             - normalizeSvg
           typeOnly: false
       exports: []
+    test/unit/worker-run.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/run.ts
+          imports:
+            - runInWorker
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - TEST_REGISTRY
+          typeOnly: false
+      exports: []
 statistics:
-  totalTypeScriptFiles: 32
-  totalSourceFiles: 32
+  totalTypeScriptFiles: 33
+  totalSourceFiles: 33
   totalModules: 2
-  totalLinesOfCode: 1676
-  totalExports: 66
+  totalLinesOfCode: 1768
+  totalExports: 67
   entryRoots: 20
   reachableFiles: 20
   dormantFiles: 0
@@ -456,14 +475,14 @@ statistics:
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 9
   noImporterFileCount: 0
-  unusedExportsCount: 6
+  unusedExportsCount: 7
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 1
-  totalInterfaces: 16
+  totalInterfaces: 17
   totalFunctions: 16
   totalTypeGuards: 0
   totalEnums: 0
