@@ -369,7 +369,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `trials/t4-browser/measure.mjs` - Trial T4: a minimal Chrome DevTools Protocol client. It starts the browser named by SCIENG_BROWSER
+### `trials/t4-browser/measure.mjs` - A proxy that refuses every connection. It records each attempt (the first line of the request)
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -534,7 +534,7 @@ graph TD
 |----------|-------|
 | Total Source Files | 49 |
 | Subsystems | 16 |
-| Total Lines of Code | 3684 |
+| Total Lines of Code | 3942 |
 | Total Exports | 77 |
 | Total Re-exports | 16 |
 | Total Classes | 1 |

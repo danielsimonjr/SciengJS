@@ -667,7 +667,7 @@
         "exports": []
       },
       "trials/t4-browser/measure.mjs": {
-        "description": "Trial T4: a minimal Chrome DevTools Protocol client. It starts the browser named by SCIENG_BROWSER",
+        "description": "A proxy that refuses every connection. It records each attempt (the first line of the request)",
         "externalDependencies": [],
         "nodeDependencies": [
           {
