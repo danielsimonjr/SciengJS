@@ -55,3 +55,17 @@ test("rejects a browser path that does not exist, and names the path", async () 
   expect(message).toContain("no-such-browser.exe");
   expect(message).toContain("browser");
 }, 20000);
+
+describe.skipIf(!haveBrowser)("page checker on svg drawings", () => {
+  test("fails an svg with no drawn child", async () => {
+    const result = await checkPage({ browserPath, htmlPath: `${FIXTURES}empty-svg.html`, drawingSelectors: ["#drawing"] });
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
+  }, 60000);
+
+  test("fails an svg whose drawn child has a zero box", async () => {
+    const result = await checkPage({ browserPath, htmlPath: `${FIXTURES}zero-box-svg.html`, drawingSelectors: ["#drawing"] });
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
+  }, 60000);
+});

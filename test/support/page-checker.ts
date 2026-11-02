@@ -137,12 +137,16 @@ async function removeProfile(profile: string, deadlineMs: number): Promise<void>
 /** The page-side check of one selector. It returns a short string when the element draws nothing. */
 function drawingExpression(selector: string): string {
   const label = JSON.stringify(selector);
+  // A drawn element is a descendant that is not a container and that has a non-zero box.
+  // A container alone (for example an empty svg) draws nothing.
   return `(() => {
     const el = document.querySelector(${label});
     if (!el) return "no element matches " + ${label};
-    const box = el.getBoundingClientRect();
-    if (el.querySelectorAll("*").length === 0) return "empty drawing: " + ${label} + " has no rendered child";
-    if (!(box.width > 0 && box.height > 0)) return "empty drawing: " + ${label} + " has a zero box";
+    const containers = new Set(["svg", "g", "defs", "symbol", "title", "desc", "style", "script", "metadata", "clippath", "mask", "pattern", "marker", "lineargradient", "radialgradient", "stop"]);
+    const leaves = [...el.querySelectorAll("*")].filter((n) => !containers.has(n.localName.toLowerCase()));
+    if (leaves.length === 0) return "empty drawing: " + ${label} + " has no rendered child";
+    const drawn = leaves.some((n) => { const b = n.getBoundingClientRect(); return b.width > 0 && b.height > 0; });
+    if (!drawn) return "empty drawing: " + ${label} + " has a zero box";
     return "";
   })()`;
 }
