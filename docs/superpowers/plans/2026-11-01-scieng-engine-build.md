@@ -279,9 +279,9 @@ Increments with disjoint scope can run at the same time, each in its own worktre
 
 | Risk | Measured by | Consequence of a failure |
 |---|---|---|
-| The TeX format with the full package set is too large or too slow in WASM | T3, T5 | split the bundles further, or limit the package set; the plan changes at I12 |
+| The TeX format with the full package set is too large or too slow in WASM | T3, T5 | Split the bundles further, or limit the package set. The plan changes at I12. |
 | The AMS Type 1 fonts and Latin Modern do not cover a glyph that a bundle uses | T5 | add a font under the OFL or the GFL, or remove the package from its bundle |
-| The engine compiler does not accept the Pascal of `tex.web`, or the build fails the trip test | T5 | correct the compiler; I12 waits for a build that passes |
+| The engine compiler does not accept the Pascal of `tex.web`, or the build fails the trip test | T5 | Correct the compiler. I12 waits for a build that passes the trip test. |
 | `occt-import-js` is too slow or too large under Node | T2 | limit the mesh stage to STEP, or change the reader |
 | A large STEP part reads slowly: a 1.8 MB part takes about 1 s for each read, and parts over 1.8 MB are not measured | T2 | measure a larger part in I9, set the default timeout from that number, and document the part size that it covers |
 | The browser client behaves differently per system | T4 and the I4 CI matrix | per-system fixes in the client, never a hard-coded path |
