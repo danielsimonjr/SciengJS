@@ -1,24 +1,24 @@
 {
-  "totalFiles": 76,
+  "totalFiles": 78,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 2,
     "orphan": 11,
-    "test": 24,
-    "tool": 19,
+    "test": 25,
+    "tool": 20,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
     "src": 33,
-    "tests": 24,
-    "tools": 19
+    "tests": 25,
+    "tools": 20
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 56
+    "(root)": 58
   },
   "files": [
     {
@@ -456,6 +456,13 @@
       "loc": 44
     },
     {
+      "file": "trials/t5-tex-build/test/trip-gate.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 80
+    },
+    {
       "file": "trials/t5-tex-build/test/type1.test.mjs",
       "package": "(root)",
       "area": "tests",
@@ -474,7 +481,7 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 11
+      "loc": 13
     },
     {
       "file": "trials/t5-tex-build/tools/compile-cli.mjs",
@@ -488,7 +495,7 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 51
+      "loc": 53
     },
     {
       "file": "trials/t5-tex-build/tools/pascal.mjs",
@@ -540,11 +547,18 @@
       "loc": 35
     },
     {
+      "file": "trials/t5-tex-build/tools/trip-gate.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 65
+    },
+    {
       "file": "trials/t5-tex-build/tools/trip.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 120
+      "loc": 128
     },
     {
       "file": "trials/t5-tex-build/tools/wasm.mjs",

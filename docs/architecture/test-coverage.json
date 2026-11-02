@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 33,
-    "totalTestFiles": 12,
+    "totalTestFiles": 13,
     "testedCount": 7,
     "untestedCount": 26,
     "coveragePercent": "21.2",
@@ -130,6 +130,7 @@
       "src/worker/run.ts",
       "src/errors.ts"
     ],
+    "trials/t5-tex-build/test/trip-gate.test.mjs": [],
     "trials/t5-tex-build/test/type1.test.mjs": [
       "trials/t5-tex-build/runtime/type1.mjs",
       "trials/t5-tex-build/runtime/tfm.mjs"

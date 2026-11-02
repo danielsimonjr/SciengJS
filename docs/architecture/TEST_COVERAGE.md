@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 33 |
-| Total Test Files | 12 |
+| Total Test Files | 13 |
 | Source Files with Tests | 7 |
 | Source Files without Tests | 26 |
 | Coverage (raw, direct-import) | **21.2%** |
@@ -127,4 +127,5 @@ The following 26 source files are not directly imported by any test file:
 | `unit/svg-compare.test.ts` | 0 files |
 | `unit/teardown.test.ts` | 0 files |
 | `unit/worker-run.test.ts` | 2 files |
+| `test/trip-gate.test.mjs` | 0 files |
 | `test/type1.test.mjs` | 2 files |

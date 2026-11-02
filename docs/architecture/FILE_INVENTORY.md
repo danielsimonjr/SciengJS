@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 76
+**Total files**: 78
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 20 | A `src`-area file that is an entry root. |
 | `test-only` | 2 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 24 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
-| `tool` | 19 | A file in a `tools/` or `scripts/` folder outside `src/`. |
+| `test` | 25 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `tool` | 20 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **76** | |
+| **Total** | **78** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 33 |
-| `tests` | 24 |
-| `tools` | 19 |
+| `tests` | 25 |
+| `tools` | 20 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 56 |
+| `(root)` | 58 |
 | `@danielsimonjr/sciengjs` | 20 |
 
 ## All files
@@ -106,11 +106,12 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t5-tex-build/runtime/tfm.mjs` | (root) | src | test-only | 23 |
 | `trials/t5-tex-build/runtime/type1.mjs` | (root) | src | test-only | 236 |
 | `trials/t5-tex-build/runtime/vfs.mjs` | (root) | src | orphan | 44 |
+| `trials/t5-tex-build/test/trip-gate.test.mjs` | (root) | tests | test | 80 |
 | `trials/t5-tex-build/test/type1.test.mjs` | (root) | tests | test | 43 |
 | `trials/t5-tex-build/tools/build.mjs` | (root) | tools | tool | 79 |
-| `trials/t5-tex-build/tools/compare-builds.mjs` | (root) | tools | tool | 11 |
+| `trials/t5-tex-build/tools/compare-builds.mjs` | (root) | tools | tool | 13 |
 | `trials/t5-tex-build/tools/compile-cli.mjs` | (root) | tools | tool | 18 |
-| `trials/t5-tex-build/tools/linediff.mjs` | (root) | tools | tool | 51 |
+| `trials/t5-tex-build/tools/linediff.mjs` | (root) | tools | tool | 53 |
 | `trials/t5-tex-build/tools/pascal.mjs` | (root) | tools | tool | 1402 |
 | `trials/t5-tex-build/tools/render.mjs` | (root) | tools | tool | 78 |
 | `trials/t5-tex-build/tools/run-texware.mjs` | (root) | tools | tool | 32 |
@@ -118,7 +119,8 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t5-tex-build/tools/tangle-cli.mjs` | (root) | tools | tool | 18 |
 | `trials/t5-tex-build/tools/tangle.mjs` | (root) | tools | tool | 530 |
 | `trials/t5-tex-build/tools/tex-run.mjs` | (root) | tools | tool | 35 |
-| `trials/t5-tex-build/tools/trip.mjs` | (root) | tools | tool | 120 |
+| `trials/t5-tex-build/tools/trip-gate.mjs` | (root) | tools | tool | 65 |
+| `trials/t5-tex-build/tools/trip.mjs` | (root) | tools | tool | 128 |
 | `trials/t5-tex-build/tools/wasm.mjs` | (root) | tools | tool | 177 |
 
 ## Skipped links

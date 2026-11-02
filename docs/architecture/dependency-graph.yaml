@@ -2,9 +2,9 @@ metadata:
   name: agent-accf745efccdf0916
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 76
+  totalFiles: 78
   totalModules: 3
-  totalExports: 103
+  totalExports: 106
 modules:
   src:
     src/browser/index.ts:
@@ -678,6 +678,21 @@ modules:
             - TEST_REGISTRY
           typeOnly: false
       exports: []
+    trials/t5-tex-build/test/trip-gate.test.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:fs
+        - node:os
+        - node:path
+        - node:test
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/trip-gate.mjs
+          imports:
+            - tripGate
+            - buildBanner
+          typeOnly: false
+      exports: []
     trials/t5-tex-build/test/type1.test.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -899,6 +914,21 @@ modules:
             - flatName
           typeOnly: false
       exports: []
+    trials/t5-tex-build/tools/trip-gate.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - TEX_BANNER
+        - buildBanner
+        - tripGate
     trials/t5-tex-build/tools/trip.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -917,6 +947,11 @@ modules:
           imports:
             - lineDiff
           typeOnly: false
+        - file: trials/t5-tex-build/tools/trip-gate.mjs
+          imports:
+            - tripGate
+            - buildBanner
+          typeOnly: false
       exports: []
     trials/t5-tex-build/tools/wasm.mjs:
       externalDependencies: []
@@ -932,11 +967,11 @@ modules:
         - f64bytes
         - ModuleBuilder
 statistics:
-  totalTypeScriptFiles: 76
-  totalSourceFiles: 76
+  totalTypeScriptFiles: 78
+  totalSourceFiles: 78
   totalModules: 3
-  totalLinesOfCode: 7733
-  totalExports: 103
+  totalLinesOfCode: 7890
+  totalExports: 106
   entryRoots: 20
   reachableFiles: 20
   dormantFiles: 13
@@ -954,10 +989,10 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 5
   totalInterfaces: 17
-  totalFunctions: 41
+  totalFunctions: 43
   totalTypeGuards: 0
   totalEnums: 0
-  totalConstants: 17
+  totalConstants: 18
   totalReExports: 16
 reachability:
   roots:
