@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "totalSourceFiles": 20,
+    "totalTestFiles": 11,
+    "testedCount": 5,
+    "untestedCount": 15,
+    "coveragePercent": "25.0",
+    "effectiveCoverage": {
+      "policyLoaded": false,
+      "activeFiles": 20,
+      "testedActive": 5,
+      "activeUntested": 15,
+      "excludedTotal": 0,
+      "percent": "25.0",
+      "breakdown": {
+        "active_untested": 15
+      }
+    }
+  },
+  "untestedFiles": [
+    "src/browser/index.ts",
+    "src/graph/index.ts",
+    "src/html/index.ts",
+    "src/index.ts",
+    "src/math/index.ts",
+    "src/mermaid/index.ts",
+    "src/mesh/index.ts",
+    "src/pairs.ts",
+    "src/plot/index.ts",
+    "src/raster/index.ts",
+    "src/registry.ts",
+    "src/sysml/index.ts",
+    "src/tex/index.ts",
+    "src/worker/entry.ts",
+    "src/worker/protocol.ts"
+  ],
+  "testedFiles": [
+    "src/config.ts",
+    "src/core.ts",
+    "src/errors.ts",
+    "src/types.ts",
+    "src/worker/run.ts"
+  ],
+  "coverageMap": {
+    "src/browser/index.ts": [],
+    "src/config.ts": [
+      "test/unit/config.test.ts"
+    ],
+    "src/core.ts": [
+      "test/unit/render.test.ts"
+    ],
+    "src/errors.ts": [
+      "test/unit/config.test.ts",
+      "test/unit/errors.test.ts",
+      "test/unit/render.test.ts",
+      "test/unit/worker-run.test.ts"
+    ],
+    "src/graph/index.ts": [],
+    "src/html/index.ts": [],
+    "src/index.ts": [],
+    "src/math/index.ts": [],
+    "src/mermaid/index.ts": [],
+    "src/mesh/index.ts": [],
+    "src/pairs.ts": [],
+    "src/plot/index.ts": [],
+    "src/raster/index.ts": [],
+    "src/registry.ts": [],
+    "src/sysml/index.ts": [],
+    "src/tex/index.ts": [],
+    "src/types.ts": [
+      "test/unit/render.test.ts"
+    ],
+    "src/worker/entry.ts": [],
+    "src/worker/protocol.ts": [],
+    "src/worker/run.ts": [
+      "test/unit/worker-run.test.ts"
+    ]
+  },
+  "testToSourceMap": {
+    "test/integration/page-checker.test.ts": [],
+    "test/mutation/run-mutants.test.ts": [],
+    "test/unit/config.test.ts": [
+      "src/config.ts",
+      "src/errors.ts"
+    ],
+    "test/unit/errors.test.ts": [
+      "src/errors.ts"
+    ],
+    "test/unit/no-bun-api.test.ts": [],
+    "test/unit/page-checker-io.test.ts": [],
+    "test/unit/process-list.test.ts": [],
+    "test/unit/render.test.ts": [
+      "src/core.ts",
+      "src/errors.ts",
+      "src/types.ts"
+    ],
+    "test/unit/svg-compare.test.ts": [],
+    "test/unit/teardown.test.ts": [],
+    "test/unit/worker-run.test.ts": [
+      "src/worker/run.ts",
+      "src/errors.ts"
+    ]
+  },
+  "classifiedUntested": [
+    {
+      "file": "src/browser/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/graph/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/html/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/math/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/mermaid/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/mesh/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/pairs.ts",
+      "category": null
+    },
+    {
+      "file": "src/plot/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/raster/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/registry.ts",
+      "category": null
+    },
+    {
+      "file": "src/sysml/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/tex/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/worker/entry.ts",
+      "category": null
+    },
+    {
+      "file": "src/worker/protocol.ts",
+      "category": null
+    }
+  ]
+}

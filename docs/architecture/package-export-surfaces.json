@@ -1,0 +1,50 @@
+{
+  "surfaces": {
+    "browser": [],
+    "entry": [
+      "Capability",
+      "INPUT_TYPES",
+      "InputType",
+      "NetworkPolicy",
+      "OUTPUT_FORMATS",
+      "OutputFormat",
+      "RENDER_ERROR_CODES",
+      "RenderAsset",
+      "RenderError",
+      "RenderErrorCode",
+      "RenderOptions",
+      "RenderRequest",
+      "RenderResult",
+      "SciengConfig",
+      "capabilities",
+      "loadConfig",
+      "render"
+    ],
+    "graph": [],
+    "html": [],
+    "math": [],
+    "mermaid": [],
+    "mesh": [],
+    "plot": [],
+    "raster": [],
+    "root": [
+      "BINARY_INPUT_TYPES",
+      "DEFAULT_REGISTRY",
+      "INPUT_TYPES",
+      "OUTPUT_FORMATS",
+      "PAIRS",
+      "RENDER_ERROR_CODES",
+      "RenderError",
+      "capabilitiesWithRegistry",
+      "findPair",
+      "loadConfig",
+      "registryKey",
+      "renderWithRegistry"
+    ],
+    "sysml": [],
+    "tex": [],
+    "worker": [
+      "runInWorker"
+    ]
+  }
+}

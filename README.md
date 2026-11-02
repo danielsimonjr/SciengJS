@@ -13,6 +13,7 @@ sciengjs renders DOT, Mermaid, LaTeX math, TikZ, plots, SysML v2, STEP, IGES, BR
 
 - Language: TypeScript, ESM.
 - Runtime: Node 22 LTS or later for the package. Bun for development and tests.
+- Bun 1.4.4 does not enforce the worker heap limit (`maxMemoryMb`). The heap limit holds only under Node, the release runtime. The Node test `test/node/worker.node.mjs` checks it against the built package.
 - Engines: WASM and JavaScript libraries, with few dependencies and no Python. The "Stages" section of the [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) names each engine and its licence.
 - Browser stage: a local Chromium or Chrome, for Mermaid fallback layouts, HTML to PNG and HTML to PDF.
 

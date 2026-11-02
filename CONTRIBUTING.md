@@ -7,7 +7,19 @@
 
 ## Development
 
-The setup, build and test commands arrive with increment I0 of the build plan.
+Install Bun 1.4.4 and Node 22 or later. Run `bun install --frozen-lockfile` in the repository root.
+
+The page checker tests need a Chrome or Chromium executable. Set `SCIENG_BROWSER` to its absolute path. Without it, those tests skip with a printed reason. In CI they never skip.
+
+| Command | Purpose |
+|---|---|
+| `bun test` | Run the full suite. |
+| `bun run typecheck` | Typecheck `src/` and `test/`. |
+| `bun run build` | Emit the ESM package into `dist/`. |
+| `bun run smoke` | Pack the build, install the tarball in a fresh folder and run the Node smoke test. |
+| `repo-tools check . --docs=docs/architecture` | Check the drift gate of the architecture documents. |
+| `repo-tools docs check src` | Check the doc comments of `src/`. |
+| `repo-tools ste <file>` | Check one document in Simplified Technical English. |
 
 ## The rules of a change
 

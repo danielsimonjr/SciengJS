@@ -81,7 +81,7 @@ export function render(req: RenderRequest, config?: Partial<SciengConfig>): Prom
 export function capabilities(config?: Partial<SciengConfig>): Promise<Capability[]>;
 ```
 
-- `render` rejects with a `RenderError`. A `RenderError` has a `code` (`E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY`, `E_INTERNAL`), a message and, when it has one, the source line and column.
+- `render` rejects with a `RenderError`. A `RenderError` has a `code` (`E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY`, `E_INTERNAL`), a message and, when it has one, the source line and column. `E_LIMIT` covers two resource limits: the source size (`maxSourceBytes`) and the heap of the render worker (`maxMemoryMb`).
 - `capabilities` reports each input and output pair, the stage that it needs, and whether that stage is ready on this machine. Example: `pdf` reports "not ready" when no browser is configured. The adapter uses `capabilities` to report a missing stage before a render.
 - An unsupported pair (for example `dot` to `md`) rejects with `E_UNSUPPORTED`. It never falls back to another format.
 
@@ -242,7 +242,7 @@ The user directories follow the platform: `%APPDATA%` and `%LOCALAPPDATA%` on Wi
 - The release target is Node 22 LTS or later. Node 22 has the built-in `WebSocket` that the browser client uses.
 - The source uses `node:` modules, WASM and web APIs that Node 22 and Bun both provide. It uses no `Bun.*` API and no Node API that Bun lacks. A lint rule rejects `Bun.` in `src/`.
 - Development uses Bun: `bun test`, `bun run`. The package build emits ESM for Node.
-- Each render runs in a `worker_threads` worker with `resourceLimits` set from `maxMemoryMb`. A render that passes `timeoutMs` terminates its worker and rejects with `E_TIMEOUT`. A worker crash rejects with `E_INTERNAL` and leaves the next render unaffected.
+- Each render runs in a `worker_threads` worker with `resourceLimits` set from `maxMemoryMb`. A render that passes `timeoutMs` terminates its worker and rejects with `E_TIMEOUT`. A heap exhaustion of the render worker rejects with `E_LIMIT`. A worker crash for any other reason rejects with `E_INTERNAL`. Either crash leaves the next render unaffected.
 
 ## The adapter: scieng-mcp
 

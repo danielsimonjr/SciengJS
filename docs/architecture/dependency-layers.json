@@ -1,0 +1,630 @@
+{
+  "metadata": {
+    "name": "@danielsimonjr/sciengjs",
+    "version": "0.0.0",
+    "schemaVersion": "2.0.0",
+    "language": "typescript"
+  },
+  "entryPoints": [
+    {
+      "file": "src/index.ts",
+      "type": "main",
+      "description": "Entry Point"
+    }
+  ],
+  "modules": {
+    "browser": {
+      "src/browser/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "root": {
+      "src/config.ts": {
+        "description": "Resolves the configuration. Precedence: call option, then environment, then file, then default.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "os",
+            "imports": [
+              "homedir"
+            ]
+          },
+          {
+            "module": "fs/promises",
+            "imports": [
+              "readFile"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "default"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "./errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "loadConfig"
+        ],
+        "interfaces": [
+          "SciengConfig",
+          "ConfigDeps"
+        ],
+        "functions": [
+          "loadConfig"
+        ]
+      },
+      "src/core.ts": {
+        "description": "Renders one request. The registry and the config dependencies are parameters so that tests",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./config.ts",
+            "imports": [
+              "loadConfig",
+              "ConfigDeps",
+              "SciengConfig"
+            ]
+          },
+          {
+            "file": "./errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./pairs.ts",
+            "imports": [
+              "PAIRS",
+              "findPair"
+            ]
+          },
+          {
+            "file": "./registry.ts",
+            "imports": [
+              "registryKey",
+              "Registry"
+            ]
+          },
+          {
+            "file": "./worker/run.ts",
+            "imports": [
+              "runInWorker"
+            ]
+          },
+          {
+            "file": "./types.ts",
+            "imports": [
+              "BINARY_INPUT_TYPES",
+              "INPUT_TYPES",
+              "OUTPUT_FORMATS",
+              "Capability",
+              "OutputFormat",
+              "RenderOptions",
+              "RenderRequest",
+              "RenderResult"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "renderWithRegistry",
+          "capabilitiesWithRegistry"
+        ],
+        "functions": [
+          "renderWithRegistry",
+          "capabilitiesWithRegistry"
+        ]
+      },
+      "src/errors.ts": {
+        "description": "errors module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "RENDER_ERROR_CODES",
+          "RenderError"
+        ],
+        "classes": [
+          "RenderError"
+        ],
+        "interfaces": [
+          "RenderErrorPosition"
+        ],
+        "constants": [
+          "RENDER_ERROR_CODES"
+        ]
+      },
+      "src/pairs.ts": {
+        "description": "pairs module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.ts",
+            "imports": [
+              "InputType",
+              "OutputFormat"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "PAIRS",
+          "findPair"
+        ],
+        "interfaces": [
+          "PairSpec"
+        ],
+        "functions": [
+          "findPair"
+        ],
+        "constants": [
+          "PAIRS"
+        ]
+      },
+      "src/registry.ts": {
+        "description": "registry module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "DEFAULT_REGISTRY",
+          "registryKey"
+        ],
+        "interfaces": [
+          "BackendEntry"
+        ],
+        "functions": [
+          "registryKey"
+        ],
+        "constants": [
+          "DEFAULT_REGISTRY"
+        ]
+      },
+      "src/types.ts": {
+        "description": "types module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "INPUT_TYPES",
+          "OUTPUT_FORMATS",
+          "BINARY_INPUT_TYPES"
+        ],
+        "interfaces": [
+          "RenderRequest",
+          "RenderAsset",
+          "RenderResult",
+          "Capability"
+        ],
+        "constants": [
+          "INPUT_TYPES",
+          "OUTPUT_FORMATS",
+          "BINARY_INPUT_TYPES"
+        ]
+      }
+    },
+    "graph": {
+      "src/graph/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "html": {
+      "src/html/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "entry": {
+      "src/index.ts": {
+        "description": "Package entry point for src (re-exports 15 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./core.ts",
+            "imports": [
+              "capabilitiesWithRegistry",
+              "renderWithRegistry"
+            ]
+          },
+          {
+            "file": "./registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ]
+          },
+          {
+            "file": "./config.ts",
+            "imports": [
+              "SciengConfig"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.ts",
+            "imports": [
+              "Capability",
+              "RenderRequest",
+              "RenderResult"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./errors.ts",
+            "imports": [
+              "RenderError",
+              "RENDER_ERROR_CODES",
+              "RenderErrorCode"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./config.ts",
+            "imports": [
+              "loadConfig",
+              "SciengConfig",
+              "NetworkPolicy"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./types.ts",
+            "imports": [
+              "INPUT_TYPES",
+              "OUTPUT_FORMATS",
+              "InputType",
+              "OutputFormat",
+              "RenderOptions",
+              "RenderRequest",
+              "RenderResult",
+              "RenderAsset",
+              "Capability"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "RenderError",
+          "RENDER_ERROR_CODES",
+          "RenderErrorCode",
+          "loadConfig",
+          "SciengConfig",
+          "NetworkPolicy",
+          "INPUT_TYPES",
+          "OUTPUT_FORMATS",
+          "InputType",
+          "OutputFormat",
+          "RenderOptions",
+          "RenderRequest",
+          "RenderResult",
+          "RenderAsset",
+          "Capability",
+          "render",
+          "capabilities"
+        ],
+        "reExported": [
+          "RenderError",
+          "RENDER_ERROR_CODES",
+          "RenderErrorCode",
+          "loadConfig",
+          "SciengConfig",
+          "NetworkPolicy",
+          "INPUT_TYPES",
+          "OUTPUT_FORMATS",
+          "InputType",
+          "OutputFormat",
+          "RenderOptions",
+          "RenderRequest",
+          "RenderResult",
+          "RenderAsset",
+          "Capability"
+        ],
+        "functions": [
+          "render",
+          "capabilities"
+        ]
+      }
+    },
+    "math": {
+      "src/math/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "mermaid": {
+      "src/mermaid/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "mesh": {
+      "src/mesh/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "plot": {
+      "src/plot/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "raster": {
+      "src/raster/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "sysml": {
+      "src/sysml/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "tex": {
+      "src/tex/index.ts": {
+        "description": "Package entry point",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      }
+    },
+    "worker": {
+      "src/worker/entry.ts": {
+        "description": "The worker side of a render. The worker loads the backend module, runs one request and posts one message.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "worker_threads",
+            "imports": [
+              "parentPort",
+              "workerData"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError",
+              "RENDER_ERROR_CODES",
+              "RenderErrorCode"
+            ]
+          },
+          {
+            "file": "./protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob",
+              "WorkerMessage"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": []
+      },
+      "src/worker/protocol.ts": {
+        "description": "Type definitions (2 interfaces, 1 type aliases)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../types.ts",
+            "imports": [
+              "InputType",
+              "OutputFormat",
+              "RenderOptions"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [],
+        "interfaces": [
+          "WorkerJob",
+          "BackendOutput"
+        ]
+      },
+      "src/worker/run.ts": {
+        "description": "The heap limit of the worker, in megabytes. Node enforces it. Bun 1.4.4 accepts the option",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "worker_threads",
+            "imports": [
+              "Worker"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "extname"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob",
+              "WorkerMessage"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "runInWorker"
+        ],
+        "interfaces": [
+          "WorkerExit",
+          "WorkerLimits"
+        ],
+        "functions": [
+          "runInWorker"
+        ]
+      }
+    }
+  },
+  "cyclicComponents": {
+    "runtime": [],
+    "typeOnly": []
+  },
+  "layers": [
+    {
+      "name": "Browser",
+      "files": [
+        "src/browser/index.ts"
+      ]
+    },
+    {
+      "name": "Root",
+      "files": [
+        "src/config.ts",
+        "src/core.ts",
+        "src/errors.ts",
+        "src/pairs.ts",
+        "src/registry.ts",
+        "src/types.ts"
+      ]
+    },
+    {
+      "name": "Graph",
+      "files": [
+        "src/graph/index.ts"
+      ]
+    },
+    {
+      "name": "Html",
+      "files": [
+        "src/html/index.ts"
+      ]
+    },
+    {
+      "name": "Entry",
+      "files": [
+        "src/index.ts"
+      ]
+    },
+    {
+      "name": "Math",
+      "files": [
+        "src/math/index.ts"
+      ]
+    },
+    {
+      "name": "Mermaid",
+      "files": [
+        "src/mermaid/index.ts"
+      ]
+    },
+    {
+      "name": "Mesh",
+      "files": [
+        "src/mesh/index.ts"
+      ]
+    },
+    {
+      "name": "Plot",
+      "files": [
+        "src/plot/index.ts"
+      ]
+    },
+    {
+      "name": "Raster",
+      "files": [
+        "src/raster/index.ts"
+      ]
+    },
+    {
+      "name": "Sysml",
+      "files": [
+        "src/sysml/index.ts"
+      ]
+    },
+    {
+      "name": "Tex",
+      "files": [
+        "src/tex/index.ts"
+      ]
+    },
+    {
+      "name": "Worker",
+      "files": [
+        "src/worker/entry.ts",
+        "src/worker/protocol.ts",
+        "src/worker/run.ts"
+      ]
+    }
+  ]
+}
