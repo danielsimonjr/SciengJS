@@ -9,6 +9,7 @@ import path from 'node:path';
 import { runProgram } from '../runtime/run.mjs';
 import { ExitSignal } from '../runtime/host.mjs';
 import { lineDiff } from './linediff.mjs';
+import { tripGate, buildBanner } from './trip-gate.mjs';
 
 const [buildDir, srcDir, outDir] = process.argv.slice(2);
 if (!buildDir || !srcDir || !outDir) {
@@ -116,5 +117,12 @@ for (const [mine, ref] of [['tripin.log', 'tripin.log'], ['tripin.fot', 'tripin.
   fs.writeFileSync(path.join(outDir, `${mine}.diff`), d.text, 'latin1');
   results.diffs[mine] = { referenceLines: latin(src(ref)).split('\n').length, removed: d.removed, added: d.added };
 }
+// The pass rule: only the banner line may differ (see trip-gate.mjs); exit status 1 otherwise.
+results.gate = tripGate({
+  refDir: srcDir, outDir,
+  banner: buildBanner(fs.readFileSync(path.join(buildDir, 'textrip.p'), 'latin1')),
+  tmpPlDiffers: results.steps.pltotf.tmpPlDiffers,
+});
 fs.writeFileSync(path.join(outDir, 'trip-results.json'), JSON.stringify(results, null, 1));
 console.log(JSON.stringify(results));
+if (!results.gate.pass) process.exitCode = 1;

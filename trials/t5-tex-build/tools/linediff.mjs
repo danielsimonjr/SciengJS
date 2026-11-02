@@ -46,6 +46,8 @@ export function lineDiff(aText, bText, context = 2) {
     changedLines: changed,
     removed: ops.filter((o) => o[0] === '-').length,
     added: ops.filter((o) => o[0] === '+').length,
+    removedLines: ops.filter((o) => o[0] === '-').map((o) => o[1]),
+    addedLines: ops.filter((o) => o[0] === '+').map((o) => o[1]),
     text: out,
   };
 }
