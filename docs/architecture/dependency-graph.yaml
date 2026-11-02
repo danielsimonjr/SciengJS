@@ -1,10 +1,10 @@
 metadata:
-  name: sciengjs
+  name: agent-accf745efccdf0916
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 56
+  totalFiles: 76
   totalModules: 3
-  totalExports: 82
+  totalExports: 103
 modules:
   src:
     src/browser/index.ts:
@@ -333,6 +333,59 @@ modules:
         - node:zlib
       internalDependencies: []
       exports: []
+    trials/t5-tex-build/runtime/dvi2svg.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/tfm.mjs
+          imports:
+            - readTfm
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/type1.mjs
+          imports:
+            - readType1
+          typeOnly: false
+      exports:
+        - dviToSvg
+    trials/t5-tex-build/runtime/host.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - ExitSignal
+        - Host
+    trials/t5-tex-build/runtime/run.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - Host
+            - ExitSignal
+          typeOnly: false
+      exports:
+        - runProgram
+    trials/t5-tex-build/runtime/tfm.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - readTfm
+    trials/t5-tex-build/runtime/type1.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - readType1
+    trials/t5-tex-build/runtime/vfs.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies: []
+      exports:
+        - TreeFS
+        - flatName
   tests:
     test/integration/page-checker.test.ts:
       externalDependencies:
@@ -625,6 +678,23 @@ modules:
             - TEST_REGISTRY
           typeOnly: false
       exports: []
+    trials/t5-tex-build/test/type1.test.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:fs
+        - node:path
+        - node:test
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/type1.mjs
+          imports:
+            - readType1
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/tfm.mjs
+          imports:
+            - readTfm
+          typeOnly: false
+      exports: []
   tools:
     trials/t3-tex/tools/build-format.cjs:
       externalDependencies: []
@@ -693,17 +763,185 @@ modules:
         - loadEngine
         - setCoreDump
         - renderTex
+    trials/t5-tex-build/tools/build.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+        - node:path
+        - node:url
+        - node:zlib
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/pascal.mjs
+          imports:
+            - compile
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/compare-builds.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies: []
+      exports: []
+    trials/t5-tex-build/tools/compile-cli.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/pascal.mjs
+          imports:
+            - compile
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/linediff.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - lineDiff
+    trials/t5-tex-build/tools/pascal.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/wasm.mjs
+          imports:
+            - ModuleBuilder
+            - OP
+            - I32
+            - F64
+            - VOID
+            - uleb
+            - sleb
+            - f64bytes
+          typeOnly: false
+      exports:
+        - canon
+        - compile
+    trials/t5-tex-build/tools/render.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/vfs.mjs
+          imports:
+            - TreeFS
+            - flatName
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/dvi2svg.mjs
+          imports:
+            - dviToSvg
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/run-texware.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/sizes.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:zlib
+      internalDependencies: []
+      exports: []
+    trials/t5-tex-build/tools/tangle-cli.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/tangle.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - applyChanges
+        - tangle
+    trials/t5-tex-build/tools/tex-run.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/vfs.mjs
+          imports:
+            - TreeFS
+            - flatName
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/trip.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/wasm.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - I32
+        - F64
+        - VOID
+        - OP
+        - uleb
+        - sleb
+        - f64bytes
+        - ModuleBuilder
 statistics:
-  totalTypeScriptFiles: 56
-  totalSourceFiles: 56
+  totalTypeScriptFiles: 76
+  totalSourceFiles: 76
   totalModules: 3
-  totalLinesOfCode: 4451
-  totalExports: 82
+  totalLinesOfCode: 7733
+  totalExports: 103
   entryRoots: 20
   reachableFiles: 20
-  dormantFiles: 7
-  orphanedFiles: 7
-  testOnlyFiles: 0
+  dormantFiles: 13
+  orphanedFiles: 11
+  testOnlyFiles: 2
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 9
@@ -714,12 +952,12 @@ statistics:
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
-  totalClasses: 1
+  totalClasses: 5
   totalInterfaces: 17
-  totalFunctions: 30
+  totalFunctions: 41
   totalTypeGuards: 0
   totalEnums: 0
-  totalConstants: 11
+  totalConstants: 17
   totalReExports: 16
 reachability:
   roots:
@@ -744,7 +982,7 @@ reachability:
     - src/worker/protocol.ts
     - src/worker/run.ts
   reachableCount: 20
-  dormantCount: 7
+  dormantCount: 13
   orphaned:
     - trials/t1-graph/compare-layout.mjs
     - trials/t1-graph/make-sources.mjs
@@ -753,5 +991,11 @@ reachability:
     - trials/t3-tex/shim/index.cjs
     - trials/t4-browser/assets/pinned.js
     - trials/t4-browser/measure.mjs
-  testOnly: []
+    - trials/t5-tex-build/runtime/dvi2svg.mjs
+    - trials/t5-tex-build/runtime/host.mjs
+    - trials/t5-tex-build/runtime/run.mjs
+    - trials/t5-tex-build/runtime/vfs.mjs
+  testOnly:
+    - trials/t5-tex-build/runtime/tfm.mjs
+    - trials/t5-tex-build/runtime/type1.mjs
 warnings: []

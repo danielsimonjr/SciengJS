@@ -1,24 +1,24 @@
 {
-  "totalFiles": 56,
+  "totalFiles": 76,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
-    "test-only": 0,
-    "orphan": 7,
-    "test": 23,
-    "tool": 6,
+    "test-only": 2,
+    "orphan": 11,
+    "test": 24,
+    "tool": 19,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "src": 27,
-    "tests": 23,
-    "tools": 6
+    "src": 33,
+    "tests": 24,
+    "tools": 19
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 36
+    "(root)": 56
   },
   "files": [
     {
@@ -412,6 +412,146 @@
       "area": "src",
       "disposition": "orphan",
       "loc": 912
+    },
+    {
+      "file": "trials/t5-tex-build/runtime/dvi2svg.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 120
+    },
+    {
+      "file": "trials/t5-tex-build/runtime/host.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 212
+    },
+    {
+      "file": "trials/t5-tex-build/runtime/run.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 41
+    },
+    {
+      "file": "trials/t5-tex-build/runtime/tfm.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "test-only",
+      "loc": 23
+    },
+    {
+      "file": "trials/t5-tex-build/runtime/type1.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "test-only",
+      "loc": 236
+    },
+    {
+      "file": "trials/t5-tex-build/runtime/vfs.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 44
+    },
+    {
+      "file": "trials/t5-tex-build/test/type1.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 43
+    },
+    {
+      "file": "trials/t5-tex-build/tools/build.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 79
+    },
+    {
+      "file": "trials/t5-tex-build/tools/compare-builds.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 11
+    },
+    {
+      "file": "trials/t5-tex-build/tools/compile-cli.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 18
+    },
+    {
+      "file": "trials/t5-tex-build/tools/linediff.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 51
+    },
+    {
+      "file": "trials/t5-tex-build/tools/pascal.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 1402
+    },
+    {
+      "file": "trials/t5-tex-build/tools/render.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 78
+    },
+    {
+      "file": "trials/t5-tex-build/tools/run-texware.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 32
+    },
+    {
+      "file": "trials/t5-tex-build/tools/sizes.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 12
+    },
+    {
+      "file": "trials/t5-tex-build/tools/tangle-cli.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 18
+    },
+    {
+      "file": "trials/t5-tex-build/tools/tangle.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 530
+    },
+    {
+      "file": "trials/t5-tex-build/tools/tex-run.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 35
+    },
+    {
+      "file": "trials/t5-tex-build/tools/trip.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 120
+    },
+    {
+      "file": "trials/t5-tex-build/tools/wasm.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 177
     }
   ],
   "skippedLinks": [],

@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 27 |
-| Total Test Files | 11 |
-| Source Files with Tests | 5 |
-| Source Files without Tests | 22 |
-| Coverage (raw, direct-import) | **18.5%** |
+| Total Source Files | 33 |
+| Total Test Files | 12 |
+| Source Files with Tests | 7 |
+| Source Files without Tests | 26 |
+| Coverage (raw, direct-import) | **21.2%** |
 ---
 
 ## Source Files Without Test Coverage
 
-The following 22 source files are not directly imported by any test file:
+The following 26 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -89,6 +89,13 @@ The following 22 source files are not directly imported by any test file:
 - `trials/t4-browser/assets/pinned.js`
 - `trials/t4-browser/measure.mjs`
 
+### t5-tex-build/
+
+- `trials/t5-tex-build/runtime/dvi2svg.mjs`
+- `trials/t5-tex-build/runtime/host.mjs`
+- `trials/t5-tex-build/runtime/run.mjs`
+- `trials/t5-tex-build/runtime/vfs.mjs`
+
 ---
 
 ## Source Files With Test Coverage
@@ -100,6 +107,8 @@ The following 22 source files are not directly imported by any test file:
 | `src/errors.ts` | `config.test.ts`, `errors.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `src/types.ts` | `render.test.ts` |
 | `worker/run.ts` | `worker-run.test.ts` |
+| `runtime/tfm.mjs` | `type1.test.mjs` |
+| `runtime/type1.mjs` | `type1.test.mjs` |
 
 ---
 
@@ -118,3 +127,4 @@ The following 22 source files are not directly imported by any test file:
 | `unit/svg-compare.test.ts` | 0 files |
 | `unit/teardown.test.ts` | 0 files |
 | `unit/worker-run.test.ts` | 2 files |
+| `test/type1.test.mjs` | 2 files |
