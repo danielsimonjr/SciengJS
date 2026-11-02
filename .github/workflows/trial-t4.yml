@@ -89,6 +89,12 @@ jobs:
             node measure.mjs --out results
           fi
 
+      - name: Record the unprivileged user namespace setting (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sysctl kernel.apparmor_restrict_unprivileged_userns || true
+          unshare --user --map-root-user true && echo "unprivileged user namespaces: allowed" || echo "unprivileged user namespaces: refused"
+
       - name: Create a loopback-only network namespace (Ubuntu)
         if: runner.os == 'Linux'
         run: |
@@ -101,13 +107,13 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           set -euo pipefail
-          sudo ip netns exec t4ns env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --out results-netns
+          sudo ip netns exec t4ns sudo -u "$USER" env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --out results-netns
 
       - name: Negative control in the loopback-only namespace (Ubuntu)
         if: runner.os == 'Linux'
         run: |
           set -euo pipefail
-          sudo ip netns exec t4ns env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --mode negative --out results-negative
+          sudo ip netns exec t4ns sudo -u "$USER" env PATH="$PATH" HOME="$HOME" SCIENG_BROWSER="$SCIENG_BROWSER"             "$(command -v ${{ matrix.runtime }})" measure.mjs --mode negative --out results-negative
           grep -q '"imageFailed":true' results-negative/*.jsonl
           grep -q '"scriptFailed":true' results-negative/*.jsonl
 
