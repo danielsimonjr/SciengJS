@@ -129,6 +129,10 @@ Each trial build is a short branch that answers one question with numbers. Its r
   - `pdf` for every backend that has svg.
 - **Gate:**
   - The T4 network test passes in CI on three systems.
+  - On Linux, the renders pass in a network namespace with only loopback. A negative render without the forced flags fails to load an external image and an external script.
+  - On each system, a sample of the browser process tree finds no socket to an address that is not loopback.
+  - On each system, no browser process carries `--no-sandbox`.
+  - A screenshot of 4000 by 3000 device pixels arrives whole under Bun and under Node 22.
   - A flowchart and a gantt chart render.
   - A missing browser path rejects with `E_STAGE_MISSING` and `capabilities` reports it.
   - A `render_html` page with each block type renders under the request block, and each block draws.
