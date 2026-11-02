@@ -47,18 +47,31 @@ const sample = () => {
 };
 const emit = (obj) => console.log(JSON.stringify({ trial: "T2-mesh", runtime, runtimeVersion, platform: process.platform, arch: process.arch, nodeVersion: runtime === "node" ? process.version : null, ...obj }));
 
+// Memory baselines, taken before the import, after the import and after the factory.
+// They show the cost of the runtime, of the JavaScript module and of the WASM instance.
+const snapshot = (stage) => {
+  const m = process.memoryUsage();
+  return { stage, heapUsed: m.heapUsed, rss: m.rss, arrayBuffers: m.arrayBuffers ?? 0, external: m.external ?? 0 };
+};
+const baselineBefore = snapshot("before import");
+emit({ kind: "baseline", ...baselineBefore });
+
 // Load: import the package and await its factory. The WASM is a separate file that the factory loads.
 const t0 = performance.now();
 const mod = await import("occt-import-js");
+const afterImport = snapshot("after import");
+emit({ kind: "baseline", ...afterImport });
 const occt = await mod.default({
   print: (text) => wasmMessages.push(String(text)),
   printErr: (text) => wasmMessages.push(String(text)),
 });
 const loadMs = performance.now() - t0;
 sample();
+const afterFactory = snapshot("after factory");
+emit({ kind: "baseline", ...afterFactory });
 const wasmFile = join(pkgDir, "dist", "occt-import-js.wasm");
 const pkgVersion = JSON.parse(readFileSync(join(pkgDir, "package.json"), "utf8")).version;
-emit({ kind: "load", loadMs: Number(loadMs.toFixed(3)), occtImportJsVersion: pkgVersion, wasmBytes: statSync(wasmFile).size, packageBytes: sizeOf(pkgDir) });
+emit({ kind: "load", loadMs: Number(loadMs.toFixed(3)), occtImportJsVersion: pkgVersion, wasmBytes: statSync(wasmFile).size, packageBytes: sizeOf(pkgDir), heapUsedAfterFactoryMinusBeforeImportBytes: afterFactory.heapUsed - baselineBefore.heapUsed, rssAfterFactoryMinusBeforeImportBytes: afterFactory.rss - baselineBefore.rss });
 
 // Summarise one result: meshes, triangles, colours, a hash of the geometry and the bounding box.
 function summarise(result) {
