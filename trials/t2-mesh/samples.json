@@ -1,0 +1,55 @@
+{
+  "warmRuns": 20,
+  "readers": {
+    "step": "ReadStepFile",
+    "iges": "ReadIgesFile",
+    "brep": "ReadBrepFile"
+  },
+  "samples": [
+    {
+      "id": "step-colour",
+      "format": "step",
+      "file": "samples/red_cube_blue_cylinder.step",
+      "sha256": "1fd5c7d9325bcfb9863365faf84554f89e7e7a5e86760a0fc8d5db00619d9ef5",
+      "source": "https://github.com/CadQuery/cadquery/blob/60e107a6a99fb4cdf405b9c180cb00f8ea0a569b/tests/testdata/red_cube_blue_cylinder.step",
+      "licence": "Apache-2.0 (repository LICENSE)",
+      "params": null
+    },
+    {
+      "id": "step-colour-millimeter",
+      "format": "step",
+      "file": "samples/red_cube_blue_cylinder.step",
+      "sha256": "1fd5c7d9325bcfb9863365faf84554f89e7e7a5e86760a0fc8d5db00619d9ef5",
+      "source": "https://github.com/CadQuery/cadquery/blob/60e107a6a99fb4cdf405b9c180cb00f8ea0a569b/tests/testdata/red_cube_blue_cylinder.step",
+      "licence": "Apache-2.0 (repository LICENSE)",
+      "params": { "linearUnit": "millimeter" }
+    },
+    {
+      "id": "step-colour-meter",
+      "format": "step",
+      "file": "samples/red_cube_blue_cylinder.step",
+      "sha256": "1fd5c7d9325bcfb9863365faf84554f89e7e7a5e86760a0fc8d5db00619d9ef5",
+      "source": "https://github.com/CadQuery/cadquery/blob/60e107a6a99fb4cdf405b9c180cb00f8ea0a569b/tests/testdata/red_cube_blue_cylinder.step",
+      "licence": "Apache-2.0 (repository LICENSE)",
+      "params": { "linearUnit": "meter" }
+    },
+    {
+      "id": "iges-cube",
+      "format": "iges",
+      "file": "samples/cube-10x10mm.igs",
+      "sha256": "8bcbc86a044f592ba2a1a18f89a905358a85aa5093c0dd0756771b1b022b4c6f",
+      "source": "https://github.com/kovacsv/occt-import-js/blob/45619237ab5576f190f11a7c66f76ad93c5690fb/test/testfiles/cube-10x10mm/Cube%2010x10.igs",
+      "licence": "LGPL-2.1 (repository LICENSE.md)",
+      "params": null
+    },
+    {
+      "id": "brep-cylinder",
+      "format": "brep",
+      "file": "samples/cylinder1.brep",
+      "sha256": "0b167ee0ffa6d587c411080cc32f2aaf44036fd40c85ca4161687e9e2af06dad",
+      "source": "https://github.com/FreeCAD/FreeCAD/blob/46ec224b04e20f682f1fa179b4ede39ebf43b3fc/data/tests/ModelRefineTests/cylinder1.brep",
+      "licence": "LGPL-2.1 (repository LICENSE)",
+      "params": null
+    }
+  ]
+}
