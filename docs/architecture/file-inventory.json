@@ -1,11 +1,11 @@
 {
-  "totalFiles": 33,
+  "totalFiles": 37,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
     "orphan": 0,
-    "test": 13,
+    "test": 17,
     "tool": 0,
     "config": 0,
     "bench": 0,
@@ -13,11 +13,11 @@
   },
   "byArea": {
     "src": 20,
-    "tests": 13
+    "tests": 17
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 13
+    "(root)": 17
   },
   "files": [
     {
@@ -168,6 +168,34 @@
       "loc": 71
     },
     {
+      "file": "test/node/backends/heap.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 5
+    },
+    {
+      "file": "test/node/backends/loop.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 6
+    },
+    {
+      "file": "test/node/backends/ok.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 4
+    },
+    {
+      "file": "test/node/worker.node.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 45
+    },
+    {
       "file": "test/smoke/smoke.mjs",
       "package": "(root)",
       "area": "tests",
@@ -214,7 +242,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 203
+      "loc": 213
     },
     {
       "file": "test/unit/errors.test.ts",
@@ -242,7 +270,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 63
+      "loc": 74
     },
     {
       "file": "test/unit/worker-run.test.ts",

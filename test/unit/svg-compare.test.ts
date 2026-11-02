@@ -37,6 +37,11 @@ describe("normalizeSvg", () => {
     const out = normalizeSvg('<svg><rect width="1" height="2" x="3"/></svg>');
     expect(out).toContain('<rect height="2" width="1" x="3"/>');
   });
+
+  test("gives one new id to every occurrence of the same original id", () => {
+    const out = normalizeSvg('<svg><a id="a"/><b id="b"/><c id="a"/></svg>');
+    expect(out).toBe('<svg><a id="id1"/><b id="id2"/><c id="id1"/></svg>');
+  });
 });
 
 describe("compareSvg", () => {
@@ -59,5 +64,11 @@ describe("compareSvg", () => {
   test("rejects an SVG whose label text changed", () => {
     const actual = EXPECTED.replace(">label<", ">Label<");
     expect(compareSvg(actual, EXPECTED).equal).toBe(false);
+  });
+
+  test("rejects a number that differs in the third decimal", () => {
+    const actual = '<svg><rect x="1.2341"/></svg>';
+    const expected = '<svg><rect x="1.2349"/></svg>';
+    expect(compareSvg(actual, expected).equal).toBe(false);
   });
 });

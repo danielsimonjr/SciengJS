@@ -3,9 +3,9 @@
     "name": "i0",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 33,
+    "totalFiles": 37,
     "totalModules": 2,
-    "totalExports": 67
+    "totalExports": 70
   },
   "modules": {
     "src": {
@@ -401,6 +401,41 @@
         ],
         "exports": []
       },
+      "test/node/backends/heap.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/node/backends/loop.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/node/backends/ok.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/node/worker.node.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:path",
+          "node:test",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
       "test/smoke/smoke.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
@@ -652,11 +687,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 33,
-    "totalSourceFiles": 33,
+    "totalTypeScriptFiles": 37,
+    "totalSourceFiles": 37,
     "totalModules": 2,
-    "totalLinesOfCode": 1768,
-    "totalExports": 67,
+    "totalLinesOfCode": 1849,
+    "totalExports": 70,
     "entryRoots": 20,
     "reachableFiles": 20,
     "dormantFiles": 0,
@@ -674,7 +709,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 1,
     "totalInterfaces": 17,
-    "totalFunctions": 16,
+    "totalFunctions": 19,
     "totalTypeGuards": 0,
     "totalEnums": 0,
     "totalConstants": 10,

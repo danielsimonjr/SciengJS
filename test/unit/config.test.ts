@@ -125,6 +125,16 @@ describe("loadConfig precedence: call option > environment > file > default", ()
     });
   });
 
+  test("an empty environment variable counts as unset", async () => {
+    const cfg = await loadConfig({}, deps({ env: { SCIENG_TIMEOUT_MS: "" } }));
+    expect(cfg.timeoutMs).toBe(60000);
+  });
+
+  test("an empty SCIENG_CONFIG counts as unset and reads the default path", async () => {
+    const cfg = await loadConfig({}, deps({ env: { SCIENG_CONFIG: "" } }));
+    expect(cfg.timeoutMs).toBe(60000);
+  });
+
   test("SCIENG_CONFIG selects the file that the loader reads", async () => {
     const readFile = fakeFs({ "/custom/cfg.json": JSON.stringify({ maxMemoryMb: 64 }) });
     const cfg = await loadConfig({}, deps({ readFile, env: { SCIENG_CONFIG: "/custom/cfg.json" } }));
