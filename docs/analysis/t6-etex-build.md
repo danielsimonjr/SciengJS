@@ -21,7 +21,7 @@ Design sources: `docs/superpowers/specs/2026-11-01-scieng-engine-design.md`, sec
 **The trial holds.**
 
 - The T5 tangler and compiler build `tex.web` with `etex.ch` and four engine change files. The build needs one fix in the tangler (see "Changes to T5").
-- The trip build passes the e-TRIP gate in all three parts of `etripman.tex`. The parts are the trip test in compatibility mode, the trip test in extended mode, and `etrip.tex`. Each remaining difference is a difference that `etripman.tex` or the reference diffs of TeX Live allow (see "Trip and e-TRIP").
+- The trip build passes the e-TRIP gate in all three parts of `etripman.tex`. The parts are the trip test in compatibility mode, the trip test in extended mode, and `etrip.tex`. Each remaining difference is in one of the classes of the gate (see "Corrections to the brief" and "Trip and e-TRIP").
 - The engine adds five utility primitives. The LaTeX kernel of TeX Live 2023 needs each of them (see "Utility primitives").
 - The production build makes `scieng.fmt` from `latex.ltx`, `xcolor`, `tikz` and `circuitikz` in extended mode. The format selects the pgf driver `pgfsys-dvisvgm.def`.
 - The circuit renders. Each of the 10 glyphs is one `<path>`. The SVG holds no `<text>` element. Node and Bun give the same format bytes and the same SVG bytes.
@@ -37,8 +37,13 @@ The brief has three rules that the trial cannot keep as written. The trial keeps
    - Appendix A.4: in extended mode, the memory words grow by `\extramw` (38) and the control sequences grow by `\extracs` (66). The stack positions grow by `\extrabf` (23) and `\extrasv` (2). New "restoring" and group lines show.
    - Appendix B.9: in `etrip.tex`, the glue set values can differ in rounding, and the memory statistics of the reference build differ.
 
-   TeX Live records the differences of its own build in `etrip/etrip.diffs`. The gate (`tools/etrip-gate.mjs`) allows only these classes. The gate reads the four numbers from `etripman.tex` and the hunks from `etrip.diffs`. The gate adds the count of the new primitives (5) to the control sequence delta. The gate fails on any other line. A gate run with 4 or 6 new primitives fails with 4 problems.
-2. **"Implement exactly the primitives that `latex.ltx` tests for at format-build time."** This set is too small. The format build needs three primitives. The `\everyjob` code of the L3 kernel needs two more primitives at the start of each document: `\creationdate` and `\shellescape`. The code that needs `\creationdate` is at `expl3-code.tex` lines 7880 to 7887. The code that needs `\shellescape` is at `expl3-code.tex` lines 7921 to 7931. Without them no document starts. The trial adds these five primitives and no others.
+   TeX Live records the differences of its own build in `etrip/etrip.diffs`. The gate (`tools/etrip-gate.mjs`) allows these classes and three more:
+   - The build stamps: the banner, the dates and times, the `./` prefix of file names and the version string of DVItype.
+   - The echo of the terminal input in the `.fot` files.
+   - The start message of `etrip.tex`. This class is a decision of the trial, not a rule of `etripman.tex` or `etrip.diffs`. The reference `etrip.log` of the tarball is from 2014-01-22, but its `etrip.tex` is from 2021-01-28. The gate accepts only the message that the pinned `etrip.tex` prints.
+
+   The gate reads the four numbers from `etripman.tex` and the hunks from `etrip.diffs`. The gate adds the count of the new primitives (5) to the control sequence delta. The gate fails on any other line. A gate run with 4 or 6 new primitives fails with 4 problems.
+2. **"Implement exactly the primitives that `latex.ltx` tests for at format-build time."** This set is too small. The format build needs three primitives. The `\everyjob` code of the L3 kernel needs two more primitives at the start of each document: `\creationdate` and `\shellescape`. The code that needs `\creationdate` is at `expl3-code.tex` lines 7880 to 7887. The code that needs `\shellescape` is at `expl3-code.tex` lines 7921 to 7931. The `\everyjob` code uses `\tex_creationdate:D` and `\tex_shellescape:D` directly, with no test that the primitive exists. Thus each document starts with a TeX error when the engine does not have them. The trial adds these five primitives and no others.
 3. **"The same TeX Live year as T5."** T5 uses two sources (T5 deviation 6). CI uses the Ubuntu packages of TeX Live 2023. The local computer uses the current tlnet. T6 pins TeX Live 2023 for every file: the frozen `tlnet-final` archives and the source tarball `texlive-20230313-source.tar.xz`. The frozen archives do not change, so the sha256 pins stay valid.
 
 ## Platform and versions
@@ -210,7 +215,7 @@ A headless browser shows the divider: the source, two resistors and the labels.
 | `pdftex-t.tex` (manual) | GNU FDL 1.2; read for the behaviour only, not distributed |
 | The 20 package archives | the `catalogue-license` field of each `tlpobj` file: LPPL for babel, firstaid, graphics, graphics-def, l3backend, l3kernel, latex, latex-fonts, standalone, tools, unicode-data, xcolor, xkeyval; LPPL or GPL for circuitikz; LPPL 1.3c, GPL 2 or FDL for pgf; public domain for graphics-cfg; Knuth for cm and knuth-lib; OFL for amsfonts; no field for hyphen-base |
 
-The two licence texts of e-TeX do not agree. `etex.ch` reserves all rights and allows unchanged copies. `etripman.tex` calls the program public domain. The trial keeps the stricter rule: the trial applies `etex.ch` unchanged as a change file and puts every change into its own change files. The trial does not distribute `etex.ch`; the build downloads `etex.ch`. The engine does not call itself e-TeX: the banner names SET.
+The two licence texts of e-TeX do not agree. `etex.ch` reserves all rights and allows unchanged copies. `etripman.tex` calls the program public domain. The trial keeps the stricter rule: the trial applies `etex.ch` unchanged as a change file and puts every change into its own change files. The trial does not distribute `etex.ch`; the build downloads `etex.ch`. The CI artifact `t6-build` (kept 14 days) holds the Pascal and WASM files that the build makes from `etex.ch`, but not `etex.ch`. The engine does not call itself e-TeX: the banner names SET.
 
 ## Downloads
 
