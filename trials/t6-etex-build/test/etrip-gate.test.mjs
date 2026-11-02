@@ -82,6 +82,25 @@ test('a line that the reference diff of e-TeX lists: pass; another line: fail', 
   assert.equal(judge(2, 'xtrip.log', ['a', '{restoring \\count=-1}', 'b'], ['a', 'b'], c).problems.length, 1);
 });
 
+test('part 2: a statistic that must grow and stays the same: fail', () => {
+  assert.equal(judge(2, 'xtripin.log', ['341 multiletter control sequences'], ['341 multiletter control sequences']).problems.length, 1);
+  const dump = ['471 memory locations dumped; current usage is 96&278'];
+  assert.equal(judge(2, 'xtripin.log', dump, dump).problems.length, 1);
+  const stack = [' 7i,7n,9p,113b,38s stack positions out of 200i,40n,60p,500b,600s'];
+  assert.equal(judge(2, 'xtrip.log', stack, stack).problems.length, 1);
+});
+
+test('part 3: a count that the offset and the new primitives must change and stays the same: fail', () => {
+  const c = { ...ctx, extraPrimitives: 2, reference: { lines: {}, offsets: { 'multiletter control sequences': 1 } } };
+  const same = [' 409 multiletter control sequences out of 2100'];
+  assert.equal(judge(3, 'eetrip.log', same, same, c).problems.length, 1);
+});
+
+test('a line of the reference diff excuses one occurrence only', () => {
+  const c = { ...ctx, reference: { lines: { 'xtrip.log': { removed: ['{restoring \\fam=-1}'], added: [] } }, offsets: {} } };
+  assert.equal(judge(2, 'xtrip.log', ['a', '{restoring \\fam=-1}', '{restoring \\fam=-1}', 'b'], ['a', 'b'], c).problems.length, 1);
+});
+
 test('part 3: a count of the reference build is corrected by the offset of that build', () => {
   const c = { ...ctx, extraPrimitives: 2, reference: { lines: {}, offsets: { 'multiletter control sequences': 1, 'hyphenation exceptions': -1 } } };
   assert.deepEqual(judge(3, 'eetrip.log', [' 409 multiletter control sequences out of 15000+0'], [' 410 multiletter control sequences out of 2100'], c).problems, []);

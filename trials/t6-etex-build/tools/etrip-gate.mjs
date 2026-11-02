@@ -297,8 +297,18 @@ export function judgeFile({ part, file, refText, outText, ctx }) {
     if (known) {
       const knownR = (known.removed ?? []).map((l) => normaliseLine(l, fot));
       const knownA = (known.added ?? []).map((l) => normaliseLine(l, fot));
-      restR = restR.filter((l) => !knownR.includes(l));
-      restA = restA.filter((l) => !knownA.includes(l));
+      // each line of the reference diff excuses one occurrence only
+      const consume = (rest, known) => {
+        const left = [...known];
+        return rest.filter((l) => {
+          const i = left.indexOf(l);
+          if (i < 0) return true;
+          left.splice(i, 1);
+          return false;
+        });
+      };
+      restR = consume(restR, knownR);
+      restA = consume(restA, knownA);
     }
   }
   // 6. one problem per remaining line; a removal and an addition at the same
@@ -306,6 +316,29 @@ export function judgeFile({ part, file, refText, outText, ctx }) {
   const nPair = Math.min(restR.length, restA.length);
   for (const l of restR) problems.push(`${file}: removed "${l}"`);
   for (let i = nPair; i < restA.length; i++) problems.push(`${file}: added "${restA[i]}"`);
+  // 7. a statistic that the new build must change and that stays the same
+  //    gives no diff line; pair the k-th statistic of each kind of both texts
+  if (part === 2 || part === 3) {
+    const kinds = (lines) => {
+      const by = new Map();
+      for (const l of lines) {
+        const c = l.match(COUNTS_LINE);
+        // the hyphenation exceptions are not here: their count may stay the same
+        const key = c ? (kindOf(c[3]) === MULTILETTER ? `count ${c[4] === undefined}` : null)
+          : part === 2 && MEMDUMP_LINE.test(l) ? 'memdump'
+            : part === 2 && STACK_LINE.test(l) ? 'stack' : null;
+        if (key) by.set(key, [...(by.get(key) ?? []), l]);
+      }
+      return by;
+    };
+    const outBy = kinds(outN);
+    for (const [key, refs] of kinds(refN)) {
+      const outs = outBy.get(key) ?? [];
+      refs.forEach((r, k) => {
+        if (outs[k] === r && !pairOk(r, r, part, ctx)) problems.push(`${file}: statistic unchanged "${r}"`);
+      });
+    }
+  }
   return { problems };
 }
 

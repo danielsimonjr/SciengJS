@@ -607,7 +607,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 130
+      "loc": 149
     },
     {
       "file": "trials/t6-etex-build/test/primitives.test.mjs",
@@ -628,14 +628,14 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 376
+      "loc": 409
     },
     {
       "file": "trials/t6-etex-build/tools/etrip.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 81
+      "loc": 85
     },
     {
       "file": "trials/t6-etex-build/tools/primitives.mjs",

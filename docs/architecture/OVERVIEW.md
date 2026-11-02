@@ -43,7 +43,7 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 | Claim | Value | Source |
 |---|---|---|
 | totalSourceFiles | 89 | repo-tools map |
-| totalLinesOfCode | 8916 | repo-tools map |
+| totalLinesOfCode | 8972 | repo-tools map |
 | totalExports | 126 | repo-tools map |
 | totalTypeOnlyImports | 9 | repo-tools map |
 | totalModules | 3 | repo-tools map |

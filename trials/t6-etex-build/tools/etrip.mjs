@@ -20,6 +20,10 @@ if (!outDir) {
 const build = JSON.parse(fs.readFileSync(path.join(buildDir, 'build.json'), 'utf8'));
 const tripDir = build.tripDir, etripDir = path.join(build.etexDir, 'etrip');
 fs.mkdirSync(outDir, { recursive: true });
+// a file of an earlier run must not stand in for a file that this run does not write
+for (const [d, ref, mine] of COMPARISONS) {
+  for (const n of [mine, `${mine}.diff`, ...(d === 'out' ? [ref] : [])]) fs.rmSync(path.join(outDir, n), { force: true });
+}
 const read = (p) => new Uint8Array(fs.readFileSync(p));
 const write = (n, d) => fs.writeFileSync(path.join(outDir, n), typeof d === 'string' ? Buffer.from(d, 'latin1') : d);
 const load = (name) => loadProgram(buildDir, name);

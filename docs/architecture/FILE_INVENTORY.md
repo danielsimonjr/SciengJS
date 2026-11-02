@@ -127,11 +127,11 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t5-tex-build/tools/wasm.mjs` | (root) | tools | tool | 177 |
 | `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` | (root) | src | test-only | 160 |
 | `trials/t6-etex-build/test/dvisvgm-specials.test.mjs` | (root) | tests | test | 52 |
-| `trials/t6-etex-build/test/etrip-gate.test.mjs` | (root) | tests | test | 130 |
+| `trials/t6-etex-build/test/etrip-gate.test.mjs` | (root) | tests | test | 149 |
 | `trials/t6-etex-build/test/primitives.test.mjs` | (root) | tests | test | 22 |
 | `trials/t6-etex-build/tools/build.mjs` | (root) | tools | tool | 76 |
-| `trials/t6-etex-build/tools/etrip-gate.mjs` | (root) | tools | tool | 376 |
-| `trials/t6-etex-build/tools/etrip.mjs` | (root) | tools | tool | 81 |
+| `trials/t6-etex-build/tools/etrip-gate.mjs` | (root) | tools | tool | 409 |
+| `trials/t6-etex-build/tools/etrip.mjs` | (root) | tools | tool | 85 |
 | `trials/t6-etex-build/tools/primitives.mjs` | (root) | tools | tool | 33 |
 
 ## Skipped links
