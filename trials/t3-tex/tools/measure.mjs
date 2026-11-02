@@ -113,9 +113,13 @@ async function runSample(sample) {
   }
   const svgLast = await toSvg(lastDvi);
   fs.writeFileSync(path.join(outDir, `${sample.name}.svg`), svgLast ?? '');
+  const log = path.join(workdir, `${sample.name}.log`);
+  if (fs.existsSync(log)) fs.copyFileSync(log, path.join(outDir, `${sample.name}.log`));
 
   const bundleFiles = sample.bundles.filter((n) => n !== 'base');
   result.samples[sample.name] = {
+    dviWritten: first.dvi !== null,
+    firstErrorLine: texErrorLine(`${sample.name}.log`),
     firstTexMs: first.texMs,
     firstDviToSvgMs: svgFirstMs,
     warmTexMedianMs: median(warm),

@@ -93,6 +93,7 @@ jobs:
           s=$(date +%s%3N)
           (cd build/web2js && cp tex.wasm "$SCIENG_BUILD_OUT/tex.wasm" && node "$GITHUB_WORKSPACE/trials/t3-tex/tools/build-format.cjs")
           echo "format ms=$(( $(date +%s%3N) - s ))" >> build/out/results/build-timing.txt
+          cp build/web2js/*.log build/out/results/ 2>/dev/null || true
           ls -l build/format-raw
 
       - name: Measure the format and build the bundles
