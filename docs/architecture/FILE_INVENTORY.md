@@ -89,7 +89,7 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |
 | `trials/t1-graph/measure.mjs` | (root) | src | orphan | 129 |
-| `trials/t2-mesh/measure.mjs` | (root) | src | orphan | 156 |
+| `trials/t2-mesh/measure.mjs` | (root) | src | orphan | 178 |
 
 ## Skipped links
 
