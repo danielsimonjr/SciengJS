@@ -1,0 +1,22 @@
+{
+  "web2js": {
+    "repository": "https://github.com/drgrice1/web2js.git",
+    "commit": "0114ef5905dc387b70e72c654bcedd3b52b29fad"
+  },
+  "format": {
+    "name": "latex-tikz-circuitikz",
+    "preamble": [
+      "\documentclass[margin=0pt]{standalone}",
+      "\def\pgfsysdriver{pgfsys-ximera.def}",
+      "\usepackage[svgnames]{xcolor}",
+      "\usepackage{tikz}",
+      "\usepackage{circuitikz}"
+    ]
+  },
+  "samples": [
+    { "name": "circuit", "file": "samples/circuit.tex", "bundles": ["base"], "repeats": 20 },
+    { "name": "pgfplots", "file": "samples/pgfplots.tex", "bundles": ["base", "pgfplots"], "repeats": 5 }
+  ],
+  "negativeSample": { "name": "pgfplots-without-bundle", "file": "samples/pgfplots.tex", "bundles": ["base"] },
+  "compression": { "gzipLevel": 9, "brotliQuality": 11 }
+}

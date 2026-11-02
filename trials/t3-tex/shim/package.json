@@ -1,0 +1,6 @@
+{
+  "name": "node-kpathsea",
+  "version": "0.0.0-trial",
+  "private": true,
+  "main": "index.cjs"
+}
