@@ -4,7 +4,7 @@
 
 ## How to read this plan
 
-The build is a sequence of increments. Each increment ships alone. Each increment has one scope, one gate and one release. An increment starts only after the release of each increment that it depends on. Four trial builds come first. Their measured numbers decide whether the design of the tex, mesh, graph and browser stages holds.
+The build is a sequence of increments. Each increment ships alone. Each increment has one scope, one gate and one release. An increment starts only after the release of each increment that it depends on. Four trial builds come first. Their measured numbers decide whether the design of the tex, mesh, graph and browser stages holds. A fifth trial, T5, measures the TeX build of the engine before the tex stage starts.
 
 Two repositories take part:
 
@@ -69,7 +69,7 @@ Each increment runs the steps below in order. The skills named in brackets hold 
 - **Gate:** a stub backend renders through the worker. A source that loops rejects with `E_TIMEOUT` inside the limit plus one second. The loader rejects an unreadable configuration file with `E_CONFIG`. The page checker fails its deliberate-defect page. CI passes on all six jobs.
 - **Release:** no npm publish. The first publish is I1.
 
-### T1 to T4: trial builds
+### T1 to T5: trial builds
 
 Each trial build is a short branch that answers one question with numbers. Its report gives the numbers, the commands and the platform. A trial that fails its question returns the plan to planning for that stage.
 
@@ -78,6 +78,7 @@ Each trial build is a short branch that answers one question with numbers. Its r
 | T1 graph | Does `@viz-js/viz` render DOT under Bun and under Node 22, on three systems? | first-render time, warm-render time, package size, one SVG compared with the Graphviz CLI output of the same source |
 | T2 mesh | Does `occt-import-js` read a STEP, an IGES and a BREP sample under Bun and Node 22? | load time of the WASM, read time of each sample, triangle count, peak heap |
 | T3 tex | Can the TikZJax toolchain build a format with `tikz` and `circuitikz`, run it outside a browser, and give SVG with glyph paths? | format size compressed, first-render time, warm-render time of one `circuitikz` circuit, render time of one `pgfplots` plot with its bundle, SVG glyph check, the exact TeX engine of the toolchain, the licence of each toolchain part and of the font set |
+| T5 tex build | Does the engine compiler build `tex.web` to WASM that passes the trip test? Can that build make the format and render one `circuitikz` circuit under Bun and Node 22, with each glyph as a `<path>`? | the trip test result (the differences from the reference logs), the size of the compiler in lines, the WASM size, the format build time, the format size compressed, the first-render and warm-render time of the circuit, the glyph check, the licence of each build input and of each bundle |
 | T4 browser | Does the protocol client start the configured browser under Node 22 and Bun, render a PNG and a PDF, and block the network? | start time, PNG time, PDF time, the count of refused requests on the test page (expected 2) |
 
 ### I1: graph stage and the DOT backend
@@ -242,7 +243,8 @@ Each trial build is a short branch that answers one question with numbers. Its r
 
 - **Scope:**
   - `./tex`.
-  - The format and the extra bundles from T3.
+  - The engine compiler and the change files from T5.
+  - The format and the extra bundles from T5.
   - The bundle manager with pinned hashes.
   - Package detection.
   - The DVI to SVG converter.
@@ -250,8 +252,11 @@ Each trial build is a short branch that answers one question with numbers. Its r
 - **Gate:**
   - A hash mismatch deletes the file and rejects with `E_INTEGRITY`.
   - `\write18` and a file read outside the virtual tree fail.
-  - A `circuitikz` circuit, a `tikz-cd` diagram and a `pgfplots` plot match their expected SVG files.
-  - The render times stay inside the T3 numbers plus a stated margin.
+  - A `circuitikz` circuit, a `tikz-cd` diagram and a `chemfig` molecule match their expected SVG files.
+  - Each glyph of each expected SVG file is a `<path>`.
+  - The trip test passes in CI on each WASM build.
+  - A source that loads a package with the GPL as its only licence rejects with `E_UNSUPPORTED`. The message names the replacement.
+  - The render times stay inside the T5 numbers plus a stated margin.
 - **Release:** sciengjs 0.10.0. Then **A**: the `tikz` command; the `circuit` command gains a TikZ route.
 
 ### I13 (A): adapter completion
@@ -268,14 +273,15 @@ Each trial build is a short branch that answers one question with numbers. Its r
 
 ## Parallel work
 
-Increments with disjoint scope can run at the same time, each in its own worktree, with one writing agent per worktree. After I4: I6, I7 and I8 are independent. After I9: I10 and I11 are independent. I12 depends only on T3 and I0, and can start after T3. The lead runs the sweep after each agent, one agent at a time, because the baseline compares machine-wide state.
+Increments with disjoint scope can run at the same time, each in its own worktree, with one writing agent per worktree. After I4: I6, I7 and I8 are independent. After I9: I10 and I11 are independent. T5 depends only on T3. I12 depends only on T5 and I0, and can start after T5. The lead runs the sweep after each agent, one agent at a time, because the baseline compares machine-wide state.
 
 ## Risks and the trial that measures each
 
 | Risk | Measured by | Consequence of a failure |
 |---|---|---|
-| The TeX format with the full package set is too large or too slow in WASM | T3 | split the bundles further, or limit the package set; the plan changes at I12 |
-| DVI to SVG with glyph paths needs a font source with a usable licence | T3 | choose the font set before I12 |
+| The TeX format with the full package set is too large or too slow in WASM | T3, T5 | split the bundles further, or limit the package set; the plan changes at I12 |
+| The AMS Type 1 fonts and Latin Modern do not cover a glyph that a bundle uses | T5 | add a font under the OFL or the GFL, or remove the package from its bundle |
+| The engine compiler does not accept the Pascal of `tex.web`, or the build fails the trip test | T5 | correct the compiler; I12 waits for a build that passes |
 | `occt-import-js` is too slow or too large under Node | T2 | limit the mesh stage to STEP, or change the reader |
 | A large STEP part reads slowly: a 1.8 MB part takes about 1 s for each read, and parts over 1.8 MB are not measured | T2 | measure a larger part in I9, set the default timeout from that number, and document the part size that it covers |
 | The browser client behaves differently per system | T4 and the I4 CI matrix | per-system fixes in the client, never a hard-coded path |
