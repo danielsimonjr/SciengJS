@@ -1,0 +1,23 @@
+{
+  "mutants": [
+    { "id": "svg-1", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "Number(value.toFixed(3))", "replacement": "Number(value.toFixed(2))", "equivalent": null },
+    { "id": "svg-2", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "Object.is(rounded, -0) ? \"0\" : String(rounded)", "replacement": "String(rounded)", "equivalent": "String(-0) is \"0\", so the Object.is branch gives the same text." },
+    { "id": "svg-3", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "(a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)", "replacement": "(a[0] > b[0] ? -1 : a[0] < b[0] ? 1 : 0)", "equivalent": null },
+    { "id": "svg-4", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "attrs.sort((a, b) =>", "replacement": "void ((a, b) =>", "equivalent": null },
+    { "id": "svg-5", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "if (!map.has(id)) map.set(", "replacement": "map.set(", "equivalent": null },
+    { "id": "svg-6", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "(?:\\.\\d+)?(?:[eE]", "replacement": "(?:[eE]", "equivalent": null },
+    { "id": "svg-7", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "value.replace(NUMBER, roundNumber)", "replacement": "value", "equivalent": null },
+    { "id": "svg-8", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "out = renumberIds(out);", "replacement": "out = out;", "equivalent": null },
+    { "id": "svg-9", "file": "test/support/svg-compare.ts", "test": "test/unit/svg-compare.test.ts", "original": "out = out.replace(/>\\s+</g, \"><\").trim();", "replacement": "out = out.trim();", "equivalent": null },
+    { "id": "cfg-1", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "if (value !== undefined) resolved[key] = checkValue(key, value, \"call option\");", "replacement": "if (value !== undefined && resolved[key] === undefined) resolved[key] = checkValue(key, value, \"call option\");", "equivalent": null },
+    { "id": "cfg-2", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "if (text !== undefined) resolved[key] = fromEnvText(key, text, envName);", "replacement": "if (false) resolved[key] = fromEnvText(key, text, envName);", "equivalent": null },
+    { "id": "cfg-3", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "if (fileValue !== undefined) resolved[key] = checkValue(key, fileValue, filePath);", "replacement": "if (fileValue !== undefined && resolved[key] === undefined) resolved[key] = checkValue(key, fileValue, filePath);", "equivalent": null },
+    { "id": "cfg-4", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "readConfigFile(filePath, explicitPath !== undefined, d)", "replacement": "readConfigFile(filePath, false, d)", "equivalent": null },
+    { "id": "cfg-5", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "    timeoutMs: 60000,", "replacement": "    timeoutMs: 60001,", "equivalent": null },
+    { "id": "cfg-6", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "const text = nonEmpty(d.env[envName]);", "replacement": "const text = d.env[envName];", "equivalent": null },
+    { "id": "cfg-7", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "const explicitPath = nonEmpty(d.env[ENV.configFile]);", "replacement": "const explicitPath = d.env[ENV.configFile];", "equivalent": null },
+    { "id": "cfg-8", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "    const fileValue = fromFile[key];", "replacement": "    const fileValue = undefined as unknown;", "equivalent": null },
+    { "id": "cfg-9", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "    if (value !== undefined) resolved[key] = checkValue(key, value, \"call option\");", "replacement": "    if (value !== undefined) resolved[key] = checkValue(key, value, \"call option\") as never;", "equivalent": "The cast only changes the type. The emitted value is the same at run time." },
+    { "id": "cfg-10", "file": "src/config.ts", "test": "test/unit/config.test.ts", "original": "if (!/^\\d+$/.test(text)) {", "replacement": "if (!/^\\d*$/.test(text)) {", "equivalent": "nonEmpty removes the empty string before fromEnvText runs, so the pattern never sees an empty text. \\d+ and \\d* differ only on the empty string." }
+  ]
+}
