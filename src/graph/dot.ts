@@ -61,7 +61,7 @@ export async function dotToSvg(source: string): Promise<DotSvgResult> {
   return { svg: dropped.svg, warnings };
 }
 
-/** The text of a DOT request. A byte source is read as UTF-8. */
+/** The text of a DOT request. The function reads a byte source as UTF-8. */
 export function dotSourceText(source: string | Uint8Array): string {
   return typeof source === "string" ? source : new TextDecoder().decode(source);
 }

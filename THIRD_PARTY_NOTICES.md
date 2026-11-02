@@ -26,7 +26,7 @@ Version: each row gives the version that the engine pins.
 
 ### Graphviz (EPL-2.0)
 
-Graphviz is licensed under the Eclipse Public License 2.0. The wrapper `@viz-js/viz` is licensed under MIT. The package does not ship a Graphviz licence file. The licence text of Graphviz is in `assets/licenses/EPL-2.0.txt`. The source repository of the wrapper is https://github.com/mdaines/viz-js.
+The Eclipse Public License 2.0 applies to Graphviz. The wrapper `@viz-js/viz` is licensed under MIT. The package does not ship a Graphviz licence file. The licence text of Graphviz is in `assets/licenses/EPL-2.0.txt`. The source repository of the wrapper is https://github.com/mdaines/viz-js.
 
 ### OpenCascade (LGPL-2.1)
 
@@ -34,7 +34,7 @@ Graphviz is licensed under the Eclipse Public License 2.0. The wrapper `@viz-js/
 
 ### resvg (MPL-2.0)
 
-`@resvg/resvg-wasm` is licensed under the Mozilla Public License 2.0. The WASM file stays a separate, unmodified file. The licence text is in `assets/licenses/MPL-2.0.txt`.
+The Mozilla Public License 2.0 applies to `@resvg/resvg-wasm`. The WASM file stays a separate, unmodified file. The licence text is in `assets/licenses/MPL-2.0.txt`.
 
 ### Liberation Serif (SIL Open Font License 1.1)
 

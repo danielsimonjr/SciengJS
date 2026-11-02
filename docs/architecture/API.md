@@ -25,11 +25,11 @@ Rejects with `RenderError`. The codes are: `E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`
 
 The graph stage removes each `image` attribute of the source before it renders. It reports one warning for each removed attribute. The stage reads no image file and opens no network connection.
 
-The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5. The font is licensed under the SIL Open Font License 1.1. The bold and italic faces are not bundled. The configuration key `rasterFont` (environment variable `SCIENG_RASTER_FONT`) names another TrueType or OpenType file. A file that cannot be read rejects with `E_CONFIG`. A file with no font signature also rejects with `E_CONFIG`.
+The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5. The font is licensed under the SIL Open Font License 1.1. The package does not bundle the bold and italic faces. The configuration key `rasterFont` (environment variable `SCIENG_RASTER_FONT`) names another TrueType or OpenType file. A file that the stage cannot read rejects with `E_CONFIG`. A file with no font signature also rejects with `E_CONFIG`.
 
 ### Graph size and `timeoutMs`
 
-The default `timeoutMs` is 60000. The graph stage renders a 100-node graph in about 1 s on one development host. The measured graph had two edges per node, drawn from a fixed seed. The same host rendered 200 nodes in 3.3 s. The trial report T1 measured 200-node graphs at 12 s to 51 s, and 153 s in one run. A large graph can therefore pass `timeoutMs`. Such a render rejects with `E_TIMEOUT`. The caller raises `timeoutMs` for that graph.
+The default `timeoutMs` is 60000. The graph stage renders a 100-node graph in 0.79 s to 0.89 s warm, on one development host. The measured graph has two edges per node, drawn from a fixed seed. The same host renders 200 nodes in 3.3 s warm. The trial report T1 measured 200-node graphs at 12 s to 51 s, and 153 s in one run. A large graph can therefore pass `timeoutMs`. Such a render rejects with `E_TIMEOUT`. The caller raises `timeoutMs` for that graph.
 
 ### `capabilities(config?)`
 
