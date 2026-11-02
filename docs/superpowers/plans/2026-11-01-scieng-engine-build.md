@@ -86,6 +86,9 @@ Each trial build is a short branch that answers one question with numbers. Its r
   - `./graph`, `./raster`.
   - `dot` to svg and png.
 - **Gate:** the DOT corpus matches its expected SVG files. An `image` attribute gives a warning and no reference. `allowNetwork: none` holds.
+- **Expected files:** `@viz-js/viz` at the pinned version makes the expected SVG files. The Graphviz CLI does not, because its layout differs (see `docs/analysis/t1-graph.md`).
+- **Image check:** the backend removes each `image` attribute before the render. A render with a declared image size keeps the `href` as text, so a check of the warning alone is not sufficient. The gate also checks that the SVG holds no `href` to the image file.
+- **Graph size:** each corpus graph renders well inside the default timeout on every system. A test with a large graph sets its own timeout. The API documents the graph size that the default timeout covers.
 - **Release:** sciengjs 0.1.0.
 
 ### I2 (A): scieng-mcp on the engine, DOT first
@@ -271,3 +274,4 @@ Increments with disjoint scope can run at the same time, each in its own worktre
 | `occt-import-js` is too slow or too large under Node | T2 | limit the mesh stage to STEP, or change the reader |
 | The browser client behaves differently per system | T4 and the I4 CI matrix | per-system fixes in the client, never a hard-coded path |
 | A workhorse executor cannot meet a gate | the gate of each increment | promote the executor, recorded in the route table |
+| Layout time grows fast with graph size: a 200-node graph takes 13 s to 42 s for each warm render | T1 | keep corpus graphs small, give large-graph tests their own timeout, and document the size that the default timeout covers |
