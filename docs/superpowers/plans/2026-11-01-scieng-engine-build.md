@@ -203,7 +203,8 @@ Each trial build is a short branch that answers one question with numbers. Its r
   - The samples of T2 give a valid `glb` (checked by a second reader).
   - The viewer page passes the page checker.
   - The PNG is not empty.
-  - Face colors carry into the materials.
+  - Face colors carry into the materials. The reader returns them on `brep_faces[].color`, and the mesh color is null (see `docs/analysis/t2-mesh.md`).
+  - A STEP part of 1.8 MB or more renders well inside the default timeout on every system. A test with a larger part sets its own timeout.
 - **Release:** sciengjs 0.7.0. Then **A**: the `step` command.
 
 ### I10: CAD
@@ -272,6 +273,7 @@ Increments with disjoint scope can run at the same time, each in its own worktre
 | The TeX format with the full package set is too large or too slow in WASM | T3 | split the bundles further, or limit the package set; the plan changes at I12 |
 | DVI to SVG with glyph paths needs a font source with a usable licence | T3 | choose the font set before I12 |
 | `occt-import-js` is too slow or too large under Node | T2 | limit the mesh stage to STEP, or change the reader |
+| A large STEP part reads slowly: a 1.8 MB part takes about 1 s for each read, and parts over 1.8 MB are not measured | T2 | measure a larger part in I9, set the default timeout from that number, and document the part size that it covers |
 | The browser client behaves differently per system | T4 and the I4 CI matrix | per-system fixes in the client, never a hard-coded path |
 | A workhorse executor cannot meet a gate | the gate of each increment | promote the executor, recorded in the route table |
 | Layout time grows fast with graph size: a 200-node graph takes 13 s to 42 s for each warm render | T1 | keep corpus graphs small, give large-graph tests their own timeout, and document the size that the default timeout covers |
