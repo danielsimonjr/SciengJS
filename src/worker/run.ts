@@ -4,12 +4,22 @@ import { fileURLToPath } from "node:url";
 import { RenderError } from "../errors.ts";
 import type { BackendOutput, WorkerJob, WorkerMessage } from "./protocol.ts";
 
+/** The exit of one worker. The exit code is the code that `Worker.terminate` reports. */
+export interface WorkerExit {
+  exitCode: number;
+}
+
 /** The limits of one worker render. */
 export interface WorkerLimits {
   /** The time limit of one render, in milliseconds. */
   timeoutMs: number;
-  /** The heap limit of the worker, in megabytes. Node enforces it. Bun does not. */
+  /**
+   * The heap limit of the worker, in megabytes. Node enforces it. Bun 1.4.4 accepts the option
+   * and does not enforce it, so the limit holds only under Node, the release runtime.
+   */
   maxMemoryMb: number;
+  /** Called once the worker has exited, before the render settles. Tests use it to prove the exit. */
+  onWorkerExit?: (exit: WorkerExit) => void;
 }
 
 /**
@@ -23,7 +33,10 @@ function entryUrl(): URL {
 
 /**
  * Runs one render in a fresh worker. The worker ends at the first of: its message, its error,
- * its exit, or the time limit. The worker is always terminated before the promise settles.
+ * its exit, or the time limit. The promise settles only after the worker has exited.
+ *
+ * A heap exhaustion (`ERR_WORKER_OUT_OF_MEMORY`) maps to `E_LIMIT`. The design lists the heap
+ * limit as a resource limit of a source. A crash of any other kind maps to `E_INTERNAL`.
  */
 export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<BackendOutput> {
   return new Promise<BackendOutput>((resolve, reject) => {
@@ -38,8 +51,12 @@ export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<Backe
       if (settled) return;
       settled = true;
       if (timer !== undefined) clearTimeout(timer);
-      void worker.terminate().catch(() => undefined);
-      action();
+      worker
+        .terminate()
+        .then((exitCode) => {
+          limits.onWorkerExit?.({ exitCode });
+        })
+        .finally(action);
     };
 
     timer = setTimeout(() => {
@@ -56,8 +73,14 @@ export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<Backe
         }
       });
     });
-    worker.once("error", (err: Error) => {
-      settle(() => reject(new RenderError("E_INTERNAL", `render worker failed: ${err.message}`)));
+    worker.once("error", (err: Error & { code?: string }) => {
+      settle(() => {
+        if (err.code === "ERR_WORKER_OUT_OF_MEMORY") {
+          reject(new RenderError("E_LIMIT", `render exceeded the heap limit of ${limits.maxMemoryMb} MB`));
+        } else {
+          reject(new RenderError("E_INTERNAL", `render worker failed: ${err.message}`));
+        }
+      });
     });
     worker.once("exit", (code: number) => {
       settle(() => reject(new RenderError("E_INTERNAL", `render worker exited with code ${code} before it returned`)));
