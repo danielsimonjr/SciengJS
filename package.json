@@ -57,6 +57,7 @@
   },
   "files": [
     "dist",
+    "assets",
     "THIRD_PARTY_NOTICES.md",
     "README.md",
     "LICENSE"
@@ -94,5 +95,9 @@
     "@types/bun": "^1.4.4",
     "@types/node": "^22",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@resvg/resvg-wasm": "2.6.2",
+    "@viz-js/viz": "3.31.0"
   }
 }
