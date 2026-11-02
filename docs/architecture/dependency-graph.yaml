@@ -1,10 +1,10 @@
 metadata:
-  name: t3
+  name: sciengjs
   schemaVersion: 2.0.0
   language: typescript
   totalFiles: 56
   totalModules: 3
-  totalExports: 81
+  totalExports: 82
 modules:
   src:
     src/browser/index.ts:
@@ -435,6 +435,7 @@ modules:
         - PROFILE_PREFIX
         - waitForDevToolsPort
         - removeProfile
+        - launchEvidence
         - checkPage
         - teardownLaunch
     test/support/process-list.ts:
@@ -527,12 +528,14 @@ modules:
       externalDependencies:
         - bun:test
       nodeDependencies:
+        - node:child_process
         - node:fs
         - node:os
         - node:path
       internalDependencies:
         - file: test/support/page-checker.ts
           imports:
+            - launchEvidence
             - removeProfile
             - waitForDevToolsPort
           typeOnly: false
@@ -694,8 +697,8 @@ statistics:
   totalTypeScriptFiles: 56
   totalSourceFiles: 56
   totalModules: 3
-  totalLinesOfCode: 4388
-  totalExports: 81
+  totalLinesOfCode: 4449
+  totalExports: 82
   entryRoots: 20
   reachableFiles: 20
   dormantFiles: 7
@@ -713,7 +716,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 1
   totalInterfaces: 17
-  totalFunctions: 29
+  totalFunctions: 30
   totalTypeGuards: 0
   totalEnums: 0
   totalConstants: 11

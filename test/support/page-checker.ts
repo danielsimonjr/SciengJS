@@ -208,6 +208,28 @@ function drawingExpression(selector: string): string {
   })()`;
 }
 
+/** The bytes of browser stderr that a start failure reports. */
+const STDERR_TAIL_BYTES = 4000;
+
+/**
+ * Records the exit and the stderr tail of a launched process, so a start failure names its cause.
+ * Spawn the process with a piped stderr. The collector also drains the pipe.
+ */
+export function launchEvidence(child: ChildProcess, tailBytes = STDERR_TAIL_BYTES): { describe: () => string } {
+  let tail = "";
+  let exit: string | undefined;
+  child.stderr?.setEncoding("utf8");
+  child.stderr?.on("data", (chunk: string) => {
+    tail = (tail + chunk).slice(-tailBytes);
+  });
+  child.once("exit", (code, signal) => {
+    exit = signal ? `signal ${signal}` : `exit code ${code}`;
+  });
+  return {
+    describe: () => `launched process: ${exit ?? "still running"}; stderr tail: ${tail.trim() === "" ? "(empty)" : tail.trim()}`,
+  };
+}
+
 /** Runs one page check. The browser is closed and the profile removed before the promise settles. */
 export async function checkPage(options: PageCheckOptions): Promise<PageCheckResult> {
   const startTimeoutMs = options.startTimeoutMs ?? DEFAULT_START_TIMEOUT_MS;
@@ -226,7 +248,7 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
     }
     try {
       child = spawn(options.browserPath, [...CHROME_ARGS, `--user-data-dir=${profile}`, "about:blank"], {
-        stdio: "ignore",
+        stdio: ["ignore", "ignore", "pipe"],
         windowsHide: true,
       });
     } catch (err) {
@@ -238,7 +260,12 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
       child!.once("error", (err) => reject(new Error(`cannot start the browser at ${options.browserPath}: ${err.message}`)));
     });
     spawnFailure.catch(() => undefined);
-    port = await Promise.race([waitForDevToolsPort(profile, Date.now() + startTimeoutMs), spawnFailure]);
+    const evidence = launchEvidence(child);
+    try {
+      port = await Promise.race([waitForDevToolsPort(profile, Date.now() + startTimeoutMs), spawnFailure]);
+    } catch (err) {
+      throw new Error(`${(err as Error).message}; ${evidence.describe()}`);
+    }
 
     const targets = (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()) as {
       type: string;
