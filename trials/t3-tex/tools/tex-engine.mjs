@@ -38,6 +38,11 @@ export function renderTex(engine, workdir, inputName, sourceText) {
   const sourcePath = path.join(workdir, inputName);
   fs.writeFileSync(sourcePath, sourceText);
   engine.kpathsea.register(inputName, sourcePath);
+  // LaTeX reads <jobname>.aux at \end{document}. A new run has no earlier aux, so an empty one is supplied.
+  const auxName = path.parse(inputName).name + '.aux';
+  const auxPath = path.join(workdir, auxName);
+  fs.writeFileSync(auxPath, '');
+  engine.kpathsea.register(auxName, auxPath);
 
   const { library, module, pages, coreDump } = engine;
   const t0 = performance.now();

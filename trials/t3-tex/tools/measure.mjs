@@ -35,7 +35,7 @@ const median = (values) => {
 
 const bundlesFor = (names) => names.map((n) => path.join(bundleRoot, n)).join(',');
 
-async function toSvg(dvi) {
+async function toSvg(dvi, name) {
   let html = '';
   const sink = new Writable({
     write(chunk, _enc, cb) {
@@ -47,6 +47,8 @@ async function toSvg(dvi) {
     yield Buffer.from(dvi);
   }
   await dvi2html(chunks(), sink);
+  // The HTML from the converter is kept for diagnosis; the SVG is cut out of it.
+  fs.writeFileSync(path.join(outDir, `${name}.html`), html);
   const match = html.match(/<svg[\s\S]*<\/svg>/);
   return match ? match[0] : null;
 }
@@ -101,7 +103,7 @@ async function runSample(sample) {
   const first = renderTex(engine, workdir, inputName, source);
   if (first.dvi === null) throw new Error(`${sample.name}: no DVI written`);
   const tFirstSvg = performance.now();
-  const svgFirst = await toSvg(first.dvi);
+  const svgFirst = await toSvg(first.dvi, `${sample.name}-first`);
   const svgFirstMs = performance.now() - tFirstSvg;
 
   const warm = [];
@@ -111,7 +113,7 @@ async function runSample(sample) {
     warm.push(r.texMs);
     lastDvi = r.dvi;
   }
-  const svgLast = await toSvg(lastDvi);
+  const svgLast = await toSvg(lastDvi, sample.name);
   fs.writeFileSync(path.join(outDir, `${sample.name}.svg`), svgLast ?? '');
   const log = path.join(workdir, `${sample.name}.log`);
   if (fs.existsSync(log)) fs.copyFileSync(log, path.join(outDir, `${sample.name}.log`));

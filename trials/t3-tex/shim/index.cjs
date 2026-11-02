@@ -55,10 +55,16 @@ function findWithKpsewhich(name, format) {
   }
 }
 
+// TeX passes names such as TeXinputs:"circuit.aux". The lookup key is the bare file name.
+function bareName(name) {
+  return name.replace(/^"|"$/g, '').replace(/^TeX[A-Za-z]+:/, '');
+}
+
 function findFile(name, format) {
-  if (registered.has(name)) return registered.get(name);
-  if (lookupMode() === 'kpsewhich') return findWithKpsewhich(name, format);
-  return findInBundles(name);
+  const bare = bareName(name);
+  if (registered.has(bare)) return registered.get(bare);
+  if (lookupMode() === 'kpsewhich') return findWithKpsewhich(bare, format);
+  return findInBundles(bare) ?? findInBundles(name);
 }
 
 class Kpathsea {
@@ -76,6 +82,6 @@ module.exports = {
   FILE_FORMAT,
   // Adds the TeX source of one run to the lookup. The harness calls this for the input file only.
   register(name, absolutePath) {
-    registered.set(name, absolutePath);
+    registered.set(bareName(name), absolutePath);
   }
 };
