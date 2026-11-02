@@ -26,7 +26,7 @@ Design sources: `docs/superpowers/specs/2026-11-01-scieng-engine-design.md`, sec
 - The production build makes `scieng.fmt` from `latex.ltx`, `xcolor`, `tikz` and `circuitikz` in extended mode. The format selects the pgf driver `pgfsys-dvisvgm.def`.
 - The circuit renders. Each of the 10 glyphs is one `<path>`. The SVG holds no `<text>` element. Node and Bun give the same format bytes and the same SVG bytes.
 
-The numbers come from CI run CI_RUN (head CI_HEAD), conclusion CI_CONCLUSION. The local numbers come from one Windows x64 computer with Node 26.13.0 and Bun 1.4.4.
+The numbers come from CI run `41527360451` (head `3ce19c5`), conclusion `success`. The local numbers come from one Windows x64 computer with Node 26.13.0 and Bun 1.4.4.
 
 ## Corrections to the brief
 
@@ -50,12 +50,24 @@ The brief has three rules that the trial cannot keep as written. The trial keeps
 | `tex.web` and the TeXware | the Knuth files of T5 (same pins) |
 | LaTeX kernel | `latex.ltx` and `expl3-code.tex` of the `latex` and `l3kernel` archives |
 | pgf | 3.1.10 (2023-01-15) |
-| Node | 22 in CI; 26.13.0 on the local computer |
+| Node | 22.23.4 in CI; 26.13.0 on the local computer |
 | Bun | 1.4.4 |
 
 ## CI runs and jobs
 
-CI_TABLE
+Run `41527360451` (head `3ce19c5`), conclusion `success`. The earlier run `41526202613` (head `4e89665`, the sample without the `dvisvgm` option) also passed, with the same format and SVG bytes.
+
+Each measure job fetches and builds again, compares the WASM sha256 with the build job, runs e-TRIP, builds the format and renders. It then compares the format and the SVG byte for byte with the build job.
+
+| Job | ID | Same WASM | e-TRIP | Format build | Same format | Same SVG |
+|---|---|---|---|---|---|---|
+| build (ubuntu, Node 22) | 125558435256 | reference | pass | 9.2 s | reference | reference |
+| ubuntu, Node 22 | 125559630335 | yes | pass | 8.1 s | yes | yes |
+| ubuntu, Bun 1.4.4 | 125559630536 | yes | pass | 7.0 s | yes | yes |
+| windows, Node 22 | 125559630587 | yes | pass | 4.7 s | yes | yes |
+| windows, Bun 1.4.4 | 125559630408 | yes | pass | 7.3 s | yes | yes |
+| macos, Node 22 | 125559630366 | yes | pass | 12.4 s | yes | yes |
+| macos, Bun 1.4.4 | 125559630583 | yes | pass | 12.6 s | yes | yes |
 
 ## Build
 
@@ -140,7 +152,7 @@ The format passes the option `dvisvgm` to `graphics`, `graphicx`, `color` and `x
 
 The pinned pgf code selects this file in two steps. `pgfsys.code.tex` lines 1749 to 1757 call `\pgfutil@guessdriver`. `pgfutil-latex.def` lines 196 to 198 set the driver to `pgfsys-\Gin@driver`, the name of the graphics driver.
 
-`pgfsys-dvisvgm.def` writes `dvisvgm:raw` and `dvisvgm:bbox` specials. The `color` specials come from `dvisvgm.def`. The trial DVI to SVG converter reads the specials through `runtime/dvisvgm-specials.mjs`. The circuit DVI holds 110 specials. The converter ignores one: `papersize=...` from `standalone`. The sample loads `standalone` with the option `dvisvgm`, so the L3 kernel loads `l3backend-dvisvgm.def`. Without the option, the L3 kernel loads `l3backend-dvips.def`, which adds two more ignored specials (`header=l3backend-dvips.pro` and `ps::%%HiResBoundingBox`). The SVG is the same with and without the option.
+`pgfsys-dvisvgm.def` writes `dvisvgm:raw` and `dvisvgm:bbox` specials. The `color` specials come from `dvisvgm.def`. The trial DVI to SVG converter reads the specials through `runtime/dvisvgm-specials.mjs`. The circuit DVI holds 110 specials. The converter ignores two: `papersize=...` and `ps::%%HiResBoundingBox`. The sample loads `standalone` with the option `dvisvgm`, so the L3 kernel loads `l3backend-dvisvgm.def`. Without the option, the L3 kernel loads `l3backend-dvips.def`, which adds one more ignored special (`header=l3backend-dvips.pro`). The SVG is the same with and without the option.
 
 ## Format
 
@@ -152,7 +164,7 @@ The pinned pgf code selects this file in two steps. `pgfsys.code.tex` lines 1749
 | gzip -9 | 6,460,595 (Node zlib) |
 | brotli 11 | 3,746,285 |
 | sha256 (first 16) | `cec00440913c954c`, the same under Node and Bun |
-| Build time, CI | CI_FMT_TIMES |
+| Build time, CI | 4.7 s to 12.6 s over the seven jobs; median 8.1 s (see "CI runs and jobs") |
 | Build time, local | 11.6 s (Node), 36.1 s (Bun); other local runs gave 13.9 s to 73 s under load |
 
 The format holds 558,062 words of font information for 36 fonts. Most of these words are not font data. The L3 kernel keeps its integer arrays in the `\fontdimen` parameters of small dummy fonts (`expl3-code.tex` line 14928, `\__intarray_entry:w` is `\tex_fontdimen:D`).
@@ -163,7 +175,13 @@ The render is T5 `tools/render.mjs` with `TEX_PROGRAM=setprod` and `DVI_SPECIALS
 
 | Runtime | First TeX | First SVG | Warm TeX (median) | Warm SVG (median) |
 |---|---|---|---|---|
-CI_RENDER_ROWS
+| build job, ubuntu, Node 22 | 276.7 ms | 13.0 ms | 244.8 ms | 5.5 ms |
+| ubuntu, Node 22 | 274.1 ms | 13.7 ms | 245.6 ms | 5.7 ms |
+| ubuntu, Bun 1.4.4 | 206.5 ms | 11.5 ms | 168.7 ms | 3.4 ms |
+| windows, Node 22 | 155.9 ms | 9.2 ms | 143.5 ms | 3.9 ms |
+| windows, Bun 1.4.4 | 257.0 ms | 16.9 ms | 185.9 ms | 4.3 ms |
+| macos, Node 22 | 289.6 ms | 15.8 ms | 330.9 ms | 7.5 ms |
+| macos, Bun 1.4.4 | 328.2 ms | 19.6 ms | 271.3 ms | 3.9 ms |
 | Node 26.13.0, local | 334.5 ms | 15.4 ms | 293.1 ms | 9.2 ms |
 
 ## Glyph check
