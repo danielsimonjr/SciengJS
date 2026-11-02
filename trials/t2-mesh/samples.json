@@ -52,7 +52,7 @@
       "file": "samples/cylinder1.brep",
       "sha256": "0b167ee0ffa6d587c411080cc32f2aaf44036fd40c85ca4161687e9e2af06dad",
       "source": "https://github.com/FreeCAD/FreeCAD/blob/46ec224b04e20f682f1fa179b4ede39ebf43b3fc/data/tests/ModelRefineTests/cylinder1.brep",
-      "licence": "LGPL-2.1 (repository LICENSE)",
+      "licence": "LGPL-2.0-or-later (repository README: LGPL2+; source header: either version 2 of the License, or any later version)",
       "params": null
     },
     {

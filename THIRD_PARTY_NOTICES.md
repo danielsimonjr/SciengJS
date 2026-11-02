@@ -43,10 +43,10 @@ The TikZJax toolchain is licensed under the LaTeX Project Public License 1.3c. T
 
 The package detection of the `tex` stage follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT). The engine credits that project for the method.
 
-### Trial T2 sample files (LGPL-2.1 and Apache-2.0)
+### Trial T2 sample files (LGPL-2.0-or-later, LGPL-2.1 and Apache-2.0)
 
 The trial folder `trials/t2-mesh/samples/` holds three CAD test files from other projects. The engine package does not ship them. The licence texts are in `trials/t2-mesh/samples/LICENSES/`. The source, commit and SHA-256 of each file are in `trials/t2-mesh/samples/README.md`.
 
 - `red_cube_blue_cylinder.step`, from CadQuery: Apache-2.0.
 - `cube-10x10mm.igs`, from occt-import-js: LGPL-2.1.
-- `cylinder1.brep`, from FreeCAD: LGPL-2.1.
+- `cylinder1.brep`, from FreeCAD: LGPL-2.0-or-later.

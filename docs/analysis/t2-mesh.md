@@ -132,7 +132,7 @@ The three small samples are committed in `trials/t2-mesh/samples/`. The licence 
 |---|---|---|---|---|
 | `samples/red_cube_blue_cylinder.step` | `CadQuery/cadquery` at `60e107a6a99fb4cdf405b9c180cb00f8ea0a569b`, path `tests/testdata/red_cube_blue_cylinder.step` | Apache-2.0 | `1fd5c7d9325bcfb9863365faf84554f89e7e7a5e86760a0fc8d5db00619d9ef5` | 18322 |
 | `samples/cube-10x10mm.igs` | `kovacsv/occt-import-js` at `45619237ab5576f190f11a7c66f76ad93c5690fb`, path `test/testfiles/cube-10x10mm/Cube 10x10.igs` | LGPL-2.1 | `8bcbc86a044f592ba2a1a18f89a905358a85aa5093c0dd0756771b1b022b4c6f` | 11421 |
-| `samples/cylinder1.brep` | `FreeCAD/FreeCAD` at `46ec224b04e20f682f1fa179b4ede39ebf43b3fc`, path `data/tests/ModelRefineTests/cylinder1.brep` | LGPL-2.1 | `0b167ee0ffa6d587c411080cc32f2aaf44036fd40c85ca4161687e9e2af06dad` | 11166 |
+| `samples/cylinder1.brep` | `FreeCAD/FreeCAD` at `46ec224b04e20f682f1fa179b4ede39ebf43b3fc`, path `data/tests/ModelRefineTests/cylinder1.brep` | LGPL-2.0-or-later | `0b167ee0ffa6d587c411080cc32f2aaf44036fd40c85ca4161687e9e2af06dad` | 11166 |
 
 The large sample is not committed. The workflow downloads it at the start of each job from `Open-Cascade-SAS/OCCT` at commit `7fd59977dfb3a75f75670474b59dfc0f3f5f90ba`, path `data/step/linkrods.step`. The job fails if the SHA-256 differs.
 
@@ -140,7 +140,7 @@ The large sample is not committed. The workflow downloads it at the start of eac
 |---|---|---|---|---|
 | `samples-large/linkrods.step` (downloaded, not committed) | `Open-Cascade-SAS/OCCT` at `7fd59977dfb3a75f75670474b59dfc0f3f5f90ba`, path `data/step/linkrods.step` | LGPL-2.1 (repository licence) | `3674e4b01ee0e983c81ed170f0574cda201ad08e0f7b46e05e4f4613400fd5f7` | 1793282 |
 
-Licence texts are in `trials/t2-mesh/samples/LICENSES/`. The Apache-2.0 text comes from the CadQuery repository. The LGPL-2.1 texts come from the occt-import-js, FreeCAD and OCCT repositories. The file `THIRD_PARTY_NOTICES.md` names the samples.
+Licence texts are in `trials/t2-mesh/samples/LICENSES/`. The Apache-2.0 text comes from the CadQuery repository. The LGPL-2.1 texts come from the occt-import-js and OCCT repositories. The LGPL-2.0 text comes from the FreeCAD repository. The file `THIRD_PARTY_NOTICES.md` names the samples.
 
 ### Search for an IGES file with a clear origin
 
