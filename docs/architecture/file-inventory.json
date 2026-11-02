@@ -1,10 +1,10 @@
 {
-  "totalFiles": 46,
+  "totalFiles": 47,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
-    "orphan": 3,
+    "orphan": 4,
     "test": 23,
     "tool": 0,
     "config": 0,
@@ -12,12 +12,12 @@
     "example": 0
   },
   "byArea": {
-    "src": 23,
+    "src": 24,
     "tests": 23
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 26
+    "(root)": 27
   },
   "files": [
     {
@@ -341,6 +341,13 @@
       "area": "src",
       "disposition": "orphan",
       "loc": 129
+    },
+    {
+      "file": "trials/t2-mesh/measure.mjs",
+      "package": "(root)",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 156
     }
   ],
   "skippedLinks": [],

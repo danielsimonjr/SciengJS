@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 23 |
+| Total Source Files | 24 |
 | Total Test Files | 11 |
 | Source Files with Tests | 5 |
-| Source Files without Tests | 18 |
-| Coverage (raw, direct-import) | **21.7%** |
+| Source Files without Tests | 19 |
+| Coverage (raw, direct-import) | **20.8%** |
 ---
 
 ## Source Files Without Test Coverage
 
-The following 18 source files are not directly imported by any test file:
+The following 19 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -75,6 +75,10 @@ The following 18 source files are not directly imported by any test file:
 - `trials/t1-graph/compare-layout.mjs`
 - `trials/t1-graph/make-sources.mjs`
 - `trials/t1-graph/measure.mjs`
+
+### t2-mesh/
+
+- `trials/t2-mesh/measure.mjs`
 
 ---
 

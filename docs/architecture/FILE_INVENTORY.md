@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 46
+**Total files**: 47
 
 ## Disposition counts
 
@@ -17,26 +17,26 @@ This report lists each source file that the map census finds, with a disposition
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
 | `build-entry` | 20 | A `src`-area file that is an entry root. |
 | `test-only` | 0 | A `src`-area file that only a test reaches. |
-| `orphan` | 3 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
+| `orphan` | 4 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
 | `test` | 23 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 0 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **46** | |
+| **Total** | **47** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 23 |
+| `src` | 24 |
 | `tests` | 23 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 26 |
+| `(root)` | 27 |
 | `@danielsimonjr/sciengjs` | 20 |
 
 ## All files
@@ -89,6 +89,7 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |
 | `trials/t1-graph/measure.mjs` | (root) | src | orphan | 129 |
+| `trials/t2-mesh/measure.mjs` | (root) | src | orphan | 156 |
 
 ## Skipped links
 

@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 23,
+    "totalSourceFiles": 24,
     "totalTestFiles": 11,
     "testedCount": 5,
-    "untestedCount": 18,
-    "coveragePercent": "21.7",
+    "untestedCount": 19,
+    "coveragePercent": "20.8",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 23,
+      "activeFiles": 24,
       "testedActive": 5,
-      "activeUntested": 18,
+      "activeUntested": 19,
       "excludedTotal": 0,
-      "percent": "21.7",
+      "percent": "20.8",
       "breakdown": {
-        "active_untested": 18
+        "active_untested": 19
       }
     }
   },
@@ -35,7 +35,8 @@
     "src/worker/protocol.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
-    "trials/t1-graph/measure.mjs"
+    "trials/t1-graph/measure.mjs",
+    "trials/t2-mesh/measure.mjs"
   ],
   "testedFiles": [
     "src/config.ts",
@@ -80,7 +81,8 @@
     ],
     "trials/t1-graph/compare-layout.mjs": [],
     "trials/t1-graph/make-sources.mjs": [],
-    "trials/t1-graph/measure.mjs": []
+    "trials/t1-graph/measure.mjs": [],
+    "trials/t2-mesh/measure.mjs": []
   },
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
@@ -178,6 +180,10 @@
     },
     {
       "file": "trials/t1-graph/measure.mjs",
+      "category": null
+    },
+    {
+      "file": "trials/t2-mesh/measure.mjs",
       "category": null
     }
   ]
