@@ -42,3 +42,16 @@ describe.skipIf(!haveBrowser)("page checker", () => {
     expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
   }, 60000);
 });
+
+// Runs without a browser: a path that does not exist must reject with a message that names the path.
+test("rejects a browser path that does not exist, and names the path", async () => {
+  const missing = `${FIXTURES}no-such-browser.exe`;
+  let message = "";
+  try {
+    await checkPage({ browserPath: missing, htmlPath: `${FIXTURES}good.html` });
+  } catch (err) {
+    message = (err as Error).message;
+  }
+  expect(message).toContain("no-such-browser.exe");
+  expect(message).toContain("browser");
+}, 20000);

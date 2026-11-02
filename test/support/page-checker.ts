@@ -159,11 +159,19 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
   let socket: WebSocket | undefined;
 
   try {
+    if (!existsSync(options.browserPath)) {
+      throw new Error(`browser path does not exist: ${options.browserPath}`);
+    }
     child = spawn(options.browserPath, [...CHROME_ARGS, `--user-data-dir=${profile}`, "about:blank"], {
       stdio: "ignore",
       windowsHide: true,
     });
-    port = await waitForDevToolsPort(profile, Date.now() + startTimeoutMs);
+    // A spawn that fails emits an error event. Without a listener the process would crash.
+    const spawnFailure = new Promise<never>((_, reject) => {
+      child!.once("error", (err) => reject(new Error(`cannot start the browser at ${options.browserPath}: ${err.message}`)));
+    });
+    spawnFailure.catch(() => undefined);
+    port = await Promise.race([waitForDevToolsPort(profile, Date.now() + startTimeoutMs), spawnFailure]);
 
     const targets = (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()) as {
       type: string;
