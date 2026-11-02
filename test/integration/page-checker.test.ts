@@ -81,4 +81,10 @@ describe.skipIf(!haveBrowser)("page checker on svg drawings", () => {
     expect(result.ok).toBe(false);
     expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
   }, 60000);
+
+  test("fails an svg whose only child is an empty foreignObject", async () => {
+    const result = await checkPage({ browserPath, htmlPath: `${FIXTURES}empty-foreignobject.html`, drawingSelectors: ["#drawing"] });
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.startsWith("empty drawing: #drawing"))).toBe(true);
+  }, 60000);
 });
