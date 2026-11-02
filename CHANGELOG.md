@@ -7,6 +7,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 ### Changed
 
 - Design, browser stage: forced flags send all browser traffic to a refusing proxy in the engine process, and block DNS. The client never passes `--no-sandbox` (trial T4).
+- Build plan, I4: gates for the network namespace, the socket sample, the sandbox and a large screenshot.
 - Build plan, I9: face colors come from `brep_faces[].color`. A STEP part of 1.8 MB renders inside the default timeout. A new risk row records the read time of large parts (trial T2).
 - Build plan, I1: `@viz-js/viz` makes the expected SVG files, not the Graphviz CLI. The gate checks that no `href` to an image file remains. Corpus graphs stay small for the default timeout. A new risk row records the layout time of large graphs (trial T1).
 
