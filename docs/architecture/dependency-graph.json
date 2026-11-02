@@ -3,9 +3,9 @@
     "name": "i0",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 37,
+    "totalFiles": 42,
     "totalModules": 2,
-    "totalExports": 70
+    "totalExports": 75
   },
   "modules": {
     "src": {
@@ -394,11 +394,29 @@
           {
             "file": "test/support/page-checker.ts",
             "imports": [
-              "checkPage"
+              "checkPage",
+              "PROFILE_PREFIX"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/process-list.ts",
+            "imports": [
+              "listCommandLines"
             ],
             "typeOnly": false
           }
         ],
+        "exports": []
+      },
+      "test/mutation/run-mutants.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
         "exports": []
       },
       "test/node/backends/heap.mjs": {
@@ -478,7 +496,21 @@
         "exports": [
           "PageCheckOptions",
           "PageCheckResult",
-          "checkPage"
+          "PROFILE_PREFIX",
+          "waitForDevToolsPort",
+          "removeProfile",
+          "checkPage",
+          "teardownLaunch"
+        ]
+      },
+      "test/support/process-list.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "listCommandLines"
         ]
       },
       "test/support/stubs/stub-dot.ts": {
@@ -597,6 +629,52 @@
         ],
         "exports": []
       },
+      "test/unit/page-checker-io.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "removeProfile",
+              "waitForDevToolsPort"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/process-list.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "PROFILE_PREFIX"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/process-list.ts",
+            "imports": [
+              "listCommandLines"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/render.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -654,11 +732,30 @@
         ],
         "exports": []
       },
-      "test/unit/worker-run.test.ts": {
+      "test/unit/teardown.test.ts": {
         "externalDependencies": [
           "bun:test"
         ],
         "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "teardownLaunch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/worker-run.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:events",
+          "node:worker_threads"
+        ],
         "internalDependencies": [
           {
             "file": "src/worker/run.ts",
@@ -687,11 +784,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 37,
-    "totalSourceFiles": 37,
+    "totalTypeScriptFiles": 42,
+    "totalSourceFiles": 42,
     "totalModules": 2,
-    "totalLinesOfCode": 1879,
-    "totalExports": 70,
+    "totalLinesOfCode": 2305,
+    "totalExports": 75,
     "entryRoots": 20,
     "reachableFiles": 20,
     "dormantFiles": 0,
@@ -709,10 +806,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 1,
     "totalInterfaces": 17,
-    "totalFunctions": 19,
+    "totalFunctions": 23,
     "totalTypeGuards": 0,
     "totalEnums": 0,
-    "totalConstants": 10,
+    "totalConstants": 11,
     "totalReExports": 16
   },
   "reachability": {

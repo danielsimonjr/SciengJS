@@ -14,6 +14,13 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The SVG comparison and the config loader have mutation-audit tests. Each test kills a mutant that the earlier tests let through.
 - The page checker stops the launched browser before it removes the profile. A Windows run no longer waits for a locked profile and loses its result.
 - The page checker treats a locked DevTools port file as "not yet" and polls again.
+- A render settles with `E_INTERNAL` when its worker does not stop cleanly. A stop that never resolves is bounded by `terminateWaitMs`.
+- A file that exists but cannot start rejects with the browser path in the message.
+- An svg whose only child is an empty `foreignObject` fails the drawing check.
+- The profile removal retries `EPERM` and `ENOTEMPTY`. A port timeout names the last held read.
+- The design and the architecture documents state that `E_LIMIT` covers the worker heap limit, and that `E_INTERNAL` covers other worker crashes.
+- The platform-default tests write their Windows paths with escaped backslashes.
+- The mutation audit runner and its mutant list are in `test/mutation/`.
 
 ### Added
 

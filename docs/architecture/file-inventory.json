@@ -1,11 +1,11 @@
 {
-  "totalFiles": 37,
+  "totalFiles": 42,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 20,
     "test-only": 0,
     "orphan": 0,
-    "test": 17,
+    "test": 22,
     "tool": 0,
     "config": 0,
     "bench": 0,
@@ -13,11 +13,11 @@
   },
   "byArea": {
     "src": 20,
-    "tests": 17
+    "tests": 22
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 20,
-    "(root)": 17
+    "(root)": 22
   },
   "files": [
     {
@@ -158,14 +158,21 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 89
+      "loc": 117
     },
     {
       "file": "test/integration/page-checker.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 71
+      "loc": 99
+    },
+    {
+      "file": "test/mutation/run-mutants.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 124
     },
     {
       "file": "test/node/backends/heap.mjs",
@@ -214,7 +221,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 283
+      "loc": 325
+    },
+    {
+      "file": "test/support/process-list.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 17
     },
     {
       "file": "test/support/stubs/stub-dot.ts",
@@ -259,6 +273,20 @@
       "loc": 39
     },
     {
+      "file": "test/unit/page-checker-io.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 78
+    },
+    {
+      "file": "test/unit/process-list.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 22
+    },
+    {
       "file": "test/unit/render.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -273,11 +301,18 @@
       "loc": 74
     },
     {
+      "file": "test/unit/teardown.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 33
+    },
+    {
       "file": "test/unit/worker-run.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 29
+      "loc": 83
     }
   ],
   "skippedLinks": [],

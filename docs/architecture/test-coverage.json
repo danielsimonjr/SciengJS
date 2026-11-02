@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 20,
-    "totalTestFiles": 7,
+    "totalTestFiles": 10,
     "testedCount": 5,
     "untestedCount": 15,
     "coveragePercent": "25.0",
@@ -86,12 +86,15 @@
       "src/errors.ts"
     ],
     "test/unit/no-bun-api.test.ts": [],
+    "test/unit/page-checker-io.test.ts": [],
+    "test/unit/process-list.test.ts": [],
     "test/unit/render.test.ts": [
       "src/core.ts",
       "src/errors.ts",
       "src/types.ts"
     ],
     "test/unit/svg-compare.test.ts": [],
+    "test/unit/teardown.test.ts": [],
     "test/unit/worker-run.test.ts": [
       "src/worker/run.ts",
       "src/errors.ts"

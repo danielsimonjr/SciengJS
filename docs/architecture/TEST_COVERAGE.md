@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 20 |
-| Total Test Files | 7 |
+| Total Test Files | 10 |
 | Source Files with Tests | 5 |
 | Source Files without Tests | 15 |
 | Coverage (raw, direct-import) | **25.0%** |
@@ -92,6 +92,9 @@ The following 15 source files are not directly imported by any test file:
 | `unit/config.test.ts` | 2 files |
 | `unit/errors.test.ts` | 1 files |
 | `unit/no-bun-api.test.ts` | 0 files |
+| `unit/page-checker-io.test.ts` | 0 files |
+| `unit/process-list.test.ts` | 0 files |
 | `unit/render.test.ts` | 3 files |
 | `unit/svg-compare.test.ts` | 0 files |
+| `unit/teardown.test.ts` | 0 files |
 | `unit/worker-run.test.ts` | 2 files |
