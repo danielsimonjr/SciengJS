@@ -19,7 +19,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 ## Principles
 
 1. **Local.** No render sends a source to a web service. The one network access is the first download of a WASM TeX bundle. The download comes from a configured URL. A pinned sha256 checks each bundle.
-2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows an engine only when that engine is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only the program source, `tex.web`. The engine builds `tex.web` to WASM with its own tools.
+2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows outside software only when that software is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only the program source, `tex.web`. The engine builds `tex.web` to WASM with its own tools.
 3. **One input drives one output.** A backend is a pure function of its source and options. The same request gives the same bytes.
 4. **Configurable, never hard-coded.** Every path, URL, limit and timeout comes from the configuration (section "Configuration"). A missing required value fails with an error that names the value. No backend guesses a path.
 5. **Untrusted input is the default.** Every backend accepts a source from an unknown author. No backend executes code from a source.
