@@ -113,6 +113,20 @@ jobs:
           node tools/sizes.mjs build/out/bundles/pgfplots/files/* > build/out/results/pgfplots-bundle-sizes.jsonl
           rm build/format-raw/core.dump
 
+      - name: Collect the licence files of the toolchain packages
+        run: |
+          set -euo pipefail
+          out=build/out/results/licences
+          mkdir -p "$out"
+          for p in texlive-latex-base texlive-latex-extra texlive-latex-recommended texlive-pictures texlive-fonts-recommended texlive-binaries texlive-plain-generic binaryen; do
+            f="/usr/share/doc/$p/copyright"
+            if [ -f "$f" ]; then cp "$f" "$out/$p.copyright"; else echo "missing $f" >> "$out/missing.txt"; fi
+          done
+          cp build/web2js/LICENSE.md "$out/web2js-LICENSE.md"
+          node -p "require('./build/web2js/package.json').license" > "$out/web2js-package-license.txt"
+          node -p "JSON.parse(require('fs').readFileSync('node_modules/@drgrice1/dvi2html/package.json', 'utf8')).license" > "$out/dvi2html-package-license.txt"
+          cp node_modules/@drgrice1/dvi2html/LICENSE "$out/dvi2html-LICENSE" 2>/dev/null || echo "no LICENSE file in the npm package" > "$out/dvi2html-LICENSE-note.txt"
+
       - name: Record the tool versions
         run: |
           set -euo pipefail
