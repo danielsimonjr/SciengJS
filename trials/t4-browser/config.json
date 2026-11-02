@@ -1,0 +1,66 @@
+{
+  "pageUrl": "https://t4.sciengjs.invalid/page.html",
+  "testPage": {
+    "pageTemplate": "page.html",
+    "unlistedImage": "https://www.python.org/static/img/python-logo.png",
+    "unlistedScript": "https://code.jquery.com/jquery-3.7.1.min.js",
+    "pinnedUrl": "https://cdn.jsdelivr.net/npm/sciengjs-trial-t4-pinned@1.0.0/pinned.js",
+    "pinnedFile": "assets/pinned.js"
+  },
+  "chromeArgs": [
+    "--headless=new",
+    "--remote-debugging-port=0",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-extensions",
+    "--disable-gpu",
+    "--no-sandbox",
+    "--do-not-de-elevate",
+    "--disable-breakpad",
+    "--disable-crash-reporter",
+    "--disable-background-networking",
+    "--disable-component-update",
+    "--disable-sync",
+    "--disable-default-apps",
+    "--disable-domain-reliability",
+    "--disable-client-side-phishing-detection",
+    "--metrics-recording-only",
+    "--no-pings",
+    "--safebrowsing-disable-auto-update",
+    "--disable-features=OptimizationHints,Translate,MediaRouter,InterestFeedContentSuggestions",
+    "--password-store=basic",
+    "--use-mock-keychain"
+  ],
+  "profilePrefix": "sciengjs-trial-t4-",
+  "runs": 21,
+  "viewport": {
+    "width": 800,
+    "height": 600,
+    "scale": 1
+  },
+  "bigViewport": {
+    "width": 1600,
+    "height": 1200,
+    "scale": 2
+  },
+  "boxCenter": {
+    "x": 200,
+    "y": 150
+  },
+  "pinnedBoxColor": [
+    0,
+    170,
+    0
+  ],
+  "pollMs": 50,
+  "timeouts": {
+    "portMs": 20000,
+    "socketOpenMs": 10000,
+    "commandMs": 60000,
+    "pageSettleMs": 20000,
+    "proxyWaitMs": 2000,
+    "stopMs": 20000,
+    "exitGraceMs": 5000,
+    "removeMs": 30000
+  }
+}
