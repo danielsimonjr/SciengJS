@@ -132,8 +132,14 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - The client speaks the Chrome DevTools Protocol over the built-in `WebSocket` of Node 22 and Bun. The client has no npm dependency.
 - The browser path comes from `SCIENG_BROWSER`, else the `browser` key of the configuration file. The client does not search for a browser. A missing path rejects with `E_STAGE_MISSING`.
 - Each render starts the browser with a new temporary profile, headless, with no extensions.
+- Each render starts the browser with these forced flags. Each flag closes one route off the host:
+  - `--proxy-server` names a proxy in the engine process. The proxy refuses every connection, records each attempt and forwards nothing.
+  - `--proxy-bypass-list=<-loopback>` sends loopback connections through the same proxy.
+  - `--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1` stops every DNS lookup.
+  - `--force-webrtc-ip-handling-policy=disable_non_proxied_udp` keeps WebRTC on the proxy.
+- The client never passes `--no-sandbox`. A host where the browser sandbox cannot start rejects the render with `E_STAGE_MISSING`.
 - The client intercepts every request through the `Fetch` domain. The client fulfils two kinds of request from the process. The first is the page that the client loads. The second is each exact pinned URL in the asset list of the engine. The list holds the Mermaid, Plotly, KaTeX, WaveDrom and Three.js builds that the engine pages name. The client fulfils a pinned URL with the local copy in the engine package. The client refuses every other network request and every other `file:` request.
-- A page keeps its pinned CDN URLs, so the page also works in a normal browser. A render through the client sends no request out of the process.
+- A page keeps its pinned CDN URLs, so the page also works in a normal browser. With the forced flags and the `Fetch` interception, a render sends no request and opens no connection out of the process. See `docs/analysis/t4-browser.md`.
 - A test proves the block: a page that requests an unlisted image and an unlisted script records two refused requests. A second test renders a `render_html` page with each block type under the block and checks that each block draws.
 - Outputs: a PNG screenshot of the page or of one element; a PDF through `Page.printToPDF`.
 
