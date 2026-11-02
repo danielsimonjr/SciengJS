@@ -29,14 +29,14 @@ const code = new WebAssembly.Module(fs.readFileSync('tex.wasm'));
 // Pass 1: latex.ltx and \dump.
 const initexMemory = new WebAssembly.Memory({ initial: pages, maximum: pages });
 library.setMemory(initexMemory.buffer);
-library.setInput('\n*latex.ltx\n\dump\n\n', () => {});
+library.setInput('\n*latex.ltx\n\\dump\n\n', () => {});
 let wasm = new WebAssembly.Instance(code, { library, env: { memory: initexMemory } });
 library.setWasmExports(wasm.exports);
 wasm.exports.main();
 
 // Pass 2: the preamble from the config. The memory image is written when the input ends.
 const preamble = config.format.preamble.join('\n');
-const input = '\n&latex\n' + preamble + '\n\DeclareGraphicsExtensions{}\n';
+const input = '\n&latex\n' + preamble + '\n\\DeclareGraphicsExtensions{}\n';
 const memory = new WebAssembly.Memory({ initial: pages, maximum: pages });
 library.setMemory(memory.buffer);
 library.setInput(input, () => {
