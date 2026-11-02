@@ -20,6 +20,34 @@ export interface WorkerLimits {
   maxMemoryMb: number;
   /** Called once the worker has exited, before the render settles. Tests use it to prove the exit. */
   onWorkerExit?: (exit: WorkerExit) => void;
+  /** The longest wait for the worker to stop after the render settles, in milliseconds. */
+  terminateWaitMs?: number;
+  /** Creates the worker. Tests replace it with a double. */
+  createWorker?: (entry: URL, data: WorkerJob, maxMemoryMb: number) => Worker;
+}
+
+/** The default longest wait for a worker to stop. It is the only place where this value is set. */
+const DEFAULT_TERMINATE_WAIT_MS = 5000;
+
+function createDefaultWorker(entry: URL, data: WorkerJob, maxMemoryMb: number): Worker {
+  return new Worker(entry, {
+    workerData: data,
+    resourceLimits: { maxOldGenerationSizeMb: maxMemoryMb },
+  });
+}
+
+/** Terminates the worker. It rejects when terminate throws, rejects or does not resolve within the wait. */
+function stopWorker(worker: Worker, waitMs: number): Promise<number> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const bound = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`the worker did not stop within ${waitMs} ms`)), waitMs);
+  });
+  const stop = new Promise<number>((resolve) => resolve(worker.terminate()));
+  return Promise.race([stop, bound]).finally(() => clearTimeout(timer));
+}
+
+function messageOf(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
 }
 
 /**
@@ -40,10 +68,9 @@ function entryUrl(): URL {
  */
 export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<BackendOutput> {
   return new Promise<BackendOutput>((resolve, reject) => {
-    const worker = new Worker(entryUrl(), {
-      workerData: job,
-      resourceLimits: { maxOldGenerationSizeMb: limits.maxMemoryMb },
-    });
+    const create = limits.createWorker ?? createDefaultWorker;
+    const worker = create(entryUrl(), job, limits.maxMemoryMb);
+    const terminateWaitMs = limits.terminateWaitMs ?? DEFAULT_TERMINATE_WAIT_MS;
     let settled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -51,12 +78,13 @@ export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<Backe
       if (settled) return;
       settled = true;
       if (timer !== undefined) clearTimeout(timer);
-      worker
-        .terminate()
+      stopWorker(worker, terminateWaitMs)
         .then((exitCode) => {
           limits.onWorkerExit?.({ exitCode });
         })
-        .finally(action);
+        .then(action, (err: unknown) => {
+          reject(new RenderError("E_INTERNAL", `render worker did not stop cleanly: ${messageOf(err)}`));
+        });
     };
 
     timer = setTimeout(() => {
