@@ -19,7 +19,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 ## Principles
 
 1. **Local.** No render sends a source to a web service. The one network access is the first download of a WASM TeX bundle. The download comes from a configured URL. A pinned sha256 checks each bundle.
-2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows an engine only when that engine is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only the program source, `tex.web`, and builds it to WASM with its own tools.
+2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows an engine only when that engine is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only the program source, `tex.web`. The engine builds `tex.web` to WASM with its own tools.
 3. **One input drives one output.** A backend is a pure function of its source and options. The same request gives the same bytes.
 4. **Configurable, never hard-coded.** Every path, URL, limit and timeout comes from the configuration (section "Configuration"). A missing required value fails with an error that names the value. No backend guesses a path.
 5. **Untrusted input is the default.** Every backend accepts a source from an unknown author. No backend executes code from a source.
@@ -112,7 +112,7 @@ A stage is a shared service that several backends use. Each stage loads on first
 |---|---|---|---|
 | graph | `@viz-js/viz` (Graphviz compiled to WASM) | wrapper MIT; Graphviz EPL-2.0 | the adapters that turn Mermaid, SysML into DOT |
 | math | `@mathjax/src` 4.x | Apache-2.0 | the request wrapper and the SVG clean-up |
-| tex | `tex.web` (the TeX program source), compiled to WASM by the engine | `tex.web`: the licence of its author; the TeX packages: LPPL; the outline fonts: OFL or GFL (see "tex") | the Pascal to WASM compiler, the change files, the WASM host functions, the format build, the bundle manager, the package detection, the DVI to SVG converter with glyph paths |
+| tex | the engine compiles `tex.web` (the TeX program source) to WASM | `tex.web`: the licence of its author; the TeX packages: LPPL; the outline fonts: OFL or GFL (see "tex") | the Pascal to WASM compiler, the change files, the WASM host functions, the format build, the bundle manager, the package detection, the DVI to SVG converter with glyph paths |
 | mesh | `occt-import-js` (OpenCascade, WASM); `manifold-3d` | LGPL-2.1; Apache-2.0 | the CSG document reader, the glTF and STL writers, the Three.js viewer page |
 | browser | the installed Chromium or Chrome | (system program) | the Chrome DevTools Protocol client |
 | raster | `@resvg/resvg-wasm` | MPL-2.0 | the call wrapper |
@@ -178,7 +178,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - Package detection: the backend scans the source for environments and commands, and loads only the bundles that the source needs. The method follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT), with credit. A source that loads a package that no bundle holds rejects with `E_UNSUPPORTED`. The message names the package and its replacement when the table above gives one.
 - Bundles download on first use from `SCIENG_TEX_BUNDLE_URL` into `SCIENG_CACHE_DIR`. Each bundle has a pinned sha256 in the engine package. A hash mismatch deletes the download and rejects with `E_INTEGRITY`.
 - TeX runs on a virtual file system that holds only the bundles and the source. `\write18` is off. `\openin` and `\input` see only the virtual tree.
-- DVI to SVG: the engine reads the DVI output and writes SVG with each glyph as a `<path>`. The outlines come from the Type 1 Computer Modern fonts of the AMS (OFL). Latin Modern (GFL) supplies the fonts that the AMS set does not hold. The engine uses no font with a shareware licence.
+- DVI to SVG: the engine reads the DVI output and writes SVG with each glyph as a `<path>`. The outlines come from the Type 1 Computer Modern fonts of the AMS (OFL). Latin Modern (GFL) supplies the fonts that the AMS Type 1 fonts do not hold. The engine uses no font with a shareware licence.
 
 ### mesh
 
