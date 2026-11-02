@@ -88,30 +88,45 @@ async function portAnswers(port: number): Promise<boolean> {
  * so a read can fail with EBUSY or EPERM. Such a read is not yet a port: the caller polls again.
  * Any other read error is a real failure and is thrown.
  */
-function readPortFile(file: string): number | undefined {
+const READ_HOLD_CODES = new Set(["EBUSY", "EPERM", "ENOENT"]);
+const REMOVE_HOLD_CODES = new Set(["EBUSY", "EPERM", "ENOTEMPTY"]);
+
+/** One read of the port file: the port, or the code of a read that is held, or neither when the text is not a port. */
+function readPortFile(file: string, readText: (path: string) => string): { port?: number; code?: string } {
   let text: string;
   try {
-    text = readFileSync(file, "utf8");
+    text = readText(file);
   } catch (err) {
     const code = (err as NodeJS.ErrnoException).code;
-    if (code === "EBUSY" || code === "EPERM" || code === "ENOENT") return undefined;
+    if (code !== undefined && READ_HOLD_CODES.has(code)) return { code };
     throw err;
   }
   const port = Number(text.split(/\r?\n/)[0]);
-  return Number.isInteger(port) && port > 0 ? port : undefined;
+  return Number.isInteger(port) && port > 0 ? { port } : {};
 }
 
-/** Polls the profile folder until the browser has published its DevTools port. */
-async function waitForDevToolsPort(profile: string, deadline: number): Promise<number> {
+/**
+ * Polls the profile folder until the browser has published its DevTools port. A held read is polled again.
+ * The timeout message names the code of the last held read.
+ */
+export async function waitForDevToolsPort(
+  profile: string,
+  deadline: number,
+  readText: (path: string) => string = (path) => readFileSync(path, "utf8"),
+): Promise<number> {
   const file = join(profile, "DevToolsActivePort");
+  let lastCode: string | undefined;
   while (Date.now() < deadline) {
     if (existsSync(file)) {
-      const port = readPortFile(file);
-      if (port !== undefined) return port;
+      const read = readPortFile(file, readText);
+      if (read.port !== undefined) return read.port;
+      lastCode = read.code ?? lastCode;
     }
     await sleep(POLL_MS);
   }
-  throw new Error(`the browser did not publish its DevTools port in time (${file})`);
+  throw new Error(
+    `the browser did not publish its DevTools port in time (${file}); last held read: ${lastCode ?? "none"}`,
+  );
 }
 
 /**
@@ -154,14 +169,19 @@ async function stopLaunched(child: ChildProcess | undefined, graceMs: number): P
 }
 
 /** Removes the profile. Chrome holds files for a moment after it stops, so a busy folder is retried. */
-async function removeProfile(profile: string, deadlineMs: number): Promise<void> {
+export async function removeProfile(
+  profile: string,
+  deadlineMs: number,
+  remove: (path: string) => void = (path) => rmSync(path, { recursive: true, force: true }),
+): Promise<void> {
   const deadline = Date.now() + deadlineMs;
   for (;;) {
     try {
-      rmSync(profile, { recursive: true, force: true });
+      remove(profile);
       return;
     } catch (err) {
-      if ((err as NodeJS.ErrnoException).code !== "EBUSY" || Date.now() >= deadline) throw err;
+      const code = (err as NodeJS.ErrnoException).code;
+      if (code === undefined || !REMOVE_HOLD_CODES.has(code) || Date.now() >= deadline) throw err;
       await sleep(POLL_MS * 5);
     }
   }
