@@ -18,6 +18,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - Build plan, I4: gates for the network namespace, the socket sample, the sandbox and a large screenshot.
 - Build plan, I9: face colors come from `brep_faces[].color`. A STEP part of 1.8 MB renders inside the default timeout. A new risk row records the read time of large parts (trial T2).
 - Build plan, I1: `@viz-js/viz` makes the expected SVG files, not the Graphviz CLI. The gate checks that no `href` to an image file remains. Corpus graphs stay small for the default timeout. A new risk row records the layout time of large graphs (trial T1).
+- Design, raster stage: the stage bundles a default font, so PNG text does not depend on the fonts of the host.
 
 ### Fixed
 
@@ -44,6 +45,12 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 ### Added
 
 - Trial T5 (tex build): the report `docs/analysis/t5-tex-build.md` and its sources in `trials/t5-tex-build/`. An own tangler and an own Pascal to WASM compiler build `tex.web`. The build passes the trip test; only the banner line differs. The build runs under Bun 1.4.4 and Node 22 on three systems and makes `plain.fmt`. Each glyph of the SVG is a `<path>` from the AMS Type 1 fonts. LaTeX, `tikz` and `circuitikz` need e-TeX, so the format of the design cannot build on `tex.web` alone.
+- Increment I1 (graph and raster): `render` of `dot` to `svg` and of `dot` to `png`. The DOT stage uses `@viz-js/viz` 3.31.0. The raster stage uses `@resvg/resvg-wasm` 2.6.2. The subpaths `./graph` and `./raster` export `dotToSvg` and `svgToPng`.
+- The DOT stage removes each `image` attribute of a source and reports one warning for each. The output holds no image reference, and the stage opens no network connection.
+- The PNG option `scale` (default 1). A PNG over `maxMemoryMb` rejects with `E_LIMIT`.
+- The raster font: Liberation Serif Regular 2.1.5 under the SIL Open Font License 1.1, in `assets/fonts/`. The configuration key `rasterFont` (environment variable `SCIENG_RASTER_FONT`) replaces the font. The configuration now has eight keys.
+- The DOT corpus: eight sources and their expected SVG files in `test/corpus/dot/`.
+- The mutation audit of the scanner and of the PNG budget adds six mutants. All six are killed.
 - Trial T4 round 3: the client never passes `--no-sandbox`. Renders run with the Chrome sandbox on, on three systems.
 - Trial T4 (browser): the report `docs/analysis/t4-browser.md` and its sources in `trials/t4-browser/`. The protocol client starts Chrome under Bun 1.4.4 and Node 22 on three systems. It renders a PNG and a PDF, and it refuses the page's unlisted requests. A forced refusing proxy and an Ubuntu network namespace close the connection gap (finding F1).
 - Trial T1 (graph): the report `docs/analysis/t1-graph.md` and its sources in `trials/t1-graph/`. `@viz-js/viz` 3.31.0 renders DOT under Bun 1.4.4 and Node 22 on three systems, with the same SVG bytes in all six jobs. The layout differs from the Graphviz CLI 2.43.0. A 200-node graph takes 13 s to 42 s for each warm render.

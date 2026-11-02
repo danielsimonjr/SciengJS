@@ -17,11 +17,11 @@ A name is listed here when two or more distinct files across the monorepo define
 
 | Category | Count |
 | --- | --: |
-| **TRUE_DUPLICATE** (actionable) | 0 |
+| **TRUE_DUPLICATE** (actionable) | 1 |
 | DISPATCH_VARIANT | 0 |
 | ALIAS_DELEGATION | 0 |
 | ALLOWLISTED | 0 |
-| _Total flagged names_ | 0 |
+| _Total flagged names_ | 1 |
 
 ## Summary — types (interface/type/enum)
 
@@ -37,7 +37,9 @@ A name is listed here when two or more distinct files across the monorepo define
 
 ### TRUE_DUPLICATE — actionable merge targets
 
-_None._
+| Name | Category | Defining files (package, public?, sub-tag) | Canonical hint |
+| --- | --- | --- | --- |
+| `render` | function | `src/graph/backend-png.ts` (unknown, public, PLAIN)<br>`src/graph/backend-svg.ts` (unknown, public, PLAIN)<br>`src/index.ts` (unknown, public, PLAIN) | **AMBIGUOUS** |
 
 ### DISPATCH_VARIANT — distinct public typed-dispatch surfaces
 

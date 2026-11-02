@@ -19,6 +19,14 @@
 7. The main thread settles on the first of: the message, a worker error, a worker exit, or the time limit. It then terminates the worker.
 8. `renderWithRegistry` returns the bytes, the MIME type, the backend name and the warnings.
 
+## A DOT render to PNG
+
+1. The registry names the backend `graph/viz+raster/resvg` for `dot` to `png`. The module is `src/graph/backend-png.ts`.
+2. The backend checks the options. Only `scale` is allowed. The scale is a finite number above zero.
+3. The backend reads the raster font. It reads the file named by `rasterFont`, or the bundled font. A file that cannot be read rejects the render. A file with no font signature also rejects the render.
+4. `dotToSvg` in `src/graph/dot.ts` removes each `image` attribute and reports one warning for each. It renders the source with the viz library. It then removes each SVG image element of the output.
+5. `svgToPng` in `src/raster/index.ts` loads resvg once for the process. It checks the pixel buffer against `maxMemoryMb` before it renders. It renders the SVG at the scale and returns the PNG bytes.
+
 ## Errors
 
 A backend throws a `RenderError` to report a code. Any other error becomes `E_INTERNAL` with its message.

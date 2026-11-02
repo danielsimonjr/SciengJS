@@ -14,7 +14,22 @@ Renders one source to one format.
 
 Returns `Promise<RenderResult>`. The result holds `bytes`, `mime`, `backend`, `warnings` and, when present, `assets`.
 
-Rejects with `RenderError`. The codes are: `E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY` and `E_INTERNAL`. The render never falls back to another format. `E_LIMIT` covers the source size and the heap limit of the render worker. A worker crash for any other reason is `E_INTERNAL`.
+Rejects with `RenderError`. The codes are: `E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY` and `E_INTERNAL`. The render never falls back to another format. `E_LIMIT` covers the source size, the heap limit of the render worker and the pixel buffer of a PNG render. A worker crash for any other reason is `E_INTERNAL`.
+
+### Options of the graph stage
+
+| Pair | Option | Type | Default | Meaning |
+|---|---|---|---|---|
+| `dot` to `svg` | none | | | Any option rejects with `E_INPUT`. |
+| `dot` to `png` | `scale` | finite number above zero | `1` | Multiplies the size of the image. A pixel buffer over `maxMemoryMb` rejects with `E_LIMIT`. Any other option rejects with `E_INPUT`. |
+
+The graph stage removes each `image` attribute of the source before it renders. It reports one warning for each removed attribute. The stage reads no image file and opens no network connection.
+
+The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5. The font is licensed under the SIL Open Font License 1.1. The bold and italic faces are not bundled. The configuration key `rasterFont` (environment variable `SCIENG_RASTER_FONT`) names another TrueType or OpenType file. A file that cannot be read rejects with `E_CONFIG`. A file with no font signature also rejects with `E_CONFIG`.
+
+### Graph size and `timeoutMs`
+
+The default `timeoutMs` is 60000. The graph stage renders a 100-node graph in about 1 s on one development host. The measured graph had two edges per node, drawn from a fixed seed. The same host rendered 200 nodes in 3.3 s. The trial report T1 measured 200-node graphs at 12 s to 51 s, and 153 s in one run. A large graph can therefore pass `timeoutMs`. Such a render rejects with `E_TIMEOUT`. The caller raises `timeoutMs` for that graph.
 
 ### `capabilities(config?)`
 
@@ -46,14 +61,14 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | `RenderResult` | `{ bytes, mime, backend, warnings, assets? }` |
 | `RenderAsset` | `{ name, bytes, mime }` |
 | `Capability` | `{ type, format, stage, ready, reason? }` |
-| `SciengConfig` | The seven configuration keys, with `browser` optional. |
+| `SciengConfig` | The eight configuration keys. `browser` and `rasterFont` are optional. |
 | `NetworkPolicy` | `none`, `tex-bundles`, `tex-bundles,images` |
 
 ## Subpaths
 
-| Subpath | Status in increment I0 |
+| Subpath | Status in increment I1 |
 |---|---|
-| `./graph` | Stub. It exports nothing. |
+| `./graph` | DOT to SVG through the viz library. It exports `dotToSvg`. |
 | `./mermaid` | Stub. |
 | `./math` | Stub. |
 | `./tex` | Stub. |
@@ -62,6 +77,6 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | `./mesh` | Stub. |
 | `./browser` | Stub. |
 | `./html` | Stub. |
-| `./raster` | Stub. |
+| `./raster` | SVG to PNG through resvg. It exports `svgToPng` and `isFontFile`. |
 
 Each stage fills its subpath in its own increment. A caller that imports a subpath loads no WASM file.
