@@ -101,6 +101,8 @@ The tangle and the compile of `texprod` take 122 ms to 375 ms in the CI jobs (`t
 
 The trip test follows `tripman.tex`. The driver is `tools/trip.mjs`.
 
+The gate `tools/trip-gate.mjs` applies the pass rule. Each compared file must exist. `trip.typ` and `tmp.pl` must have no difference. Each log and fot file must differ only in the banner line. On a failure, `trip.mjs` exits with status 1 and the CI job fails.
+
 | Step | Program | Result |
 |---|---|---|
 | 1 | `pltotf` on `trip.pl` | `trip.tfm`, 3116 bytes |
@@ -300,9 +302,9 @@ tools/render.mjs build/rebuild build/out/fmt/plain.fmt samples/labels.tex build/
 ## Files
 
 - `trials/t5-tex-build/config.json`, `trials/t5-tex-build/.gitattributes`.
-- `trials/t5-tex-build/tools/`: `tangle.mjs`, `tangle-cli.mjs`, `pascal.mjs`, `wasm.mjs`, `compile-cli.mjs`, `build.mjs`, `trip.mjs`, `linediff.mjs`, `run-texware.mjs`, `tex-run.mjs`, `render.mjs`, `sizes.mjs`, `compare-builds.mjs`.
+- `trials/t5-tex-build/tools/`: `tangle.mjs`, `tangle-cli.mjs`, `pascal.mjs`, `wasm.mjs`, `compile-cli.mjs`, `build.mjs`, `trip.mjs`, `linediff.mjs`, `run-texware.mjs`, `tex-run.mjs`, `render.mjs`, `sizes.mjs`, `compare-builds.mjs`, `trip-gate.mjs`.
 - `trials/t5-tex-build/runtime/`: `host.mjs`, `run.mjs`, `vfs.mjs`, `tfm.mjs`, `type1.mjs`, `dvi2svg.mjs`.
 - `trials/t5-tex-build/changes/`: `tex-system.ch`, `tex-trip.ch`, `tex-prod.ch`, `dvitype.ch`.
 - `trials/t5-tex-build/samples/labels.tex`, `trials/t5-tex-build/samples/probe-tikz.tex`.
-- `trials/t5-tex-build/test/type1.test.mjs`.
+- `trials/t5-tex-build/test/type1.test.mjs`, `trials/t5-tex-build/test/trip-gate.test.mjs`.
 - `.github/workflows/trial-t5.yml`.
