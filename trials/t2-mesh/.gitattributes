@@ -1,1 +1,3 @@
-samples/** binary
+samples/*.step binary
+samples/*.igs binary
+samples/*.brep binary

@@ -35,8 +35,12 @@ const runtimeVersion = process.versions.bun ?? process.version;
 // They go to this array, so stdout keeps only JSON lines.
 const wasmMessages = [];
 const peak = { heapUsed: 0, rss: 0, arrayBuffers: 0 };
+// sampleMax holds the peak of the sample that is running; the run-wide peak is in peak.
+const sampleMax = { heapUsed: 0, rss: 0 };
 const sample = () => {
   const m = process.memoryUsage();
+  sampleMax.heapUsed = Math.max(sampleMax.heapUsed, m.heapUsed);
+  sampleMax.rss = Math.max(sampleMax.rss, m.rss);
   peak.heapUsed = Math.max(peak.heapUsed, m.heapUsed);
   peak.rss = Math.max(peak.rss, m.rss);
   peak.arrayBuffers = Math.max(peak.arrayBuffers, m.arrayBuffers ?? 0);
@@ -105,6 +109,8 @@ for (const s of config.samples) {
   const fn = occt[readers[s.format]];
   if (typeof fn !== "function") throw new Error(`reader ${readers[s.format]} is missing`);
 
+  sampleMax.heapUsed = 0;
+  sampleMax.rss = 0;
   const first = performance.now();
   const firstResult = fn(bytes, s.params);
   const firstMs = performance.now() - first;
@@ -112,8 +118,9 @@ for (const s of config.samples) {
   if (!firstResult.success) throw new Error(`${s.id}: reader returned success false`);
   const summary = summarise(firstResult);
 
+  const runs = s.warmRuns ?? warmRuns;
   const times = [];
-  for (let i = 0; i < warmRuns; i++) {
+  for (let i = 0; i < runs; i++) {
     const t = performance.now();
     const r = fn(bytes, s.params);
     times.push(performance.now() - t);
@@ -130,7 +137,9 @@ for (const s of config.samples) {
     sha256: fileHash,
     params: s.params,
     firstReadMs: Number(firstMs.toFixed(3)),
-    warmRuns,
+    warmRuns: runs,
+    peakHeapUsedBytes: sampleMax.heapUsed,
+    peakRssBytes: sampleMax.rss,
     warmMedianMs: Number(median(times).toFixed(3)),
     warmMinMs: Number(Math.min(...times).toFixed(3)),
     warmMaxMs: Number(Math.max(...times).toFixed(3)),

@@ -22,7 +22,9 @@
       "sha256": "1fd5c7d9325bcfb9863365faf84554f89e7e7a5e86760a0fc8d5db00619d9ef5",
       "source": "https://github.com/CadQuery/cadquery/blob/60e107a6a99fb4cdf405b9c180cb00f8ea0a569b/tests/testdata/red_cube_blue_cylinder.step",
       "licence": "Apache-2.0 (repository LICENSE)",
-      "params": { "linearUnit": "millimeter" }
+      "params": {
+        "linearUnit": "millimeter"
+      }
     },
     {
       "id": "step-colour-meter",
@@ -31,7 +33,9 @@
       "sha256": "1fd5c7d9325bcfb9863365faf84554f89e7e7a5e86760a0fc8d5db00619d9ef5",
       "source": "https://github.com/CadQuery/cadquery/blob/60e107a6a99fb4cdf405b9c180cb00f8ea0a569b/tests/testdata/red_cube_blue_cylinder.step",
       "licence": "Apache-2.0 (repository LICENSE)",
-      "params": { "linearUnit": "meter" }
+      "params": {
+        "linearUnit": "meter"
+      }
     },
     {
       "id": "iges-cube",
@@ -50,6 +54,19 @@
       "source": "https://github.com/FreeCAD/FreeCAD/blob/46ec224b04e20f682f1fa179b4ede39ebf43b3fc/data/tests/ModelRefineTests/cylinder1.brep",
       "licence": "LGPL-2.1 (repository LICENSE)",
       "params": null
+    },
+    {
+      "id": "step-large-linkrods",
+      "format": "step",
+      "file": "samples-large/linkrods.step",
+      "sha256": "3674e4b01ee0e983c81ed170f0574cda201ad08e0f7b46e05e4f4613400fd5f7",
+      "source": "https://github.com/Open-Cascade-SAS/OCCT/blob/7fd59977dfb3a75f75670474b59dfc0f3f5f90ba/data/step/linkrods.step",
+      "licence": "LGPL-2.1 (repository licence; copy of the licence text in samples/LICENSES)",
+      "params": null,
+      "warmRuns": 5,
+      "fetch": {
+        "url": "https://raw.githubusercontent.com/Open-Cascade-SAS/OCCT/7fd59977dfb3a75f75670474b59dfc0f3f5f90ba/data/step/linkrods.step"
+      }
     }
   ]
 }

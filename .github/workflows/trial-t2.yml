@@ -51,6 +51,17 @@ jobs:
       - name: Install the pinned occt-import-js package
         run: npm ci --no-audit --no-fund
 
+      # The large sample is not in git. Each entry with a "fetch" URL in samples.json comes from its
+      # pinned commit. A checksum mismatch fails the job.
+      - name: Fetch the large sample at its pinned commit and check its SHA-256
+        run: |
+          set -euo pipefail
+          while read -r url file sha; do
+            mkdir -p "$(dirname "$file")"
+            curl --fail --silent --show-error --location "$url" --output "$file"
+            echo "$sha  $file" | sha256sum --check --strict -
+          done < <(node -e 'for (const x of require("./samples.json").samples.filter((s) => s.fetch)) console.log([x.fetch.url, x.file, x.sha256].join(" "))')
+
       - name: Record the runtime versions
         run: |
           mkdir -p results
