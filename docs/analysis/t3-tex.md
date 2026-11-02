@@ -30,7 +30,7 @@ The numbers come from CI run `41395234104`, head commit `7339ced`. The format ar
 
 | Item | Value | Source |
 |---|---|---|
-| TeX engine | e-TeX 2.6 on TeX 3.141592653 | `engine-banner-lines.txt` in the format artifact; `texk/tex.web` line 193; `etexdir/etex.ch` line 197 |
+| TeX engine | e-TeX 2.6 on TeX 3.141592653 | `engine-banner-lines.txt` in the format artifact; `texk/tex.web` line 193 (before the change files); merged `tex.web` lines 292 and 295 (after `tie`, in the artifact); `etexdir/etex.ch` line 197 |
 | Banner printed by a render | `This is e-TeX, Version 3.141592653-2.6` | first line of each `*.log` in the render artifacts |
 | LaTeX kernel | `LaTeX2e <2023-11-01> patch level 1` | `*.log` files |
 | TeX Live (apt) | `texlive-base` 2023.20240207-1, `texlive-latex-base` 2023.20240207-1, `texlive-pictures` 2023.20240207-1, `texlive-fonts-recommended` 2023.20240207-1, `texlive-binaries` 2023.20230311.66589-9build3 | `apt-versions.txt` |
@@ -90,7 +90,7 @@ The `gzip` command and the `zlib` module disagree by 137,374 bytes on the same f
 
 ## Render results
 
-Each sample renders in a single process. The first render includes the first call of the run. The warm median is the median of the later renders in the same process. The circuit uses 20 warm renders. The `pgfplots` plot uses 5.
+Each sample renders in a single process. Each render call allocates a new 160 MiB memory and copies the format into it, so the warm median includes that copy. The first render is the first `renderTex` call. It excludes gunzip and WASM compile, which the Load table shows. The first render includes the first call of the run. The warm median is the median of the later renders in the same process. The circuit uses 20 warm renders. The `pgfplots` plot uses 5.
 
 ### Load
 
@@ -131,6 +131,20 @@ The `pgfplots` bundle has 43 files. The raw size is 2,041,928 bytes. The sum of 
 
 Without the `pgfplots` bundle, the `pgfplots` sample stops with `! Undefined control sequence.` and writes no DVI. This holds in all six jobs.
 
+### Job wall time
+
+| Job | Start (UTC) | End (UTC) | Wall time |
+|---|---|---|---|
+| build the format (ubuntu-latest) | 05:38:49 | 05:41:06 | 2 min 17 s |
+| render (ubuntu-latest, node) | 05:41:08 | 05:41:36 | 28 s |
+| render (macos-latest, bun) | 05:41:08 | 05:41:44 | 36 s |
+| render (ubuntu-latest, bun) | 05:41:09 | 05:41:48 | 39 s |
+| render (macos-latest, node) | 05:41:09 | 05:41:50 | 41 s |
+| render (windows-latest, node) | 05:41:08 | 05:41:50 | 42 s |
+| render (windows-latest, bun) | 05:41:09 | 05:42:07 | 58 s |
+
+The build wall time includes the apt install of TeX Live, the `npm ci`, and the clone of web2js. The render wall time includes the `npm ci`, the clone, and the artifact download.
+
 ## SVG glyph check
 
 Source: the SVG and the converter HTML of each render artifact.
@@ -148,27 +162,29 @@ The converter (`src/text.ts`, lines 149-150) writes `<text font-family="...">`. 
 
 ## Font set
 
-The font set is Computer Modern, from the TFM files of TeX Live (`cmr10.tfm`, and others). The bundle holds metrics only. The outline fonts of the browser build (Bakoma OpenType, from `bakoma.zip`) were not fetched in this trial. The licence of the Bakoma files is therefore not read. Their licence is a required check before a glyph-to-path step uses them.
+The font set in the run is Computer Modern, through the TFM metrics of TeX Live (for example `cmr10.tfm`). The bundle holds metrics only. The browser build of the fork uses the Bakoma OpenType outlines. The CTAN page for Bakoma gives the licence field "Shareware: A fee is required". The trial did not fetch the Bakoma files. A glyph-to-path step needs outline fonts under a licence that the engine accepts.
 
 ## Licences
 
-Each row names the file that the licence came from. The licence text for a TeX package is in its own file header or in the TeX Live copyright file.
+Each row gives the licence as read, the source file and line, and the derivation. Copyright holders appear by role. The file header names the holder.
 
-| Part | Licence as read | Source (file and line) | Note |
+| Part | Licence as read | Source (file and line) | Derivation or note |
 |---|---|---|---|
-| TeX engine source, `tex.web` | Copyright (C) 1982 by D. E. Knuth; all rights are reserved | `texk/tex.web` line 1 (web2js at the pin) | Only line 1 is read. The permission text of the file is not read in this trial. |
-| e-TeX change file `etex.ch` | e-TeX copyright, P. Breitenlohner, with the NTS notice | `etexdir/etex.ch` lines 6 and 33 | The full permission text is not read. |
-| web2js (compiler and runtime glue) | `GPL-3.0` | `package.json` `"license"` | `LICENSE.md` text names "Math-expression", a different project, and gives GPL v3 and Apache v2. The licence file does not match the package. |
-| TikZJax fork (`drgrice1/tikzjax`) | `GPL-3.0+` | `package.json` line 9 | No `LICENSE` file at the root. The GitHub licence field is empty. The original `kisonecat/tikzjax` says LPPL-1.3c (`licenseInfo`). The trial uses no file of the fork. |
-| dvi2html (`drgrice1/dvi2html`) | MIT in the repository, GPL-3.0 in the npm package | `LICENSE` at the pin (`The MIT License (MIT)`, Mitch Anderson, 2015); `package.json` `"license": "GPL-3.0"` | The two statements conflict. The trial treats the package as GPL-3.0. |
-| TeX Live base and LaTeX | LPPL 1.3c and other licences per file | `texlive-latex-base.copyright` in the licence artifact | The copyright file names the licences of each part. |
-| pgf and tikz | LPPL 1.3c, or GPL (choice) | `pgf.sty` and `tikz.code.tex` headers in the bundle (`% 1. under the LaTeX Project Public License and/or 2. under the GNU Public License`) | Dual licence. |
-| circuitikz | LPPL 1.3c, or GPL (choice) | `circuitikz.sty` header in the bundle | Dual licence. The header names `gpl-3.0_license.txt` and `lppl-1-3c_license.txt`. |
-| pgfplots | GPL, version 3 or later | `pgfplots.sty` and `pgfplots.code.tex` headers in the `pgfplots` bundle | Single licence named in the header. |
-| Computer Modern fonts (TFM metrics in TeX Live) | Knuth public domain, with a name restriction | `texlive-fonts-recommended.copyright`, section 3.3, item (2) | The names `cmr10` and similar may not be used for fonts with other metrics. |
-| Bakoma outline fonts (browser build only) | not read | not fetched | Required before use. |
-| DVI converter (see dvi2html row) | see the dvi2html row | | |
-| binaryen | Not read. The copyright file names the upstream and its copyright holders only | `binaryen.copyright` in the licence artifact | Build time only. |
+| TeX engine source, `tex.web` | Unlimited copying and redistribution while the file is unchanged. A modified copy must not use the name `tex.web`. "TeX" and "METAFONT" are trademarks | `texk/tex.web` lines 1-6 at the web2js pin | The TeX author's program. Only the header is read. |
+| e-TeX change file, `etexdir/etex.ch` | Copying is authorized only if the copy is unchanged, or by the e-TeX author | `etexdir/etex.ch` lines 6-10 | Applied to `tex.web` by `tie`. |
+| web2js change files, `changes/*.ch` (14 files) | Part of web2js, which is GPL-3.0 (`package.json` `"license"`). The `LICENSE.md` text names another project | `changes/change-order`; web2js `package.json` | Applied by `tie`. The origin of each file is not read. `changes/shellescape.ch` adds `\shellescape`, which reads as 0 (off). It adds no shell escape code. |
+| TeX WASM build, `tex.wasm` | Not a separate licence. It derives from the three rows above, compiled by web2js and optimised by `wasm-opt`. The web2js licence (GPL-3.0) applies to its compiler and glue | Derivation of the rows above | The licence conclusion is left to planning. |
+| Format, `core.dump` | Memory image made by `tex.wasm` from `latex.ltx`, `standalone`, `xcolor`, `tikz` and `circuitikz`. The licence is the union of the rows of its inputs | TeX Live packages; `tex.wasm` row | Not separately licensed. |
+| web2js (compiler and runner) | GPL-3.0 | web2js `package.json` `"license"` | `LICENSE.md` names another project and gives GPL v3 and Apache v2. The mismatch is recorded. |
+| TikZJax fork, `drgrice1/tikzjax` | GPL-3.0+ | `package.json` line 9 | No `LICENSE` file at the root. The trial uses none of its files at run time. The original `kisonecat/tikzjax` says LPPL-1.3c. |
+| dvi2html, `drgrice1/dvi2html` | Repository `LICENSE`: MIT. npm `package.json`: GPL-3.0 | `LICENSE` line 1; npm package `"license"` | The two statements conflict. The trial uses the npm package, which is GPL-3.0. |
+| TeX Live base and LaTeX packages | Per file. The copyright files name the licences | `texlive-latex-base.copyright` and related files in the licence artifact | Not read per package. |
+| pgf and tikz | LPPL 1.3c, or GPL (choice of the licensee) | `pgf.sty` and `tikz.code.tex` headers, bundle `base` | Dual licence. |
+| circuitikz | LPPL 1.3c, or GPL (choice of the user) | `circuitikz.sty` header, bundle `base` | Dual licence. |
+| pgfplots | GPL, version 3 or later | `pgfplots.sty` and `pgfplots.code.tex` headers, bundle `pgfplots` | Single licence. |
+| Computer Modern TFM metrics (font set in the run) | Public domain, with a name restriction: a font with the same name must have identical metrics | `texlive-fonts-recommended.copyright`, section 3.3, item (2) | The bundle holds metrics only. |
+| Bakoma outline fonts (browser build; not in the run) | CTAN licence field: "Shareware: A fee is required". CTAN version 9.51. The README is not read | CTAN package page `ctan.org/pkg/bakoma`, fetched in the trial | A licence conflict for a free engine. It blocks the glyph-path step until the licence is settled. |
+| binaryen (build time only) | Not read | `binaryen.copyright` in the licence artifact | Build tool. Not in the output. |
 
 ## Commands
 
@@ -203,7 +219,7 @@ The measure job runs `node tools/measure.mjs` (or `bun tools/measure.mjs`) with 
 
 ## Changes required before the design can hold
 
-1. Add a glyph-to-path step after the DVI conversion. It needs outline fonts for the Computer Modern names in the output. Check the licence of the outline fonts before use.
+1. Add a glyph-to-path step after the DVI conversion. It needs outline fonts for the Computer Modern names in the output. The CTAN licence field of Bakoma says shareware. Settle that licence before use.
 2. Resolve the licence of the converter. Either use a converter under a licence that the engine accepts, or replace the converter. Record the choice in the design table, which currently says LPPL-1.3c.
 3. Drop `latex.fmt` from the runtime bundle, or leave it out of the `base` manifest.
 4. Pin the TeX Live packages to one TeX Live year, or record the apt versions in the design.
