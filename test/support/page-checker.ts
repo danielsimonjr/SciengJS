@@ -25,6 +25,8 @@ export interface PageCheckOptions {
   settleMs?: number;
   /** Time allowed for the browser to stop after the close request, in milliseconds. */
   stopTimeoutMs?: number;
+  /** Called with the profile folder of this check, once the folder exists. The leak check matches on it. */
+  onProfile?: (profile: string) => void;
 }
 
 export interface PageCheckResult {
@@ -213,6 +215,7 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
   const stopTimeoutMs = options.stopTimeoutMs ?? DEFAULT_STOP_TIMEOUT_MS;
   const problems: string[] = [];
   const profile = mkdtempSync(join(tmpdir(), PROFILE_PREFIX));
+  options.onProfile?.(profile);
   let child: ChildProcess | undefined;
   let port: number | undefined;
   let socket: WebSocket | undefined;

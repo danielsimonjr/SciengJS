@@ -15,3 +15,20 @@ export function listCommandLines(): string[] {
   }
   return result.stdout.split(/\r?\n/).filter((line) => line.trim() !== "");
 }
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * True when the command line names this folder as a whole. A folder whose name extends the given name does not
+ * match, so a run that shares a prefix with this check cannot be reported as this check.
+ */
+export function holdsFolder(commandLine: string, folder: string): boolean {
+  return new RegExp(`${escapeRegExp(folder)}(?![A-Za-z0-9_-])`).test(commandLine);
+}
+
+/** The command lines of the running processes that name this folder. */
+export function processesHolding(folder: string): string[] {
+  return listCommandLines().filter((line) => holdsFolder(line, folder));
+}

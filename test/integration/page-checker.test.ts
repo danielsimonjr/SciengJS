@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { checkPage, PROFILE_PREFIX } from "../support/page-checker.ts";
-import { listCommandLines } from "../support/process-list.ts";
+import { checkPage } from "../support/page-checker.ts";
+import { processesHolding } from "../support/process-list.ts";
 
 const FIXTURES = fileURLToPath(new URL("../fixtures/pages/", import.meta.url));
 const browserPath = process.env.SCIENG_BROWSER ?? "";
@@ -90,10 +90,22 @@ describe.skipIf(!haveBrowser)("page checker on svg drawings", () => {
   }, 60000);
 });
 
+/** The longest wait for the browser helper processes to exit after a check returns. */
+const LEAK_WAIT_MS = 5000;
+const LEAK_POLL_MS = 250;
+
 describe.skipIf(!haveBrowser)("page checker teardown", () => {
-  test("leaves no running process that holds a check profile", async () => {
-    await checkPage({ browserPath, htmlPath: `${FIXTURES}good.html` });
-    const held = listCommandLines().filter((line) => line.includes(PROFILE_PREFIX));
+  test("leaves no running process that holds this check's profile folder", async () => {
+    let profile = "";
+    await checkPage({ browserPath, htmlPath: `${FIXTURES}good.html`, onProfile: (path) => (profile = path) });
+    expect(profile).not.toBe("");
+    // Renderer and GPU helpers can outlive the parent for a moment, so the listing is polled up to the bound.
+    const deadline = Date.now() + LEAK_WAIT_MS;
+    let held = processesHolding(profile);
+    while (held.length > 0 && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, LEAK_POLL_MS));
+      held = processesHolding(profile);
+    }
     expect(held).toEqual([]);
   }, 60000);
 });
