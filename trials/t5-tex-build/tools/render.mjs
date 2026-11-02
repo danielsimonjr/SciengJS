@@ -1,12 +1,19 @@
 // Render a sample with the large build and a format, then DVI to SVG; measure the times.
 // node render.mjs <build-dir> <format-file> <sample.tex> <font-dir> <out-dir> <repeats> [root folders...]
 // The font dir holds the TFM and PFB files; the roots hold the other input files.
+// Environment: TEX_PROGRAM gives the program name of the build dir (default texprod).
+// DVI_SPECIALS gives an ES module with createSpecials() and unitPerPt for the \special
+// commands of the DVI file (T6: runtime/dvisvgm-specials.mjs); without it, specials are skipped.
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { runProgram } from '../runtime/run.mjs';
 import { ExitSignal } from '../runtime/host.mjs';
 import { TreeFS, flatName } from '../runtime/vfs.mjs';
 import { dviToSvg } from '../runtime/dvi2svg.mjs';
+
+const program = process.env.TEX_PROGRAM || 'texprod';
+const specialsModule = process.env.DVI_SPECIALS ? await import(pathToFileURL(path.resolve(process.env.DVI_SPECIALS)).href) : null;
 
 const [buildDir, fmtFile, sample, fontDir, outDir, repeatsArg, ...roots] = process.argv.slice(2);
 if (!outDir) {
@@ -16,10 +23,10 @@ if (!outDir) {
 const repeats = Number(repeatsArg ?? 10);
 fs.mkdirSync(outDir, { recursive: true });
 const t0 = performance.now();
-const module = await WebAssembly.compile(fs.readFileSync(path.join(buildDir, 'texprod.wasm')));
+const module = await WebAssembly.compile(fs.readFileSync(path.join(buildDir, `${program}.wasm`)));
 const wasmCompileMs = performance.now() - t0;
-const symbols = JSON.parse(fs.readFileSync(path.join(buildDir, 'texprod.symbols.json'), 'utf8'));
-const pool = new Uint8Array(fs.readFileSync(path.join(buildDir, 'texprod.pool')));
+const symbols = JSON.parse(fs.readFileSync(path.join(buildDir, `${program}.symbols.json`), 'utf8'));
+const pool = new Uint8Array(fs.readFileSync(path.join(buildDir, `${program}.pool`)));
 const fmtName = path.basename(fmtFile).toLowerCase();
 const fmt = new Uint8Array(fs.readFileSync(fmtFile));
 const job = path.basename(sample, '.tex').toLowerCase();
@@ -44,9 +51,10 @@ const one = async () => {
   const dvi = vfs.mem.get(`${job}.dvi`);
   if (!dvi) throw new Error(`no DVI; terminal:\n${r.terminal}`);
   const b = performance.now();
-  const svg = dviToSvg(dvi, fontFiles);
+  const sp = specialsModule?.createSpecials();
+  const svg = dviToSvg(dvi, fontFiles, sp ? { special: sp.special, unitPerPt: specialsModule.unitPerPt } : {});
   const svgMs = performance.now() - b;
-  return { texMs, svgMs, svg, dvi, log: vfs.mem.get(`${job}.log`), terminal: r.terminal };
+  return { texMs, svgMs, svg, dvi, log: vfs.mem.get(`${job}.log`), terminal: r.terminal, ignoredSpecials: sp?.ignored() ?? null };
 };
 
 const first = await one();
@@ -70,6 +78,8 @@ const result = {
     glyphPaths: first.svg.glyphs, rules: first.svg.rules, pathElements: count(/<path\b/g),
     textElements: count(/<text\b/g), fontFamily: count(/font-family/g), missing: first.svg.missing, fonts: first.svg.fonts,
   },
+  specials: first.svg.specials,
+  ...(first.ignoredSpecials ? { ignoredSpecials: first.ignoredSpecials } : {}),
   sameSvgEveryRun: warm.every((w) => w.svg.svg === svgText),
 };
 fs.writeFileSync(path.join(outDir, `render-${job}.json`), JSON.stringify(result, null, 1));

@@ -1,5 +1,6 @@
 // One run of the large build: node tex-run.mjs <build-dir> <out-dir> <terminal line> [root folders...]
-// The build dir holds texprod.wasm, texprod.symbols.json and texprod.pool.
+// The build dir holds texprod.wasm, texprod.symbols.json and texprod.pool. The environment
+// variable TEX_PROGRAM gives another program name of the build dir (T6: setprod).
 // The out dir gets every file that the run wrote, the terminal text,
 // and run.json with the times and the list of files that the run read.
 import fs from 'node:fs';
@@ -8,6 +9,8 @@ import { runProgram } from '../runtime/run.mjs';
 import { ExitSignal } from '../runtime/host.mjs';
 import { TreeFS, flatName } from '../runtime/vfs.mjs';
 
+const program = process.env.TEX_PROGRAM || 'texprod';
+
 const [buildDir, outDir, line, ...roots] = process.argv.slice(2);
 if (!buildDir || !outDir || line === undefined) {
   console.error('usage: tex-run.mjs <build-dir> <out-dir> <terminal line> [root folders...]');
@@ -15,11 +18,11 @@ if (!buildDir || !outDir || line === undefined) {
 }
 fs.mkdirSync(outDir, { recursive: true });
 const t0 = performance.now();
-const module = await WebAssembly.compile(fs.readFileSync(path.join(buildDir, 'texprod.wasm')));
+const module = await WebAssembly.compile(fs.readFileSync(path.join(buildDir, `${program}.wasm`)));
 const compileMs = performance.now() - t0;
-const symbols = JSON.parse(fs.readFileSync(path.join(buildDir, 'texprod.symbols.json'), 'utf8'));
+const symbols = JSON.parse(fs.readFileSync(path.join(buildDir, `${program}.symbols.json`), 'utf8'));
 const vfs = new TreeFS([outDir, ...roots]);
-vfs.set('tex.pool', new Uint8Array(fs.readFileSync(path.join(buildDir, 'texprod.pool'))));
+vfs.set('tex.pool', new Uint8Array(fs.readFileSync(path.join(buildDir, `${program}.pool`))));
 const r = await runProgram({
   module, symbols, files: vfs, terminal: [line], mapName: flatName,
   extra: { hostexit: (code) => { throw new ExitSignal(code); } },

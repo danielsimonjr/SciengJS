@@ -41,4 +41,6 @@ export class TreeFS {
 // TeX names a file with an area prefix (TeXinputs:, TeXfonts:, TeXformats:).
 // The virtual file system has one flat name space in lower case.
 // A name in braces (`\input{pgf.tex}`, a TeX Live syntax) maps to the name without braces.
-export const flatName = (n) => n.replace(/^[A-Za-z]+:/, '').replace(/^{(.*)}$/, '$1').toLowerCase();
+// A name in quotes (`\openin1"expl3.ltx"`, a TeX Live syntax that LaTeX uses) maps to the
+// name without quotes; TeX can put its default extension after the closing quote.
+export const flatName = (n) => n.replace(/^[A-Za-z]+:/, '').replace(/^{(.*)}$/, '$1').replace(/"/g, '').toLowerCase();
