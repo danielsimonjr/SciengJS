@@ -6,6 +6,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Changed
 
+- Design, tex stage: the engine compiles `tex.web` to WASM with its own compiler and runtime, and CI runs the trip test on each build. Bundles hold only packages under the LPPL or in the public domain. The five packages with the GPL as their only licence leave the package set, each with a replacement. Glyphs become paths from the AMS Type 1 fonts (OFL) and Latin Modern (GFL) (trial T3).
+- Build plan: trial T5 measures the TeX build of the engine. I12 builds on T5. The I12 gate adds the trip test, the glyph paths and the rejection of a GPL-only package.
 - Design, browser stage: forced flags send all browser traffic to a refusing proxy in the engine process, and block DNS. The client never passes `--no-sandbox` (trial T4).
 - Build plan, I4: gates for the network namespace, the socket sample, the sandbox and a large screenshot.
 - Build plan, I9: face colors come from `brep_faces[].color`. A STEP part of 1.8 MB renders inside the default timeout. A new risk row records the read time of large parts (trial T2).
