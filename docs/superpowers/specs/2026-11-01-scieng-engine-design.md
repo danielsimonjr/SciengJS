@@ -195,6 +195,11 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 ### raster
 
 - Input: SVG. Output: PNG at a given scale. No browser.
+- The stage uses `@resvg/resvg-wasm`. The WASM build reads no file and finds no system font. A text element draws no pixel without a font.
+- The stage bundles one default font: Liberation Serif Regular, version 2.1.5, under the SIL Open Font License 1.1. The font is metric-compatible with Times New Roman. Times-Roman, the default font of Graphviz, resolves to this font. The font file and its licence are in the `assets/fonts/` folder of the package. `THIRD_PARTY_NOTICES.md` lists the font.
+- Every font family of an input resolves to the font in use.
+- The configuration key `rasterFont` names a TrueType or OpenType file. The file replaces the default font. A file that cannot be read rejects the render with `E_CONFIG`. A file without a font signature also rejects the render with `E_CONFIG`.
+- A PNG whose RGBA pixel buffer is larger than `maxMemoryMb` megabytes rejects with `E_LIMIT`.
 
 ## Backends
 
@@ -264,6 +269,7 @@ One loader reads the configuration. Each key has one default, in the loader. An 
 | `maxSourceBytes` | `SCIENG_MAX_SOURCE_BYTES` | 10485760 | the size limit of one source |
 | `maxMemoryMb` | `SCIENG_MAX_MEMORY_MB` | 2048 | the heap limit of the worker of one render |
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` | the network uses that are allowed: `none`, `tex-bundles`, or `tex-bundles,images` |
+| `rasterFont` | `SCIENG_RASTER_FONT` | none (the bundled font of the raster stage) | the path of a TrueType or OpenType font for the raster stage |
 
 The user directories follow the platform: `%APPDATA%` and `%LOCALAPPDATA%` on Windows, `~/Library` on macOS, `XDG_CONFIG_HOME` and `XDG_CACHE_HOME` on Linux. The loader rejects an unreadable configuration file with `E_CONFIG`. The loader never falls back to the defaults.
 
