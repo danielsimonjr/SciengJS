@@ -19,7 +19,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 ## Principles
 
 1. **Local.** No render sends a source to a web service. The one network access is the first download of a WASM TeX bundle. The download comes from a configured URL. A pinned sha256 checks each bundle.
-2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows outside software only when that software is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only the program source, `tex.web`. The engine builds `tex.web` to WASM with its own tools.
+2. **Few dependencies.** The engine writes its own parsers, layouts, plotter, converters and browser client. The engine borrows outside software only when that software is decades of work: Graphviz layout, OpenCascade surface tessellation and TeX. Graphviz and OpenCascade are WASM builds of their projects. For TeX, the engine borrows only program sources: `tex.web` and the e-TeX change file `etex.ch`. The engine builds them to WASM with its own tools.
 3. **One input drives one output.** A backend is a pure function of its source and options. The same request gives the same bytes.
 4. **Configurable, never hard-coded.** Every path, URL, limit and timeout comes from the configuration (section "Configuration"). A missing required value fails with an error that names the value. No backend guesses a path.
 5. **Untrusted input is the default.** Every backend accepts a source from an unknown author. No backend executes code from a source.
@@ -112,7 +112,7 @@ A stage is a shared service that several backends use. Each stage loads on first
 |---|---|---|---|
 | graph | `@viz-js/viz` (Graphviz compiled to WASM) | wrapper MIT; Graphviz EPL-2.0 | the adapters that turn Mermaid, SysML into DOT |
 | math | `@mathjax/src` 4.x | Apache-2.0 | the request wrapper and the SVG clean-up |
-| tex | the engine compiles `tex.web` (the TeX program source) to WASM | `tex.web`: the licence of its author; the TeX packages: LPPL; the outline fonts: OFL or GFL (see "tex") | the Pascal to WASM compiler, the change files, the WASM host functions, the format build, the bundle manager, the package detection, the DVI to SVG converter with glyph paths |
+| tex | the engine compiles `tex.web` (the TeX program source) with `etex.ch` to WASM | `tex.web` and `etex.ch`: the licences of their authors; the TeX packages: LPPL; the outline fonts: OFL or GFL (see "tex") | the Pascal to WASM compiler, the change files, the WASM host functions, the format build, the bundle manager, the package detection, the DVI to SVG converter with glyph paths |
 | mesh | `occt-import-js` (OpenCascade, WASM); `manifold-3d` | LGPL-2.1; Apache-2.0 | the CSG document reader, the glTF and STL writers, the Three.js viewer page |
 | browser | the installed Chromium or Chrome | (system program) | the Chrome DevTools Protocol client |
 | raster | `@resvg/resvg-wasm` | MPL-2.0 | the call wrapper |
@@ -153,10 +153,15 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 
 - Input: a TikZ picture or a picture environment of a supported package. Output: SVG.
 - Build:
-  - `tangle` writes Pascal from `tex.web` and the change files of the engine. `tangle` is a build tool. The engine package does not hold `tangle`.
-  - The engine compiler (in `tools/`, build time only) compiles the Pascal of `tex.web` to WASM. The compiler accepts the Pascal subset that `tex.web` uses.
+  - `tangle` writes Pascal from `tex.web` and a stack of change files, applied in this order: `etex.ch`, then the change files of the engine. `tangle` is a build tool. The engine package does not hold `tangle`.
+  - Each change file of the engine holds one concern: the system interface, the trip settings, the production settings, the utility primitives. A new extension is a new change file in the stack, not an edit of an old one.
+  - The utility primitives are the primitives that the LaTeX kernel tests for at format build time and that `etex.ch` does not give, for example `\expanded`. The build plan names the set. The engine writes each primitive from the published description of its behaviour. The engine uses no part of the source of pdfTeX.
+  - The format builds in the extended mode of e-TeX.
+  - The engine compiler (in `tools/`, build time only) compiles the Pascal to WASM. The compiler accepts the Pascal subset that `tex.web` and `etex.ch` use.
   - The build uses no part of another TeX to WASM toolchain.
-- Name: the author of `tex.web` permits a changed program to use the name TeX only when the program passes the trip test. CI runs the trip test on each WASM build. A build that fails the trip test does not ship.
+- Name: the build is a changed program, so it never uses the name TeX or e-TeX. Its banner names the engine. The primitives `\eTeXversion` and `\eTeXrevision` keep the values of `etex.ch`. The engine does not define `\pdftexversion`, so packages do not take the build for pdfTeX.
+- Compatibility gates: CI runs the trip test of `tex.web` and the e-TRIP test of `etex.ch` on each WASM build. Each log may differ from the reference only in the banner line. A build that fails a gate does not ship.
+- The format selects the pgf driver for DVI output that the DVI to SVG converter reads. The build plan names the driver file.
 - Runtime: the engine writes the host functions of the WASM module: file open, read and write on the virtual file system, and the terminal output.
 - The format holds LaTeX, `standalone`, `xcolor`, `tikz` and `circuitikz`. The text language is English only. No bundle holds `latex.fmt`.
 - The format and the bundles build from the packages of one pinned TeX Live year.
