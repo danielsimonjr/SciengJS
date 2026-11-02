@@ -199,10 +199,15 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
     if (!existsSync(options.browserPath)) {
       throw new Error(`browser path does not exist: ${options.browserPath}`);
     }
-    child = spawn(options.browserPath, [...CHROME_ARGS, `--user-data-dir=${profile}`, "about:blank"], {
-      stdio: "ignore",
-      windowsHide: true,
-    });
+    try {
+      child = spawn(options.browserPath, [...CHROME_ARGS, `--user-data-dir=${profile}`, "about:blank"], {
+        stdio: "ignore",
+        windowsHide: true,
+      });
+    } catch (err) {
+      // Bun and Node on Windows throw a file that cannot run at the spawn call. Other platforms emit it as the error event below.
+      throw new Error(`cannot start the browser at ${options.browserPath}: ${(err as Error).message}`);
+    }
     // A spawn that fails emits an error event. Without a listener the process would crash.
     const spawnFailure = new Promise<never>((_, reject) => {
       child!.once("error", (err) => reject(new Error(`cannot start the browser at ${options.browserPath}: ${err.message}`)));

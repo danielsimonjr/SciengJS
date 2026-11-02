@@ -56,6 +56,19 @@ test("rejects a browser path that does not exist, and names the path", async () 
   expect(message).toContain("browser");
 }, 20000);
 
+// Runs without a browser: a file that exists but cannot run must reject with the path in the message.
+test("rejects a browser path that exists but cannot start, and names the path", async () => {
+  const notABrowser = `${FIXTURES}good.html`;
+  let message = "";
+  try {
+    await checkPage({ browserPath: notABrowser, htmlPath: `${FIXTURES}good.html` });
+  } catch (err) {
+    message = (err as Error).message;
+  }
+  expect(message).toContain("cannot start the browser");
+  expect(message).toContain("good.html");
+}, 20000);
+
 describe.skipIf(!haveBrowser)("page checker on svg drawings", () => {
   test("fails an svg with no drawn child", async () => {
     const result = await checkPage({ browserPath, htmlPath: `${FIXTURES}empty-svg.html`, drawingSelectors: ["#drawing"] });
