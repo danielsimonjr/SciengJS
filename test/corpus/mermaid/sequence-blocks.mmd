@@ -1,0 +1,16 @@
+sequenceDiagram
+participant User
+participant Server
+loop Every minute
+User->>Server: Poll
+end
+alt Ready
+Server-->>User: Data
+else Not ready
+Server-->>User: Retry later
+end
+par Fetch headers
+User->>Server: Headers
+and Fetch body
+User->>Server: Body
+end

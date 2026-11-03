@@ -1,0 +1,9 @@
+classDiagram
+direction LR
+class Order
+class Customer
+class Product
+Customer "1" --> "*" Order : places
+Order "1" *-- "*" Product : contains
+Order ..> Product : checks
+Customer o-- Product

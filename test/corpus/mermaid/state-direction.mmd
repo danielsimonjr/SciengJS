@@ -1,0 +1,6 @@
+stateDiagram-v2
+direction LR
+state "Waiting for input" as Wait
+[*] --> Wait
+Wait --> Done : submit
+Done --> [*]
