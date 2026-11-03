@@ -8,6 +8,10 @@ export interface BackendSettings {
   rasterFont: string | undefined;
   /** The folder URL of the bundled files: the raster font and the resvg WASM file. */
   assetsUrl: string;
+  /** The path of the Chromium or Chrome executable, or undefined when no browser is configured. */
+  browser: string | undefined;
+  /** The time limit of one render, in milliseconds. A browser backend cleans up inside this limit. */
+  timeoutMs: number;
 }
 
 /** What the worker receives: one render request and the backend module that serves it. */

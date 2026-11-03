@@ -15,21 +15,22 @@ This document provides a comprehensive dependency graph of all files, components
 1. [Overview](#overview)
 2. [Package Dependencies](#package-dependencies)
 3. [Root Dependencies](#root-dependencies)
-4. [Graph Dependencies](#graph-dependencies)
-5. [Entry Dependencies](#entry-dependencies)
-6. [Mermaid Dependencies](#mermaid-dependencies)
-7. [Raster Dependencies](#raster-dependencies)
-8. [Worker Dependencies](#worker-dependencies)
-9. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-10. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-11. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-12. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-13. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-14. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-15. [Dependency Matrix](#dependency-matrix)
-16. [Circular Dependency Analysis](#circular-dependency-analysis)
-17. [Visual Dependency Graph](#visual-dependency-graph)
-18. [Summary Statistics](#summary-statistics)
+4. [Browser Dependencies](#browser-dependencies)
+5. [Graph Dependencies](#graph-dependencies)
+6. [Entry Dependencies](#entry-dependencies)
+7. [Mermaid Dependencies](#mermaid-dependencies)
+8. [Raster Dependencies](#raster-dependencies)
+9. [Worker Dependencies](#worker-dependencies)
+10. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+11. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+12. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+13. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+14. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+15. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+16. [Dependency Matrix](#dependency-matrix)
+17. [Circular Dependency Analysis](#circular-dependency-analysis)
+18. [Visual Dependency Graph](#visual-dependency-graph)
+19. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -39,6 +40,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **root**: 8 files
+- **browser**: 9 files
 - **graph**: 5 files
 - **entry**: 1 file
 - **mermaid**: 9 files
@@ -171,6 +173,151 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Constants: `ENGINE_VERSION`
+
+---
+
+<a id="browser-dependencies"></a>
+
+## Browser Dependencies
+
+### `src/browser/backend-pdf.ts` - backend-pdf module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./input.ts` | `blockedWarnings, browserPathOf, htmlSource, parsePdfOptions` | Import |
+| `./render.ts` | `renderHtmlPage` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/browser/backend-png.ts` - backend-png module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./input.ts` | `blockedWarnings, browserPathOf, htmlSource, parsePngOptions` | Import |
+| `./render.ts` | `renderHtmlPage` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/browser/cdp.ts` - cdp module
+
+**Exports:**
+- Classes: `CdpConnection`
+- Interfaces: `CdpSocket`
+
+---
+
+### `src/browser/flags.ts` - The flags of every browser start. Each flag closes one route off the host. The client never adds
+
+**Exports:**
+- Interfaces: `FlagInputs`
+- Functions: `forcedBrowserFlags`
+
+---
+
+### `src/browser/index.ts` - Package entry point for browser (re-exports 10 symbols)
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./cdp.ts` | `CdpConnection, CdpSocket` | Re-export |
+| `./flags.ts` | `forcedBrowserFlags, FlagInputs` | Re-export |
+| `./proxy.ts` | `startRefusingProxy, RefusingProxy` | Re-export |
+| `./render.ts` | `renderHtmlPage, HtmlPageRequest, HtmlPageResult, HtmlFormat` | Re-export |
+
+**Exports:**
+- Re-exports:
+
+  ```text
+  CdpConnection, CdpSocket, forcedBrowserFlags, FlagInputs, startRefusingProxy, RefusingProxy,
+  renderHtmlPage, HtmlPageRequest, HtmlPageResult, HtmlFormat
+  ```
+
+
+---
+
+### `src/browser/input.ts` - input module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces: `PngOptions`
+- Functions: `parsePngOptions`, `parsePdfOptions`, `htmlSource`, `browserPathOf`, `blockedWarnings`
+- Constants: `DEFAULT_WIDTH`, `DEFAULT_HEIGHT`, `DEFAULT_SCALE`
+
+---
+
+### `src/browser/profile.ts` - Removes the profile. A held file is retried until the deadline. Any other error, or a deadline with the
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `fs` | `mkdtempSync, rmSync` |
+| `os` | `tmpdir` |
+| `path` | `join` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Functions: `makeProfile`, `removeProfile`
+- Constants: `PROFILE_PREFIX`
+
+---
+
+### `src/browser/proxy.ts` - The host of an absolute URL, or of the authority of a CONNECT request ("host:port"). A value that is
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `net` | `Server, Socket` |
+| `events` | `once` |
+| `http` | `IncomingMessage, ServerResponse` |
+| `http` | `createServer` |
+
+**Exports:**
+- Interfaces: `RefusingProxy`
+- Functions: `startRefusingProxy`
+
+---
+
+### `src/browser/render.ts` - The share of the render time that the page work may use. The rest is the budget for stopping the browser
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `child_process` | `spawn, ChildProcess` |
+| `fs` | `readFileSync, existsSync` |
+| `path` | `join` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `./cdp.ts` | `CdpConnection` | Import |
+| `./flags.ts` | `forcedBrowserFlags` | Import |
+| `./profile.ts` | `makeProfile, removeProfile` | Import |
+| `./proxy.ts` | `startRefusingProxy` | Import |
+
+**Exports:**
+- Interfaces: `HtmlPageResult`
+- Types: `HtmlFormat`, `HtmlPageRequest`
+- Functions: `renderHtmlPage`
+- Constants: `PAGE_URL`
 
 ---
 
@@ -675,27 +822,36 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 11 files |
+| `src/errors` | 0 files | 14 files |
 | `src/mermaid/common` | 1 file | 8 files |
 | `src/mermaid/render` | 6 files | 3 files |
+| `src/worker/protocol` | 1 file | 8 files |
+| `src/browser/render` | 5 files | 3 files |
 | `src/core` | 6 files | 1 file |
 | `src/graph/backend-png` | 6 files | 1 file |
-| `src/worker/protocol` | 1 file | 6 files |
 | `src/config` | 3 files | 3 files |
 | `src/graph/dot` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/index` | 5 files | 0 files |
 | `src/assets` | 1 file | 3 files |
+| `src/browser/index` | 4 files | 0 files |
 | `src/mermaid/backend-png` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
 | `src/mermaid/sequence` | 1 file | 3 files |
 | `src/raster/index` | 3 files | 1 file |
 | `src/types` | 0 files | 4 files |
+| `src/browser/backend-pdf` | 3 files | 0 files |
+| `src/browser/backend-png` | 3 files | 0 files |
+| `src/browser/input` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
 | `src/mermaid/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
 | `src/mermaid/state` | 1 file | 2 files |
 | `src/worker/run` | 2 files | 1 file |
+| `src/browser/cdp` | 0 files | 2 files |
+| `src/browser/flags` | 0 files | 2 files |
+| `src/browser/profile` | 1 file | 1 file |
+| `src/browser/proxy` | 0 files | 2 files |
 | `src/pairs` | 1 file | 1 file |
 | `src/registry` | 0 files | 2 files |
 | `src/worker/entry` | 2 files | 0 files |
@@ -706,15 +862,6 @@ The codebase is organized into the following modules:
 | `src/version` | 0 files | 1 file |
 | `trials/t5-tex-build/runtime/host.mjs` | 0 files | 1 file |
 | `trials/t5-tex-build/runtime/run.mjs` | 1 file | 0 files |
-| `trials/t5-tex-build/runtime/tfm.mjs` | 0 files | 1 file |
-| `trials/t5-tex-build/runtime/type1.mjs` | 0 files | 1 file |
-| `trials/t1-graph/compare-layout.mjs` | 0 files | 0 files |
-| `trials/t1-graph/make-sources.mjs` | 0 files | 0 files |
-| `trials/t1-graph/measure.mjs` | 0 files | 0 files |
-| `trials/t2-mesh/measure.mjs` | 0 files | 0 files |
-| `trials/t3-tex/shim/index.cjs` | 0 files | 0 files |
-| `trials/t4-browser/assets/pinned.js` | 0 files | 0 files |
-| `trials/t4-browser/measure.mjs` | 0 files | 0 files |
 
 ---
 
@@ -740,74 +887,103 @@ graph TD
         N7[version]
     end
 
-    subgraph Graph
-        N8[backend-png]
-        N9[backend-svg]
-        N10[dot]
-        N11[image]
+    subgraph Browser
+        N8[backend-pdf]
+        N9[backend-png]
+        N10[cdp]
+        N11[flags]
         N12[index]
+        N13[input]
+        N14[profile]
+        N15[proxy]
+        N16[render]
+    end
+
+    subgraph Graph
+        N17[backend-png]
+        N18[backend-svg]
+        N19[dot]
+        N20[image]
+        N21[index]
     end
 
     subgraph Entry
-        N13[index]
+        N22[index]
     end
 
     subgraph Mermaid
-        N14[backend-png]
-        N15[backend-svg]
-        N16[class]
-        N17[common]
-        N18[index]
-        N19[render]
-        N20[sequence-layout]
-        N21[sequence]
-        N22[state]
+        N23[backend-png]
+        N24[backend-svg]
+        N25[class]
+        N26[common]
+        N27[index]
+        N28[render]
+        N29[sequence-layout]
+        N30[sequence]
+        N31[state]
     end
 
     subgraph Raster
-        N23[index]
-        N24[warnings]
+        N32[index]
+        N33[warnings]
     end
 
     subgraph Worker
-        N25[entry]
-        N26[protocol]
-        N27[run]
+        N34[entry]
+        N35[protocol]
+        N36[run]
     end
 
     subgraph Trials/t1-graph
-        N28[compare-layout.mjs]
-        N29[make-sources.mjs]
-        N30[measure.mjs]
+        N37[compare-layout.mjs]
+        N38[make-sources.mjs]
+        N39[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N31[measure.mjs]
+        N40[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N32[index.cjs]
+        N41[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N33[pinned.js]
-        N34[measure.mjs]
+        N42[pinned.js]
+        N43[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N35[dvi2svg.mjs]
-        N36[host.mjs]
-        N37[run.mjs]
-        N38[tfm.mjs]
-        N39[type1.mjs]
-        N40[vfs.mjs]
+        N44[dvi2svg.mjs]
+        N45[host.mjs]
+        N46[run.mjs]
+        N47[tfm.mjs]
+        N48[type1.mjs]
+        N49[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N41[dvisvgm-specials.mjs]
+        N50[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
+    N8 --> N35
+    N8 --> N13
+    N8 --> N16
+    N9 --> N35
+    N9 --> N13
+    N9 --> N16
+    N12 --> N10
+    N12 --> N11
+    N12 --> N15
+    N12 --> N16
+    N13 --> N3
+    N14 --> N3
+    N16 --> N3
+    N16 --> N10
+    N16 --> N11
+    N16 --> N14
+    N16 --> N15
     N1 --> N3
     N1 --> N7
     N1 --> N0
@@ -815,62 +991,56 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N27
+    N2 --> N36
     N2 --> N6
-    N8 --> N3
-    N8 --> N0
-    N8 --> N26
-    N8 --> N10
-    N8 --> N23
-    N8 --> N24
-    N9 --> N3
-    N9 --> N26
-    N9 --> N10
-    N10 --> N3
-    N10 --> N11
-    N12 --> N10
-    N13 --> N2
-    N13 --> N5
-    N13 --> N1
-    N13 --> N6
-    N13 --> N3
-    N14 --> N8
-    N14 --> N26
-    N14 --> N17
-    N14 --> N19
-    N15 --> N26
-    N15 --> N17
-    N15 --> N19
-    N16 --> N17
     N17 --> N3
-    N18 --> N17
-    N18 --> N16
-    N18 --> N22
-    N18 --> N21
-    N18 --> N20
+    N17 --> N0
+    N17 --> N35
+    N17 --> N19
+    N17 --> N32
+    N17 --> N33
+    N18 --> N3
+    N18 --> N35
     N18 --> N19
-    N19 --> N10
-    N19 --> N16
-    N19 --> N17
-    N19 --> N21
+    N19 --> N3
     N19 --> N20
-    N19 --> N22
-    N20 --> N17
-    N20 --> N21
-    N21 --> N17
-    N22 --> N17
-    N4 --> N6
-    N23 --> N0
-    N23 --> N1
-    N23 --> N3
-    N25 --> N3
+    N21 --> N19
+    N22 --> N2
+    N22 --> N5
+    N22 --> N1
+    N22 --> N6
+    N22 --> N3
+    N23 --> N17
+    N23 --> N35
+    N23 --> N26
+    N23 --> N28
+    N24 --> N35
+    N24 --> N26
+    N24 --> N28
     N25 --> N26
-    N26 --> N6
-    N27 --> N3
+    N26 --> N3
     N27 --> N26
-    N35 --> N38
-    N35 --> N39
-    N37 --> N36
+    N27 --> N25
+    N27 --> N31
+    N27 --> N30
+    N27 --> N29
+    N27 --> N28
+    N28 --> N19
+    N28 --> N25
+    N28 --> N26
+    N28 --> N30
+    N28 --> N29
+    N28 --> N31
+    N29 --> N26
+    N29 --> N30
+    N30 --> N26
+    N31 --> N26
+    N4 --> N6
+    N32 --> N0
+    N32 --> N1
+    N32 --> N3
+    N34 --> N3
+    N34 --> N35
 ```
 
 ---
@@ -880,17 +1050,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 130 |
-| Subsystems | 12 |
-| Total Lines of Code | 14937 |
-| Total Exports | 245 |
-| Total Re-exports | 45 |
-| Total Classes | 5 |
-| Total Interfaces | 42 |
-| Total Functions | 109 |
+| Total Source Files | 144 |
+| Subsystems | 13 |
+| Total Lines of Code | 15889 |
+| Total Exports | 280 |
+| Total Re-exports | 55 |
+| Total Classes | 6 |
+| Total Interfaces | 47 |
+| Total Functions | 121 |
 | Total Type Guards | 2 |
 | Total Enums | 0 |
-| Type-only Imports | 18 |
+| Type-only Imports | 21 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

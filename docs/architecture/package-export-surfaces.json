@@ -1,5 +1,30 @@
 {
   "surfaces": {
+    "browser": [
+      "CdpConnection",
+      "CdpSocket",
+      "DEFAULT_HEIGHT",
+      "DEFAULT_SCALE",
+      "DEFAULT_WIDTH",
+      "FlagInputs",
+      "HtmlFormat",
+      "HtmlPageRequest",
+      "HtmlPageResult",
+      "PAGE_URL",
+      "PROFILE_PREFIX",
+      "RefusingProxy",
+      "blockedWarnings",
+      "browserPathOf",
+      "forcedBrowserFlags",
+      "htmlSource",
+      "makeProfile",
+      "parsePdfOptions",
+      "parsePngOptions",
+      "removeProfile",
+      "render",
+      "renderHtmlPage",
+      "startRefusingProxy"
+    ],
     "entry": [
       "Capability",
       "INPUT_TYPES",

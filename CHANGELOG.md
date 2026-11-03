@@ -2,6 +2,18 @@
 
 This file records all notable changes to this project. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- The subpath `./browser`: a Chrome DevTools Protocol client over the built-in `WebSocket`, with no npm dependency. Each start uses a new temporary profile and runs headless. Each start uses the forced flags: a refusing proxy, the loopback bypass list, a DNS block and the WebRTC policy. The client never passes `--no-sandbox`. The `Fetch` domain refuses each page request, except the page itself.
+- The formats `html` to `png` (a screenshot of the page at a given width, height and device scale) and `html` to `pdf` (`Page.printToPDF`). Both need the browser stage. The browser path comes from `SCIENG_BROWSER` or the `browser` key. Without it, both reject with `E_STAGE_MISSING`, and `capabilities` reports them as not ready.
+- The browser profile, the proxy and the browser process are removed before a render returns, on the success path and on each failure path.
+
+### Changed
+
+- The smoke test imports the `./browser` subpath. It no longer checks that the subpath is absent.
+
 ## [0.2.0] - 2026-11-03
 
 ### Added

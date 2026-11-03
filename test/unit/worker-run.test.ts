@@ -7,7 +7,7 @@ import { TEST_REGISTRY } from "../support/test-registry.ts";
 import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
 
 const moduleUrl = TEST_REGISTRY["dot:svg"]!.moduleUrl;
-const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL };
+const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL, browser: undefined, timeoutMs: 60000 };
 const OK_JOB = { moduleUrl, backend: "test/fixed", request: { type: "dot" as const, format: "svg" as const, source: "ok", options: {}, settings: SETTINGS } };
 const FOREIGN_MODULE_URL = new URL("../support/stubs/stub-foreign-error.ts", import.meta.url).href;
 
