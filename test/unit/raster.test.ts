@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { RenderError } from "../../src/errors.ts";
-import { isFontFile, svgToPng } from "../../src/raster/index.ts";
+import { isFontFile, MAX_PNG_PIXEL_MB, svgToPng } from "../../src/raster/index.ts";
 import { countOpaquePixels, decodePng } from "../support/png-decode.ts";
 
 const FONT_BYTES = new Uint8Array(readFileSync(fileURLToPath(new URL("../../assets/fonts/LiberationSerif-Regular.ttf", import.meta.url))));
@@ -55,11 +55,42 @@ describe("svgToPng", () => {
   });
 });
 
+describe("svgToPng pixel cap", () => {
+  test("a PNG over the fixed pixel cap rejects with E_LIMIT even when maxMemoryMb is larger", async () => {
+    // The cap holds because resvg keeps about two copies of the pixel buffer in a WASM memory of at most 4 GiB.
+    const side = Math.ceil(Math.sqrt(((MAX_PNG_PIXEL_MB + 1) * 1048576) / 4));
+    const huge = `<svg xmlns="http://www.w3.org/2000/svg" width="${side}" height="${side}"><rect width="1" height="1"/></svg>`;
+    const err = await rejectionOf(svgToPng(huge, { scale: 1, maxMemoryMb: 8192 }));
+    expect(err.code).toBe("E_LIMIT");
+    expect(err.message).toContain("pixel");
+  });
+
+  test("the cap is below the 4 GiB WASM memory with room for two copies", () => {
+    expect(MAX_PNG_PIXEL_MB).toBeLessThanOrEqual(1024);
+  });
+});
+
+describe("svgToPng failure paths", () => {
+  test("an SVG that resvg cannot parse rejects with E_INPUT", async () => {
+    const err = await rejectionOf(svgToPng("<svg", { scale: 1, maxMemoryMb: 2048 }));
+    expect(err.code).toBe("E_INPUT");
+  });
+
+  test("a render after a failed render still works", async () => {
+    await rejectionOf(svgToPng("<svg", { scale: 1, maxMemoryMb: 2048 }));
+    expect((await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048 })).byteLength).toBeGreaterThan(50);
+  });
+});
+
 describe("isFontFile", () => {
   test("accepts a TrueType, an OpenType and an Apple TrueType signature", () => {
     expect(isFontFile(new Uint8Array([0, 1, 0, 0, 0, 0]))).toBe(true);
     expect(isFontFile(new TextEncoder().encode("OTTO0000"))).toBe(true);
     expect(isFontFile(new TextEncoder().encode("true0000"))).toBe(true);
+  });
+
+  test("rejects a TrueType collection, because resvg gets one font buffer", () => {
+    expect(isFontFile(new TextEncoder().encode("ttcf0000"))).toBe(false);
   });
 
   test("rejects an empty file, a short file and text", () => {
