@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { render } from "../../src/index.ts";
+import { renderIsolated } from "../support/test-registry.ts";
 import { blockNetwork } from "../support/network-guard.ts";
 
 const CLASS = 'classDiagram\nclass Animal\nAnimal : +String home "http://127.0.0.1:9/page.png"';
@@ -12,13 +12,13 @@ describe("mermaid native layouts with allowNetwork none", () => {
     const restore = blockNetwork(attempts);
     try {
       for (const source of [CLASS, STATE, SEQUENCE]) {
-        const result = await render({ type: "mermaid", source, format: "svg" }, { allowNetwork: "none" });
+        const result = await renderIsolated({ type: "mermaid", source, format: "svg" }, { allowNetwork: "none" });
         const svg = new TextDecoder().decode(result.bytes);
         expect(svg).toContain("<svg");
         expect(svg).not.toContain("<image");
         expect(svg).not.toContain('href="');
       }
-      const png = await render({ type: "mermaid", source: SEQUENCE, format: "png" }, { allowNetwork: "none" });
+      const png = await renderIsolated({ type: "mermaid", source: SEQUENCE, format: "png" }, { allowNetwork: "none" });
       expect(png.bytes[0]).toBe(0x89);
     } finally {
       restore();

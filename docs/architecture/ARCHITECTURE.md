@@ -53,7 +53,7 @@ Chrome can relaunch itself when the session is elevated. The process that the ch
 | Attribute | Measure |
 |---|---|
 | Speed | A worker render with a 500 ms limit ends at 739 ms under Node 26. |
-| Stability | No test reads the configuration file of the host. The page checker tests skip only when no browser is named. CI never skips them. |
+| Stability | The unit tests read no configuration file of the host. The page checker tests skip only when no browser is named. CI never skips them. |
 | Reliability | The CI smoke test packs the package. The CI smoke test installs the tarball in a fresh folder. The CI smoke test imports the tarball under Node 22. |
 | Security | Pinned action SHAs. A read-only token. No job publishes a package. |
 | Maintainability | One default per configuration key. One table of supported pairs. |

@@ -5,7 +5,7 @@ import https from "node:https";
 import net from "node:net";
 import { dotToSvg } from "../../src/graph/dot.ts";
 import { svgToPng } from "../../src/raster/index.ts";
-import { render } from "../../src/index.ts";
+import { renderIsolated } from "../support/test-registry.ts";
 import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
 import { blockNetwork } from "../support/network-guard.ts";
 
@@ -34,7 +34,7 @@ function hrefs(svg: string): { element: string; value: string }[] {
 
 describe("graph stage with allowNetwork none", () => {
   test("the public render to svg holds no external reference and gives a warning for each removed one", async () => {
-    const result = await render({ type: "dot", source: SOURCE, format: "svg" }, { allowNetwork: "none" });
+    const result = await renderIsolated({ type: "dot", source: SOURCE, format: "svg" }, { allowNetwork: "none" });
     expect(result.mime).toBe("image/svg+xml");
     const svg = new TextDecoder().decode(result.bytes);
     expect(svg).toContain("<svg");
@@ -53,7 +53,7 @@ describe("graph stage with allowNetwork none", () => {
   });
 
   test("the public render to png succeeds under allowNetwork none", async () => {
-    const result = await render({ type: "dot", source: SOURCE, format: "png" }, { allowNetwork: "none", assetsUrl: ASSETS });
+    const result = await renderIsolated({ type: "dot", source: SOURCE, format: "png" }, { allowNetwork: "none", assetsUrl: ASSETS });
     expect(result.mime).toBe("image/png");
     expect(result.bytes.byteLength).toBeGreaterThan(100);
   });
