@@ -1,7 +1,11 @@
-import { expect, test } from "bun:test";
+import { afterAll, expect, test } from "bun:test";
+import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
 import { renderIsolated } from "../support/test-registry.ts";
 
 const NONE = { allowNetwork: "none" as const };
+const scratch = makeScratch("scieng-mermaid-scale-");
+const PNG = { ...NONE, assetsUrl: makeAssetsFolder(scratch, "assets", realFiles()) };
+afterAll(() => removeScratch(scratch));
 
 test("a directive before a native class diagram renders with lenient and warns", async () => {
   const out = await renderIsolated(
@@ -36,8 +40,8 @@ test("the mermaid svg and png capabilities say which types need the browser stag
 test("a native png takes the option scale, and scale 2 doubles the pixel width", async () => {
   const req = { type: "mermaid" as const, source: "classDiagram\nclass A", format: "png" as const };
   const width = (b: Uint8Array): number => new DataView(b.buffer, b.byteOffset).getUint32(16);
-  const one = await renderIsolated(req, NONE);
-  const two = await renderIsolated({ ...req, options: { scale: 2 } }, NONE);
+  const one = await renderIsolated(req, PNG);
+  const two = await renderIsolated({ ...req, options: { scale: 2 } }, PNG);
   expect(Math.abs(width(two.bytes) - 2 * width(one.bytes))).toBeLessThanOrEqual(1);
   await expect(renderIsolated({ ...req, options: { scale: -1 } }, NONE)).rejects.toMatchObject({ code: "E_INPUT" });
 });
