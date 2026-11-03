@@ -135,6 +135,8 @@ function runBun(testFile) {
         passed: status === 0,
         failedLine: /\(fail\)/.test(out),
         timedOut: stoppedByRunner || BUN_TIME_LIMIT.test(out),
+        // bun prints this text before the message of a failed expect(). An error that the code throws does not print it.
+        assertion: /expect\(received\)/.test(out),
       });
     });
   });
@@ -149,10 +151,6 @@ async function baseline(testFiles) {
 
 function lineNumber(text, index) {
   return text.slice(0, index).split("\n").length;
-}
-
-function lineAt(text, number) {
-  return (text.split("\n")[number - 1] ?? "").replace(/\r$/, "");
 }
 
 async function main() {
@@ -194,9 +192,8 @@ async function main() {
       results.push({
         ...m,
         line,
-        originalLine: lineAt(original, line),
-        mutatedLine: lineAt(mutated, line),
         result,
+        failure: result === "killed" ? (run.assertion ? "assertion" : "error") : undefined,
       });
     } finally {
       const { conflicts } = restoreFromBackups();
@@ -210,7 +207,8 @@ async function main() {
   const killed = scored.filter((r) => r.result === "killed").length;
   const equivalent = valid.filter((r) => r.equivalent !== null).length;
   const timeouts = scored.filter((r) => r.result === "timeout").length;
-  const summary = `killed ${killed} of ${scored.length} non-equivalent mutants; ${timeouts} timed out (never a kill); ${equivalent} equivalent excluded; ${results.length - valid.length} invalid`;
+  const assertionKills = scored.filter((r) => r.failure === "assertion").length;
+  const summary = `killed ${killed} of ${scored.length} non-equivalent mutants (${assertionKills} by an assertion, ${killed - assertionKills} by an error); ${timeouts} timed out (never a kill); ${equivalent} equivalent excluded; ${results.length - valid.length} invalid`;
 
   if (reportPath !== "") {
     const lines = [
@@ -231,10 +229,11 @@ async function main() {
     for (const r of results) {
       lines.push(`### ${r.id}: ${r.result}`, "", `- file: ${r.file}`, `- test: ${r.test}`);
       if (r.line !== undefined) lines.push(`- line: ${r.line}`);
+      if (r.failure !== undefined) lines.push(`- failure: ${r.failure}`);
       if (r.equivalent !== null) lines.push(`- equivalent: ${r.equivalent}`);
       if (r.detail !== undefined) lines.push(`- detail: ${r.detail}`);
       if (r.line !== undefined) {
-        lines.push("", "original line:", "", "```", r.originalLine, "```", "", "mutated line:", "", "```", r.mutatedLine, "```");
+        lines.push("", "original text:", "", "```", r.original, "```", "", "mutated text:", "", "```", r.replacement, "```");
       }
       lines.push("");
     }
