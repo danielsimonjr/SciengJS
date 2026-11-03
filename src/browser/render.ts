@@ -23,8 +23,14 @@ const PORT_FILE = "DevToolsActivePort";
 const HELD_READ_CODES = new Set(["EBUSY", "EPERM", "ENOENT"]);
 const IS_WINDOWS = process.platform === "win32";
 
-/** The output of the browser stage for an HTML page. */
-export type HtmlFormat = "png" | "pdf";
+/** The output of the browser stage for a page. The svg format returns the SVG that the page reports. */
+export type HtmlFormat = "png" | "pdf" | "svg";
+
+/** A pinned file that the client fulfils for one exact URL, with its bytes read before the browser starts. */
+export interface PinnedBytes {
+  bytes: Uint8Array;
+  mime: string;
+}
 
 interface HtmlPageBase {
   html: string;
@@ -34,18 +40,37 @@ interface HtmlPageBase {
   timeoutMs: number;
   /** Called with the profile folder of this render once the folder exists. A test uses it to find leaks. */
   onProfile?: (profile: string) => void;
+  /** The exact pinned URLs that the client fulfils from memory. Every other request is refused. */
+  pinned?: ReadonlyMap<string, PinnedBytes>;
+  /**
+   * The page sets window.__sciengDone to {ok, svg} or {ok, message}. The capture waits for that value. A page
+   * that reports ok false rejects with E_INPUT. A png or pdf then draws the diagram in the element sciengjs-diagram.
+   */
+  awaitDone?: boolean;
 }
 
-/** One page to draw. A png has a size and a device scale. A pdf has neither. */
+/** One page to draw. A png has a size and a device scale. A pdf has neither. An svg needs awaitDone. */
 export type HtmlPageRequest =
   | (HtmlPageBase & { format: "png"; width: number; height: number; scale: number })
-  | (HtmlPageBase & { format: "pdf" });
+  | (HtmlPageBase & { format: "pdf" })
+  | (HtmlPageBase & { format: "svg"; awaitDone: true });
 
 /** The bytes that the browser drew, and the requests that it asked for and the client refused. */
 export interface HtmlPageResult {
   bytes: Uint8Array;
   /** Each URL that the page asked for and the client refused, in order. */
   blocked: string[];
+}
+
+/** The report of a page that sets window.__sciengDone. */
+type DoneReport = { ok: true; svg: string } | { ok: false; message: string };
+
+/** The box of the diagram in CSS pixels. The png clip and the pdf page size come from it. */
+interface DiagramBox {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 /** What the client learns about the browser process while it runs. */
@@ -127,6 +152,7 @@ class Interceptor {
   constructor(
     private readonly cdp: CdpConnection,
     private readonly html: string,
+    private readonly pinned: ReadonlyMap<string, PinnedBytes>,
   ) {}
 
   record = (err: unknown): void => {
@@ -193,6 +219,23 @@ class Interceptor {
         .catch(this.record);
       return;
     }
+    const asset = this.pinned.get(paused.request.url);
+    if (asset !== undefined) {
+      // A pinned build is fulfilled from the bytes that the caller read from the engine package. No request leaves the process.
+      cdp
+        .send(
+          "Fetch.fulfillRequest",
+          {
+            requestId: paused.requestId,
+            responseCode: 200,
+            responseHeaders: [{ name: "Content-Type", value: asset.mime }],
+            body: Buffer.from(asset.bytes).toString("base64"),
+          },
+          sessionId,
+        )
+        .catch(this.record);
+      return;
+    }
     this.blocked.push(paused.request.url);
     cdp.send("Fetch.failRequest", { requestId: paused.requestId, errorReason: "BlockedByClient" }, sessionId).catch(this.record);
   }
@@ -208,7 +251,7 @@ export async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, dead
 }
 
 async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPageResult> {
-  const guard = new Interceptor(cdp, req.html);
+  const guard = new Interceptor(cdp, req.html, req.pinned ?? new Map());
   // A new page that the page opens (window.open) is a new target of the browser. The browser-level auto-attach
   // pauses it until it is guarded. A target of the browser itself (for example a built-in extension) is not a
   // target of the page: the client lets it run, and the forced flags keep its connections on the proxy.
@@ -236,7 +279,7 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
   });
   await cdp.send("Page.enable", {}, s);
   await cdp.send("Page.setLifecycleEventsEnabled", { enabled: true }, s);
-  if (req.format === "png") {
+  if (req.format === "png" && req.awaitDone !== true) {
     await cdp.send(
       "Emulation.setDeviceMetricsOverride",
       { width: req.width, height: req.height, deviceScaleFactor: req.scale, mobile: false },
@@ -257,14 +300,89 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
     });
   }
 
-  const data =
-    req.format === "png"
-      ? ((await cdp.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false }, s)) as { data: string })
-      : ((await cdp.send("Page.printToPDF", { printBackground: true, preferCSSPageSize: true }, s)) as { data: string });
+  let bytes: Uint8Array;
+  if (req.awaitDone === true) {
+    const done = await awaitDoneReport(cdp, s);
+    if (!done.ok) throw new RenderError("E_INPUT", done.message);
+    if (req.format === "svg") {
+      bytes = new TextEncoder().encode(done.svg);
+    } else {
+      bytes = await drawDiagram(cdp, s, req);
+    }
+  } else if (req.format === "pdf") {
+    await fitPageToDiagram(cdp, s);
+    bytes = await printPdf(cdp, s);
+  } else if (req.format === "png") {
+    const data = (await cdp.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false }, s)) as { data: string };
+    bytes = Buffer.from(data.data, "base64");
+  } else {
+    throw new RenderError("E_INTERNAL", "the page format is not drawn by this stage");
+  }
   if (guard.faults.length > 0) {
     throw new RenderError("E_INTERNAL", `the browser rejected a page request: ${guard.faults[0]?.message ?? "unknown"}`);
   }
-  return { bytes: Buffer.from(data.data, "base64"), blocked: guard.blocked };
+  return { bytes, blocked: guard.blocked };
+}
+
+/** Waits until the page sets window.__sciengDone. The wait is one promise that the browser resolves. */
+async function awaitDoneReport(cdp: CdpConnection, s: string): Promise<DoneReport> {
+  const expression =
+    "new Promise((resolve) => { const poll = () => (window.__sciengDone ? resolve(window.__sciengDone) : setTimeout(poll, 50)); poll(); })";
+  const reply = (await cdp.send("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true }, s)) as {
+    result?: { value?: DoneReport };
+    exceptionDetails?: unknown;
+  };
+  const value = reply.result?.value;
+  if (reply.exceptionDetails !== undefined || value === undefined) {
+    throw new RenderError("E_INTERNAL", "the page did not report a result");
+  }
+  return value;
+}
+
+/** Reads the box of the first SVG of the diagram element, or undefined when the page has no diagram. */
+async function diagramBox(cdp: CdpConnection, s: string): Promise<DiagramBox | undefined> {
+  const expression =
+    '(() => { const e = document.querySelector("#sciengjs-diagram svg"); if (!e) return null; const r = e.getBoundingClientRect(); ' +
+    "return { x: r.x, y: r.y, width: Math.ceil(r.width), height: Math.ceil(r.height) }; })()";
+  const reply = (await cdp.send("Runtime.evaluate", { expression, returnByValue: true }, s)) as {
+    result?: { value?: DiagramBox | null };
+  };
+  const box = reply.result?.value;
+  return box === null || box === undefined || box.width <= 0 || box.height <= 0 ? undefined : box;
+}
+
+/** Draws the diagram of a page that reports done: a png clipped to the diagram box. */
+async function drawDiagram(cdp: CdpConnection, s: string, req: HtmlPageRequest): Promise<Uint8Array> {
+  if (req.format === "svg") throw new RenderError("E_INTERNAL", "an svg is not drawn from a box");
+  const box = await diagramBox(cdp, s);
+  if (box === undefined) throw new RenderError("E_INPUT", "the diagram has no drawable size");
+  if (req.format === "pdf") {
+    await fitPageToDiagram(cdp, s);
+    return printPdf(cdp, s);
+  }
+  const data = (await cdp.send(
+    "Page.captureScreenshot",
+    { format: "png", captureBeyondViewport: true, clip: { x: box.x, y: box.y, width: box.width, height: box.height, scale: 1 } },
+    s,
+  )) as { data: string };
+  return Buffer.from(data.data, "base64");
+}
+
+/** Sets the pdf page size to the diagram box, so that the pdf holds one page of the diagram. A page with no diagram keeps its size. */
+async function fitPageToDiagram(cdp: CdpConnection, s: string): Promise<void> {
+  const box = await diagramBox(cdp, s);
+  if (box === undefined) return;
+  const css = `@page { size: ${box.width}px ${box.height}px; margin: 0 }`;
+  await cdp.send(
+    "Runtime.evaluate",
+    { expression: `(() => { const st = document.createElement("style"); st.textContent = ${JSON.stringify(css)}; document.head.appendChild(st); })()` },
+    s,
+  );
+}
+
+async function printPdf(cdp: CdpConnection, s: string): Promise<Uint8Array> {
+  const data = (await cdp.send("Page.printToPDF", { printBackground: true, preferCSSPageSize: true }, s)) as { data: string };
+  return Buffer.from(data.data, "base64");
 }
 
 function hasExited(child: ChildProcess): boolean {

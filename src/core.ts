@@ -86,7 +86,7 @@ export async function renderWithRegistry(
   return {
     bytes: out.bytes,
     mime: MIME[req.format],
-    backend: entry.backend,
+    backend: out.backend ?? entry.backend,
     warnings: out.warnings ?? [],
   };
 }

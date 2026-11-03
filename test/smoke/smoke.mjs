@@ -53,6 +53,12 @@ try {
   if (!readFileSync(shippedWasm).equals(readFileSync(lockedWasm))) {
     throw new Error("the shipped assets/index_bg.wasm differs from the locked @resvg/resvg-wasm file");
   }
+  const shippedMermaid = join(installedAssets, "mermaid.min.js");
+  if (!existsSync(shippedMermaid)) throw new Error("the installed package has no assets/mermaid.min.js");
+  const lockedMermaid = createRequire(join(repo, "package.json")).resolve("mermaid/dist/mermaid.min.js");
+  if (!readFileSync(shippedMermaid).equals(readFileSync(lockedMermaid))) {
+    throw new Error("the shipped assets/mermaid.min.js differs from the locked mermaid dist file");
+  }
   // A folder with the bundled font and no WASM file: a render through the folder must reject with E_STAGE_MISSING.
   const noWasmFolder = join(app, "no-wasm-assets");
   mkdirSync(join(noWasmFolder, "fonts"), { recursive: true });
@@ -113,7 +119,18 @@ try {
   if (!(err instanceof RenderError)) throw err;
   flowCode = err.code;
 }
-if (flowCode !== "E_UNSUPPORTED") throw new Error("expected E_UNSUPPORTED for a flowchart, got " + flowCode);
+if (flowCode !== "E_STAGE_MISSING") throw new Error("expected E_STAGE_MISSING for a flowchart with no browser, got " + flowCode);
+for (const [label, req] of [["dot to pdf", { type: "dot", source: "digraph G { a -> b }", format: "pdf" }], ["mermaid to pdf", { type: "mermaid", source: mermaidSequence, format: "pdf" }]]) {
+  let pdfCode = "none";
+  try {
+    await render(req, {});
+  } catch (err) {
+    if (!(err instanceof RenderError)) throw err;
+    pdfCode = err.code;
+  }
+  if (pdfCode !== "E_STAGE_MISSING") throw new Error(label + " with no browser must reject with E_STAGE_MISSING, got " + pdfCode);
+}
+
 let code = "none";
 try {
   await render({ type: "math", source: "x", format: "svg" }, {});

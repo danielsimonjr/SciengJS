@@ -6,3 +6,4 @@ coverage/
 *.mutation-backup
 *.mutation-hash
 assets/index_bg.wasm
+assets/mermaid.min.js

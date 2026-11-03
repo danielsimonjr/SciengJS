@@ -95,6 +95,21 @@ export function outside(ctx: Context, line: number, text: string, why: string): 
  */
 export function prepare(source: string, options: Record<string, unknown>, extra: readonly string[] = []): Source {
   const ctx: Context = { lenient: readLenient(options, extra), warnings: [] };
+  const content = scanContent(source, ctx);
+  return headerOf(content, ctx);
+}
+
+/**
+ * Tells whether a source routes to the browser stage. A source routes there when its header is not one of the
+ * native kinds. A source with no header stays on the native path, which rejects it.
+ */
+export function routesToBrowser(source: string): boolean {
+  const head = scanContent(source, { lenient: false, warnings: [] })[0];
+  return head !== undefined && !HEADERS.has(head.text);
+}
+
+/** Removes blank lines, comment lines and directives, and keeps the content lines with their line numbers. */
+function scanContent(source: string, ctx: Context): ContentLine[] {
   const raw = source.split(/\r?\n/);
   const content: ContentLine[] = [];
 
@@ -121,7 +136,11 @@ export function prepare(source: string, options: Record<string, unknown>, extra:
     }
     content.push({ number, text });
   }
+  return content;
+}
 
+/** Reads the header of the content lines and returns the source. A type that the native layouts do not draw rejects. */
+function headerOf(content: ContentLine[], ctx: Context): Source {
   const head = content[0];
   if (head === undefined) {
     throw new RenderError("E_INPUT", "the source names no Mermaid diagram type");

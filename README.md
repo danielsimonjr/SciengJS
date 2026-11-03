@@ -150,7 +150,7 @@ const source = "sequenceDiagram\nAlice->>Bob: Hello Bob\nBob-->>Alice: Hi Alice"
 const { bytes, warnings } = await render({ type: "mermaid", source, format: "svg" }, {});
 ```
 
-Other Mermaid diagram types reject with `E_UNSUPPORTED`.
+Other Mermaid diagram types (for example flowchart and gantt) go through the browser stage. They need `SCIENG_BROWSER`. Without it they reject with `E_STAGE_MISSING`. The pinned Mermaid build ships in the package, and the browser stage serves it to the page, so no request leaves the process.
 
 ## Roadmap
 

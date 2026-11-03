@@ -45,10 +45,10 @@ describe("mermaid through render: the native layouts draw three diagram types", 
 });
 
 describe("mermaid through render: rejections and lenient mode", () => {
-  test("a flowchart is refused with E_UNSUPPORTED, and the message names the browser stage", async () => {
+  test("a flowchart with no browser path is refused with E_STAGE_MISSING, and the message names the browser stage", async () => {
     const err = await rejectionOf(renderIsolated({ type: "mermaid", source: "flowchart LR\nA --> B", format: "svg" }, NETWORK_NONE));
-    expect(err.code).toBe("E_UNSUPPORTED");
-    expect(err.message).toContain("browser stage");
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("SCIENG_BROWSER");
   });
 
   test("an option other than lenient is refused with E_INPUT", async () => {

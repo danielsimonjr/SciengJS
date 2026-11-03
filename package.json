@@ -70,6 +70,7 @@
   "devDependencies": {
     "@types/bun": "^1.4.4",
     "@types/node": "^22",
+    "mermaid": "11.17.2",
     "typescript": "^7.0.2"
   },
   "dependencies": {
