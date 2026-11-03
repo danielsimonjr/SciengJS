@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { RenderError } from "../../src/errors.ts";
-import { render } from "../../src/graph/backend-png.ts";
+import { render, renderPng } from "../../src/graph/backend-png.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 import { countDarkPixels, decodePng } from "../support/png-decode.ts";
 
@@ -89,9 +89,69 @@ describe("dot to png backend", () => {
   });
 
   test("a rasterFont with a font signature is used in place of the bundled font", async () => {
+    // A file with a TrueType signature and no tables holds no glyph, so a render that uses it draws no text.
+    const path = join(scratch, "no-glyphs.ttf");
+    writeFileSync(path, new Uint8Array(64));
+    const bytes = new Uint8Array(64);
+    bytes.set([0, 1, 0, 0]);
+    writeFileSync(path, bytes);
+    const labelled = 'digraph G { a [label="WWWWWWWWWWWW"] }';
+    const withBundled = await render({ ...request(), source: labelled });
+    const withReplacement = await render({ ...request({}, path), source: labelled });
+    expect(Array.from(withReplacement.bytes.subarray(0, 8))).toEqual(PNG_SIGNATURE);
+    const drawn = countDarkPixels(decodePng(withBundled.bytes));
+    const blank = countDarkPixels(decodePng(withReplacement.bytes));
+    expect(drawn).toBeGreaterThan(blank + 200);
+  });
+
+  test("a copy of the bundled font gives the same PNG as the bundled font", async () => {
     const path = join(scratch, "copy.ttf");
     copyFileSync(BUNDLED_FONT, path);
-    const out = await render(request({}, path));
+    const same = await render(request({}, path));
+    const bundled = await render(request());
+    expect(Buffer.from(same.bytes).equals(Buffer.from(bundled.bytes))).toBe(true);
+  });
+
+  test("a TrueType collection rejects with E_CONFIG, because the stage takes one font file", async () => {
+    const path = join(scratch, "collection.ttc");
+    writeFileSync(path, new TextEncoder().encode("ttcf0000"));
+    const err = await rejectionOf(render(request({}, path)));
+    expect(err.code).toBe("E_CONFIG");
+  });
+
+  test("a missing bundled font rejects with E_STAGE_MISSING and names the path", async () => {
+    const missing = join(scratch, "no-such-bundled.ttf");
+    const err = await rejectionOf(renderPng(request(), missing));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain(missing);
+  });
+
+  test("a bundled font that is not a font rejects with E_STAGE_MISSING", async () => {
+    const path = join(scratch, "bundled-text.ttf");
+    writeFileSync(path, "not a font");
+    const err = await rejectionOf(renderPng(request(), path));
+    expect(err.code).toBe("E_STAGE_MISSING");
+  });
+
+  test("a configured rasterFont is read in place of the bundled path, even when the bundled path is missing", async () => {
+    const path = join(scratch, "configured.ttf");
+    copyFileSync(BUNDLED_FONT, path);
+    const out = await renderPng(request({}, path), join(scratch, "no-such-bundled.ttf"));
     expect(Array.from(out.bytes.subarray(0, 8))).toEqual(PNG_SIGNATURE);
+  });
+
+  test("bold, italic and CJK labels give one warning each for the face and the glyphs", async () => {
+    const out = await render({ ...request(), source: 'digraph G { a [label=<<B>x</B> <I>y</I>>]; b [label="日本"] }' });
+    const warnings = out.warnings ?? [];
+    const ours = warnings.filter((w) => !w.startsWith("graphviz"));
+    expect(ours).toHaveLength(3);
+    expect(warnings.join(" ")).toContain("bold");
+    expect(warnings.join(" ")).toContain("italic");
+    expect(warnings.join(" ")).toContain("no glyph");
+  });
+
+  test("a label that the font can draw gives no warning", async () => {
+    const out = await render(request());
+    expect(out.warnings).toEqual([]);
   });
 });
