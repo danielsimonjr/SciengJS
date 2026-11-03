@@ -34,11 +34,15 @@ The heap limit comes from `maxMemoryMb`. Node enforces it, and Node is the relea
 
 The registry maps `type:format` to a backend module URL. The worker imports that module. The public `render` uses the built-in registry. The tests pass their own registry through `renderWithRegistry`. The public surface does not change.
 
-In increment I0 the built-in registry is empty. A pair that is in the table but has no backend rejects with `E_UNSUPPORTED`.
+The built-in registry names the backend of each pair that this release draws. A pair that is in the table but has no backend rejects with `E_UNSUPPORTED`.
 
 ### Configuration failures stop the render
 
 An unreadable file, an invalid file, an unknown key and an invalid value reject with `E_CONFIG`. The loader does not fall back to the defaults for a source that the loader could not read. A missing file is an error only when `SCIENG_CONFIG` names it. At the default path, a missing file is not an error.
+
+### The engine draws Mermaid diagrams without a browser
+
+The engine draws three Mermaid diagram types with its own parser. A class diagram or a state diagram becomes DOT, and the graph stage draws it. A sequence diagram has its own layout. The other Mermaid types need a browser, and the browser stage does not exist yet. The engine rejects them with `E_UNSUPPORTED`.
 
 ### Browser closing is by protocol
 
@@ -49,12 +53,11 @@ Chrome can relaunch itself when the session is elevated. The process that the ch
 | Attribute | Measure |
 |---|---|
 | Speed | A worker render with a 500 ms limit ends at 739 ms under Node 26. |
-| Stability | No test reads the user configuration. The page checker tests skip only when no browser is named. CI never skips them. |
+| Stability | The unit tests read no configuration file of the host. The page checker tests skip only when no browser is named. CI never skips them. |
 | Reliability | The CI smoke test packs the package. The CI smoke test installs the tarball in a fresh folder. The CI smoke test imports the tarball under Node 22. |
 | Security | Pinned action SHAs. A read-only token. No job publishes a package. |
 | Maintainability | One default per configuration key. One table of supported pairs. |
 
 ## Open decisions
 
-- The per-type render options are an open bag in increment I0. Each increment types its own keys.
 - The browser stage, the mesh stage and the TeX stage need their trial results before their designs are final.

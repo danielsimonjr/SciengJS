@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="576" viewBox="0 0 320 576">
+<rect x="40" y="86" width="240" height="80" fill="none" stroke="#000000" data-scieng-kind="block" data-scieng-type="loop" data-scieng-line="4"/>
+<text x="46" y="100" font-size="14">loop Every minute</text>
+<line x1="40" y1="266" x2="280" y2="266" stroke="#000000" stroke-dasharray="6 4" data-scieng-kind="divider" data-scieng-line="9"/>
+<text x="46" y="280" font-size="14">else Not ready</text>
+<rect x="40" y="196" width="240" height="150" fill="none" stroke="#000000" data-scieng-kind="block" data-scieng-type="alt" data-scieng-line="7"/>
+<text x="46" y="210" font-size="14">alt Ready</text>
+<line x1="40" y1="446" x2="280" y2="446" stroke="#000000" stroke-dasharray="6 4" data-scieng-kind="divider" data-scieng-line="14"/>
+<text x="46" y="460" font-size="14">and Fetch body</text>
+<rect x="40" y="376" width="240" height="150" fill="none" stroke="#000000" data-scieng-kind="block" data-scieng-type="par" data-scieng-line="12"/>
+<text x="46" y="390" font-size="14">par Fetch headers</text>
+<line x1="70" y1="56" x2="70" y2="556" stroke="#888888" stroke-dasharray="4 4" data-scieng-kind="lifeline" data-scieng-id="User"/>
+<line x1="250" y1="56" x2="250" y2="556" stroke="#888888" stroke-dasharray="4 4" data-scieng-kind="lifeline" data-scieng-id="Server"/>
+<line x1="70" y1="126" x2="250" y2="126" stroke="#000000" data-scieng-kind="message" data-scieng-row="0" data-scieng-line="5"/>
+<polygon points="250,126 240,121 240,131" fill="#000000"/>
+<text x="160" y="120" text-anchor="middle" font-size="14">Poll</text>
+<line x1="250" y1="236" x2="70" y2="236" stroke="#000000" stroke-dasharray="4 3" data-scieng-kind="message" data-scieng-row="1" data-scieng-line="8"/>
+<polygon points="70,236 80,231 80,241" fill="#000000"/>
+<text x="160" y="230" text-anchor="middle" font-size="14">Data</text>
+<line x1="250" y1="306" x2="70" y2="306" stroke="#000000" stroke-dasharray="4 3" data-scieng-kind="message" data-scieng-row="2" data-scieng-line="10"/>
+<polygon points="70,306 80,301 80,311" fill="#000000"/>
+<text x="160" y="300" text-anchor="middle" font-size="14">Retry later</text>
+<line x1="70" y1="416" x2="250" y2="416" stroke="#000000" data-scieng-kind="message" data-scieng-row="3" data-scieng-line="13"/>
+<polygon points="250,416 240,411 240,421" fill="#000000"/>
+<text x="160" y="410" text-anchor="middle" font-size="14">Headers</text>
+<line x1="70" y1="486" x2="250" y2="486" stroke="#000000" data-scieng-kind="message" data-scieng-row="4" data-scieng-line="15"/>
+<polygon points="250,486 240,481 240,491" fill="#000000"/>
+<text x="160" y="480" text-anchor="middle" font-size="14">Body</text>
+<rect x="20" y="20" width="100" height="36" rx="4" fill="#ffffff" stroke="#000000" data-scieng-kind="participant" data-scieng-id="User"/>
+<text x="70" y="42" text-anchor="middle" font-size="14">User</text>
+<rect x="200" y="20" width="100" height="36" rx="4" fill="#ffffff" stroke="#000000" data-scieng-kind="participant" data-scieng-id="Server"/>
+<text x="250" y="42" text-anchor="middle" font-size="14">Server</text>
+</svg>

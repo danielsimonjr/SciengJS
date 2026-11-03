@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { render } from "../../src/index.ts";
+import { renderIsolated } from "../support/test-registry.ts";
 
 /** A generated graph of 100 nodes and 199 edges. Its layout is the slow case of trial T1. */
 function largeGraph(nodes: number): string {
@@ -16,7 +16,7 @@ function largeGraph(nodes: number): string {
 describe("a large graph", () => {
   // The default timeout of 60000 ms covers the corpus graphs. A graph of 100 nodes sets its own limit.
   test("a 100-node graph renders with its own time limit and draws every node", async () => {
-    const result = await render(
+    const result = await renderIsolated(
       { type: "dot", source: largeGraph(100), format: "svg" },
       { timeoutMs: 120000 },
     );

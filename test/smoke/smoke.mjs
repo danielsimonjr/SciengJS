@@ -64,8 +64,10 @@ try {
     `import { capabilities, render, RenderError } from "@danielsimonjr/sciengjs";
 import * as graph from "@danielsimonjr/sciengjs/graph";
 import * as raster from "@danielsimonjr/sciengjs/raster";
+import * as mermaid from "@danielsimonjr/sciengjs/mermaid";
 if (typeof graph.dotToSvg !== "function" || typeof raster.svgToPng !== "function") throw new Error("a stage subpath did not load");
-for (const empty of ["mermaid", "math", "tex", "plot", "sysml", "mesh", "browser", "html"]) {
+if (typeof mermaid.renderMermaidSvg !== "function" || typeof mermaid.layoutSequence !== "function") throw new Error("the mermaid subpath did not load");
+for (const empty of ["math", "tex", "plot", "sysml", "mesh", "browser", "html"]) {
   let refused = false;
   try {
     await import("@danielsimonjr/sciengjs/" + empty);
@@ -93,6 +95,23 @@ try {
 if (missingCode !== "E_STAGE_MISSING" || !missingMessage.includes("index_bg.wasm")) {
   throw new Error("a missing WASM file under assetsUrl must reject with E_STAGE_MISSING naming index_bg.wasm, got " + missingCode + ": " + missingMessage);
 }
+const mermaidSequence = "sequenceDiagram\\nAlice->>Bob: Hello Bob";
+const mermaidSources = [["class", "classDiagram\\nclass Animal\\nAnimal <|-- Dog"], ["state", "stateDiagram-v2\\n[*] --> Still"], ["sequence", mermaidSequence]];
+for (const [label, source] of mermaidSources) {
+  const out = await render({ type: "mermaid", source, format: "svg" }, {});
+  if (out.backend !== "mermaid/native") throw new Error("mermaid " + label + " did not use the mermaid backend");
+  if (!new TextDecoder().decode(out.bytes).includes("<svg")) throw new Error("mermaid " + label + " to svg returned no svg");
+}
+const mermaidPng = await render({ type: "mermaid", source: mermaidSequence, format: "png" }, {});
+if (mermaidPng.bytes[0] !== 0x89 || mermaidPng.bytes[1] !== 0x50 || mermaidPng.bytes[2] !== 0x4e || mermaidPng.bytes[3] !== 0x47) throw new Error("mermaid to png returned no PNG");
+let flowCode = "none";
+try {
+  await render({ type: "mermaid", source: "flowchart LR\\nA --> B", format: "svg" }, {});
+} catch (err) {
+  if (!(err instanceof RenderError)) throw err;
+  flowCode = err.code;
+}
+if (flowCode !== "E_UNSUPPORTED") throw new Error("expected E_UNSUPPORTED for a flowchart, got " + flowCode);
 let code = "none";
 try {
   await render({ type: "math", source: "x", format: "svg" }, {});
@@ -101,7 +120,7 @@ try {
   code = err.code;
 }
 if (code !== "E_UNSUPPORTED") throw new Error("expected E_UNSUPPORTED for a pair with no backend, got " + code);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; math to svg rejected with " + code);
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg rejected with " + code);
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

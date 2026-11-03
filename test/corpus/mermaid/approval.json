@@ -1,0 +1,13 @@
+{
+  "entries": [
+    { "source": "class-generic.mmd", "approved": true },
+    { "source": "class-inheritance.mmd", "approved": true },
+    { "source": "class-relations.mmd", "approved": true },
+    { "source": "sequence-activation.mmd", "approved": true },
+    { "source": "sequence-basic.mmd", "approved": true },
+    { "source": "sequence-blocks.mmd", "approved": true },
+    { "source": "sequence-notes.mmd", "approved": true },
+    { "source": "state-basic.mmd", "approved": true },
+    { "source": "state-direction.mmd", "approved": true }
+  ]
+}

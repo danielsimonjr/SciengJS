@@ -1,7 +1,7 @@
 {
   "metadata": {
     "name": "@danielsimonjr/sciengjs",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "schemaVersion": "2.0.0",
     "language": "typescript"
   },
@@ -306,7 +306,7 @@
     },
     "graph": {
       "src/graph/backend-png.ts": {
-        "description": "backend-png module",
+        "description": "Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -361,11 +361,13 @@
         "workspaceDependencies": [],
         "exports": [
           "render",
-          "renderPng"
+          "renderPng",
+          "svgDocumentToPng"
         ],
         "functions": [
           "render",
-          "renderPng"
+          "renderPng",
+          "svgDocumentToPng"
         ]
       },
       "src/graph/backend-svg.ts": {
@@ -598,6 +600,427 @@
         "functions": [
           "render",
           "capabilities"
+        ]
+      }
+    },
+    "mermaid": {
+      "src/mermaid/backend-png.ts": {
+        "description": "Renders one Mermaid source to PNG: the SVG of the diagram, then the PNG of that SVG.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../graph/backend-png.ts",
+            "imports": [
+              "svgDocumentToPng"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./common.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderMermaidSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/mermaid/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./common.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderMermaidSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/mermaid/class.ts": {
+        "description": "class module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./common.ts",
+            "imports": [
+              "inputError",
+              "outside",
+              "xmlSafe",
+              "ContentLine",
+              "Source"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "parseClassDiagram",
+          "classToDot"
+        ],
+        "interfaces": [
+          "ClassArrow",
+          "ClassDef",
+          "ClassRelation",
+          "ClassModel"
+        ],
+        "functions": [
+          "parseClassDiagram",
+          "classToDot"
+        ]
+      },
+      "src/mermaid/common.ts": {
+        "description": "Reads the option `lenient` and checks the other keys. A key outside `lenient` and `extra` rejects with E_INPUT.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readLenient",
+          "sourceText",
+          "xmlSafe",
+          "inputError",
+          "outside",
+          "prepare"
+        ],
+        "interfaces": [
+          "ContentLine",
+          "Context",
+          "Source"
+        ],
+        "functions": [
+          "readLenient",
+          "sourceText",
+          "xmlSafe",
+          "inputError",
+          "outside",
+          "prepare"
+        ]
+      },
+      "src/mermaid/index.ts": {
+        "description": "The public surface of the Mermaid native layouts. It holds the header and option reader, the parsers,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./common.ts",
+            "imports": [
+              "prepare",
+              "Source"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./class.ts",
+            "imports": [
+              "parseClassDiagram",
+              "classToDot",
+              "ClassModel",
+              "ClassDef",
+              "ClassRelation",
+              "ClassArrow",
+              "Marker"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./state.ts",
+            "imports": [
+              "parseStateDiagram",
+              "stateToDot",
+              "StateModel",
+              "StateDef",
+              "StateTransition"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./sequence.ts",
+            "imports": [
+              "parseSequenceDiagram",
+              "SequenceModel",
+              "SeqEvent",
+              "Participant",
+              "MessageEvent",
+              "NoteEvent",
+              "ActivateEvent",
+              "DeactivateEvent",
+              "Branch",
+              "BlockEvent"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./sequence-layout.ts",
+            "imports": [
+              "layoutSequence"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderMermaidSvg",
+              "MermaidSvg"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "prepare",
+          "Source",
+          "parseClassDiagram",
+          "classToDot",
+          "ClassModel",
+          "ClassDef",
+          "ClassRelation",
+          "ClassArrow",
+          "Marker",
+          "parseStateDiagram",
+          "stateToDot",
+          "StateModel",
+          "StateDef",
+          "StateTransition",
+          "parseSequenceDiagram",
+          "SequenceModel",
+          "SeqEvent",
+          "Participant",
+          "MessageEvent",
+          "NoteEvent",
+          "ActivateEvent",
+          "DeactivateEvent",
+          "Branch",
+          "BlockEvent",
+          "layoutSequence",
+          "renderMermaidSvg",
+          "MermaidSvg"
+        ],
+        "reExported": [
+          "prepare",
+          "Source",
+          "parseClassDiagram",
+          "classToDot",
+          "ClassModel",
+          "ClassDef",
+          "ClassRelation",
+          "ClassArrow",
+          "Marker",
+          "parseStateDiagram",
+          "stateToDot",
+          "StateModel",
+          "StateDef",
+          "StateTransition",
+          "parseSequenceDiagram",
+          "SequenceModel",
+          "SeqEvent",
+          "Participant",
+          "MessageEvent",
+          "NoteEvent",
+          "ActivateEvent",
+          "DeactivateEvent",
+          "Branch",
+          "BlockEvent",
+          "layoutSequence",
+          "renderMermaidSvg",
+          "MermaidSvg"
+        ]
+      },
+      "src/mermaid/render.ts": {
+        "description": "Renders one Mermaid source to SVG. A class or state diagram goes through DOT and the graph stage.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ]
+          },
+          {
+            "file": "./class.ts",
+            "imports": [
+              "classToDot",
+              "parseClassDiagram"
+            ]
+          },
+          {
+            "file": "./common.ts",
+            "imports": [
+              "prepare"
+            ]
+          },
+          {
+            "file": "./sequence.ts",
+            "imports": [
+              "parseSequenceDiagram"
+            ]
+          },
+          {
+            "file": "./sequence-layout.ts",
+            "imports": [
+              "layoutSequence"
+            ]
+          },
+          {
+            "file": "./state.ts",
+            "imports": [
+              "parseStateDiagram",
+              "stateToDot"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "renderMermaidSvg"
+        ],
+        "interfaces": [
+          "MermaidSvg"
+        ],
+        "functions": [
+          "renderMermaidSvg"
+        ]
+      },
+      "src/mermaid/sequence-layout.ts": {
+        "description": "Lays out one sequence model into one SVG document string.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./common.ts",
+            "imports": [
+              "xmlSafe"
+            ]
+          },
+          {
+            "file": "./sequence.ts",
+            "imports": [
+              "BlockEvent",
+              "Branch",
+              "MessageEvent",
+              "SeqEvent",
+              "SequenceModel"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "layoutSequence"
+        ],
+        "functions": [
+          "layoutSequence"
+        ]
+      },
+      "src/mermaid/sequence.ts": {
+        "description": "sequence module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./common.ts",
+            "imports": [
+              "inputError",
+              "outside",
+              "Source"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "parseSequenceDiagram"
+        ],
+        "interfaces": [
+          "Participant",
+          "MessageEvent",
+          "NoteEvent",
+          "ActivateEvent",
+          "DeactivateEvent",
+          "Branch",
+          "BlockEvent",
+          "SequenceModel"
+        ],
+        "functions": [
+          "parseSequenceDiagram"
+        ]
+      },
+      "src/mermaid/state.ts": {
+        "description": "state module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./common.ts",
+            "imports": [
+              "inputError",
+              "outside",
+              "xmlSafe",
+              "ContentLine",
+              "Source"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "parseStateDiagram",
+          "stateToDot"
+        ],
+        "interfaces": [
+          "StateDef",
+          "StateTransition",
+          "StateModel"
+        ],
+        "functions": [
+          "parseStateDiagram",
+          "stateToDot"
         ]
       }
     },
@@ -1155,6 +1578,20 @@
       "name": "Entry",
       "files": [
         "src/index.ts"
+      ]
+    },
+    {
+      "name": "Mermaid",
+      "files": [
+        "src/mermaid/backend-png.ts",
+        "src/mermaid/backend-svg.ts",
+        "src/mermaid/class.ts",
+        "src/mermaid/common.ts",
+        "src/mermaid/index.ts",
+        "src/mermaid/render.ts",
+        "src/mermaid/sequence-layout.ts",
+        "src/mermaid/sequence.ts",
+        "src/mermaid/state.ts"
       ]
     },
     {

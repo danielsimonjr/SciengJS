@@ -10,9 +10,9 @@
 - **Dormant files**: 14
   - **Orphaned (reachable from nothing)**: 11
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 12
-  - **Unreferenced anywhere**: 2
-  - **Referenced in their own module**: 10
+- **Potentially unused exports**: 17
+  - **Unreferenced anywhere**: 3
+  - **Referenced in their own module**: 14
   - **Not classified**: 0
 
 ## Caveats
@@ -63,12 +63,13 @@ No file of this repository imports these files. Do not use the list as a deletio
 
 No other file imports these names, and their own module does not use them.
 
-- `src/index.ts`: `capabilities`
+- `src/index.ts`: `capabilities`, `render`
 - `trials/t6-etex-build/runtime/dvisvgm-specials.mjs`: `unitPerPt`
 
 ### Notes
 
 - `src/index.ts` `capabilities`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/index.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'capabilities' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
+- `src/index.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/index.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` `unitPerPt`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'trials/t6-etex-build/runtime/dvisvgm-specials.mjs' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'unitPerPt' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 
 ## Exports referenced in their own module
@@ -77,6 +78,9 @@ No other file imports these names, but their own module uses them.
 
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
+- `src/mermaid/backend-png.ts`: `render`
+- `src/mermaid/backend-svg.ts`: `render`
+- `src/mermaid/common.ts`: `Context`, `DiagramKind`
 - `src/pairs.ts`: `PairSpec`
 - `src/raster/index.ts`: `SvgToPngOptions`
 - `src/raster/warnings.ts`: `CoverageTest`

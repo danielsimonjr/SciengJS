@@ -1,7 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test";
+import { Resvg } from "@resvg/resvg-wasm";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { RenderError } from "../../src/errors.ts";
+import { rejectionOf, resolved } from "../support/rejections.ts";
 import { isFontFile, MAX_PNG_PIXEL_MB, svgToPng } from "../../src/raster/index.ts";
 import { countOpaquePixels, decodePng } from "../support/png-decode.ts";
 import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
@@ -13,16 +14,6 @@ const TEXT = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" vi
 const scratch = makeScratch("scieng-raster-");
 const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
 afterAll(() => removeScratch(scratch));
-
-async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
-  try {
-    await promise;
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the promise resolved");
-}
 
 describe("svgToPng", () => {
   test("writes a PNG with the signature and the size of the SVG at the scale", async () => {
@@ -53,18 +44,36 @@ describe("svgToPng", () => {
     // 512 by 512 pixels at four bytes each is exactly one mebibyte.
     const square = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#00ff00"/></svg>';
     const wide = '<svg xmlns="http://www.w3.org/2000/svg" width="513" height="512"><rect width="513" height="512" fill="#00ff00"/></svg>';
-    expect(decodePng(await svgToPng(square, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS })).width).toBe(512);
+    expect(decodePng(await resolved(svgToPng(square, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }))).width).toBe(512);
     const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
   });
 });
 
+describe("svgToPng releases its resvg handle", () => {
+  test("each render frees its handle exactly once, also when the render succeeds", async () => {
+    const original = Resvg.prototype.free;
+    let frees = 0;
+    Resvg.prototype.free = function countFree(this: unknown) {
+      frees += 1;
+      return original.call(this);
+    };
+    try {
+      await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS });
+    } finally {
+      Resvg.prototype.free = original;
+    }
+    expect(frees).toBe(1);
+  });
+});
+
 describe("svgToPng pixel cap", () => {
   test("a PNG over the fixed pixel cap rejects with E_LIMIT even when maxMemoryMb is larger", async () => {
-    // The cap holds because resvg keeps about two copies of the pixel buffer in a WASM memory of at most 4 GiB.
-    const side = Math.ceil(Math.sqrt(((MAX_PNG_PIXEL_MB + 1) * 1048576) / 4));
-    const huge = `<svg xmlns="http://www.w3.org/2000/svg" width="${side}" height="${side}"><rect width="1" height="1"/></svg>`;
-    const err = await rejectionOf(svgToPng(huge, { scale: 1, maxMemoryMb: 8192, assetsUrl: ASSETS }));
+    // One row of 1.5 billion pixels is 6 GB of pixels: over the cap, and more than the 4 GiB of WASM memory.
+    // The check rejects it before resvg draws. A square input over the cap would draw a 1 GiB buffer if the
+    // cap were removed, and that run would stop at its time limit instead of failing an assertion.
+    const wide = `<svg xmlns="http://www.w3.org/2000/svg" width="1500000000" height="1"><rect width="1" height="1"/></svg>`;
+    const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 8192, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
     expect(err.message).toContain("pixel");
   });

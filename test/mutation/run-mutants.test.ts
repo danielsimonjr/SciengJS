@@ -152,6 +152,135 @@ describe("run-mutants restores the source when the run is interrupted", () => {
   );
 });
 
+/** A fixture whose one mutant runs the test body that is given. The mutant applies when the source holds MUTATED. */
+function makeProbeFixture(
+  testBody: string,
+  mutant = { original: "export const value = 1;", replacement: "export const value = 2; // MUTATED" },
+  source = "export const value = 1;\n",
+): string {
+  const root = mkdtempSync(join(tmpdir(), "sciengjs-mutation-probe-"));
+  mkdirSync(join(root, "src"));
+  mkdirSync(join(root, "test", "mutation"), { recursive: true });
+  writeFileSync(join(root, "src", "value.ts"), source);
+  writeFileSync(
+    join(root, "test", "probe.test.ts"),
+    [
+      'import { expect, test } from "bun:test";',
+      'import { readFileSync } from "node:fs";',
+      'import { join } from "node:path";',
+      'const mutated = readFileSync(join(import.meta.dir, "..", "src", "value.ts"), "utf8").includes("MUTATED");',
+      testBody,
+      "",
+    ].join("\n"),
+  );
+  writeFileSync(
+    join(root, "test", "mutation", "mutants.json"),
+    JSON.stringify({
+      mutants: [
+        {
+          id: "value",
+          file: "src/value.ts",
+          test: "test/probe.test.ts",
+          original: mutant.original,
+          replacement: mutant.replacement,
+          equivalent: null,
+        },
+      ],
+    }),
+  );
+  return root;
+}
+
+/** Runs the runner on a probe fixture, and returns the markdown report that it writes. */
+function reportOfProbe(root: string, extraArgs: string[] = []): string {
+  const report = join(root, "report.md");
+  const run = spawnSync(process.execPath, [RUNNER, `--root=${root}`, `--report=${report}`, ...extraArgs], {
+    env: { ...process.env, BUN_BIN: process.execPath },
+    encoding: "utf8",
+    timeout: WAIT_MS * 2,
+  });
+  if (run.status !== 0) throw new Error(`the runner exited with ${run.status}: ${run.stderr}`);
+  return readFileSync(report, "utf8");
+}
+
+/** Runs the runner on a probe fixture, and returns the result that the markdown report gives its one mutant. */
+function resultOfProbe(testBody: string, extraArgs: string[] = []): string {
+  const root = makeProbeFixture(testBody);
+  try {
+    const row = /\| value \| src\/value\.ts:1 \| (\w+) \|/.exec(reportOfProbe(root, extraArgs));
+    if (row === null) throw new Error("the report has no result row");
+    return row[1]!;
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+describe("run-mutants never counts a timeout as a kill", () => {
+  test("an assertion failure is still a kill (control)", () => {
+    expect(resultOfProbe('test("assert", () => { if (mutated) expect(1).toBe(2); });')).toBe("killed");
+  }, WAIT_MS);
+
+  test("a test that bun stops at its own time limit is a timeout, not a kill", () => {
+    const body = 'test("hangs", () => { if (mutated) return new Promise(() => {}); }, 500);';
+    expect(resultOfProbe(body)).toBe("timeout");
+  }, WAIT_MS);
+
+  test("a timeout is not a kill even when an assertion failed earlier in the same run", () => {
+    const body = [
+      'test("assert", () => { if (mutated) expect(1).toBe(2); });',
+      'test("hangs", () => { if (mutated) return new Promise(() => {}); }, 500);',
+    ].join("\n");
+    expect(resultOfProbe(body)).toBe("timeout");
+  }, WAIT_MS);
+
+  test("a run that the runner stops at its time limit is a timeout, not a survivor", () => {
+    const body = 'test("spins", () => { if (mutated) { while (true) {} } });';
+    expect(resultOfProbe(body, ["--timeout-ms=2000"])).toBe("timeout");
+  }, WAIT_MS);
+});
+
+describe("the report gives the full text of each mutant", () => {
+  test("a mutant that changes a second line shows both lines of its text", () => {
+    const root = makeProbeFixture(
+      'test("unused", () => { if (mutated) expect(1).toBe(2); });',
+      { original: "export const value = 1;\n// the second line", replacement: "export const value = 1;\n// the changed line" },
+      "export const value = 1;\n// the second line\n",
+    );
+    try {
+      const report = reportOfProbe(root);
+      expect(report).toContain("// the second line");
+      expect(report).toContain("// the changed line");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, WAIT_MS);
+});
+
+describe("a kill is an assertion failure or an error that the code throws", () => {
+  test("an assertion failure is counted as an assertion kill", () => {
+    const root = makeProbeFixture('test("assert", () => { if (mutated) expect(1).toBe(2); });');
+    try {
+      const report = reportOfProbe(root);
+      expect(report).toContain("- failure: assertion");
+      expect(report).toContain("(1 by an assertion, 0 by an error)");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, WAIT_MS);
+
+  test("an error that the code throws is counted as an error kill", () => {
+    const root = makeProbeFixture('test("throws", () => { if (mutated) throw new Error("boom"); });');
+    try {
+      const report = reportOfProbe(root);
+      expect(report).toContain("| value | src/value.ts:1 | killed |");
+      expect(report).toContain("- failure: error");
+      expect(report).toContain("(0 by an assertion, 1 by an error)");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  }, WAIT_MS);
+});
+
 describe("the leftovers of an interrupted run are never committed", () => {
   test("a backup and a hash file are ignored by git", () => {
     const repo = resolve(import.meta.dir, "..", "..");

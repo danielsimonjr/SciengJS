@@ -10,14 +10,16 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.1.0 holds the first input type: **Graphviz DOT**.
+Release 0.2.0 holds two input types: **Graphviz DOT** and **Mermaid** (class, state and sequence diagrams).
 
 | Input | Output | Engine |
 |---|---|---|
 | DOT | SVG | Graphviz 16.1.0, compiled to WASM (`@viz-js/viz`) |
 | DOT | PNG | Graphviz, then resvg compiled to WASM (`@resvg/resvg-wasm`), with a bundled font |
+| Mermaid (class, state, sequence) | SVG | The engine's own parsers and layouts. Class and state diagrams go through Graphviz. |
+| Mermaid (class, state, sequence) | PNG | The same SVG, then resvg compiled to WASM (`@resvg/resvg-wasm`), with a bundled font |
 
-- **No network.** The DOT path makes no network request.
+- **No network.** The DOT and Mermaid paths make no network request.
 - **Unsafe attributes are removed.** The engine removes each `image` and `stylesheet` attribute before the layout and gives a warning for each one. A DOT file cannot make the engine or a browser fetch a file or a URL. A `URL` attribute stays as a link in the SVG.
 - **The same text on every machine.** PNG text uses the bundled Liberation Serif font, not the fonts of the host. The engine gives a warning when the drawing asks for bold, italic or a character that the font does not have.
 - **Limits.** Each render has a time limit, a source size limit and a heap limit. A PNG has a pixel limit of 1024 MB.
@@ -137,6 +139,19 @@ const png = await svgToPng(svg, { scale: 1, maxMemoryMb: 512 });
 
 A subpath call runs in the calling thread, without the worker and its limits. Use `render` for input that you do not trust.
 
+## Mermaid
+
+The `mermaid` input draws class, state and sequence diagrams without a browser. A line outside the grammar rejects the render with `E_INPUT`, and the message names the line. Set `lenient` to `true` to skip such a line and get a warning instead.
+
+```js
+import { render } from "@danielsimonjr/sciengjs";
+
+const source = "sequenceDiagram\nAlice->>Bob: Hello Bob\nBob-->>Alice: Hi Alice";
+const { bytes, warnings } = await render({ type: "mermaid", source, format: "svg" }, {});
+```
+
+Other Mermaid diagram types reject with `E_UNSUPPORTED`.
+
 ## Roadmap
 
 The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives the order of the increments. Each increment adds one input type, its tests and one release. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the API, the stages, the security controls and the licence of each engine.
@@ -144,7 +159,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Input type | Stage | Status |
 |---|---|---|
 | DOT | graph, raster | released in 0.1.0 |
-| Mermaid | mermaid, browser | planned |
+| Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: planned |
 | LaTeX math | math (MathJax) | planned |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
 | Plots | plot | planned |

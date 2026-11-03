@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="196" viewBox="0 0 320 196">
+<line x1="70" y1="56" x2="70" y2="176" stroke="#888888" stroke-dasharray="4 4" data-scieng-kind="lifeline" data-scieng-id="Alice"/>
+<line x1="250" y1="56" x2="250" y2="176" stroke="#888888" stroke-dasharray="4 4" data-scieng-kind="lifeline" data-scieng-id="Bob"/>
+<line x1="70" y1="86" x2="250" y2="86" stroke="#000000" data-scieng-kind="message" data-scieng-row="0" data-scieng-line="4"/>
+<polygon points="250,86 240,81 240,91" fill="#000000"/>
+<text x="160" y="80" text-anchor="middle" font-size="14">Hello Bob</text>
+<line x1="250" y1="116" x2="70" y2="116" stroke="#000000" stroke-dasharray="4 3" data-scieng-kind="message" data-scieng-row="1" data-scieng-line="5"/>
+<polygon points="70,116 80,111 80,121" fill="#000000"/>
+<text x="160" y="110" text-anchor="middle" font-size="14">Hi Alice</text>
+<line x1="70" y1="146" x2="250" y2="146" stroke="#000000" data-scieng-kind="message" data-scieng-row="2" data-scieng-line="6"/>
+<text x="160" y="140" text-anchor="middle" font-size="14">Plain arrow</text>
+<rect x="20" y="20" width="100" height="36" rx="4" fill="#ffffff" stroke="#000000" data-scieng-kind="participant" data-scieng-id="Alice"/>
+<text x="70" y="42" text-anchor="middle" font-size="14">Alice</text>
+<rect x="200" y="20" width="100" height="36" rx="4" fill="#ffffff" stroke="#000000" data-scieng-kind="participant" data-scieng-id="Bob"/>
+<text x="250" y="42" text-anchor="middle" font-size="14">Bob Smith</text>
+</svg>

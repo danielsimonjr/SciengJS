@@ -4,21 +4,11 @@ import { pathToFileURL } from "node:url";
 import { existsSync } from "node:fs";
 import { assetFile, BUNDLED_FONT_FILE, bundledFontPathIn, checkAssetsUrl, readAsset, RESVG_WASM_FILE } from "../../src/assets.ts";
 import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
-import { RenderError } from "../../src/errors.ts";
+import { rejection, returned } from "../support/rejections.ts";
 import { makeAssetsFolder, makeScratch, removeScratch } from "../support/assets-fixture.ts";
 
 const scratch = makeScratch("scieng-assets-");
 afterAll(() => removeScratch(scratch));
-
-function errorOf(call: () => unknown): RenderError {
-  try {
-    call();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
-}
 
 describe("checkAssetsUrl", () => {
   test("keeps a folder URL that already ends with a slash", () => {
@@ -30,7 +20,7 @@ describe("checkAssetsUrl", () => {
   });
 
   test("rejects a URL that is not a file URL, and names the label", () => {
-    const err = errorOf(() => checkAssetsUrl("https://example.test/assets/", "call option: assetsUrl"));
+    const err = rejection(() => checkAssetsUrl("https://example.test/assets/", "call option: assetsUrl"));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("call option: assetsUrl");
     expect(err.message).toContain("must be a file: URL");
@@ -38,14 +28,14 @@ describe("checkAssetsUrl", () => {
 
   test("rejects text that is not a URL, and names the label", () => {
     for (const value of ["", "not a url", "C:\\srv\\assets\\"]) {
-      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      const err = rejection(() => checkAssetsUrl(value, "assetsUrl"));
       expect(err.code).toBe("E_CONFIG");
       expect(err.message).toContain("assetsUrl");
     }
   });
 
   test("rejects a value that is not a string, and says so", () => {
-    const err = errorOf(() => checkAssetsUrl(5, "assetsUrl"));
+    const err = rejection(() => checkAssetsUrl(5, "assetsUrl"));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("must be a string");
     expect(err.message).toContain("assetsUrl");
@@ -53,7 +43,7 @@ describe("checkAssetsUrl", () => {
 
   test("rejects a query or a fragment in the folder URL, and says so", () => {
     for (const value of ["file:///srv/assets?revision=1", "file:///srv/assets#part", "file:///srv/assets?"]) {
-      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      const err = rejection(() => checkAssetsUrl(value, "assetsUrl"));
       expect(err.code).toBe("E_CONFIG");
       expect(err.message).toContain("no query and no fragment");
       expect(err.message).toContain("assetsUrl");
@@ -62,7 +52,7 @@ describe("checkAssetsUrl", () => {
 
   test("rejects an encoded slash or an encoded backslash in the path, and says so", () => {
     for (const value of ["file:///srv/assets%2Fprivate/", "file:///srv/assets%5Cprivate/", "file:///srv/ASSETS%2fprivate/"]) {
-      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      const err = rejection(() => checkAssetsUrl(value, "assetsUrl"));
       expect(err.code).toBe("E_CONFIG");
       expect(err.message).toContain("encoded slash or backslash");
     }
@@ -70,7 +60,7 @@ describe("checkAssetsUrl", () => {
 
   test("rejects a file URL with a host other than localhost, and says so", () => {
     for (const value of ["file://server/share/assets/", "file://server/assets", "file://127.0.0.1/assets/"]) {
-      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      const err = rejection(() => checkAssetsUrl(value, "assetsUrl"));
       expect(err.code).toBe("E_CONFIG");
       expect(err.message).toContain("no host or with the host localhost");
       expect(err.message).toContain("assetsUrl");
@@ -86,12 +76,12 @@ describe("readAsset", () => {
   test("returns the exact bytes of the file under the folder", () => {
     const bytes = new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 250]);
     const url = makeAssetsFolder(scratch, "exact", { wasm: bytes });
-    expect(Array.from(readAsset(url, RESVG_WASM_FILE))).toEqual(Array.from(bytes));
+    expect(Array.from(returned(() => readAsset(url, RESVG_WASM_FILE)))).toEqual(Array.from(bytes));
   });
 
   test("a missing file rejects with E_STAGE_MISSING and names the path", () => {
     const url = makeAssetsFolder(scratch, "empty", {});
-    const err = errorOf(() => readAsset(url, RESVG_WASM_FILE));
+    const err = rejection(() => readAsset(url, RESVG_WASM_FILE));
     expect(err.code).toBe("E_STAGE_MISSING");
     expect(err.message).toContain(RESVG_WASM_FILE);
     expect(err.message).toContain("ENOENT");
@@ -109,19 +99,19 @@ describe("assetFile", () => {
   });
 
   test("rejects a folder URL that is not a file URL with E_CONFIG", () => {
-    expect(errorOf(() => assetFile("https://example.test/assets/", BUNDLED_FONT_FILE)).code).toBe("E_CONFIG");
+    expect(rejection(() => assetFile("https://example.test/assets/", BUNDLED_FONT_FILE)).code).toBe("E_CONFIG");
   });
 
   test("a folder URL that this system cannot open as a folder rejects with E_CONFIG", () => {
     // A POSIX path is not absolute on Windows. A host name is not allowed on POSIX.
     const value = process.platform === "win32" ? "file:///srv/assets/" : "file://server/assets/";
-    const err = errorOf(() => assetFile(value, RESVG_WASM_FILE));
+    const err = rejection(() => assetFile(value, RESVG_WASM_FILE));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("assetsUrl");
   });
 
   test("rejects a folder URL with a host on every platform, before a path is built", () => {
-    const err = errorOf(() => assetFile("file://server/share/assets/", RESVG_WASM_FILE));
+    const err = rejection(() => assetFile("file://server/share/assets/", RESVG_WASM_FILE));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("no host or with the host localhost");
   });

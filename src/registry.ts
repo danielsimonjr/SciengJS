@@ -22,6 +22,8 @@ function backendUrl(name: string): string {
 export const DEFAULT_REGISTRY: Registry = {
   "dot:svg": { backend: "graph/viz", moduleUrl: backendUrl("graph/backend-svg") },
   "dot:png": { backend: "graph/viz+raster/resvg", moduleUrl: backendUrl("graph/backend-png") },
+  "mermaid:svg": { backend: "mermaid/native", moduleUrl: backendUrl("mermaid/backend-svg") },
+  "mermaid:png": { backend: "mermaid/native+raster/resvg", moduleUrl: backendUrl("mermaid/backend-png") },
 };
 
 /** Builds the registry key of a pair. */

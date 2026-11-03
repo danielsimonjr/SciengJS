@@ -4,7 +4,7 @@
 
 # @danielsimonjr/sciengjs - Dependency Graph
 
-**Version**: 0.1.1
+**Version**: 0.2.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -17,18 +17,19 @@ This document provides a comprehensive dependency graph of all files, components
 3. [Root Dependencies](#root-dependencies)
 4. [Graph Dependencies](#graph-dependencies)
 5. [Entry Dependencies](#entry-dependencies)
-6. [Raster Dependencies](#raster-dependencies)
-7. [Worker Dependencies](#worker-dependencies)
-8. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-9. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-10. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-11. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-12. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-13. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-14. [Dependency Matrix](#dependency-matrix)
-15. [Circular Dependency Analysis](#circular-dependency-analysis)
-16. [Visual Dependency Graph](#visual-dependency-graph)
-17. [Summary Statistics](#summary-statistics)
+6. [Mermaid Dependencies](#mermaid-dependencies)
+7. [Raster Dependencies](#raster-dependencies)
+8. [Worker Dependencies](#worker-dependencies)
+9. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+10. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+11. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+12. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+13. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+14. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+15. [Dependency Matrix](#dependency-matrix)
+16. [Circular Dependency Analysis](#circular-dependency-analysis)
+17. [Visual Dependency Graph](#visual-dependency-graph)
+18. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -40,6 +41,7 @@ The codebase is organized into the following modules:
 - **root**: 8 files
 - **graph**: 5 files
 - **entry**: 1 file
+- **mermaid**: 9 files
 - **raster**: 2 files
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
@@ -176,7 +178,7 @@ The codebase is organized into the following modules:
 
 ## Graph Dependencies
 
-### `src/graph/backend-png.ts` - backend-png module
+### `src/graph/backend-png.ts` - Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -194,7 +196,7 @@ The codebase is organized into the following modules:
 | `../raster/warnings.ts` | `rasterWarnings` | Import |
 
 **Exports:**
-- Functions: `render`, `renderPng`
+- Functions: `render`, `renderPng`, `svgDocumentToPng`
 
 ---
 
@@ -274,6 +276,150 @@ The codebase is organized into the following modules:
   RenderAsset, Capability
   ```
 
+
+---
+
+<a id="mermaid-dependencies"></a>
+
+## Mermaid Dependencies
+
+### `src/mermaid/backend-png.ts` - Renders one Mermaid source to PNG: the SVG of the diagram, then the PNG of that SVG.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../graph/backend-png.ts` | `svgDocumentToPng` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./common.ts` | `sourceText` | Import |
+| `./render.ts` | `renderMermaidSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/mermaid/backend-svg.ts` - backend-svg module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./common.ts` | `sourceText` | Import |
+| `./render.ts` | `renderMermaidSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/mermaid/class.ts` - class module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./common.ts` | `inputError, outside, xmlSafe, ContentLine, Source` | Import |
+
+**Exports:**
+- Interfaces: `ClassArrow`, `ClassDef`, `ClassRelation`, `ClassModel`
+- Types: `Marker`
+- Functions: `parseClassDiagram`, `classToDot`
+
+---
+
+### `src/mermaid/common.ts` - Reads the option `lenient` and checks the other keys. A key outside `lenient` and `extra` rejects with E_INPUT.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces: `ContentLine`, `Context`, `Source`
+- Types: `DiagramKind`
+- Functions: `readLenient`, `sourceText`, `xmlSafe`, `inputError`, `outside`, `prepare`
+
+---
+
+### `src/mermaid/index.ts` - The public surface of the Mermaid native layouts. It holds the header and option reader, the parsers,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./common.ts` | `prepare, Source` | Re-export |
+| `./class.ts` | `parseClassDiagram, classToDot, ClassModel, ClassDef, ClassRelation, ClassArrow, Marker` | Re-export |
+| `./state.ts` | `parseStateDiagram, stateToDot, StateModel, StateDef, StateTransition` | Re-export |
+| `./sequence.ts` | `parseSequenceDiagram, SequenceModel, SeqEvent, Participant, MessageEvent, NoteEvent, ActivateEvent, DeactivateEvent, Branch, BlockEvent` | Re-export |
+| `./sequence-layout.ts` | `layoutSequence` | Re-export |
+| `./render.ts` | `renderMermaidSvg, MermaidSvg` | Re-export |
+
+**Exports:**
+- Re-exports:
+
+  ```text
+  prepare, Source, parseClassDiagram, classToDot, ClassModel, ClassDef, ClassRelation, ClassArrow,
+  Marker, parseStateDiagram, stateToDot, StateModel, StateDef, StateTransition, parseSequenceDiagram,
+  SequenceModel, SeqEvent, Participant, MessageEvent, NoteEvent, ActivateEvent, DeactivateEvent,
+  Branch, BlockEvent, layoutSequence, renderMermaidSvg, MermaidSvg
+  ```
+
+
+---
+
+### `src/mermaid/render.ts` - Renders one Mermaid source to SVG. A class or state diagram goes through DOT and the graph stage.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../graph/dot.ts` | `dotToSvg` | Import |
+| `./class.ts` | `classToDot, parseClassDiagram` | Import |
+| `./common.ts` | `prepare` | Import |
+| `./sequence.ts` | `parseSequenceDiagram` | Import |
+| `./sequence-layout.ts` | `layoutSequence` | Import |
+| `./state.ts` | `parseStateDiagram, stateToDot` | Import |
+
+**Exports:**
+- Interfaces: `MermaidSvg`
+- Functions: `renderMermaidSvg`
+
+---
+
+### `src/mermaid/sequence-layout.ts` - Lays out one sequence model into one SVG document string.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./common.ts` | `xmlSafe` | Import |
+| `./sequence.ts` | `BlockEvent, Branch, MessageEvent, SeqEvent, SequenceModel` | Import (type-only) |
+
+**Exports:**
+- Functions: `layoutSequence`
+
+---
+
+### `src/mermaid/sequence.ts` - sequence module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./common.ts` | `inputError, outside, Source` | Import |
+
+**Exports:**
+- Interfaces: `Participant`, `MessageEvent`, `NoteEvent`, `ActivateEvent`, `DeactivateEvent`, `Branch`, `BlockEvent`, `SequenceModel`
+- Types: `SeqEvent`
+- Functions: `parseSequenceDiagram`
+
+---
+
+### `src/mermaid/state.ts` - state module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./common.ts` | `inputError, outside, xmlSafe, ContentLine, Source` | Import |
+
+**Exports:**
+- Interfaces: `StateDef`, `StateTransition`, `StateModel`
+- Functions: `parseStateDiagram`, `stateToDot`
 
 ---
 
@@ -529,17 +675,26 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 10 files |
+| `src/errors` | 0 files | 11 files |
+| `src/mermaid/common` | 1 file | 8 files |
+| `src/mermaid/render` | 6 files | 3 files |
 | `src/core` | 6 files | 1 file |
+| `src/graph/backend-png` | 6 files | 1 file |
+| `src/worker/protocol` | 1 file | 6 files |
 | `src/config` | 3 files | 3 files |
-| `src/graph/backend-png` | 6 files | 0 files |
-| `src/graph/dot` | 2 files | 3 files |
+| `src/graph/dot` | 2 files | 4 files |
+| `src/mermaid/index` | 6 files | 0 files |
 | `src/index` | 5 files | 0 files |
-| `src/worker/protocol` | 1 file | 4 files |
 | `src/assets` | 1 file | 3 files |
+| `src/mermaid/backend-png` | 4 files | 0 files |
+| `src/mermaid/sequence-layout` | 2 files | 2 files |
+| `src/mermaid/sequence` | 1 file | 3 files |
 | `src/raster/index` | 3 files | 1 file |
 | `src/types` | 0 files | 4 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
+| `src/mermaid/backend-svg` | 3 files | 0 files |
+| `src/mermaid/class` | 1 file | 2 files |
+| `src/mermaid/state` | 1 file | 2 files |
 | `src/worker/run` | 2 files | 1 file |
 | `src/pairs` | 1 file | 1 file |
 | `src/registry` | 0 files | 2 files |
@@ -560,8 +715,6 @@ The codebase is organized into the following modules:
 | `trials/t3-tex/shim/index.cjs` | 0 files | 0 files |
 | `trials/t4-browser/assets/pinned.js` | 0 files | 0 files |
 | `trials/t4-browser/measure.mjs` | 0 files | 0 files |
-| `trials/t5-tex-build/runtime/vfs.mjs` | 0 files | 0 files |
-| `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` | 0 files | 0 files |
 
 ---
 
@@ -599,47 +752,59 @@ graph TD
         N13[index]
     end
 
+    subgraph Mermaid
+        N14[backend-png]
+        N15[backend-svg]
+        N16[class]
+        N17[common]
+        N18[index]
+        N19[render]
+        N20[sequence-layout]
+        N21[sequence]
+        N22[state]
+    end
+
     subgraph Raster
-        N14[index]
-        N15[warnings]
+        N23[index]
+        N24[warnings]
     end
 
     subgraph Worker
-        N16[entry]
-        N17[protocol]
-        N18[run]
+        N25[entry]
+        N26[protocol]
+        N27[run]
     end
 
     subgraph Trials/t1-graph
-        N19[compare-layout.mjs]
-        N20[make-sources.mjs]
-        N21[measure.mjs]
+        N28[compare-layout.mjs]
+        N29[make-sources.mjs]
+        N30[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N22[measure.mjs]
+        N31[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N23[index.cjs]
+        N32[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N24[pinned.js]
-        N25[measure.mjs]
+        N33[pinned.js]
+        N34[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N26[dvi2svg.mjs]
-        N27[host.mjs]
-        N28[run.mjs]
-        N29[tfm.mjs]
-        N30[type1.mjs]
-        N31[vfs.mjs]
+        N35[dvi2svg.mjs]
+        N36[host.mjs]
+        N37[run.mjs]
+        N38[tfm.mjs]
+        N39[type1.mjs]
+        N40[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N32[dvisvgm-specials.mjs]
+        N41[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
@@ -650,16 +815,16 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N18
+    N2 --> N27
     N2 --> N6
     N8 --> N3
     N8 --> N0
-    N8 --> N17
+    N8 --> N26
     N8 --> N10
-    N8 --> N14
-    N8 --> N15
+    N8 --> N23
+    N8 --> N24
     N9 --> N3
-    N9 --> N17
+    N9 --> N26
     N9 --> N10
     N10 --> N3
     N10 --> N11
@@ -669,18 +834,43 @@ graph TD
     N13 --> N1
     N13 --> N6
     N13 --> N3
-    N4 --> N6
-    N14 --> N0
-    N14 --> N1
-    N14 --> N3
-    N16 --> N3
+    N14 --> N8
+    N14 --> N26
+    N14 --> N17
+    N14 --> N19
+    N15 --> N26
+    N15 --> N17
+    N15 --> N19
     N16 --> N17
-    N17 --> N6
-    N18 --> N3
+    N17 --> N3
     N18 --> N17
-    N26 --> N29
-    N26 --> N30
-    N28 --> N27
+    N18 --> N16
+    N18 --> N22
+    N18 --> N21
+    N18 --> N20
+    N18 --> N19
+    N19 --> N10
+    N19 --> N16
+    N19 --> N17
+    N19 --> N21
+    N19 --> N20
+    N19 --> N22
+    N20 --> N17
+    N20 --> N21
+    N21 --> N17
+    N22 --> N17
+    N4 --> N6
+    N23 --> N0
+    N23 --> N1
+    N23 --> N3
+    N25 --> N3
+    N25 --> N26
+    N26 --> N6
+    N27 --> N3
+    N27 --> N26
+    N35 --> N38
+    N35 --> N39
+    N37 --> N36
 ```
 
 ---
@@ -690,17 +880,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 107 |
-| Subsystems | 11 |
-| Total Lines of Code | 11733 |
-| Total Exports | 171 |
-| Total Re-exports | 18 |
+| Total Source Files | 130 |
+| Subsystems | 12 |
+| Total Lines of Code | 14859 |
+| Total Exports | 243 |
+| Total Re-exports | 45 |
 | Total Classes | 5 |
-| Total Interfaces | 23 |
-| Total Functions | 86 |
+| Total Interfaces | 42 |
+| Total Functions | 108 |
 | Total Type Guards | 2 |
 | Total Enums | 0 |
-| Type-only Imports | 14 |
+| Type-only Imports | 18 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |
@@ -708,4 +898,4 @@ graph TD
 
 ---
 
-*Version*: 0.1.1
+*Version*: 0.2.0
