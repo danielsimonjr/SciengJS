@@ -84,7 +84,7 @@ export function capabilities(config?: Partial<SciengConfig>): Promise<Capability
 ```
 
 - `render` rejects with a `RenderError`. A `RenderError` has a `code` (`E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`, `E_TIMEOUT`, `E_STAGE_MISSING`, `E_CONFIG`, `E_INTEGRITY`, `E_INTERNAL`), a message and, when it has one, the source line and column. `E_LIMIT` covers two resource limits: the source size (`maxSourceBytes`) and the heap of the render worker (`maxMemoryMb`).
-- `capabilities` reports each input and output pair, the stage that it needs, and whether that stage is ready on this machine. Example: `pdf` reports "not ready" when no browser is configured. The adapter uses `capabilities` to report a missing stage before a render.
+- `capabilities` reports each input and output pair, the stage that it needs, and whether that stage is ready on this machine. Example: `pdf` reports "not ready" when no browser is configured. The adapter uses `capabilities` to report a missing stage before a render. A pair can also have a `note`. Example: the Mermaid `svg` and `png` pairs note that types other than class, state and sequence need the browser stage.
 - An unsupported pair (for example `dot` to `md`) rejects with `E_UNSUPPORTED`. It never falls back to another format.
 
 ### Subpath exports
@@ -212,6 +212,9 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - Sequence diagrams use the engine's own layout: one column per participant, one row per message, with notes, activations, loops, alternatives and parallel blocks.
 - A construct outside the supported grammar rejects with `E_INPUT` and the line. The option `lenient: true` skips the construct and reports a warning.
 - All other Mermaid types go to the browser stage. The page names the pinned Mermaid URL. The client fulfils that URL from the engine package. No request leaves the process.
+- The router reads the first word of the first content line. It skips blank lines, comment lines, directives and front matter. Only a type in the list of other Mermaid types goes to the browser stage. An unknown header stays on the native path, which rejects it with `E_INPUT`.
+- The engine package holds the sha256 of the pinned Mermaid build. A local copy with a different hash rejects with `E_INTEGRITY` before the browser starts.
+- A Mermaid `png` takes the options `lenient` and `scale` on both paths. `scale` is a number above 0 and not more than 8. The default is 1. The browser path sizes the page from the `viewBox` of the diagram and uses `scale` as the device scale.
 
 ### PLOT
 
