@@ -45,7 +45,7 @@ This report lists each source file that the map census finds, with a disposition
 | File | Package | Area | Disposition | Lines |
 | --- | --- | --- | --- | --: |
 | `scripts/prepare-build.mjs` | (root) | tools | tool | 83 |
-| `src/assets.ts` | @danielsimonjr/sciengjs | src | build-entry | 81 |
+| `src/assets.ts` | @danielsimonjr/sciengjs | src | build-entry | 88 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 225 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 104 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 53 |
@@ -82,7 +82,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/stubs/stub-foreign-error.ts` | (root) | tests | test | 14 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
 | `test/support/test-registry.ts` | (root) | tests | test | 26 |
-| `test/unit/assets.test.ts` | (root) | tests | test | 122 |
+| `test/unit/assets.test.ts` | (root) | tests | test | 141 |
 | `test/unit/config-assets.test.ts` | (root) | tests | test | 111 |
 | `test/unit/config.test.ts` | (root) | tests | test | 263 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 69 |
@@ -103,7 +103,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/render.test.ts` | (root) | tests | test | 174 |
 | `test/unit/svg-compare.test.ts` | (root) | tests | test | 74 |
 | `test/unit/teardown.test.ts` | (root) | tests | test | 33 |
-| `test/unit/version.test.ts` | (root) | tests | test | 13 |
+| `test/unit/version.test.ts` | (root) | tests | test | 23 |
 | `test/unit/worker-run.test.ts` | (root) | tests | test | 97 |
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |

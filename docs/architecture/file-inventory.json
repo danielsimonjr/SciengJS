@@ -33,7 +33,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 81
+      "loc": 88
     },
     {
       "file": "src/config.ts",
@@ -292,7 +292,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 122
+      "loc": 141
     },
     {
       "file": "test/unit/config-assets.test.ts",
@@ -439,7 +439,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 13
+      "loc": 23
     },
     {
       "file": "test/unit/worker-run.test.ts",

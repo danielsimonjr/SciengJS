@@ -26,7 +26,7 @@ The asset root for bundled use. A bundle of the engine names the folder of its f
 - A render error keeps its code in a bundled build. Each output file of a bundle holds its own copy of the error class. The worker checked the class, so an error from another copy reached the caller as `E_INTERNAL`. The worker now checks the name and the code. A missing font gives `E_STAGE_MISSING`, and a DOT syntax error gives `E_INPUT`.
 - The smoke test starts npm with one quoted command on Windows, so Node prints no DEP0190 warning.
 - The loader test compares the real path of the temporary folder. It passes on macOS, where that folder is a link.
-- The generated file `src/version.ts` keeps LF line endings. The file `.gitattributes` sets `src/version.ts text eol=lf`. After `bun run build`, `git status` shows no change for the file.
+- The generated file `src/version.ts` keeps LF line endings. The file `.gitattributes` sets `src/version.ts text eol=lf`. After `bun run build`, `git status` shows no change for the file. A clone made before this release keeps its CRLF copy. Run `git checkout -- src/version.ts` once in that clone.
 
 ## [0.1.0] - 2026-11-02
 

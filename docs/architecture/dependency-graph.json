@@ -2188,6 +2188,7 @@
           "bun:test"
         ],
         "nodeDependencies": [
+          "node:child_process",
           "node:fs",
           "node:url"
         ],
@@ -2368,7 +2369,7 @@
     "totalTypeScriptFiles": 107,
     "totalSourceFiles": 107,
     "totalModules": 3,
-    "totalLinesOfCode": 11697,
+    "totalLinesOfCode": 11733,
     "totalExports": 171,
     "entryRoots": 19,
     "reachableFiles": 19,
