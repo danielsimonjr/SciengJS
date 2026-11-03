@@ -1,2 +1,4 @@
 # The build writes src/version.ts with LF. Git keeps LF for this file on every system.
 src/version.ts text eol=lf
+# The engine assets ship byte for byte as Git stores them, on every system.
+assets/** -text

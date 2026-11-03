@@ -1,11 +1,11 @@
 {
-  "totalFiles": 129,
+  "totalFiles": 130,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 28,
     "test-only": 3,
     "orphan": 11,
-    "test": 60,
+    "test": 61,
     "tool": 27,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 27,
     "src": 42,
-    "tests": 60
+    "tests": 61
   },
   "byPackage": {
-    "(root)": 101,
+    "(root)": 102,
     "@danielsimonjr/sciengjs": 28
   },
   "files": [
@@ -587,6 +587,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 33
+    },
+    {
+      "file": "test/unit/third-party-notices.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 21
     },
     {
       "file": "test/unit/version.test.ts",

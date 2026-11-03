@@ -10,6 +10,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The option `lenient` for the `mermaid` input. A line outside the grammar rejects the render with `E_INPUT` and the line number. With `lenient: true`, the parser skips the line and the render gives one warning that names the line.
 - The subpath `./mermaid`: the Mermaid parsers, the DOT builders, the sequence layout and the SVG render.
 - The Mermaid corpus: nine sources and their expected SVG files. The approval manifest lists each expected file as not approved.
+- `assets/licenses/MIT-viz-js.txt`, the MIT licence text of the `@viz-js/viz` wrapper. The npm package of the wrapper does not ship this file. `THIRD_PARTY_NOTICES.md` names `assets/licenses/MIT-viz-js.txt`. `.gitattributes` stores the files of `assets/` without line-ending conversion.
 
 ### Changed
 

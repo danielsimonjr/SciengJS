@@ -1,8 +1,8 @@
 metadata:
-  name: sciengjs
+  name: agent-a2a6677e562e80502
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 129
+  totalFiles: 130
   totalModules: 3
   totalExports: 243
 modules:
@@ -2040,6 +2040,14 @@ modules:
             - teardownLaunch
           typeOnly: false
       exports: []
+    test/unit/third-party-notices.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies: []
+      exports: []
     test/unit/version.test.ts:
       externalDependencies:
         - bun:test
@@ -2158,10 +2166,10 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 129
-  totalSourceFiles: 129
+  totalTypeScriptFiles: 130
+  totalSourceFiles: 130
   totalModules: 3
-  totalLinesOfCode: 14838
+  totalLinesOfCode: 14859
   totalExports: 243
   entryRoots: 28
   reachableFiles: 28

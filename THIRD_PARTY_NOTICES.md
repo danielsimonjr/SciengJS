@@ -26,7 +26,7 @@ Version: each row gives the version that the engine pins.
 
 ### Graphviz (EPL-2.0)
 
-The Eclipse Public License 2.0 applies to Graphviz. The wrapper `@viz-js/viz` is licensed under MIT. The package does not ship a Graphviz licence file. The licence text of Graphviz is in `assets/licenses/EPL-2.0.txt`. The source repository of the wrapper is https://github.com/mdaines/viz-js.
+The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to the wrapper `@viz-js/viz`. The package does not ship a Graphviz licence file. The licence text of Graphviz is in `assets/licenses/EPL-2.0.txt`. The MIT licence text of the wrapper is in `assets/licenses/MIT-viz-js.txt`, copied from the tag `release-viz-3.31.0` of the source repository https://github.com/mdaines/viz-js. The npm package does not ship this file.
 
 ### OpenCascade (LGPL-2.1)
 
