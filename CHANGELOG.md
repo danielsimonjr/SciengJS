@@ -2,7 +2,21 @@
 
 This file records all notable changes to this project. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [0.2.0] - 2026-11-02
+
+### Added
+
+- The `mermaid` input draws `classDiagram`, `stateDiagram-v2` and `sequenceDiagram` to SVG and PNG with no browser. A class diagram and a state diagram go through the graph stage. A sequence diagram has its own layout: one column for each participant and one row for each message.
+- The option `lenient` for the `mermaid` input. A line outside the grammar rejects the render with `E_INPUT` and the line number. With `lenient: true`, the parser skips the line and the render gives one warning that names the line.
+- The subpath `./mermaid`: the Mermaid parsers, the DOT builders, the sequence layout and the SVG render.
+- The Mermaid corpus: nine sources and their expected SVG files. The approval manifest lists each expected file as not approved.
+
+### Changed
+
+- The smoke test imports the `./mermaid` subpath and renders the three diagram types from the packed tarball. It checks that a flowchart rejects with `E_UNSUPPORTED`.
+- The raster cap test uses one row of 1.5 billion pixels. The former square input drew a 1 GiB buffer without the cap, and the mutation audit timed out on that test.
+- The README and the architecture documents describe the Mermaid stage and remove the increment-I0 and increment-I1 status claims.
+- The mutation audit gives the full text of each mutant in its report. Each kill names its cause: an assertion, or an error that the code throws. The rejection helpers of the test suite fail as assertions. An assertion kills all 92 non-equivalent mutants.
 
 ## [0.1.1] - 2026-11-03
 

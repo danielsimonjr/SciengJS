@@ -1,11 +1,11 @@
 {
-  "totalFiles": 119,
+  "totalFiles": 120,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 26,
     "test-only": 3,
     "orphan": 11,
-    "test": 53,
+    "test": 54,
     "tool": 26,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "src": 40,
-    "tests": 53,
+    "tests": 54,
     "tools": 26
   },
   "byPackage": {
     "@danielsimonjr/sciengjs": 26,
-    "(root)": 93
+    "(root)": 94
   },
   "files": [
     {
@@ -229,14 +229,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 251
+      "loc": 250
     },
     {
       "file": "test/mutation/run-mutants.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 241
+      "loc": 292
     },
     {
       "file": "test/node/backends/heap.mjs",
@@ -309,6 +309,13 @@
       "loc": 34
     },
     {
+      "file": "test/support/rejections.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 38
+    },
+    {
       "file": "test/support/stubs/stub-dot.ts",
       "package": "(root)",
       "area": "tests",
@@ -327,14 +334,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 26
+      "loc": 33
     },
     {
       "file": "test/unit/config.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 260
+      "loc": 250
     },
     {
       "file": "test/unit/errors.test.ts",
@@ -397,7 +404,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 63
+      "loc": 53
     },
     {
       "file": "test/unit/mermaid-class.test.ts",
@@ -439,21 +446,21 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 123
+      "loc": 113
     },
     {
       "file": "test/unit/mermaid-sequence.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 449
+      "loc": 442
     },
     {
       "file": "test/unit/mermaid-state.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 231
+      "loc": 220
     },
     {
       "file": "test/unit/no-bun-api.test.ts",
@@ -495,7 +502,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 106
+      "loc": 96
     },
     {
       "file": "test/unit/readme-mermaid.test.ts",

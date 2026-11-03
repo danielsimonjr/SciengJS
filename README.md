@@ -10,14 +10,16 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.1.0 holds the first input type: **Graphviz DOT**.
+Release 0.2.0 holds two input types: **Graphviz DOT** and **Mermaid** (class, state and sequence diagrams).
 
 | Input | Output | Engine |
 |---|---|---|
 | DOT | SVG | Graphviz 16.1.0, compiled to WASM (`@viz-js/viz`) |
 | DOT | PNG | Graphviz, then resvg compiled to WASM (`@resvg/resvg-wasm`), with a bundled font |
+| Mermaid (class, state, sequence) | SVG | The engine's own parsers and layouts. Class and state diagrams go through Graphviz. |
+| Mermaid (class, state, sequence) | PNG | The same SVG, then resvg compiled to WASM (`@resvg/resvg-wasm`), with a bundled font |
 
-- **No network.** The DOT path makes no network request.
+- **No network.** The DOT and Mermaid paths make no network request.
 - **Unsafe attributes are removed.** The engine removes each `image` and `stylesheet` attribute before the layout and gives a warning for each one. A DOT file cannot make the engine or a browser fetch a file or a URL. A `URL` attribute stays as a link in the SVG.
 - **The same text on every machine.** PNG text uses the bundled Liberation Serif font, not the fonts of the host. The engine gives a warning when the drawing asks for bold, italic or a character that the font does not have.
 - **Limits.** Each render has a time limit, a source size limit and a heap limit. A PNG has a pixel limit of 1024 MB.

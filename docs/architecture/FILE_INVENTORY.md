@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 119
+**Total files**: 120
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 26 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 53 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 54 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 26 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **119** | |
+| **Total** | **120** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 40 |
-| `tests` | 53 |
+| `tests` | 54 |
 | `tools` | 26 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 93 |
+| `(root)` | 94 |
 | `@danielsimonjr/sciengjs` | 26 |
 
 ## All files
@@ -73,8 +73,8 @@ This report lists each source file that the map census finds, with a disposition
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 111 |
-| `test/mutation/run-mutants.mjs` | (root) | tests | test | 251 |
-| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 241 |
+| `test/mutation/run-mutants.mjs` | (root) | tests | test | 250 |
+| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 292 |
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
@@ -85,10 +85,11 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/page-checker.ts` | (root) | tests | test | 357 |
 | `test/support/png-decode.ts` | (root) | tests | test | 105 |
 | `test/support/process-list.ts` | (root) | tests | test | 34 |
+| `test/support/rejections.ts` | (root) | tests | test | 38 |
 | `test/support/stubs/stub-dot.ts` | (root) | tests | test | 22 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
-| `test/support/test-registry.ts` | (root) | tests | test | 26 |
-| `test/unit/config.test.ts` | (root) | tests | test | 260 |
+| `test/support/test-registry.ts` | (root) | tests | test | 33 |
+| `test/unit/config.test.ts` | (root) | tests | test | 250 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 34 |
 | `test/unit/graph-corpus.test.ts` | (root) | tests | test | 47 |
 | `test/unit/graph-dot.test.ts` | (root) | tests | test | 79 |
@@ -97,21 +98,21 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/graph-network.test.ts` | (root) | tests | test | 95 |
 | `test/unit/graph-png.test.ts` | (root) | tests | test | 157 |
 | `test/unit/graph-registry.test.ts` | (root) | tests | test | 34 |
-| `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 63 |
+| `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 53 |
 | `test/unit/mermaid-class.test.ts` | (root) | tests | test | 272 |
 | `test/unit/mermaid-common.test.ts` | (root) | tests | test | 131 |
 | `test/unit/mermaid-corpus.test.ts` | (root) | tests | test | 42 |
 | `test/unit/mermaid-network.test.ts` | (root) | tests | test | 28 |
 | `test/unit/mermaid-registry.test.ts` | (root) | tests | test | 34 |
-| `test/unit/mermaid-render.test.ts` | (root) | tests | test | 123 |
-| `test/unit/mermaid-sequence.test.ts` | (root) | tests | test | 449 |
-| `test/unit/mermaid-state.test.ts` | (root) | tests | test | 231 |
+| `test/unit/mermaid-render.test.ts` | (root) | tests | test | 113 |
+| `test/unit/mermaid-sequence.test.ts` | (root) | tests | test | 442 |
+| `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
 | `test/unit/page-checker-io.test.ts` | (root) | tests | test | 112 |
 | `test/unit/process-list.test.ts` | (root) | tests | test | 51 |
 | `test/unit/raster-init.test.ts` | (root) | tests | test | 35 |
 | `test/unit/raster-warnings.test.ts` | (root) | tests | test | 153 |
-| `test/unit/raster.test.ts` | (root) | tests | test | 106 |
+| `test/unit/raster.test.ts` | (root) | tests | test | 96 |
 | `test/unit/readme-mermaid.test.ts` | (root) | tests | test | 21 |
 | `test/unit/render.test.ts` | (root) | tests | test | 166 |
 | `test/unit/svg-compare.test.ts` | (root) | tests | test | 74 |

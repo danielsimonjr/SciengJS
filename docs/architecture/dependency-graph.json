@@ -3,9 +3,9 @@
     "name": "agent-a2a6677e562e80502",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 119,
+    "totalFiles": 120,
     "totalModules": 3,
-    "totalExports": 217
+    "totalExports": 221
   },
   "modules": {
     "src": {
@@ -1203,6 +1203,26 @@
           "processesHolding"
         ]
       },
+      "test/support/rejections.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "rejection",
+          "rejectionOf",
+          "resolved"
+        ]
+      },
       "test/support/stubs/stub-dot.ts": {
         "externalDependencies": [],
         "nodeDependencies": [],
@@ -1231,14 +1251,31 @@
           {
             "file": "src/config.ts",
             "imports": [
-              "ConfigDeps"
+              "ConfigDeps",
+              "SciengConfig"
             ],
             "typeOnly": true
           },
           {
+            "file": "src/core.ts",
+            "imports": [
+              "renderWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
             "file": "src/registry.ts",
             "imports": [
+              "DEFAULT_REGISTRY",
               "Registry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "RenderRequest",
+              "RenderResult"
             ],
             "typeOnly": true
           },
@@ -1253,7 +1290,8 @@
         "exports": [
           "FIXED_SVG",
           "TEST_REGISTRY",
-          "ISOLATED_CONFIG_DEPS"
+          "ISOLATED_CONFIG_DEPS",
+          "renderIsolated"
         ]
       },
       "test/unit/config.test.ts": {
@@ -1271,9 +1309,10 @@
             "typeOnly": false
           },
           {
-            "file": "src/errors.ts",
+            "file": "test/support/rejections.ts",
             "imports": [
-              "RenderError"
+              "rejectionOf",
+              "resolved"
             ],
             "typeOnly": false
           }
@@ -1374,9 +1413,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "src/index.ts",
+            "file": "test/support/test-registry.ts",
             "imports": [
-              "render"
+              "renderIsolated"
             ],
             "typeOnly": false
           }
@@ -1409,9 +1448,9 @@
             "typeOnly": false
           },
           {
-            "file": "src/index.ts",
+            "file": "test/support/test-registry.ts",
             "imports": [
-              "render"
+              "renderIsolated"
             ],
             "typeOnly": false
           },
@@ -1509,9 +1548,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "src/errors.ts",
+            "file": "test/support/rejections.ts",
             "imports": [
-              "RenderError"
+              "rejectionOf"
             ],
             "typeOnly": false
           },
@@ -1638,9 +1677,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "src/index.ts",
+            "file": "test/support/test-registry.ts",
             "imports": [
-              "render"
+              "renderIsolated"
             ],
             "typeOnly": false
           },
@@ -1694,10 +1733,16 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "src/index.ts",
+            "file": "test/support/rejections.ts",
             "imports": [
-              "RenderError",
-              "render"
+              "rejectionOf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "renderIsolated"
             ],
             "typeOnly": false
           }
@@ -1711,9 +1756,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "src/errors.ts",
+            "file": "test/support/rejections.ts",
             "imports": [
-              "RenderError"
+              "rejection"
             ],
             "typeOnly": false
           },
@@ -1750,9 +1795,9 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "src/errors.ts",
+            "file": "test/support/rejections.ts",
             "imports": [
-              "RenderError"
+              "rejection"
             ],
             "typeOnly": false
           },
@@ -1904,9 +1949,10 @@
         ],
         "internalDependencies": [
           {
-            "file": "src/errors.ts",
+            "file": "test/support/rejections.ts",
             "imports": [
-              "RenderError"
+              "rejectionOf",
+              "resolved"
             ],
             "typeOnly": false
           },
@@ -1940,9 +1986,9 @@
         ],
         "internalDependencies": [
           {
-            "file": "src/index.ts",
+            "file": "test/support/test-registry.ts",
             "imports": [
-              "render"
+              "renderIsolated"
             ],
             "typeOnly": false
           }
@@ -2706,11 +2752,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 119,
-    "totalSourceFiles": 119,
+    "totalTypeScriptFiles": 120,
+    "totalSourceFiles": 120,
     "totalModules": 3,
-    "totalLinesOfCode": 13754,
-    "totalExports": 217,
+    "totalLinesOfCode": 13791,
+    "totalExports": 221,
     "entryRoots": 26,
     "reachableFiles": 26,
     "dormantFiles": 14,
@@ -2720,7 +2766,7 @@
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 17,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 16,
+    "unusedExportsCount": 17,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -2728,7 +2774,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 5,
     "totalInterfaces": 42,
-    "totalFunctions": 88,
+    "totalFunctions": 92,
     "totalTypeGuards": 1,
     "totalEnums": 0,
     "totalConstants": 25,

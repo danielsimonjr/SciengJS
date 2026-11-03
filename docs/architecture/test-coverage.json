@@ -2,23 +2,24 @@
   "metadata": {
     "totalSourceFiles": 40,
     "totalTestFiles": 37,
-    "testedCount": 23,
-    "untestedCount": 17,
-    "coveragePercent": "57.5",
+    "testedCount": 22,
+    "untestedCount": 18,
+    "coveragePercent": "55.0",
     "effectiveCoverage": {
       "policyLoaded": false,
       "activeFiles": 40,
-      "testedActive": 23,
-      "activeUntested": 17,
+      "testedActive": 22,
+      "activeUntested": 18,
       "excludedTotal": 0,
-      "percent": "57.5",
+      "percent": "55.0",
       "breakdown": {
-        "active_untested": 17
+        "active_untested": 18
       }
     }
   },
   "untestedFiles": [
     "src/graph/index.ts",
+    "src/index.ts",
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
@@ -44,7 +45,6 @@
     "src/graph/backend-svg.ts",
     "src/graph/dot.ts",
     "src/graph/image.ts",
-    "src/index.ts",
     "src/mermaid/class.ts",
     "src/mermaid/common.ts",
     "src/mermaid/render.ts",
@@ -63,12 +63,7 @@
   ],
   "coverageMap": {
     "src/config.ts": [
-      "test/unit/config.test.ts",
-      "test/unit/graph-large.test.ts",
-      "test/unit/graph-network.test.ts",
-      "test/unit/mermaid-network.test.ts",
-      "test/unit/mermaid-render.test.ts",
-      "test/unit/readme-mermaid.test.ts"
+      "test/unit/config.test.ts"
     ],
     "src/core.ts": [
       "test/unit/graph-registry.test.ts",
@@ -76,21 +71,11 @@
       "test/unit/render.test.ts"
     ],
     "src/errors.ts": [
-      "test/unit/config.test.ts",
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
-      "test/unit/graph-large.test.ts",
-      "test/unit/graph-network.test.ts",
       "test/unit/graph-png.test.ts",
-      "test/unit/graph-svg-backend.test.ts",
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
-      "test/unit/mermaid-network.test.ts",
-      "test/unit/mermaid-render.test.ts",
-      "test/unit/mermaid-sequence.test.ts",
-      "test/unit/mermaid-state.test.ts",
-      "test/unit/raster.test.ts",
-      "test/unit/readme-mermaid.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
@@ -113,13 +98,7 @@
       "test/unit/graph-image.test.ts"
     ],
     "src/graph/index.ts": [],
-    "src/index.ts": [
-      "test/unit/graph-large.test.ts",
-      "test/unit/graph-network.test.ts",
-      "test/unit/mermaid-network.test.ts",
-      "test/unit/mermaid-render.test.ts",
-      "test/unit/readme-mermaid.test.ts"
-    ],
+    "src/index.ts": [],
     "src/mermaid/backend-png.ts": [],
     "src/mermaid/backend-svg.ts": [],
     "src/mermaid/class.ts": [
@@ -157,11 +136,6 @@
       "test/unit/mermaid-registry.test.ts"
     ],
     "src/types.ts": [
-      "test/unit/graph-large.test.ts",
-      "test/unit/graph-network.test.ts",
-      "test/unit/mermaid-network.test.ts",
-      "test/unit/mermaid-render.test.ts",
-      "test/unit/readme-mermaid.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/worker/entry.ts": [],
@@ -197,8 +171,7 @@
     "test/integration/page-checker.test.ts": [],
     "test/mutation/run-mutants.test.ts": [],
     "test/unit/config.test.ts": [
-      "src/config.ts",
-      "src/errors.ts"
+      "src/config.ts"
     ],
     "test/unit/errors.test.ts": [
       "src/errors.ts"
@@ -213,19 +186,10 @@
     "test/unit/graph-image.test.ts": [
       "src/graph/image.ts"
     ],
-    "test/unit/graph-large.test.ts": [
-      "src/index.ts",
-      "src/errors.ts",
-      "src/config.ts",
-      "src/types.ts"
-    ],
+    "test/unit/graph-large.test.ts": [],
     "test/unit/graph-network.test.ts": [
       "src/graph/dot.ts",
-      "src/raster/index.ts",
-      "src/index.ts",
-      "src/errors.ts",
-      "src/config.ts",
-      "src/types.ts"
+      "src/raster/index.ts"
     ],
     "test/unit/graph-png.test.ts": [
       "src/errors.ts",
@@ -237,7 +201,6 @@
       "src/registry.ts"
     ],
     "test/unit/graph-svg-backend.test.ts": [
-      "src/errors.ts",
       "src/graph/backend-svg.ts",
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
@@ -255,30 +218,18 @@
     "test/unit/mermaid-corpus.test.ts": [
       "src/mermaid/render.ts"
     ],
-    "test/unit/mermaid-network.test.ts": [
-      "src/index.ts",
-      "src/errors.ts",
-      "src/config.ts",
-      "src/types.ts"
-    ],
+    "test/unit/mermaid-network.test.ts": [],
     "test/unit/mermaid-registry.test.ts": [
       "src/core.ts",
       "src/registry.ts"
     ],
-    "test/unit/mermaid-render.test.ts": [
-      "src/index.ts",
-      "src/errors.ts",
-      "src/config.ts",
-      "src/types.ts"
-    ],
+    "test/unit/mermaid-render.test.ts": [],
     "test/unit/mermaid-sequence.test.ts": [
-      "src/errors.ts",
       "src/mermaid/common.ts",
       "src/mermaid/sequence.ts",
       "src/mermaid/sequence-layout.ts"
     ],
     "test/unit/mermaid-state.test.ts": [
-      "src/errors.ts",
       "src/mermaid/common.ts",
       "src/mermaid/state.ts",
       "src/graph/dot.ts"
@@ -292,15 +243,9 @@
       "src/graph/dot.ts"
     ],
     "test/unit/raster.test.ts": [
-      "src/errors.ts",
       "src/raster/index.ts"
     ],
-    "test/unit/readme-mermaid.test.ts": [
-      "src/index.ts",
-      "src/errors.ts",
-      "src/config.ts",
-      "src/types.ts"
-    ],
+    "test/unit/readme-mermaid.test.ts": [],
     "test/unit/render.test.ts": [
       "src/core.ts",
       "src/errors.ts",
@@ -327,6 +272,10 @@
   "classifiedUntested": [
     {
       "file": "src/graph/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/index.ts",
       "category": null
     },
     {
