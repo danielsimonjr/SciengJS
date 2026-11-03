@@ -8,11 +8,11 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 40 |
-| Total Test Files | 38 |
-| Source Files with Tests | 22 |
+| Total Source Files | 42 |
+| Total Test Files | 41 |
+| Source Files with Tests | 24 |
 | Source Files without Tests | 18 |
-| Coverage (raw, direct-import) | **55.0%** |
+| Coverage (raw, direct-import) | **57.1%** |
 ---
 
 ## Source Files Without Test Coverage
@@ -70,9 +70,10 @@ The following 18 source files are not directly imported by any test file:
 
 | Source File | Test Files |
 |-------------|------------|
-| `src/config.ts` | `config.test.ts` |
-| `src/core.ts` | `graph-registry.test.ts`, `mermaid-registry.test.ts`, `render.test.ts` |
-| `src/errors.ts` | `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `mermaid-class.test.ts`, `mermaid-common.test.ts`, `render.test.ts`, `worker-run.test.ts` |
+| `src/assets.ts` | `assets.test.ts` |
+| `src/config.ts` | `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `graph-svg-backend.test.ts`, `render.test.ts`, `worker-run.test.ts` |
+| `src/core.ts` | `graph-png.test.ts`, `graph-registry.test.ts`, `mermaid-registry.test.ts`, `render.test.ts` |
+| `src/errors.ts` | `config-assets.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `mermaid-class.test.ts`, `mermaid-common.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `graph/backend-png.ts` | `graph-png.test.ts` |
 | `graph/backend-svg.ts` | `graph-svg-backend.test.ts` |
 | `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `mermaid-class.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts`, `raster-warnings.test.ts` |
@@ -85,8 +86,9 @@ The following 18 source files are not directly imported by any test file:
 | `mermaid/state.ts` | `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
 | `raster/index.ts` | `graph-network.test.ts`, `mermaid-xml.test.ts`, `raster.test.ts` |
 | `raster/warnings.ts` | `raster-warnings.test.ts` |
-| `src/registry.ts` | `graph-registry.test.ts`, `mermaid-registry.test.ts` |
+| `src/registry.ts` | `graph-png.test.ts`, `graph-registry.test.ts`, `mermaid-registry.test.ts` |
 | `src/types.ts` | `render.test.ts` |
+| `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
 | `worker/protocol.ts` | `graph-png.test.ts`, `graph-svg-backend.test.ts` |
 | `worker/run.ts` | `worker-run.test.ts` |
 | `runtime/tfm.mjs` | `type1.test.mjs` |
@@ -101,6 +103,8 @@ The following 18 source files are not directly imported by any test file:
 |-----------|---------------------|
 | `integration/page-checker.test.ts` | 0 files |
 | `mutation/run-mutants.test.ts` | 0 files |
+| `unit/assets.test.ts` | 2 files |
+| `unit/config-assets.test.ts` | 3 files |
 | `unit/config.test.ts` | 1 files |
 | `unit/errors.test.ts` | 1 files |
 | `unit/graph-corpus.test.ts` | 1 files |
@@ -108,9 +112,9 @@ The following 18 source files are not directly imported by any test file:
 | `unit/graph-image.test.ts` | 1 files |
 | `unit/graph-large.test.ts` | 0 files |
 | `unit/graph-network.test.ts` | 2 files |
-| `unit/graph-png.test.ts` | 3 files |
+| `unit/graph-png.test.ts` | 5 files |
 | `unit/graph-registry.test.ts` | 2 files |
-| `unit/graph-svg-backend.test.ts` | 3 files |
+| `unit/graph-svg-backend.test.ts` | 4 files |
 | `unit/mermaid-class.test.ts` | 4 files |
 | `unit/mermaid-common.test.ts` | 2 files |
 | `unit/mermaid-corpus.test.ts` | 1 files |
@@ -127,10 +131,11 @@ The following 18 source files are not directly imported by any test file:
 | `unit/raster-warnings.test.ts` | 2 files |
 | `unit/raster.test.ts` | 1 files |
 | `unit/readme-mermaid.test.ts` | 0 files |
-| `unit/render.test.ts` | 3 files |
+| `unit/render.test.ts` | 4 files |
 | `unit/svg-compare.test.ts` | 0 files |
 | `unit/teardown.test.ts` | 0 files |
-| `unit/worker-run.test.ts` | 2 files |
+| `unit/version.test.ts` | 1 files |
+| `unit/worker-run.test.ts` | 3 files |
 | `test/tangle.test.mjs` | 0 files |
 | `test/trip-gate.test.mjs` | 0 files |
 | `test/type1.test.mjs` | 2 files |

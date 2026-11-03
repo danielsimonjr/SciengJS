@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "totalSourceFiles": 40,
-    "totalTestFiles": 38,
-    "testedCount": 22,
+    "totalSourceFiles": 42,
+    "totalTestFiles": 41,
+    "testedCount": 24,
     "untestedCount": 18,
-    "coveragePercent": "55.0",
+    "coveragePercent": "57.1",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 40,
-      "testedActive": 22,
+      "activeFiles": 42,
+      "testedActive": 24,
       "activeUntested": 18,
       "excludedTotal": 0,
-      "percent": "55.0",
+      "percent": "57.1",
       "breakdown": {
         "active_untested": 18
       }
@@ -38,6 +38,7 @@
     "trials/t5-tex-build/runtime/vfs.mjs"
   ],
   "testedFiles": [
+    "src/assets.ts",
     "src/config.ts",
     "src/core.ts",
     "src/errors.ts",
@@ -55,6 +56,7 @@
     "src/raster/warnings.ts",
     "src/registry.ts",
     "src/types.ts",
+    "src/version.ts",
     "src/worker/protocol.ts",
     "src/worker/run.ts",
     "trials/t5-tex-build/runtime/tfm.mjs",
@@ -62,15 +64,25 @@
     "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
   ],
   "coverageMap": {
+    "src/assets.ts": [
+      "test/unit/assets.test.ts"
+    ],
     "src/config.ts": [
-      "test/unit/config.test.ts"
+      "test/unit/assets.test.ts",
+      "test/unit/config-assets.test.ts",
+      "test/unit/config.test.ts",
+      "test/unit/graph-svg-backend.test.ts",
+      "test/unit/render.test.ts",
+      "test/unit/worker-run.test.ts"
     ],
     "src/core.ts": [
+      "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/errors.ts": [
+      "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
       "test/unit/graph-png.test.ts",
@@ -140,11 +152,16 @@
       "test/unit/raster-warnings.test.ts"
     ],
     "src/registry.ts": [
+      "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
       "test/unit/mermaid-registry.test.ts"
     ],
     "src/types.ts": [
       "test/unit/render.test.ts"
+    ],
+    "src/version.ts": [
+      "test/unit/config-assets.test.ts",
+      "test/unit/version.test.ts"
     ],
     "src/worker/entry.ts": [],
     "src/worker/protocol.ts": [
@@ -178,6 +195,15 @@
   "testToSourceMap": {
     "test/integration/page-checker.test.ts": [],
     "test/mutation/run-mutants.test.ts": [],
+    "test/unit/assets.test.ts": [
+      "src/assets.ts",
+      "src/config.ts"
+    ],
+    "test/unit/config-assets.test.ts": [
+      "src/config.ts",
+      "src/errors.ts",
+      "src/version.ts"
+    ],
     "test/unit/config.test.ts": [
       "src/config.ts"
     ],
@@ -202,13 +228,16 @@
     "test/unit/graph-png.test.ts": [
       "src/errors.ts",
       "src/graph/backend-png.ts",
-      "src/worker/protocol.ts"
+      "src/worker/protocol.ts",
+      "src/core.ts",
+      "src/registry.ts"
     ],
     "test/unit/graph-registry.test.ts": [
       "src/core.ts",
       "src/registry.ts"
     ],
     "test/unit/graph-svg-backend.test.ts": [
+      "src/config.ts",
       "src/graph/backend-svg.ts",
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
@@ -267,13 +296,18 @@
     "test/unit/render.test.ts": [
       "src/core.ts",
       "src/errors.ts",
+      "src/config.ts",
       "src/types.ts"
     ],
     "test/unit/svg-compare.test.ts": [],
     "test/unit/teardown.test.ts": [],
+    "test/unit/version.test.ts": [
+      "src/version.ts"
+    ],
     "test/unit/worker-run.test.ts": [
       "src/worker/run.ts",
-      "src/errors.ts"
+      "src/errors.ts",
+      "src/config.ts"
     ],
     "trials/t5-tex-build/test/tangle.test.mjs": [],
     "trials/t5-tex-build/test/trip-gate.test.mjs": [],

@@ -1,12 +1,405 @@
 metadata:
-  name: agent-a2a6677e562e80502
+  name: sciengjs
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 121
+  totalFiles: 129
   totalModules: 3
-  totalExports: 222
+  totalExports: 243
 modules:
+  tools:
+    scripts/prepare-build.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs/promises
+        - node:module
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports: []
+    trials/t3-tex/tools/build-format.cjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    trials/t3-tex/tools/collect.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t3-tex/tools/tex-engine.mjs
+          imports:
+            - loadEngine
+            - renderTex
+            - setCoreDump
+          typeOnly: false
+      exports: []
+    trials/t3-tex/tools/make-bundle.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies: []
+      exports: []
+    trials/t3-tex/tools/measure.mjs:
+      externalDependencies:
+        - '@drgrice1/dvi2html'
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:perf_hooks
+        - node:stream
+        - node:url
+        - node:zlib
+      internalDependencies:
+        - file: trials/t3-tex/tools/tex-engine.mjs
+          imports:
+            - loadEngine
+            - renderTex
+            - setCoreDump
+            - requiredEnv
+          typeOnly: false
+      exports: []
+    trials/t3-tex/tools/sizes.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+        - node:zlib
+      internalDependencies: []
+      exports: []
+    trials/t3-tex/tools/tex-engine.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:module
+        - node:path
+        - node:perf_hooks
+      internalDependencies: []
+      exports:
+        - requiredEnv
+        - loadEngine
+        - setCoreDump
+        - renderTex
+    trials/t5-tex-build/tools/build-lib.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+        - node:path
+        - node:zlib
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/pascal.mjs
+          imports:
+            - compile
+          typeOnly: false
+      exports:
+        - sha
+        - fetchPinned
+        - buildProgram
+        - runtimeName
+    trials/t5-tex-build/tools/build.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/build-lib.mjs
+          imports:
+            - fetchPinned
+            - buildProgram
+            - runtimeName
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/compare-builds.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies: []
+      exports: []
+    trials/t5-tex-build/tools/compile-cli.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/pascal.mjs
+          imports:
+            - compile
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/linediff.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - lineDiff
+    trials/t5-tex-build/tools/pascal.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/wasm.mjs
+          imports:
+            - ModuleBuilder
+            - OP
+            - I32
+            - F64
+            - VOID
+            - uleb
+            - sleb
+            - f64bytes
+          typeOnly: false
+      exports:
+        - canon
+        - compile
+    trials/t5-tex-build/tools/render.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/vfs.mjs
+          imports:
+            - TreeFS
+            - flatName
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/dvi2svg.mjs
+          imports:
+            - dviToSvg
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/run-texware.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/sizes.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:zlib
+      internalDependencies: []
+      exports: []
+    trials/t5-tex-build/tools/tangle-cli.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/tangle.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - applyChanges
+        - tangle
+    trials/t5-tex-build/tools/tex-run.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/vfs.mjs
+          imports:
+            - TreeFS
+            - flatName
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/trip-gate.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - TEX_BANNER
+        - buildBanner
+        - tripGate
+    trials/t5-tex-build/tools/trip-steps.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - latin
+        - flatName
+        - loadProgram
+        - plRoundTrip
+        - texRun
+        - dvitypeRun
+    trials/t5-tex-build/tools/trip.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/trip-gate.mjs
+          imports:
+            - tripGate
+            - buildBanner
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/trip-steps.mjs
+          imports:
+            - latin
+            - loadProgram
+            - plRoundTrip
+            - texRun
+            - dvitypeRun
+          typeOnly: false
+      exports: []
+    trials/t5-tex-build/tools/wasm.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - I32
+        - F64
+        - VOID
+        - OP
+        - uleb
+        - sleb
+        - f64bytes
+        - ModuleBuilder
+    trials/t6-etex-build/tools/build.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/build-lib.mjs
+          imports:
+            - fetchPinned
+            - buildProgram
+            - runtimeName
+            - sha
+          typeOnly: false
+        - file: trials/t6-etex-build/tools/primitives.mjs
+          imports:
+            - addedPrimitives
+          typeOnly: false
+      exports: []
+    trials/t6-etex-build/tools/etrip-gate.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - COMPARISONS
+        - etripConstants
+        - parseReferenceDiffs
+        - dropEchoText
+        - etripMessageOf
+        - judgeFile
+        - etripGate
+    trials/t6-etex-build/tools/etrip.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/tools/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+        - file: trials/t5-tex-build/tools/trip-steps.mjs
+          imports:
+            - latin
+            - loadProgram
+            - plRoundTrip
+            - texRun
+            - dvitypeRun
+          typeOnly: false
+        - file: trials/t6-etex-build/tools/etrip-gate.mjs
+          imports:
+            - etripGate
+            - COMPARISONS
+          typeOnly: false
+      exports: []
+    trials/t6-etex-build/tools/primitives.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - addedPrimitives
   src:
+    src/assets.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - BUNDLED_FONT_FILE
+        - RESVG_WASM_FILE
+        - checkAssetsUrl
+        - assetFile
+        - bundledFontPathIn
+        - readAsset
     src/config.ts:
       externalDependencies: []
       nodeDependencies:
@@ -18,10 +411,19 @@ modules:
           imports:
             - RenderError
           typeOnly: false
+        - file: src/version.ts
+          imports:
+            - ENGINE_VERSION
+          typeOnly: false
+        - file: src/assets.ts
+          imports:
+            - checkAssetsUrl
+          typeOnly: false
       exports:
         - NetworkPolicy
         - SciengConfig
         - ConfigDeps
+        - DEFAULT_ASSETS_URL
         - loadConfig
     src/core.ts:
       externalDependencies: []
@@ -74,15 +476,19 @@ modules:
         - RenderErrorCode
         - RenderErrorPosition
         - RenderError
+        - isRenderError
     src/graph/backend-png.ts:
       externalDependencies: []
       nodeDependencies:
         - node:fs
-        - node:url
       internalDependencies:
         - file: src/errors.ts
           imports:
             - RenderError
+          typeOnly: false
+        - file: src/assets.ts
+          imports:
+            - bundledFontPathIn
           typeOnly: false
         - file: src/worker/protocol.ts
           imports:
@@ -499,10 +905,17 @@ modules:
     src/raster/index.ts:
       externalDependencies:
         - '@resvg/resvg-wasm'
-      nodeDependencies:
-        - node:fs
-        - node:module
+      nodeDependencies: []
       internalDependencies:
+        - file: src/assets.ts
+          imports:
+            - readAsset
+            - RESVG_WASM_FILE
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - DEFAULT_ASSETS_URL
+          typeOnly: false
         - file: src/errors.ts
           imports:
             - RenderError
@@ -546,6 +959,12 @@ modules:
         - RenderAsset
         - RenderResult
         - Capability
+    src/version.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - ENGINE_VERSION
     src/worker/entry.ts:
       externalDependencies: []
       nodeDependencies:
@@ -555,6 +974,7 @@ modules:
           imports:
             - RenderError
             - RENDER_ERROR_CODES
+            - isRenderError
             - RenderErrorCode
           typeOnly: false
         - file: src/worker/protocol.ts
@@ -803,11 +1223,32 @@ modules:
       nodeDependencies:
         - node:child_process
         - node:fs
+        - node:module
         - node:os
         - node:path
         - node:url
       internalDependencies: []
       exports: []
+    test/support/assets-fixture.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:module
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports:
+        - REAL_FONT_PATH
+        - REAL_WASM_PATH
+        - realFiles
+        - noGlyphFont
+        - wasmWithCustomSection
+        - makeScratch
+        - removeScratch
+        - makeAssetsFolder
+        - wasmImportingMissingFunction
+        - wasmWhoseStartTraps
     test/support/bun-scan.ts:
       externalDependencies: []
       nodeDependencies:
@@ -882,6 +1323,7 @@ modules:
       exports:
         - rejection
         - rejectionOf
+        - returned
         - resolved
     test/support/stubs/stub-dot.ts:
       externalDependencies: []
@@ -889,6 +1331,12 @@ modules:
       internalDependencies: []
       exports:
         - FIXED_SVG
+        - render
+    test/support/stubs/stub-foreign-error.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
         - render
     test/support/svg-compare.ts:
       externalDependencies: []
@@ -931,6 +1379,63 @@ modules:
         - TEST_REGISTRY
         - ISOLATED_CONFIG_DEPS
         - renderIsolated
+    test/unit/assets.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/assets.ts
+          imports:
+            - assetFile
+            - BUNDLED_FONT_FILE
+            - bundledFontPathIn
+            - checkAssetsUrl
+            - readAsset
+            - RESVG_WASM_FILE
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - DEFAULT_ASSETS_URL
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+            - returned
+          typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - removeScratch
+          typeOnly: false
+      exports: []
+    test/unit/config-assets.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/config.ts
+          imports:
+            - loadConfig
+            - ConfigDeps
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/version.ts
+          imports:
+            - ENGINE_VERSION
+          typeOnly: false
+      exports: []
     test/unit/config.test.ts:
       externalDependencies:
         - bun:test
@@ -954,6 +1459,7 @@ modules:
       internalDependencies:
         - file: src/errors.ts
           imports:
+            - isRenderError
             - RenderError
             - RENDER_ERROR_CODES
           typeOnly: false
@@ -1034,6 +1540,13 @@ modules:
           imports:
             - renderIsolated
           typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
         - file: test/support/network-guard.ts
           imports:
             - blockNetwork
@@ -1066,6 +1579,27 @@ modules:
             - countDarkPixels
             - decodePng
           typeOnly: false
+        - file: src/core.ts
+          imports:
+            - renderWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - noGlyphFont
+            - realFiles
+            - wasmImportingMissingFunction
+            - wasmWhoseStartTraps
+            - wasmWithCustomSection
+          typeOnly: false
       exports: []
     test/unit/graph-registry.test.ts:
       externalDependencies:
@@ -1092,6 +1626,10 @@ modules:
         - bun:test
       nodeDependencies: []
       internalDependencies:
+        - file: src/config.ts
+          imports:
+            - DEFAULT_ASSETS_URL
+          typeOnly: false
         - file: test/support/rejections.ts
           imports:
             - rejectionOf
@@ -1172,6 +1710,13 @@ modules:
         - bun:test
       nodeDependencies: []
       internalDependencies:
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
         - file: test/support/test-registry.ts
           imports:
             - renderIsolated
@@ -1206,6 +1751,13 @@ modules:
         - bun:test
       nodeDependencies: []
       internalDependencies:
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
         - file: test/support/rejections.ts
           imports:
             - rejectionOf
@@ -1304,6 +1856,13 @@ modules:
           imports:
             - svgToPng
           typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
       exports: []
     test/unit/no-bun-api.test.ts:
       externalDependencies:
@@ -1361,7 +1920,14 @@ modules:
       nodeDependencies:
         - node:child_process
         - node:url
-      internalDependencies: []
+      internalDependencies:
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
       exports: []
     test/unit/raster-warnings.test.ts:
       externalDependencies:
@@ -1382,6 +1948,7 @@ modules:
       exports: []
     test/unit/raster.test.ts:
       externalDependencies:
+        - '@resvg/resvg-wasm'
         - bun:test
       nodeDependencies:
         - node:fs
@@ -1402,6 +1969,13 @@ modules:
           imports:
             - countOpaquePixels
             - decodePng
+          typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
           typeOnly: false
       exports: []
     test/unit/readme-mermaid.test.ts:
@@ -1429,6 +2003,10 @@ modules:
         - file: src/errors.ts
           imports:
             - RenderError
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - DEFAULT_ASSETS_URL
           typeOnly: false
         - file: src/types.ts
           imports:
@@ -1462,6 +2040,19 @@ modules:
             - teardownLaunch
           typeOnly: false
       exports: []
+    test/unit/version.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/version.ts
+          imports:
+            - ENGINE_VERSION
+          typeOnly: false
+      exports: []
     test/unit/worker-run.test.ts:
       externalDependencies:
         - bun:test
@@ -1480,6 +2071,10 @@ modules:
         - file: test/support/test-registry.ts
           imports:
             - TEST_REGISTRY
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - DEFAULT_ASSETS_URL
           typeOnly: false
       exports: []
     trials/t5-tex-build/test/tangle.test.mjs:
@@ -1562,381 +2157,14 @@ modules:
             - addedPrimitives
           typeOnly: false
       exports: []
-  tools:
-    trials/t3-tex/tools/build-format.cjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
-    trials/t3-tex/tools/collect.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t3-tex/tools/tex-engine.mjs
-          imports:
-            - loadEngine
-            - renderTex
-            - setCoreDump
-          typeOnly: false
-      exports: []
-    trials/t3-tex/tools/make-bundle.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies: []
-      exports: []
-    trials/t3-tex/tools/measure.mjs:
-      externalDependencies:
-        - '@drgrice1/dvi2html'
-      nodeDependencies:
-        - node:fs
-        - node:os
-        - node:path
-        - node:perf_hooks
-        - node:stream
-        - node:url
-        - node:zlib
-      internalDependencies:
-        - file: trials/t3-tex/tools/tex-engine.mjs
-          imports:
-            - loadEngine
-            - renderTex
-            - setCoreDump
-            - requiredEnv
-          typeOnly: false
-      exports: []
-    trials/t3-tex/tools/sizes.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-        - node:zlib
-      internalDependencies: []
-      exports: []
-    trials/t3-tex/tools/tex-engine.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:module
-        - node:path
-        - node:perf_hooks
-      internalDependencies: []
-      exports:
-        - requiredEnv
-        - loadEngine
-        - setCoreDump
-        - renderTex
-    trials/t5-tex-build/tools/build-lib.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:crypto
-        - node:fs
-        - node:path
-        - node:zlib
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/tangle.mjs
-          imports:
-            - tangle
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/pascal.mjs
-          imports:
-            - compile
-          typeOnly: false
-      exports:
-        - sha
-        - fetchPinned
-        - buildProgram
-        - runtimeName
-    trials/t5-tex-build/tools/build.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/build-lib.mjs
-          imports:
-            - fetchPinned
-            - buildProgram
-            - runtimeName
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/compare-builds.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies: []
-      exports: []
-    trials/t5-tex-build/tools/compile-cli.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/pascal.mjs
-          imports:
-            - compile
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/linediff.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - lineDiff
-    trials/t5-tex-build/tools/pascal.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/wasm.mjs
-          imports:
-            - ModuleBuilder
-            - OP
-            - I32
-            - F64
-            - VOID
-            - uleb
-            - sleb
-            - f64bytes
-          typeOnly: false
-      exports:
-        - canon
-        - compile
-    trials/t5-tex-build/tools/render.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/vfs.mjs
-          imports:
-            - TreeFS
-            - flatName
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/dvi2svg.mjs
-          imports:
-            - dviToSvg
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/run-texware.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/sizes.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:zlib
-      internalDependencies: []
-      exports: []
-    trials/t5-tex-build/tools/tangle-cli.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/tangle.mjs
-          imports:
-            - tangle
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/tangle.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - applyChanges
-        - tangle
-    trials/t5-tex-build/tools/tex-run.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/vfs.mjs
-          imports:
-            - TreeFS
-            - flatName
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/trip-gate.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-      exports:
-        - TEX_BANNER
-        - buildBanner
-        - tripGate
-    trials/t5-tex-build/tools/trip-steps.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-      exports:
-        - latin
-        - flatName
-        - loadProgram
-        - plRoundTrip
-        - texRun
-        - dvitypeRun
-    trials/t5-tex-build/tools/trip.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/trip-gate.mjs
-          imports:
-            - tripGate
-            - buildBanner
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/trip-steps.mjs
-          imports:
-            - latin
-            - loadProgram
-            - plRoundTrip
-            - texRun
-            - dvitypeRun
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/wasm.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - I32
-        - F64
-        - VOID
-        - OP
-        - uleb
-        - sleb
-        - f64bytes
-        - ModuleBuilder
-    trials/t6-etex-build/tools/build.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:child_process
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/build-lib.mjs
-          imports:
-            - fetchPinned
-            - buildProgram
-            - runtimeName
-            - sha
-          typeOnly: false
-        - file: trials/t6-etex-build/tools/primitives.mjs
-          imports:
-            - addedPrimitives
-          typeOnly: false
-      exports: []
-    trials/t6-etex-build/tools/etrip-gate.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-      exports:
-        - COMPARISONS
-        - etripConstants
-        - parseReferenceDiffs
-        - dropEchoText
-        - etripMessageOf
-        - judgeFile
-        - etripGate
-    trials/t6-etex-build/tools/etrip.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/trip-steps.mjs
-          imports:
-            - latin
-            - loadProgram
-            - plRoundTrip
-            - texRun
-            - dvitypeRun
-          typeOnly: false
-        - file: trials/t6-etex-build/tools/etrip-gate.mjs
-          imports:
-            - etripGate
-            - COMPARISONS
-          typeOnly: false
-      exports: []
-    trials/t6-etex-build/tools/primitives.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - addedPrimitives
 statistics:
-  totalTypeScriptFiles: 121
-  totalSourceFiles: 121
+  totalTypeScriptFiles: 129
+  totalSourceFiles: 129
   totalModules: 3
-  totalLinesOfCode: 14031
-  totalExports: 222
-  entryRoots: 26
-  reachableFiles: 26
+  totalLinesOfCode: 14838
+  totalExports: 243
+  entryRoots: 28
+  reachableFiles: 28
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
@@ -1952,10 +2180,10 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 5
   totalInterfaces: 42
-  totalFunctions: 93
-  totalTypeGuards: 1
+  totalFunctions: 108
+  totalTypeGuards: 2
   totalEnums: 0
-  totalConstants: 25
+  totalConstants: 31
   totalReExports: 45
 reachability:
   roots:
@@ -1963,6 +2191,7 @@ reachability:
     - src/graph/index.ts
     - src/raster/index.ts
     - src/mermaid/index.ts
+    - src/assets.ts
     - src/config.ts
     - src/core.ts
     - src/errors.ts
@@ -1982,10 +2211,11 @@ reachability:
     - src/raster/warnings.ts
     - src/registry.ts
     - src/types.ts
+    - src/version.ts
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 26
+  reachableCount: 28
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs
