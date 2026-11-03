@@ -6,10 +6,9 @@
 // tripin.fot and trip.typ. The out dir gets each output file and each difference.
 import fs from 'node:fs';
 import path from 'node:path';
-import { runProgram } from '../runtime/run.mjs';
-import { ExitSignal } from '../runtime/host.mjs';
 import { lineDiff } from './linediff.mjs';
 import { tripGate, buildBanner } from './trip-gate.mjs';
+import { latin, loadProgram, plRoundTrip, texRun, dvitypeRun } from './trip-steps.mjs';
 
 const [buildDir, srcDir, outDir] = process.argv.slice(2);
 if (!buildDir || !srcDir || !outDir) {
@@ -19,56 +18,28 @@ if (!buildDir || !srcDir || !outDir) {
 fs.mkdirSync(outDir, { recursive: true });
 const read = (p) => fs.readFileSync(p);
 const src = (n) => read(path.join(srcDir, n));
-const latin = (u8) => Buffer.from(u8).toString('latin1');
-
-const load = async (name) => ({
-  module: await WebAssembly.compile(read(path.join(buildDir, `${name}.wasm`))),
-  symbols: JSON.parse(fs.readFileSync(path.join(buildDir, `${name}.symbols.json`), 'utf8')),
-});
-// TeX names a file with an area prefix (TeXinputs:, TeXfonts:, TeXformats:). The virtual
-// file system has one flat folder; names are compared in lower case.
-const flatName = (n) => n.replace(/^[A-Za-z]+:/, '').toLowerCase();
+const load = (name) => loadProgram(buildDir, name);
 
 const results = { steps: {} };
 const t = (label, ms) => { results.steps[label] = { ...(results.steps[label] ?? {}), ms: Math.round(ms) }; };
 
 // Step 1: PLtoTF and TFtoPL
-const pltotf = await load('pltotf');
-const tftopl = await load('tftopl');
-{
-  const files = new Map([['plfile', src('trip.pl')]]);
-  const r = await runProgram({ ...pltotf, files, mapName: (n) => n });
-  t('pltotf', r.runMs);
-  const tfm = files.get('tfmfile');
-  fs.writeFileSync(path.join(outDir, 'trip.tfm'), tfm);
-  const files2 = new Map([['tfmfile', tfm]]);
-  const r2 = await runProgram({ ...tftopl, files: files2, mapName: (n) => n });
-  t('tftopl', r2.runMs);
-  const tmp = latin(files2.get('plfile'));
-  fs.writeFileSync(path.join(outDir, 'tmp.pl'), tmp, 'latin1');
-  const d = lineDiff(latin(src('trip.pl')), tmp);
-  results.steps.pltotf.tmpPlDiffers = d.changedLines;
-  results.tfm = tfm;
-}
+const rt = await plRoundTrip(await load('pltotf'), await load('tftopl'), src('trip.pl'));
+t('pltotf', rt.ms.pltotf);
+t('tftopl', rt.ms.tftopl);
+fs.writeFileSync(path.join(outDir, 'trip.tfm'), rt.tfm);
+fs.writeFileSync(path.join(outDir, 'tmp.pl'), rt.pl, 'latin1');
+results.steps.pltotf.tmpPlDiffers = rt.plDiffers;
 
 // Steps 3 and 4: the trip build of tex.web
 const tex = await load('textrip');
 const vfs = new Map([
   ['tex.pool', read(path.join(buildDir, 'textrip.pool'))],
   ['trip.tex', src('trip.tex')],
-  ['trip.tfm', results.tfm],
+  ['trip.tfm', rt.tfm],
 ]);
-delete results.tfm;
-const texRun = async (terminal) => {
-  const r = await runProgram({
-    ...tex, files: vfs, terminal,
-    mapName: flatName,
-    extra: { hostexit: (code) => { throw new ExitSignal(code); } },
-  });
-  return r;
-};
 {
-  const r = await texRun(['', '\\input trip']);
+  const r = await texRun(tex, vfs, ['', '\\input trip']);
   t('step3', r.runMs);
   results.steps.step3.exit = r.exit;
   fs.writeFileSync(path.join(outDir, 'tripin.fot'), r.terminal, 'latin1');
@@ -78,7 +49,7 @@ const texRun = async (terminal) => {
 }
 {
   vfs.delete('trip.log');
-  const r = await texRun([' &trip  trip ']);
+  const r = await texRun(tex, vfs, [' &trip  trip ']);
   t('step4', r.runMs);
   results.steps.step4.exit = r.exit;
   fs.writeFileSync(path.join(outDir, 'trip.fot'), r.terminal, 'latin1');
@@ -91,20 +62,11 @@ const texRun = async (terminal) => {
 
 // Step 6: DVItype
 {
-  const dvitype = await load('dvitype');
   const dvi = vfs.get('trip.dvi');
   if (dvi) {
-    const files = new Map([['dvifile', dvi], ['trip.tfm', results.tfm ?? fs.readFileSync(path.join(outDir, 'trip.tfm'))]]);
-    const r = await runProgram({
-      ...dvitype, files,
-      terminal: ['2', '*.*.*.*.*.*.*.*.*.*', '', '7227/100', ''],
-      ttyNames: ['TTY:', 'termin'],
-      echo: false,
-      extra: { hostexit: (code) => { throw new ExitSignal(code); } },
-      mapName: (n) => (n === 'dvifile' ? n : flatName(n).replace(/^.*\//, '')),
-    });
-    t('dvitype', r.runMs);
-    fs.writeFileSync(path.join(outDir, 'trip.typ'), r.terminal, 'latin1');
+    const r = await dvitypeRun(await load('dvitype'), dvi, [['trip.tfm', rt.tfm]]);
+    t('dvitype', r.ms);
+    fs.writeFileSync(path.join(outDir, 'trip.typ'), r.typ, 'latin1');
   }
 }
 

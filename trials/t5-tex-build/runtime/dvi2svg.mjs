@@ -1,6 +1,7 @@
 // DVI to SVG of the trial. Each glyph becomes one <path> with the outline of
 // its Type 1 font; each rule becomes a <rect>. The format of the DVI file:
-// dvitype.web, part 3. Units: the SVG unit is the TeX point.
+// dvitype.web, part 3. Units: the SVG unit is the TeX point, unless opt.unitPerPt
+// gives another unit. opt.special reads the \special commands (T6: dvisvgm-specials.mjs).
 import { readTfm } from './tfm.mjs';
 import { readType1 } from './type1.mjs';
 
@@ -10,7 +11,8 @@ const r = (v) => String(Math.round(v * 1000) / 1000);
  * @param {Uint8Array} dvi
  * @param {(name:string)=>{tfm:Uint8Array, pfb:Uint8Array|null}|null} fontFiles gives the files of a font;
  *   a font with no PFB keeps its TFM advances, and each of its glyphs goes in the missing list
- * @param {{page?:number, margin?:number}} [opt]
+ * @param {{page?:number, margin?:number, unitPerPt?:number,
+ *   special?:(text:string, at:{x:number,y:number,unit:number})=>({svg?:string, box?:number[]}|null)}} [opt]
  */
 export function dviToSvg(dvi, fontFiles, opt = {}) {
   let p = 0;
@@ -20,7 +22,8 @@ export function dviToSvg(dvi, fontFiles, opt = {}) {
   p = 2;
   const num = u(4), den = u(4), mag = u(4);
   p += 1 + dvi[14];
-  const toPt = (num / den) * (mag / 1000) * (72.27 / 254000);
+  // the SVG unit: the TeX point, or another unit with opt.unitPerPt (72/72.27 gives the big point)
+  const toPt = (num / den) * (mag / 1000) * (72.27 / 254000) * (opt.unitPerPt ?? 1);
   const fonts = new Map();
   const loaded = new Map();
   const missing = new Set();
@@ -105,7 +108,17 @@ export function dviToSvg(dvi, fontFiles, opt = {}) {
       case 166: v += z; break;
       case 167: case 168: case 169: case 170: z = s(o - 166); v += z; break;
       case 235: case 236: case 237: case 238: f = fonts.get(u(o - 234)); break;
-      case 239: case 240: case 241: case 242: { const k = u(o - 238); p += k; specials++; break; }
+      case 239: case 240: case 241: case 242: {
+        const k = u(o - 238);
+        const text = Buffer.from(dvi.subarray(p, p + k)).toString('latin1');
+        p += k; specials++;
+        // opt.special reads one \special at the current position (in SVG units) and can
+        // give SVG text for the page and a box [x0, y0, x1, y1] for the bounds
+        const res = page === want && opt.special ? opt.special(text, { x: h * toPt, y: v * toPt, unit: opt.unitPerPt ?? 1 }) : null;
+        if (res?.svg) out.push(res.svg);
+        if (res?.box) box(...res.box);
+        break;
+      }
       case 243: case 244: case 245: case 246: fontDef(u(o - 242)); break;
       case 248: {
         const m = opt.margin ?? 1;

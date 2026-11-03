@@ -1,0 +1,8 @@
+% The languages of the format of the T6 trial: English only (the design of
+% the tex stage). babel's hyphen.cfg reads this file when the format builds.
+english hyphen.tex % do not change!
+=usenglish
+=USenglish
+=american
+dumylang	dumyhyph.tex    % for testing a new language.
+nohyphenation	zerohyph.tex    % a language with no patterns at all.

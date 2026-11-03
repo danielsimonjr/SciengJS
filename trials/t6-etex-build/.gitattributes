@@ -1,0 +1,3 @@
+# TeX input and the change files must be byte-identical on each system:
+# the host gives each line to TeX without a carriage return.
+* text=auto eol=lf

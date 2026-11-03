@@ -248,7 +248,8 @@ function controlCode(c) {
     case "'": return 'OCT';
     case '"': return 'HEX';
     case '$': return 'SUM';
-    case ' ': case '\t': case '*': return 'NEW';
+    // tangle.web gives each line a space at its end, so `@` at the end of a line starts a module
+    case ' ': case '\t': case '\n': case '*': return 'NEW';
     case 'D': case 'd': return 'DEF';
     case 'F': case 'f': return 'FMT';
     case '{': return 'OCOM';

@@ -1,0 +1,13 @@
+% The voltage divider circuit of trial T3, for the format of T6 (scieng.fmt).
+% The format holds xcolor, tikz and circuitikz; standalone loads at run time.
+% The class option dvisvgm makes the L3 kernel load l3backend-dvisvgm.def,
+% the same driver as the graphics, xcolor and pgf drivers of the format.
+\documentclass[dvisvgm]{standalone}
+\begin{document}
+\begin{circuitikz}
+  \draw (0,0) to[V, l=$V_s$] (0,3)
+    to[R, l=$R_1$] (3,3)
+    to[R, l=$R_2$] (3,0) -- (0,0);
+  \draw (3,3) -- (4,3) node[right] {$V_{out}$};
+\end{circuitikz}
+\end{document}
