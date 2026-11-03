@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { dropImageElements, stripImageAttributes } from "../../src/graph/image.ts";
+import { dropImageElements, dropStylesheetInstructions, stripImageAttributes } from "../../src/graph/image.ts";
 
 describe("stripImageAttributes", () => {
   test("removes an image attribute of a node and reports its line and file", () => {
     const r = stripImageAttributes('digraph G { a [image="x.png"] }');
     expect(r.source).not.toContain("image");
     expect(r.source).toContain("a [");
-    expect(r.removed).toEqual([{ line: 1, file: "x.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "x.png" }]);
   });
 
   test("keeps the other attributes of the list", () => {
@@ -14,14 +14,14 @@ describe("stripImageAttributes", () => {
     expect(r.source).toContain('label="A"');
     expect(r.source).toContain("shape=box");
     expect(r.source).not.toContain("image");
-    expect(r.removed).toEqual([{ line: 1, file: "x.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "x.png" }]);
   });
 
   test("removes the last attribute of a list and keeps the rest", () => {
     const r = stripImageAttributes('digraph G { a [shape=box, image="x.png"] }');
     expect(r.source).toContain("shape=box");
     expect(r.source).not.toContain("image");
-    expect(r.removed).toEqual([{ line: 1, file: "x.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "x.png" }]);
   });
 
   test("removes a graph-level image statement with its semicolon", () => {
@@ -29,26 +29,26 @@ describe("stripImageAttributes", () => {
     expect(r.source).not.toContain("image");
     expect(r.source).toContain("a -> b");
     expect(r.source.replace(/\s+/g, " ")).toBe("digraph G { a -> b }");
-    expect(r.removed).toEqual([{ line: 1, file: "g.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "g.png" }]);
   });
 
   test("removes an image default of a node statement", () => {
     const r = stripImageAttributes('digraph G { node [image="n.png", shape=box]; a -> b }');
     expect(r.source).not.toContain("image");
     expect(r.source).toContain("shape=box");
-    expect(r.removed).toEqual([{ line: 1, file: "n.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "n.png" }]);
   });
 
   test("removes a quoted image key", () => {
     const r = stripImageAttributes('digraph G { a ["image"="q.png"] }');
     expect(r.source).not.toContain("image");
-    expect(r.removed).toEqual([{ line: 1, file: "q.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "q.png" }]);
   });
 
   test("removes an image value given as an HTML string", () => {
     const r = stripImageAttributes("digraph G { a [image=<pic.png>] }");
     expect(r.source).not.toContain("image");
-    expect(r.removed).toEqual([{ line: 1, file: "pic.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "pic.png" }]);
   });
 
   test("keeps keys that only contain the word image", () => {
@@ -81,8 +81,8 @@ describe("stripImageAttributes", () => {
     const src = 'digraph G {\n  a [\n    label="A",\n    image="one.png"\n  ];\n  b [image="two.png"];\n}\n';
     const r = stripImageAttributes(src);
     expect(r.removed).toEqual([
-      { line: 4, file: "one.png" },
-      { line: 6, file: "two.png" },
+      { key: "image", line: 4, file: "one.png" },
+      { key: "image", line: 6, file: "two.png" },
     ]);
     expect(r.source).not.toContain("image");
     expect(r.source.split("\n").length).toBe(src.split("\n").length);
@@ -108,18 +108,18 @@ describe("stripImageAttributes", () => {
   test("removes a comment between the value and the separator together with the attribute", () => {
     const r = stripImageAttributes('digraph G { image="x.png" /* c */ ; a }');
     expect(r.source.replace(/\s+/g, " ")).toBe("digraph G { a }");
-    expect(r.removed).toEqual([{ line: 1, file: "x.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "x.png" }]);
   });
 
   test("keeps a non-ASCII file name whole, because DOT identifiers take bytes from 0x80", () => {
     const r = stripImageAttributes("digraph G { a [image=café.png] }");
-    expect(r.removed).toEqual([{ line: 1, file: "café.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "café.png" }]);
     expect(r.source).not.toContain("café");
   });
 
   test("reads a # after leading spaces as a token, because only a # in column one starts a preprocessor line", () => {
     const r = stripImageAttributes('digraph G {\n  # image="p.png"\n}\n');
-    expect(r.removed).toEqual([{ line: 2, file: "p.png" }]);
+    expect(r.removed).toEqual([{ key: "image", line: 2, file: "p.png" }]);
   });
 });
 
@@ -142,5 +142,62 @@ describe("dropImageElements", () => {
     const r = dropImageElements(svg);
     expect(r.svg).toBe(svg);
     expect(r.dropped).toBe(0);
+  });
+});
+
+describe("stripImageAttributes: stylesheet and string concatenation", () => {
+  test("removes a stylesheet attribute and reports its key, line and value", () => {
+    const r = stripImageAttributes('digraph G {\n  stylesheet="http://evil.example/x.css";\n  a -> b\n}');
+    expect(r.source).not.toContain("stylesheet");
+    expect(r.source).not.toContain("evil.example");
+    expect(r.source).toContain("a -> b");
+    expect(r.removed).toEqual([{ key: "stylesheet", line: 2, file: "http://evil.example/x.css" }]);
+  });
+
+  test("removes an image key that the source builds with string concatenation", () => {
+    const r = stripImageAttributes('digraph G { a ["ima" + "ge"="p.png"] }');
+    expect(r.source).not.toContain("p.png");
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "p.png" }]);
+  });
+
+  test("removes a value that the source builds with string concatenation", () => {
+    const r = stripImageAttributes('digraph G { a [image="p" + ".png"] }');
+    expect(r.source).not.toContain("png");
+    expect(r.removed).toEqual([{ key: "image", line: 1, file: "p.png" }]);
+  });
+
+  test("keeps a label that holds the word stylesheet", () => {
+    const src = 'digraph G { a [label="stylesheet=x"] }';
+    expect(stripImageAttributes(src).removed).toEqual([]);
+  });
+});
+
+describe("dropStylesheetInstructions", () => {
+  test("removes each xml-stylesheet instruction and counts it", () => {
+    const svg = '<?xml version="1.0"?>\n<?xml-stylesheet href="http://e/x.css" type="text/css"?>\n<svg></svg>';
+    const r = dropStylesheetInstructions(svg);
+    expect(r.dropped).toBe(1);
+    expect(r.svg).not.toContain("stylesheet");
+    expect(r.svg).toContain("<svg></svg>");
+    expect(r.svg).toContain("<?xml version");
+  });
+
+  test("leaves an SVG without such an instruction as it is", () => {
+    const svg = "<svg><text>xml-stylesheet</text></svg>";
+    expect(dropStylesheetInstructions(svg)).toEqual({ svg, dropped: 0 });
+  });
+});
+
+describe("stripImageAttributes: many attributes", () => {
+  test("a source with 20000 image attributes takes under 2 seconds and keeps each line number", () => {
+    const count = 20000;
+    const source = "digraph{\n" + Array.from({ length: count }, (_, i) => `n${i} [image="p${i}.png"];\n`).join("") + "}";
+    const start = performance.now();
+    const r = stripImageAttributes(source);
+    const elapsed = performance.now() - start;
+    expect(r.removed).toHaveLength(count);
+    expect(r.removed[0]).toEqual({ key: "image", line: 2, file: "p0.png" });
+    expect(r.removed[count - 1]).toEqual({ key: "image", line: count + 1, file: `p${count - 1}.png` });
+    expect(elapsed).toBeLessThan(2000);
   });
 });

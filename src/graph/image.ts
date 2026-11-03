@@ -1,10 +1,14 @@
-/** One image attribute that the scanner removed: the line of its key and the file name of its value. */
+/** The attribute keys that name an external resource. The scanner removes each of them. */
+const EXTERNAL_KEYS: readonly string[] = ["image", "stylesheet"];
+
+/** One attribute that the scanner removed: its key, the line of the key and the text of its value. */
 export interface ImageRemoval {
+  key: string;
   line: number;
   file: string;
 }
 
-/** The source without its image attributes, and one entry for each attribute that was removed. */
+/** The source without its external-resource attributes, and one entry for each attribute that was removed. */
 export interface StripResult {
   source: string;
   removed: ImageRemoval[];
@@ -22,6 +26,7 @@ interface Token {
 interface Range {
   start: number;
   end: number;
+  key: string;
   line: number;
   file: string;
 }
@@ -131,7 +136,23 @@ function tokenize(source: string): Token[] {
     tokens.push({ kind: "char", text: c, start: i, end: i + 1 });
     i++;
   }
-  return tokens;
+  return joinConcatenations(tokens);
+}
+
+// DOT joins quoted strings with "+". The joined text is one string token.
+function joinConcatenations(tokens: Token[]): Token[] {
+  const joined: Token[] = [];
+  for (const token of tokens) {
+    const last = joined[joined.length - 1];
+    const prior = joined[joined.length - 2];
+    if (token.kind === "string" && last?.kind === "char" && last.text === "+" && prior?.kind === "string") {
+      joined.length -= 2;
+      joined.push({ kind: "string", text: prior.text + token.text, start: prior.start, end: token.end });
+      continue;
+    }
+    joined.push(token);
+  }
+  return joined;
 }
 
 function skipTrivia(source: string, from: number): number {
@@ -165,23 +186,32 @@ function skipTrivia(source: string, from: number): number {
   return j;
 }
 
-function lineOf(source: string, index: number): number {
-  let line = 1;
-  for (let k = 0; k < index; k++) {
-    if (source[k] === "\n") {
-      line++;
+/** Counts the lines from a known position, so that a scan with many hits reads the source once. */
+class LineCounter {
+  private index = 0;
+  private line = 1;
+
+  constructor(private readonly source: string) {}
+
+  /** The line of an index. The indexes of the calls must not decrease. */
+  at(index: number): number {
+    for (; this.index < index; this.index++) {
+      if (this.source[this.index] === "\n") {
+        this.line++;
+      }
     }
+    return this.line;
   }
-  return line;
 }
 
-/** Removes each image attribute of a DOT source and reports its line and file name. Comments, quoted strings and HTML strings keep their text. */
+/** Removes each image and stylesheet attribute of a DOT source and reports its key, line and value. Comments, quoted strings and HTML strings keep their text. */
 export function stripImageAttributes(source: string): StripResult {
   const tokens = tokenize(source);
   const ranges: Range[] = [];
+  const lines = new LineCounter(source);
   for (let i = 0; i < tokens.length; i++) {
     const key = tokens[i];
-    const isKey = (key.kind === "ident" || key.kind === "string") && key.text === "image";
+    const isKey = (key.kind === "ident" || key.kind === "string") && EXTERNAL_KEYS.includes(key.text);
     if (!isKey) {
       continue;
     }
@@ -198,7 +228,7 @@ export function stripImageAttributes(source: string): StripResult {
     if (sep < source.length && (source[sep] === "," || source[sep] === ";")) {
       end = sep + 1;
     }
-    ranges.push({ start: key.start, end, line: lineOf(source, key.start), file: value.text });
+    ranges.push({ start: key.start, end, key: key.text, line: lines.at(key.start), file: value.text });
     i += 2;
   }
   const chars = source.split("");
@@ -207,7 +237,7 @@ export function stripImageAttributes(source: string): StripResult {
       chars[k] = source[k] === "\n" ? "\n" : " ";
     }
   }
-  const removed: ImageRemoval[] = ranges.map((range) => ({ line: range.line, file: range.file }));
+  const removed: ImageRemoval[] = ranges.map((range) => ({ key: range.key, line: range.line, file: range.file }));
   return { source: chars.join(""), removed };
 }
 
@@ -286,5 +316,15 @@ export function dropImageElements(svg: string): { svg: string; dropped: number }
     i++;
   }
   out += svg.slice(copied);
+  return { svg: out, dropped };
+}
+
+/** Removes each xml-stylesheet processing instruction of an SVG and counts the removed instructions. */
+export function dropStylesheetInstructions(svg: string): { svg: string; dropped: number } {
+  let dropped = 0;
+  const out = svg.replace(/<\?xml-stylesheet[^>]*?\?>(\r?\n)?/g, () => {
+    dropped++;
+    return "";
+  });
   return { svg: out, dropped };
 }

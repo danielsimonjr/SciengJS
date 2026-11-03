@@ -1,5 +1,5 @@
 import { RenderError } from "../errors.ts";
-import { stripImageAttributes, dropImageElements } from "./image.ts";
+import { stripImageAttributes, dropImageElements, dropStylesheetInstructions } from "./image.ts";
 
 type VizModule = typeof import("@viz-js/viz");
 type Viz = Awaited<ReturnType<VizModule["instance"]>>;
@@ -24,27 +24,26 @@ export interface DotSvgResult {
   warnings: string[];
 }
 
-/** Renders a DOT source to SVG with the viz library. Image attributes are removed first. A syntax error rejects with E_INPUT. */
-export async function dotToSvg(source: string): Promise<DotSvgResult> {
+/** Renders a DOT source to SVG with the viz library. Image and stylesheet attributes are removed first. A syntax error rejects with E_INPUT. The viz instance is a parameter so that a test can fail it. */
+export async function dotToSvg(source: string, getViz: () => Promise<Viz> = vizInstance): Promise<DotSvgResult> {
   const stripped = stripImageAttributes(source);
   const warnings: string[] = [];
   for (const removed of stripped.removed) {
     warnings.push(
-      `line ${removed.line}: image attribute "${removed.file}" removed; the graph stage reads no image file`,
+      removed.key === "image"
+        ? `line ${removed.line}: image attribute "${removed.file}" removed; the graph stage reads no image file`
+        : `line ${removed.line}: ${removed.key} attribute "${removed.file}" removed; the graph stage links no external style sheet`,
     );
   }
 
-  const viz = await vizInstance();
+  const viz = await getViz();
   const result = viz.render(stripped.source, { format: "svg" });
 
   if (result.status === "failure") {
     const error = result.errors.find((entry) => entry.level === "error") ?? result.errors[0];
-    const lineMatch = /line (\d+)/.exec(error.message);
-    throw new RenderError(
-      "E_INPUT",
-      error.message,
-      lineMatch === null ? undefined : { line: Number(lineMatch[1]) },
-    );
+    const message = error?.message ?? "graphviz failed and gave no error message";
+    const lineMatch = /line (\d+)/.exec(message);
+    throw new RenderError("E_INPUT", message, lineMatch === null ? undefined : { line: Number(lineMatch[1]) });
   }
 
   for (const entry of result.errors) {
@@ -58,7 +57,12 @@ export async function dotToSvg(source: string): Promise<DotSvgResult> {
     warnings.push("an image element that referenced a file was removed");
   }
 
-  return { svg: dropped.svg, warnings };
+  const sheets = dropStylesheetInstructions(dropped.svg);
+  if (sheets.dropped > 0) {
+    warnings.push("a style sheet instruction that referenced a file was removed");
+  }
+
+  return { svg: sheets.svg, warnings };
 }
 
 /** The text of a DOT request. The function reads a byte source as UTF-8. */

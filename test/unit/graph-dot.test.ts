@@ -60,4 +60,20 @@ describe("dotToSvg", () => {
     expect(r.svg).toContain("http://127.0.0.1:9/page");
     expect(r.svg).not.toContain("<image");
   });
+
+  test("a stylesheet attribute gives one warning and no style sheet reference in the SVG", async () => {
+    const r = await dotToSvg('digraph G {\n  stylesheet="http://evil.example/x.css";\n  a -> b\n}\n');
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings[0]).toContain("line 2");
+    expect(r.warnings[0]).toContain("stylesheet");
+    expect(r.svg).not.toContain("xml-stylesheet");
+    expect(r.svg).not.toContain("evil.example");
+  });
+
+  test("an image key built with string concatenation gives the removal warning and no graphviz file warning", async () => {
+    const r = await dotToSvg('digraph G { a ["ima" + "ge"="p.png"] }');
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings[0]).toContain("p.png");
+    expect(r.warnings[0]).toContain("removed");
+  });
 });
