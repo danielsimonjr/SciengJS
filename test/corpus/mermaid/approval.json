@@ -1,13 +1,13 @@
 {
   "entries": [
-    { "source": "class-generic.mmd", "approved": false },
-    { "source": "class-inheritance.mmd", "approved": false },
-    { "source": "class-relations.mmd", "approved": false },
-    { "source": "sequence-activation.mmd", "approved": false },
-    { "source": "sequence-basic.mmd", "approved": false },
-    { "source": "sequence-blocks.mmd", "approved": false },
-    { "source": "sequence-notes.mmd", "approved": false },
-    { "source": "state-basic.mmd", "approved": false },
-    { "source": "state-direction.mmd", "approved": false }
+    { "source": "class-generic.mmd", "approved": true },
+    { "source": "class-inheritance.mmd", "approved": true },
+    { "source": "class-relations.mmd", "approved": true },
+    { "source": "sequence-activation.mmd", "approved": true },
+    { "source": "sequence-basic.mmd", "approved": true },
+    { "source": "sequence-blocks.mmd", "approved": true },
+    { "source": "sequence-notes.mmd", "approved": true },
+    { "source": "state-basic.mmd", "approved": true },
+    { "source": "state-direction.mmd", "approved": true }
   ]
 }
