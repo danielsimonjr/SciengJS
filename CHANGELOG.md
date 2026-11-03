@@ -4,7 +4,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
-## [0.1.1] - 2026-11-02
+## [0.1.1] - 2026-11-03
 
 The asset root for bundled use. A bundle of the engine names the folder of its font and its WASM file.
 
