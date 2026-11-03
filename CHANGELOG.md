@@ -6,6 +6,9 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Added
 
+- Mermaid types other than class, state and sequence (for example flowchart and gantt) render through the browser stage, to svg, png and pdf. The pinned Mermaid 11.17.2 build ships in the package. The browser stage serves it to the page from the package bytes. Without a browser path these reject with `E_STAGE_MISSING`.
+- The formats `pdf` for `dot`, `mermaid`, `math`, `tikz`, `plot` and `sysml` list the browser stage. `dot` to `pdf` and `mermaid` to `pdf` are built in.
+- The browser stage draws a page that reports its result: svg, png (a clip of the diagram) and pdf.
 - The subpath `./browser`: a Chrome DevTools Protocol client over the built-in `WebSocket`, with no npm dependency. Each start uses a new temporary profile and runs headless. Each start uses the forced flags: a refusing proxy, the loopback bypass list, a DNS block and the WebRTC policy. Other flags stop the background requests of the browser. The client never passes `--no-sandbox`. The `Fetch` domain refuses each page request, except the page itself. The client attaches each frame in another process, each worker and each pop-up before it runs, and intercepts its requests. The load wait uses the loader of the navigation.
 - The formats `html` to `png` (a screenshot of the page at a given width, height and device scale) and `html` to `pdf` (`Page.printToPDF`). Both need the browser stage. The browser path comes from `SCIENG_BROWSER` or the `browser` key. Without it, both reject with `E_STAGE_MISSING`, and `capabilities` reports them as not ready.
 - The browser profile, the proxy and the browser process tree are removed before a render returns, on the success path and on each failure path. One deadline covers the cleanup. Each DevTools request has a deadline, so a page that does not stop rejects with `E_TIMEOUT`.

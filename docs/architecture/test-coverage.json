@@ -1,29 +1,31 @@
 {
   "metadata": {
-    "totalSourceFiles": 51,
-    "totalTestFiles": 49,
-    "testedCount": 33,
-    "untestedCount": 18,
-    "coveragePercent": "64.7",
+    "totalSourceFiles": 56,
+    "totalTestFiles": 55,
+    "testedCount": 36,
+    "untestedCount": 20,
+    "coveragePercent": "64.3",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 51,
-      "testedActive": 33,
-      "activeUntested": 18,
+      "activeFiles": 56,
+      "testedActive": 36,
+      "activeUntested": 20,
       "excludedTotal": 0,
-      "percent": "64.7",
+      "percent": "64.3",
       "breakdown": {
-        "active_untested": 18
+        "active_untested": 20
       }
     }
   },
   "untestedFiles": [
     "src/browser/index.ts",
+    "src/graph/backend-pdf.ts",
     "src/graph/index.ts",
+    "src/mermaid/backend-pdf.ts",
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
+    "src/mermaid/browser.ts",
     "src/mermaid/index.ts",
-    "src/pairs.ts",
     "src/worker/entry.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
@@ -44,6 +46,8 @@
     "src/browser/cdp.ts",
     "src/browser/flags.ts",
     "src/browser/input.ts",
+    "src/browser/page.ts",
+    "src/browser/pinned.ts",
     "src/browser/profile.ts",
     "src/browser/proxy.ts",
     "src/browser/render.ts",
@@ -61,6 +65,7 @@
     "src/mermaid/sequence-layout.ts",
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
+    "src/pairs.ts",
     "src/raster/index.ts",
     "src/raster/warnings.ts",
     "src/registry.ts",
@@ -92,6 +97,12 @@
     "src/browser/input.ts": [
       "test/unit/browser-input.test.ts"
     ],
+    "src/browser/page.ts": [
+      "test/unit/browser-page.test.ts"
+    ],
+    "src/browser/pinned.ts": [
+      "test/unit/browser-pinned.test.ts"
+    ],
     "src/browser/profile.ts": [
       "test/integration/browser-render.test.ts"
     ],
@@ -103,6 +114,7 @@
     ],
     "src/config.ts": [
       "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser.test.ts",
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
@@ -111,6 +123,7 @@
       "test/unit/worker-run.test.ts"
     ],
     "src/core.ts": [
+      "test/unit/browser-pdf-pairs.test.ts",
       "test/unit/browser-stage.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
@@ -119,6 +132,7 @@
     ],
     "src/errors.ts": [
       "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
@@ -128,6 +142,7 @@
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
+    "src/graph/backend-pdf.ts": [],
     "src/graph/backend-png.ts": [
       "test/unit/graph-png.test.ts"
     ],
@@ -149,10 +164,13 @@
     ],
     "src/graph/index.ts": [],
     "src/index.ts": [
-      "test/integration/browser-render.test.ts"
+      "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser.test.ts"
     ],
+    "src/mermaid/backend-pdf.ts": [],
     "src/mermaid/backend-png.ts": [],
     "src/mermaid/backend-svg.ts": [],
+    "src/mermaid/browser.ts": [],
     "src/mermaid/class.ts": [
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-xml.test.ts"
@@ -160,6 +178,7 @@
     "src/mermaid/common.ts": [
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
+      "test/unit/mermaid-routing.test.ts",
       "test/unit/mermaid-sequence.test.ts",
       "test/unit/mermaid-state.test.ts",
       "test/unit/mermaid-xml.test.ts"
@@ -181,7 +200,9 @@
       "test/unit/mermaid-state.test.ts",
       "test/unit/mermaid-xml.test.ts"
     ],
-    "src/pairs.ts": [],
+    "src/pairs.ts": [
+      "test/unit/browser-pdf-pairs.test.ts"
+    ],
     "src/raster/index.ts": [
       "test/unit/graph-network.test.ts",
       "test/unit/mermaid-xml.test.ts",
@@ -191,6 +212,7 @@
       "test/unit/raster-warnings.test.ts"
     ],
     "src/registry.ts": [
+      "test/unit/browser-pdf-pairs.test.ts",
       "test/unit/browser-stage.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
@@ -198,6 +220,7 @@
     ],
     "src/types.ts": [
       "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/version.ts": [
@@ -243,6 +266,12 @@
       "src/browser/render.ts",
       "src/browser/profile.ts"
     ],
+    "test/integration/mermaid-browser.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
     "test/integration/page-checker.test.ts": [],
     "test/mutation/run-mutants.test.ts": [],
     "test/unit/assets.test.ts": [
@@ -257,6 +286,17 @@
     ],
     "test/unit/browser-input.test.ts": [
       "src/browser/input.ts"
+    ],
+    "test/unit/browser-page.test.ts": [
+      "src/browser/page.ts"
+    ],
+    "test/unit/browser-pdf-pairs.test.ts": [
+      "src/core.ts",
+      "src/pairs.ts",
+      "src/registry.ts"
+    ],
+    "test/unit/browser-pinned.test.ts": [
+      "src/browser/pinned.ts"
     ],
     "test/unit/browser-proxy.test.ts": [
       "src/browser/proxy.ts"
@@ -311,6 +351,7 @@
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
     ],
+    "test/unit/mermaid-browser-route.test.ts": [],
     "test/unit/mermaid-class.test.ts": [
       "src/errors.ts",
       "src/mermaid/common.ts",
@@ -330,6 +371,9 @@
       "src/registry.ts"
     ],
     "test/unit/mermaid-render.test.ts": [],
+    "test/unit/mermaid-routing.test.ts": [
+      "src/mermaid/common.ts"
+    ],
     "test/unit/mermaid-sequence.test.ts": [
       "src/mermaid/common.ts",
       "src/mermaid/sequence.ts",
@@ -398,7 +442,15 @@
       "category": null
     },
     {
+      "file": "src/graph/backend-pdf.ts",
+      "category": null
+    },
+    {
       "file": "src/graph/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/mermaid/backend-pdf.ts",
       "category": null
     },
     {
@@ -410,11 +462,11 @@
       "category": null
     },
     {
-      "file": "src/mermaid/index.ts",
+      "file": "src/mermaid/browser.ts",
       "category": null
     },
     {
-      "file": "src/pairs.ts",
+      "file": "src/mermaid/index.ts",
       "category": null
     },
     {

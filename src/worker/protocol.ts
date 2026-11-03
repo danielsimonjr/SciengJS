@@ -31,9 +31,11 @@ export interface WorkerJob {
 export interface BackendOutput {
   bytes: Uint8Array;
   warnings?: string[];
+  /** The backend name of this output, when it differs from the registry entry (a route chosen per source). */
+  backend?: string;
 }
 
 /** The one message that a worker sends back. */
 export type WorkerMessage =
-  | { ok: true; bytes: Uint8Array; warnings: string[] }
+  | { ok: true; bytes: Uint8Array; warnings: string[]; backend?: string }
   | { ok: false; code: string; message: string; line?: number; column?: number };

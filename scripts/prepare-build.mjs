@@ -21,6 +21,10 @@ const WASM_TARGET_PATH = path.join(ASSETS_DIR, "index_bg.wasm");
 const WASM_PACKAGE = "@resvg/resvg-wasm";
 const WASM_PACKAGE_FILE = "index_bg.wasm";
 
+// The pinned Mermaid build inside its package, and the copy in assets/.
+const MERMAID_PACKAGE_FILE = "mermaid/dist/mermaid.min.js";
+const MERMAID_TARGET_PATH = path.join(ASSETS_DIR, "mermaid.min.js");
+
 // The repository root is the parent folder of the folder holding this script.
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(scriptDir);
@@ -71,6 +75,10 @@ async function main() {
   // Only after the read succeeds, create the assets folder. Then write the bytes.
   await mkdir(path.join(root, ASSETS_DIR), { recursive: true });
   await writeFile(path.join(root, WASM_TARGET_PATH), wasmBytes);
+
+  // The pinned Mermaid build, a devDependency, is copied the same way. The browser stage serves it to pages.
+  const mermaidSourcePath = createRequire(path.join(root, "package.json")).resolve(MERMAID_PACKAGE_FILE);
+  await writeFile(path.join(root, MERMAID_TARGET_PATH), await readFile(mermaidSourcePath));
 }
 
 main()

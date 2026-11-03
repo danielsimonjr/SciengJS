@@ -17,6 +17,7 @@ Version: each row gives the version that the engine pins.
 | mesh | `occt-import-js` (OpenCascade compiled to WASM) | LGPL-2.1 | not yet a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
 | mesh (viewer page) | `three` | MIT | not yet a dependency |
+| browser | `mermaid` 11.17.2 (the pinned build `dist/mermaid.min.js`, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copy to pages |
 | raster | `@resvg/resvg-wasm` 2.6.2 | MPL-2.0 | a dependency |
 | raster | Liberation Serif Regular 2.1.5 (font, in `assets/fonts/`) | SIL Open Font License 1.1 | bundled |
 | html | `parse5` | MIT | not yet a dependency |
@@ -27,6 +28,10 @@ Version: each row gives the version that the engine pins.
 ### Graphviz (EPL-2.0)
 
 The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to the wrapper `@viz-js/viz`. The package does not ship a Graphviz licence file. The licence text of Graphviz is in `assets/licenses/EPL-2.0.txt`. The MIT licence text of the wrapper is in `assets/licenses/MIT-viz-js.txt`, copied from the tag `release-viz-3.31.0` of the source repository https://github.com/mdaines/viz-js. The npm package does not ship this file.
+
+### Mermaid (MIT)
+
+The MIT licence applies to `mermaid` 11.17.2. The build writes the file mermaid.min.js into the assets folder. That file is generated at build time and is not committed. The licence text is in `assets/licenses/MIT-mermaid.txt`.
 
 ### OpenCascade (LGPL-2.1)
 

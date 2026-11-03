@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 146
+  totalFiles: 157
   totalModules: 3
-  totalExports: 287
+  totalExports: 305
 modules:
   tools:
     scripts/prepare-build.mjs:
@@ -523,6 +523,24 @@ modules:
         - htmlSource
         - browserPathOf
         - blockedWarnings
+    src/browser/page.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - scriptJson
+        - svgPageHtml
+        - mermaidPageHtml
+    src/browser/pinned.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - MERMAID_VERSION
+        - MERMAID_FILE
+        - MERMAID_CDN_URL
+        - PinnedAsset
+        - PINNED_ASSETS
     src/browser/profile.ts:
       externalDependencies: []
       nodeDependencies:
@@ -581,6 +599,7 @@ modules:
       exports:
         - PAGE_URL
         - HtmlFormat
+        - PinnedBytes
         - HtmlPageRequest
         - HtmlPageResult
         - capturePage
@@ -662,6 +681,30 @@ modules:
         - RenderErrorPosition
         - RenderError
         - isRenderError
+    src/graph/backend-pdf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawSvgToPdf
+          typeOnly: false
+        - file: src/graph/dot.ts
+          imports:
+            - dotSourceText
+            - dotToSvg
+          typeOnly: false
+      exports:
+        - render
     src/graph/backend-png.ts:
       externalDependencies: []
       nodeDependencies:
@@ -826,6 +869,33 @@ modules:
         - Capability
         - render
         - capabilities
+    src/mermaid/backend-pdf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mermaid/common.ts
+          imports:
+            - readLenient
+            - routesToBrowser
+            - sourceText
+          typeOnly: false
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawMermaidInBrowser
+            - drawSvgToPdf
+            - MERMAID_NATIVE_PDF_BACKEND
+          typeOnly: false
+        - file: src/mermaid/render.ts
+          imports:
+            - renderMermaidSvg
+          typeOnly: false
+      exports:
+        - render
     src/mermaid/backend-png.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -841,7 +911,13 @@ modules:
           typeOnly: true
         - file: src/mermaid/common.ts
           imports:
+            - readLenient
+            - routesToBrowser
             - sourceText
+          typeOnly: false
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawMermaidInBrowser
           typeOnly: false
         - file: src/mermaid/render.ts
           imports:
@@ -860,7 +936,13 @@ modules:
           typeOnly: true
         - file: src/mermaid/common.ts
           imports:
+            - readLenient
+            - routesToBrowser
             - sourceText
+          typeOnly: false
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawMermaidInBrowser
           typeOnly: false
         - file: src/mermaid/render.ts
           imports:
@@ -868,6 +950,43 @@ modules:
           typeOnly: false
       exports:
         - render
+    src/mermaid/browser.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/input.ts
+          imports:
+            - blockedWarnings
+            - browserPathOf
+          typeOnly: false
+        - file: src/browser/pinned.ts
+          imports:
+            - MERMAID_CDN_URL
+            - MERMAID_FILE
+          typeOnly: false
+        - file: src/browser/page.ts
+          imports:
+            - mermaidPageHtml
+            - svgPageHtml
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - renderHtmlPage
+            - HtmlFormat
+            - HtmlPageRequest
+            - PinnedBytes
+          typeOnly: false
+        - file: src/assets.ts
+          imports:
+            - readAsset
+          typeOnly: false
+      exports:
+        - MERMAID_BROWSER_BACKEND
+        - MERMAID_NATIVE_PDF_BACKEND
+        - BrowserSettings
+        - BrowserDraw
+        - drawMermaidInBrowser
+        - drawSvgToPdf
     src/mermaid/class.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -907,6 +1026,7 @@ modules:
         - inputError
         - outside
         - prepare
+        - routesToBrowser
     src/mermaid/index.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1364,6 +1484,21 @@ modules:
             - PROFILE_PREFIX
           typeOnly: false
       exports: []
+    test/integration/mermaid-browser.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:module
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - render
+          typeOnly: false
+      exports: []
     test/integration/page-checker.test.ts:
       externalDependencies:
         - bun:test
@@ -1677,6 +1812,57 @@ modules:
             - parsePngOptions
           typeOnly: false
       exports: []
+    test/unit/browser-page.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/page.ts
+          imports:
+            - mermaidPageHtml
+            - scriptJson
+            - svgPageHtml
+          typeOnly: false
+      exports: []
+    test/unit/browser-pdf-pairs.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - capabilitiesWithRegistry
+          typeOnly: false
+        - file: src/pairs.ts
+          imports:
+            - PAIRS
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+      exports: []
+    test/unit/browser-pinned.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: src/browser/pinned.ts
+          imports:
+            - MERMAID_CDN_URL
+            - MERMAID_FILE
+            - MERMAID_VERSION
+            - PINNED_ASSETS
+          typeOnly: false
+      exports: []
     test/unit/browser-proxy.test.ts:
       externalDependencies:
         - bun:test
@@ -1955,6 +2141,16 @@ modules:
             - WorkerJob
           typeOnly: true
       exports: []
+    test/unit/mermaid-browser-route.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: test/support/test-registry.ts
+          imports:
+            - renderIsolated
+          typeOnly: false
+      exports: []
     test/unit/mermaid-class.test.ts:
       externalDependencies:
         - bun:test
@@ -2072,6 +2268,16 @@ modules:
         - file: test/support/test-registry.ts
           imports:
             - renderIsolated
+          typeOnly: false
+      exports: []
+    test/unit/mermaid-routing.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mermaid/common.ts
+          imports:
+            - routesToBrowser
           typeOnly: false
       exports: []
     test/unit/mermaid-sequence.test.ts:
@@ -2482,32 +2688,32 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 146
-  totalSourceFiles: 146
+  totalTypeScriptFiles: 157
+  totalSourceFiles: 157
   totalModules: 3
-  totalLinesOfCode: 16443
-  totalExports: 287
-  entryRoots: 37
-  reachableFiles: 37
+  totalLinesOfCode: 17006
+  totalExports: 305
+  entryRoots: 42
+  reachableFiles: 42
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 21
+  totalTypeOnlyImports: 23
   noImporterFileCount: 7
-  unusedExportsCount: 19
+  unusedExportsCount: 25
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 47
-  totalFunctions: 123
+  totalInterfaces: 51
+  totalFunctions: 131
   totalTypeGuards: 2
   totalEnums: 0
-  totalConstants: 42
+  totalConstants: 48
   totalReExports: 55
 reachability:
   roots:
@@ -2522,18 +2728,23 @@ reachability:
     - src/browser/cdp.ts
     - src/browser/flags.ts
     - src/browser/input.ts
+    - src/browser/page.ts
+    - src/browser/pinned.ts
     - src/browser/profile.ts
     - src/browser/proxy.ts
     - src/browser/render.ts
     - src/config.ts
     - src/core.ts
     - src/errors.ts
+    - src/graph/backend-pdf.ts
     - src/graph/backend-png.ts
     - src/graph/backend-svg.ts
     - src/graph/dot.ts
     - src/graph/image.ts
+    - src/mermaid/backend-pdf.ts
     - src/mermaid/backend-png.ts
     - src/mermaid/backend-svg.ts
+    - src/mermaid/browser.ts
     - src/mermaid/class.ts
     - src/mermaid/common.ts
     - src/mermaid/render.ts
@@ -2548,7 +2759,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 37
+  reachableCount: 42
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs

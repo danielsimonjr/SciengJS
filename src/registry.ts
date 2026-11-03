@@ -24,6 +24,8 @@ export const DEFAULT_REGISTRY: Registry = {
   "dot:png": { backend: "graph/viz+raster/resvg", moduleUrl: backendUrl("graph/backend-png") },
   "mermaid:svg": { backend: "mermaid/native", moduleUrl: backendUrl("mermaid/backend-svg") },
   "mermaid:png": { backend: "mermaid/native+raster/resvg", moduleUrl: backendUrl("mermaid/backend-png") },
+  "dot:pdf": { backend: "graph/viz+browser/chromium", moduleUrl: backendUrl("graph/backend-pdf") },
+  "mermaid:pdf": { backend: "mermaid/browser/chromium", moduleUrl: backendUrl("mermaid/backend-pdf") },
   "html:png": { backend: "browser/chromium", moduleUrl: backendUrl("browser/backend-png") },
   "html:pdf": { backend: "browser/chromium", moduleUrl: backendUrl("browser/backend-pdf") },
 };

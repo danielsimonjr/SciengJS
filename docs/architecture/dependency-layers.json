@@ -537,6 +537,45 @@
           "MAX_WARNING_URL_CHARS"
         ]
       },
+      "src/browser/page.ts": {
+        "description": "A page that loads the pinned Mermaid build and renders one source. The result is stored in window.__sciengDone:",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "scriptJson",
+          "svgPageHtml",
+          "mermaidPageHtml"
+        ],
+        "functions": [
+          "scriptJson",
+          "svgPageHtml",
+          "mermaidPageHtml"
+        ]
+      },
+      "src/browser/pinned.ts": {
+        "description": "pinned module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "MERMAID_VERSION",
+          "MERMAID_FILE",
+          "MERMAID_CDN_URL",
+          "PINNED_ASSETS"
+        ],
+        "interfaces": [
+          "PinnedAsset"
+        ],
+        "constants": [
+          "MERMAID_VERSION",
+          "MERMAID_FILE",
+          "MERMAID_CDN_URL",
+          "PINNED_ASSETS"
+        ]
+      },
       "src/browser/profile.ts": {
         "description": "Removes the profile. A held file is retried until the deadline, a Date.now() time. Any other error, or a deadline with t",
         "externalDependencies": [],
@@ -694,6 +733,7 @@
           "renderHtmlPage"
         ],
         "interfaces": [
+          "PinnedBytes",
           "HtmlPageResult"
         ],
         "functions": [
@@ -706,6 +746,47 @@
       }
     },
     "graph": {
+      "src/graph/backend-pdf.ts": {
+        "description": "backend-pdf module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ]
+          },
+          {
+            "file": "./dot.ts",
+            "imports": [
+              "dotSourceText",
+              "dotToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/graph/backend-png.ts": {
         "description": "Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,",
         "externalDependencies": [],
@@ -1005,8 +1086,52 @@
       }
     },
     "mermaid": {
+      "src/mermaid/backend-pdf.ts": {
+        "description": "Renders one Mermaid source to pdf in the browser stage. A native diagram is laid out first, then its SVG is",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./common.ts",
+            "imports": [
+              "readLenient",
+              "routesToBrowser",
+              "sourceText"
+            ]
+          },
+          {
+            "file": "./browser.ts",
+            "imports": [
+              "drawMermaidInBrowser",
+              "drawSvgToPdf",
+              "MERMAID_NATIVE_PDF_BACKEND"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderMermaidSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/mermaid/backend-png.ts": {
-        "description": "Renders one Mermaid source to PNG: the SVG of the diagram, then the PNG of that SVG.",
+        "description": "Renders one Mermaid source to PNG. A native diagram is drawn to SVG and then to PNG by the raster stage.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -1027,7 +1152,15 @@
           {
             "file": "./common.ts",
             "imports": [
+              "readLenient",
+              "routesToBrowser",
               "sourceText"
+            ]
+          },
+          {
+            "file": "./browser.ts",
+            "imports": [
+              "drawMermaidInBrowser"
             ]
           },
           {
@@ -1046,7 +1179,7 @@
         ]
       },
       "src/mermaid/backend-svg.ts": {
-        "description": "backend-svg module",
+        "description": "Renders one Mermaid source to SVG. A native diagram goes through the native layouts. Any other Mermaid type goes",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -1061,7 +1194,15 @@
           {
             "file": "./common.ts",
             "imports": [
+              "readLenient",
+              "routesToBrowser",
               "sourceText"
+            ]
+          },
+          {
+            "file": "./browser.ts",
+            "imports": [
+              "drawMermaidInBrowser"
             ]
           },
           {
@@ -1077,6 +1218,68 @@
         ],
         "functions": [
           "render"
+        ]
+      },
+      "src/mermaid/browser.ts": {
+        "description": "Draws one Mermaid source of a browser type through the browser stage. The page names the pinned Mermaid URL.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../browser/input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf"
+            ]
+          },
+          {
+            "file": "../browser/pinned.ts",
+            "imports": [
+              "MERMAID_CDN_URL",
+              "MERMAID_FILE"
+            ]
+          },
+          {
+            "file": "../browser/page.ts",
+            "imports": [
+              "mermaidPageHtml",
+              "svgPageHtml"
+            ]
+          },
+          {
+            "file": "../browser/render.ts",
+            "imports": [
+              "renderHtmlPage",
+              "HtmlFormat",
+              "HtmlPageRequest",
+              "PinnedBytes"
+            ]
+          },
+          {
+            "file": "../assets.ts",
+            "imports": [
+              "readAsset"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "MERMAID_BROWSER_BACKEND",
+          "MERMAID_NATIVE_PDF_BACKEND",
+          "drawMermaidInBrowser",
+          "drawSvgToPdf"
+        ],
+        "interfaces": [
+          "BrowserSettings",
+          "BrowserDraw"
+        ],
+        "functions": [
+          "drawMermaidInBrowser",
+          "drawSvgToPdf"
+        ],
+        "constants": [
+          "MERMAID_BROWSER_BACKEND",
+          "MERMAID_NATIVE_PDF_BACKEND"
         ]
       },
       "src/mermaid/class.ts": {
@@ -1130,7 +1333,8 @@
           "xmlSafe",
           "inputError",
           "outside",
-          "prepare"
+          "prepare",
+          "routesToBrowser"
         ],
         "interfaces": [
           "ContentLine",
@@ -1143,7 +1347,8 @@
           "xmlSafe",
           "inputError",
           "outside",
-          "prepare"
+          "prepare",
+          "routesToBrowser"
         ]
       },
       "src/mermaid/index.ts": {
@@ -1974,6 +2179,8 @@
         "src/browser/flags.ts",
         "src/browser/index.ts",
         "src/browser/input.ts",
+        "src/browser/page.ts",
+        "src/browser/pinned.ts",
         "src/browser/profile.ts",
         "src/browser/proxy.ts",
         "src/browser/render.ts"
@@ -1982,6 +2189,7 @@
     {
       "name": "Graph",
       "files": [
+        "src/graph/backend-pdf.ts",
         "src/graph/backend-png.ts",
         "src/graph/backend-svg.ts",
         "src/graph/dot.ts",
@@ -1998,8 +2206,10 @@
     {
       "name": "Mermaid",
       "files": [
+        "src/mermaid/backend-pdf.ts",
         "src/mermaid/backend-png.ts",
         "src/mermaid/backend-svg.ts",
+        "src/mermaid/browser.ts",
         "src/mermaid/class.ts",
         "src/mermaid/common.ts",
         "src/mermaid/index.ts",

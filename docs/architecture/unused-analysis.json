@@ -7,13 +7,16 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 19,
-    "unreferencedAnywhereCount": 2,
-    "referencedInModuleCount": 17,
+    "unusedExportCount": 25,
+    "unreferencedAnywhereCount": 3,
+    "referencedInModuleCount": 22,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 7
   },
   "unreferencedAnywhere": {
+    "src/graph/backend-pdf.ts": [
+      "render"
+    ],
     "src/index.ts": [
       "capabilities"
     ],
@@ -22,6 +25,9 @@
     ]
   },
   "unreferencedAnywhereNotes": {
+    "src/graph/backend-pdf.ts": {
+      "render": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/graph/backend-pdf.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
+    },
     "src/index.ts": {
       "capabilities": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/index.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'capabilities' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
     },
@@ -32,6 +38,9 @@
   "referencedInModule": {
     "src/browser/input.ts": [
       "PngOptions"
+    ],
+    "src/browser/pinned.ts": [
+      "PinnedAsset"
     ],
     "src/browser/render.ts": [
       "PAGE_URL",
@@ -44,11 +53,19 @@
       "ImageRemoval",
       "StripResult"
     ],
+    "src/mermaid/backend-pdf.ts": [
+      "render"
+    ],
     "src/mermaid/backend-png.ts": [
       "render"
     ],
     "src/mermaid/backend-svg.ts": [
       "render"
+    ],
+    "src/mermaid/browser.ts": [
+      "BrowserDraw",
+      "BrowserSettings",
+      "MERMAID_BROWSER_BACKEND"
     ],
     "src/mermaid/common.ts": [
       "Context",

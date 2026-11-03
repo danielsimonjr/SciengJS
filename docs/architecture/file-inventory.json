@@ -1,11 +1,11 @@
 {
-  "totalFiles": 146,
+  "totalFiles": 157,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 37,
+    "build-entry": 42,
     "test-only": 3,
     "orphan": 11,
-    "test": 68,
+    "test": 74,
     "tool": 27,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 27,
-    "src": 51,
-    "tests": 68
+    "src": 56,
+    "tests": 74
   },
   "byPackage": {
-    "(root)": 109,
-    "@danielsimonjr/sciengjs": 37
+    "(root)": 115,
+    "@danielsimonjr/sciengjs": 42
   },
   "files": [
     {
@@ -26,7 +26,7 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 83
+      "loc": 91
     },
     {
       "file": "src/assets.ts",
@@ -78,6 +78,20 @@
       "loc": 109
     },
     {
+      "file": "src/browser/page.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 33
+    },
+    {
+      "file": "src/browser/pinned.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 18
+    },
+    {
       "file": "src/browser/profile.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -96,7 +110,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 374
+      "loc": 492
     },
     {
       "file": "src/config.ts",
@@ -118,6 +132,13 @@
       "area": "src",
       "disposition": "build-entry",
       "loc": 53
+    },
+    {
+      "file": "src/graph/backend-pdf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 15
     },
     {
       "file": "src/graph/backend-png.ts",
@@ -162,18 +183,32 @@
       "loc": 28
     },
     {
+      "file": "src/mermaid/backend-pdf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 20
+    },
+    {
       "file": "src/mermaid/backend-png.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 14
+      "loc": 21
     },
     {
       "file": "src/mermaid/backend-svg.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 9
+      "loc": 19
+    },
+    {
+      "file": "src/mermaid/browser.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 65
     },
     {
       "file": "src/mermaid/class.ts",
@@ -187,7 +222,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 146
+      "loc": 165
     },
     {
       "file": "src/mermaid/index.ts",
@@ -250,7 +285,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 34
+      "loc": 36
     },
     {
       "file": "src/types.ts",
@@ -278,7 +313,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 39
+      "loc": 41
     },
     {
       "file": "src/worker/run.ts",
@@ -307,6 +342,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 170
+    },
+    {
+      "file": "test/integration/mermaid-browser.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 85
     },
     {
       "file": "test/integration/page-checker.test.ts",
@@ -362,7 +404,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 132
+      "loc": 149
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -470,6 +512,27 @@
       "loc": 109
     },
     {
+      "file": "test/unit/browser-page.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 31
+    },
+    {
+      "file": "test/unit/browser-pdf-pairs.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 33
+    },
+    {
+      "file": "test/unit/browser-pinned.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 35
+    },
+    {
       "file": "test/unit/browser-proxy.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -561,6 +624,13 @@
       "loc": 54
     },
     {
+      "file": "test/unit/mermaid-browser-route.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 22
+    },
+    {
       "file": "test/unit/mermaid-class.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -601,6 +671,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 134
+    },
+    {
+      "file": "test/unit/mermaid-routing.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 23
     },
     {
       "file": "test/unit/mermaid-sequence.test.ts",
