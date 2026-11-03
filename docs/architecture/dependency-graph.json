@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "name": "agent-a2a6677e562e80502",
+    "name": "sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
     "totalFiles": 130,
     "totalModules": 3,
-    "totalExports": 243
+    "totalExports": 245
   },
   "modules": {
     "tools": {
@@ -1657,7 +1657,9 @@
           {
             "file": "test/support/page-checker.ts",
             "imports": [
-              "checkPage"
+              "checkPage",
+              "WARM_UP_START_TIMEOUT_MS",
+              "warmBrowser"
             ],
             "typeOnly": false
           },
@@ -1810,12 +1812,14 @@
         "exports": [
           "PageCheckOptions",
           "PageCheckResult",
+          "WARM_UP_START_TIMEOUT_MS",
           "PROFILE_PREFIX",
           "waitForDevToolsPort",
           "removeProfile",
           "launchEvidence",
           "checkPage",
-          "teardownLaunch"
+          "teardownLaunch",
+          "warmBrowser"
         ]
       },
       "test/support/png-decode.ts": {
@@ -2750,7 +2754,8 @@
             "imports": [
               "launchEvidence",
               "removeProfile",
-              "waitForDevToolsPort"
+              "waitForDevToolsPort",
+              "warmBrowser"
             ],
             "typeOnly": false
           }
@@ -3179,8 +3184,8 @@
     "totalTypeScriptFiles": 130,
     "totalSourceFiles": 130,
     "totalModules": 3,
-    "totalLinesOfCode": 14859,
-    "totalExports": 243,
+    "totalLinesOfCode": 14937,
+    "totalExports": 245,
     "entryRoots": 28,
     "reachableFiles": 28,
     "dormantFiles": 14,
@@ -3198,10 +3203,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 5,
     "totalInterfaces": 42,
-    "totalFunctions": 108,
+    "totalFunctions": 109,
     "totalTypeGuards": 2,
     "totalEnums": 0,
-    "totalConstants": 31,
+    "totalConstants": 32,
     "totalReExports": 45
   },
   "reachability": {

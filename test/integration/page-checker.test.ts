@@ -21,8 +21,8 @@ if (!haveBrowser) {
 
 describe.skipIf(!haveBrowser)("page checker", () => {
   // The first start of a browser on a fresh runner can take longer than a timed check allows. This check starts the
-  // browser once, with its own budget, before the timed checks. It is a normal test: a failed start fails it with the
-  // start evidence, and its duration is logged.
+  // browser once, with its own budget, before the timed checks. The check is a normal test. A failed start fails the
+  // check with the start evidence. The check logs its duration.
   test("the browser starts once before the timed checks", async () => {
     await warmBrowser(
       () => checkPage({ browserPath, htmlPath: `${FIXTURES}good.html`, startTimeoutMs: WARM_UP_START_TIMEOUT_MS }),

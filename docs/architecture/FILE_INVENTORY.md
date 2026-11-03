@@ -75,7 +75,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 117 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
-| `test/integration/page-checker.test.ts` | (root) | tests | test | 111 |
+| `test/integration/page-checker.test.ts` | (root) | tests | test | 124 |
 | `test/mutation/run-mutants.mjs` | (root) | tests | test | 250 |
 | `test/mutation/run-mutants.test.ts` | (root) | tests | test | 292 |
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
@@ -86,7 +86,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
-| `test/support/page-checker.ts` | (root) | tests | test | 357 |
+| `test/support/page-checker.ts` | (root) | tests | test | 386 |
 | `test/support/png-decode.ts` | (root) | tests | test | 105 |
 | `test/support/process-list.ts` | (root) | tests | test | 34 |
 | `test/support/rejections.ts` | (root) | tests | test | 51 |
@@ -116,7 +116,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
 | `test/unit/mermaid-xml.test.ts` | (root) | tests | test | 190 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
-| `test/unit/page-checker-io.test.ts` | (root) | tests | test | 112 |
+| `test/unit/page-checker-io.test.ts` | (root) | tests | test | 148 |
 | `test/unit/process-list.test.ts` | (root) | tests | test | 51 |
 | `test/unit/raster-init.test.ts` | (root) | tests | test | 41 |
 | `test/unit/raster-warnings.test.ts` | (root) | tests | test | 153 |

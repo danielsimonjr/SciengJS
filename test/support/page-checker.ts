@@ -37,8 +37,8 @@ export interface PageCheckResult {
 
 const DEFAULT_START_TIMEOUT_MS = 20000;
 /**
- * The start budget of the warm-up, in milliseconds. It is three times the budget of a timed check. A first start
- * on a fresh CI runner can take longer than the timed budget, and the warm-up absorbs that cost once. The timed
+ * The warm-up start budget, in milliseconds, is three times the start budget of a timed check. A first start on a fresh
+ * CI runner can take longer than a timed check allows. The warm-up absorbs the extra time of the first start. The timed
  * checks keep DEFAULT_START_TIMEOUT_MS.
  */
 export const WARM_UP_START_TIMEOUT_MS = 3 * DEFAULT_START_TIMEOUT_MS;
@@ -363,9 +363,10 @@ export async function teardownLaunch(steps: {
 }
 
 /**
- * Runs one launch before the timed checks, so that a timed check does not pay the cold start of the browser.
- * The launch is injected, so a test can pass a fake one. The duration is logged on both paths. A failed launch
- * is rethrown unchanged, so the start evidence of checkPage reaches the caller.
+ * The warm-up runs one launch before the timed checks. The launch absorbs the cold start of the browser, so no timed
+ * check pays that cost. The caller passes the launch as a parameter, so a test can pass a fake launch. The warm-up logs
+ * the duration on the success path and on the failure path. The warm-up rethrows a failed launch unchanged, so the
+ * start evidence of checkPage reaches the caller.
  */
 export async function warmBrowser(
   launch: () => Promise<unknown>,

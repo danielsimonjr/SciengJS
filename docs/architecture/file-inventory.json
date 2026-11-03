@@ -243,7 +243,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 111
+      "loc": 124
     },
     {
       "file": "test/mutation/run-mutants.mjs",
@@ -320,7 +320,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 357
+      "loc": 386
     },
     {
       "file": "test/support/png-decode.ts",
@@ -530,7 +530,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 112
+      "loc": 148
     },
     {
       "file": "test/unit/process-list.test.ts",
