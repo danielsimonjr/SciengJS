@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
+import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
 import { rejectionOf } from "../support/rejections.ts";
 import { renderIsolated } from "../support/test-registry.ts";
 
@@ -7,6 +8,9 @@ const STATE = "stateDiagram-v2\n[*] --> Still\nStill --> [*]";
 const SEQUENCE = "sequenceDiagram\nAlice->>Bob: Hello Bob\nBob-->>Alice: Hi Alice";
 const NETWORK_NONE = { allowNetwork: "none" } as const;
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
+const scratch = makeScratch("scieng-mermaid-png-");
+const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
+afterAll(() => removeScratch(scratch));
 
 describe("mermaid through render: the native layouts draw three diagram types", () => {
   test("a class diagram renders to svg through the mermaid backend", async () => {
@@ -33,7 +37,7 @@ describe("mermaid through render: the native layouts draw three diagram types", 
   });
 
   test("a sequence diagram renders to png with the PNG signature", async () => {
-    const result = await renderIsolated({ type: "mermaid", source: SEQUENCE, format: "png" }, NETWORK_NONE);
+    const result = await renderIsolated({ type: "mermaid", source: SEQUENCE, format: "png" }, { ...NETWORK_NONE, assetsUrl: ASSETS });
     expect(result.mime).toBe("image/png");
     expect(result.backend).toBe("mermaid/native+raster/resvg");
     expect([...result.bytes.slice(0, 4)]).toEqual(PNG_SIGNATURE);
@@ -99,7 +103,7 @@ describe("mermaid through render: rejections and lenient mode", () => {
   test("a png render keeps the parser warnings of its lenient skips", async () => {
     const result = await renderIsolated(
       { type: "mermaid", source: "sequenceDiagram\nautonumber\nA->>B: x", format: "png", options: { lenient: true } },
-      NETWORK_NONE,
+      { ...NETWORK_NONE, assetsUrl: ASSETS },
     );
     expect(result.warnings).toContain('line 2: skipped the unsupported construct "autonumber"');
   });
@@ -109,5 +113,22 @@ describe("mermaid through render: rejections and lenient mode", () => {
       renderIsolated({ type: "mermaid", source: SEQUENCE, format: "png" }, { allowNetwork: "none", rasterFont: "C:/no/such/font.ttf" }),
     );
     expect(err.code).toBe("E_CONFIG");
+  });
+});
+
+describe("mermaid png: the bundled font and the WASM file come from assetsUrl", () => {
+  test("a missing bundled font rejects with E_STAGE_MISSING and names the font file", async () => {
+    const assetsUrl = makeAssetsFolder(scratch, "mermaid-no-font", { wasm: realFiles().wasm });
+    const err = await rejectionOf(renderIsolated({ type: "mermaid", source: SEQUENCE, format: "png" }, { ...NETWORK_NONE, assetsUrl }));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("LiberationSerif-Regular.ttf");
+    expect(err.message).toContain("mermaid-no-font");
+  });
+
+  test("a missing WASM file rejects with E_STAGE_MISSING and names the file", async () => {
+    const assetsUrl = makeAssetsFolder(scratch, "mermaid-no-wasm", { font: realFiles().font });
+    const err = await rejectionOf(renderIsolated({ type: "mermaid", source: SEQUENCE, format: "png" }, { ...NETWORK_NONE, assetsUrl }));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("index_bg.wasm");
   });
 });

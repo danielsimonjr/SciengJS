@@ -23,6 +23,12 @@ function readFont(path: string, bundled: boolean): Buffer {
   return bytes;
 }
 
+/** Reads the font of a render: the rasterFont setting when set, else the bundled font at the given path. */
+function fontOf(settings: WorkerJob["request"]["settings"], bundledFontPath: string): Buffer {
+  const rasterFont = settings.rasterFont;
+  return readFont(rasterFont ?? bundledFontPath, rasterFont === undefined);
+}
+
 /** Renders dot to png: the SVG of the graph, then the PNG of that SVG at the option scale. The bundled font comes from the assets folder named in the settings. */
 export async function render(request: WorkerJob["request"]): Promise<BackendOutput> {
   return renderPng(request, bundledFontPathIn(request.settings.assetsUrl));
@@ -46,8 +52,7 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
     }
   }
 
-  const rasterFont = request.settings.rasterFont;
-  const font = readFont(rasterFont ?? bundledFontPath, rasterFont === undefined);
+  const font = fontOf(request.settings, bundledFontPath);
 
   const dot = await dotToSvg(dotSourceText(request.source));
   const bytes = await svgToPng(dot.svg, {
@@ -61,15 +66,15 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
 
 /**
  * Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,
- * else the bundled font. The Mermaid PNG backend uses this function, so the font rule stays in one place.
+ * else the bundled font in the assets folder. The Mermaid PNG backend uses this function.
  */
 export async function svgDocumentToPng(svg: string, request: WorkerJob["request"]): Promise<BackendOutput> {
-  const rasterFont = request.settings.rasterFont;
-  const font = readFont(rasterFont ?? BUNDLED_FONT_PATH, rasterFont === undefined);
+  const font = fontOf(request.settings, bundledFontPathIn(request.settings.assetsUrl));
   const bytes = await svgToPng(svg, {
     scale: 1,
     maxMemoryMb: request.settings.maxMemoryMb,
     font,
+    assetsUrl: request.settings.assetsUrl,
   });
   return { bytes, warnings: rasterWarnings(svg, font) };
 }
