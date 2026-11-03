@@ -5,15 +5,20 @@ export interface PairSpec {
   type: InputType;
   format: OutputFormat;
   stage: string;
+  /** A note on the pair that its stage alone does not tell. */
+  note?: string;
 }
 
 /** The pairs of the design section "Scope". A pair missing here is unsupported. */
+/** The note of the Mermaid svg and png pairs, whose stage depends on the diagram type. */
+const MERMAID_NOTE = "types other than class, state and sequence need the browser stage";
+
 export const PAIRS: readonly PairSpec[] = [
   { type: "dot", format: "svg", stage: "graph" },
   { type: "dot", format: "png", stage: "graph" },
   { type: "dot", format: "pdf", stage: "browser" },
-  { type: "mermaid", format: "svg", stage: "graph" },
-  { type: "mermaid", format: "png", stage: "graph" },
+  { type: "mermaid", format: "svg", stage: "graph", note: MERMAID_NOTE },
+  { type: "mermaid", format: "png", stage: "graph", note: MERMAID_NOTE },
   { type: "mermaid", format: "pdf", stage: "browser" },
   { type: "math", format: "svg", stage: "math" },
   { type: "math", format: "png", stage: "math" },

@@ -1,5 +1,7 @@
 import { blockedWarnings, browserPathOf } from "../browser/input.ts";
-import { MERMAID_CDN_URL, MERMAID_FILE } from "../browser/pinned.ts";
+import { createHash } from "node:crypto";
+import { MERMAID_CDN_URL, MERMAID_FILE, MERMAID_SHA256 } from "../browser/pinned.ts";
+import { RenderError } from "../errors.ts";
 import { mermaidPageHtml, svgPageHtml } from "../browser/page.ts";
 import { renderHtmlPage, type HtmlFormat, type HtmlPageRequest, type PinnedBytes } from "../browser/render.ts";
 import { readAsset } from "../assets.ts";
@@ -30,6 +32,7 @@ export async function drawMermaidInBrowser(
   source: string,
   format: HtmlFormat,
   settings: BrowserSettings,
+  scale = 1,
 ): Promise<BrowserDraw & { backend: string }> {
   const browser = browserPathOf(settings.browser);
   const base = {
@@ -39,10 +42,10 @@ export async function drawMermaidInBrowser(
     pinned: pinnedMermaid(settings.assetsUrl),
     awaitDone: true as const,
   };
-  // A png of a page that reports done is clipped to the diagram box, so its size options do not apply.
+  // A png of a page that reports done is sized from the diagram box. The scale is the device scale of the screenshot.
   const request: HtmlPageRequest =
     format === "png"
-      ? { ...base, format: "png", width: 0, height: 0, scale: 1 }
+      ? { ...base, format: "png", width: 0, height: 0, scale }
       : format === "pdf"
         ? { ...base, format: "pdf" }
         : { ...base, format: "svg" };
@@ -57,9 +60,16 @@ export async function drawSvgToPdf(svg: string, settings: BrowserSettings): Prom
   return { bytes: out.bytes, warnings: blockedWarnings(out.blocked) };
 }
 
-/** Reads the pinned Mermaid build from the assets folder. A missing file rejects with E_STAGE_MISSING. */
-function pinnedMermaid(assetsUrl: string): ReadonlyMap<string, PinnedBytes> {
+/**
+ * Reads the pinned Mermaid build from the assets folder and checks its SHA-256. A missing file rejects with
+ * E_STAGE_MISSING. A file with other bytes rejects with E_INTEGRITY, so a changed copy never runs in a page.
+ */
+export function pinnedMermaid(assetsUrl: string): ReadonlyMap<string, PinnedBytes> {
   const bytes = readAsset(assetsUrl, MERMAID_FILE);
+  const hash = createHash("sha256").update(bytes).digest("hex");
+  if (hash !== MERMAID_SHA256) {
+    throw new RenderError("E_INTEGRITY", `${MERMAID_FILE} has the SHA-256 ${hash}, not the pinned ${MERMAID_SHA256}`);
+  }
   return new Map([[MERMAID_CDN_URL, { bytes, mime: "application/javascript" }]]);
 }
 

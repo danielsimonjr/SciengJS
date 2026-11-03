@@ -29,6 +29,14 @@ function fontOf(settings: WorkerJob["request"]["settings"], bundledFontPath: str
   return readFont(rasterFont ?? bundledFontPath, rasterFont === undefined);
 }
 
+/** Reads the option scale of a png. An absent value gives 1. A value that is not a finite number above 0 rejects with E_INPUT. */
+export function readScale(options: Record<string, unknown>): number {
+  const value: unknown = options.scale;
+  if (value === undefined) return 1;
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) return value;
+  throw new RenderError("E_INPUT", "option scale must be a finite number greater than 0");
+}
+
 /** Renders dot to png: the SVG of the graph, then the PNG of that SVG at the option scale. The bundled font comes from the assets folder named in the settings. */
 export async function render(request: WorkerJob["request"]): Promise<BackendOutput> {
   return renderPng(request, bundledFontPathIn(request.settings.assetsUrl));
@@ -42,15 +50,7 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
       throw new RenderError("E_INPUT", "dot to png takes no option " + key);
     }
   }
-  let scale = 1;
-  if ("scale" in options) {
-    const value: unknown = options.scale;
-    if (typeof value === "number" && Number.isFinite(value) && value > 0) {
-      scale = value;
-    } else {
-      throw new RenderError("E_INPUT", "option scale must be a finite number greater than 0");
-    }
-  }
+  const scale = readScale(options);
 
   const font = fontOf(request.settings, bundledFontPath);
 
@@ -65,13 +65,13 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
 }
 
 /**
- * Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,
+ * Rasterizes one SVG document to PNG at the given scale. The font follows render: the rasterFont setting when set,
  * else the bundled font in the assets folder. The Mermaid PNG backend uses this function.
  */
-export async function svgDocumentToPng(svg: string, request: WorkerJob["request"]): Promise<BackendOutput> {
+export async function svgDocumentToPng(svg: string, request: WorkerJob["request"], scale = 1): Promise<BackendOutput> {
   const font = fontOf(request.settings, bundledFontPathIn(request.settings.assetsUrl));
   const bytes = await svgToPng(svg, {
-    scale: 1,
+    scale,
     maxMemoryMb: request.settings.maxMemoryMb,
     font,
     assetsUrl: request.settings.assetsUrl,

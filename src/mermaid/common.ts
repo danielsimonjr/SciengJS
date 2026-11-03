@@ -29,7 +29,7 @@ const HEADERS: ReadonlyMap<string, DiagramKind> = new Map([
   ["sequenceDiagram", "sequence"],
 ]);
 
-/** Mermaid types that the native layouts do not draw. They need the browser stage, which this release does not build. */
+/** Mermaid types that the native layouts do not draw. They route to the browser stage. */
 const OTHER_TYPES: ReadonlySet<string> = new Set([
   "flowchart", "graph", "stateDiagram", "erDiagram", "gantt", "pie", "journey", "gitGraph", "mindmap",
   "timeline", "quadrantChart", "requirementDiagram", "C4Context", "C4Container", "C4Component",
@@ -100,12 +100,25 @@ export function prepare(source: string, options: Record<string, unknown>, extra:
 }
 
 /**
- * Tells whether a source routes to the browser stage. A source routes there when its header is not one of the
- * native kinds. A source with no header stays on the native path, which rejects it.
+ * Tells whether a source routes to the browser stage. A source routes there when the first word of its first
+ * content line is a Mermaid type of OTHER_TYPES. The scan skips blank lines, comment lines, directives and a
+ * leading front matter block, and it never throws: an unclosed front matter or an unknown header stays on the
+ * native path, which rejects it with E_INPUT.
  */
 export function routesToBrowser(source: string): boolean {
-  const head = scanContent(source, { lenient: false, warnings: [] })[0];
-  return head !== undefined && !HEADERS.has(head.text);
+  const raw = source.split(/\r?\n/);
+  for (let index = 0; index < raw.length; index += 1) {
+    const text = (raw[index] ?? "").trim();
+    if (text === "" || text.startsWith("%%")) continue;
+    if (text === "---") {
+      const close = raw.findIndex((line, at) => at > index && line.trim() === "---");
+      if (close < 0) return false;
+      index = close;
+      continue;
+    }
+    return OTHER_TYPES.has(text.split(/\s+/)[0] ?? "");
+  }
+  return false;
 }
 
 /** Removes blank lines, comment lines and directives, and keeps the content lines with their line numbers. */
@@ -153,7 +166,7 @@ function headerOf(content: ContentLine[], ctx: Context): Source {
   if (OTHER_TYPES.has(word)) {
     throw new RenderError(
       "E_UNSUPPORTED",
-      `line ${head.number}: ${word} diagrams need the browser stage, which this release does not build; ` +
+      `line ${head.number}: ${word} diagrams need the browser stage; ` +
         "the native layouts draw classDiagram, stateDiagram-v2 and sequenceDiagram",
       { line: head.number },
     );

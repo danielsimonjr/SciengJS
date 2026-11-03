@@ -82,14 +82,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 33
+      "loc": 41
     },
     {
       "file": "src/browser/pinned.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 18
+      "loc": 20
     },
     {
       "file": "src/browser/profile.ts",
@@ -110,7 +110,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 492
+      "loc": 509
     },
     {
       "file": "src/config.ts",
@@ -124,7 +124,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 110
+      "loc": 111
     },
     {
       "file": "src/errors.ts",
@@ -194,7 +194,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 21
+      "loc": 27
     },
     {
       "file": "src/mermaid/backend-svg.ts",
@@ -208,7 +208,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 65
+      "loc": 75
     },
     {
       "file": "src/mermaid/class.ts",
@@ -222,7 +222,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 165
+      "loc": 178
     },
     {
       "file": "src/mermaid/index.ts",
@@ -264,7 +264,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 52
+      "loc": 57
     },
     {
       "file": "src/raster/index.ts",
@@ -292,7 +292,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 69
+      "loc": 71
     },
     {
       "file": "src/version.ts",
@@ -404,7 +404,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 149
+      "loc": 153
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -516,7 +516,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 31
+      "loc": 46
     },
     {
       "file": "test/unit/browser-pdf-pairs.test.ts",
@@ -530,7 +530,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 35
+      "loc": 66
     },
     {
       "file": "test/unit/browser-proxy.test.ts",
@@ -677,7 +677,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 23
+      "loc": 44
     },
     {
       "file": "test/unit/mermaid-sequence.test.ts",

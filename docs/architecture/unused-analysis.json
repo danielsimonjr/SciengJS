@@ -7,9 +7,9 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 25,
+    "unusedExportCount": 21,
     "unreferencedAnywhereCount": 3,
-    "referencedInModuleCount": 22,
+    "referencedInModuleCount": 18,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 7
   },
@@ -39,9 +39,6 @@
     "src/browser/input.ts": [
       "PngOptions"
     ],
-    "src/browser/pinned.ts": [
-      "PinnedAsset"
-    ],
     "src/browser/render.ts": [
       "PAGE_URL",
       "capturePage"
@@ -61,11 +58,6 @@
     ],
     "src/mermaid/backend-svg.ts": [
       "render"
-    ],
-    "src/mermaid/browser.ts": [
-      "BrowserDraw",
-      "BrowserSettings",
-      "MERMAID_BROWSER_BACKEND"
     ],
     "src/mermaid/common.ts": [
       "Context",

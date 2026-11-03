@@ -9,6 +9,10 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
+// The smoke test checks the package with no browser stage, so a browser path of the caller does not reach the checks.
+const env = { ...process.env };
+delete env.SCIENG_BROWSER;
+
 const work = mkdtempSync(join(tmpdir(), "sciengjs-smoke-"));
 
 // On Windows npm is a .cmd file. Node starts .cmd files only through a shell. The shell gets one quoted command string.
@@ -16,9 +20,9 @@ function run(cmd, args, cwd, shell = false) {
   let r;
   if (shell) {
     const line = [cmd, ...args.map(shellArg)].join(" ");
-    r = spawnSync(line, { cwd, encoding: "utf8", shell: true });
+    r = spawnSync(line, { cwd, encoding: "utf8", shell: true, env });
   } else {
-    r = spawnSync(cmd, args, { cwd, encoding: "utf8" });
+    r = spawnSync(cmd, args, { cwd, encoding: "utf8", env });
   }
   if (r.status !== 0) {
     throw new Error(`${cmd} ${args.join(" ")} failed with ${r.status}\n${r.stdout}\n${r.stderr}`);

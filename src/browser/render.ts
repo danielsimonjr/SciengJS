@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { RenderError } from "../errors.ts";
 import { CdpConnection, connectCdp } from "./cdp.ts";
 import { forcedBrowserFlags } from "./flags.ts";
+import { MAX_DEVICE_PIXELS } from "./input.ts";
 import { makeProfile, removeProfile } from "./profile.ts";
 import { startRefusingProxy, type RefusingProxy } from "./proxy.ts";
 
@@ -63,7 +64,7 @@ export interface HtmlPageResult {
 }
 
 /** The report of a page that sets window.__sciengDone. */
-type DoneReport = { ok: true; svg: string } | { ok: false; message: string };
+type DoneReport = { ok: true; svg: string } | { ok: false; internal?: boolean; message: string };
 
 /** The box of the diagram in CSS pixels. The png clip and the pdf page size come from it. */
 interface DiagramBox {
@@ -303,7 +304,8 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
   let bytes: Uint8Array;
   if (req.awaitDone === true) {
     const done = await awaitDoneReport(cdp, s);
-    if (!done.ok) throw new RenderError("E_INPUT", done.message);
+    // A page that cannot run the pinned build is a fault of the engine, not of the source.
+    if (!done.ok) throw new RenderError(done.internal === true ? "E_INTERNAL" : "E_INPUT", done.message);
     if (req.format === "svg") {
       bytes = new TextEncoder().encode(done.svg);
     } else {
@@ -360,9 +362,24 @@ async function drawDiagram(cdp: CdpConnection, s: string, req: HtmlPageRequest):
     await fitPageToDiagram(cdp, s);
     return printPdf(cdp, s);
   }
+  if (box.width * req.scale * (box.height * req.scale) > MAX_DEVICE_PIXELS) {
+    throw new RenderError("E_INPUT", `the png must not have more than ${MAX_DEVICE_PIXELS} device pixels`);
+  }
+  // The viewport takes the size of the diagram and the device scale of the request, so a wide diagram is not
+  // clipped and its pixel width is its CSS width times the scale.
+  await cdp.send(
+    "Emulation.setDeviceMetricsOverride",
+    { width: Math.ceil(box.x + box.width), height: Math.ceil(box.y + box.height), deviceScaleFactor: req.scale, mobile: false },
+    s,
+  );
+  const fitted = (await diagramBox(cdp, s)) ?? box;
   const data = (await cdp.send(
     "Page.captureScreenshot",
-    { format: "png", captureBeyondViewport: true, clip: { x: box.x, y: box.y, width: box.width, height: box.height, scale: 1 } },
+    {
+      format: "png",
+      captureBeyondViewport: false,
+      clip: { x: fitted.x, y: fitted.y, width: fitted.width, height: fitted.height, scale: 1 },
+    },
     s,
   )) as { data: string };
   return Buffer.from(data.data, "base64");

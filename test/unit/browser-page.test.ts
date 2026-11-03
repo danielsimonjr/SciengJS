@@ -29,3 +29,18 @@ test("mermaidPageHtml loads the pinned URL, renders the source with strict secur
   expect(html).toContain("window.__sciengDone");
   expect(html).not.toContain("B</script>");
 });
+
+test("mermaidPageHtml reports an internal fault when the pinned build did not load", () => {
+  const html = mermaidPageHtml("flowchart LR\nA --> B", "https://example.invalid/m.js");
+  expect(html).toContain('typeof mermaid === "undefined"');
+  expect(html).toContain("internal: true");
+});
+
+test("mermaidPageHtml escapes an HTML comment opener in the source", () => {
+  const html = mermaidPageHtml("flowchart LR\nA[\"<!-- x\"] --> B", "https://example.invalid/m.js");
+  expect(html).not.toContain("<!--");
+});
+
+test("scriptJson writes each escaped character as a four-digit unicode escape inside a JSON string", () => {
+  expect(scriptJson('<a>&"\u2028')).toBe(String.raw`"\u003ca\u003e\u0026\"\u2028"`);
+});

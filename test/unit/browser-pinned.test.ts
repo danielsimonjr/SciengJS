@@ -33,3 +33,34 @@ test("the build copies the pinned Mermaid file into assets and git ignores the c
   const ignore = readFileSync(join(ROOT, ".gitignore"), "utf8");
   expect(ignore).toContain("assets/mermaid.min.js");
 });
+
+test("the pinned SHA-256 equals the hash of the Mermaid build that the build copies", async () => {
+  const { MERMAID_SHA256 } = await import("../../src/browser/pinned.ts");
+  const { createHash } = await import("node:crypto");
+  const { createRequire } = await import("node:module");
+  const file = createRequire(import.meta.url).resolve("mermaid/dist/mermaid.min.js");
+  expect(createHash("sha256").update(readFileSync(file)).digest("hex")).toBe(MERMAID_SHA256);
+}, 30000);
+
+test("a pinned Mermaid file with other bytes rejects with E_INTEGRITY before the browser starts", async () => {
+  const { mkdtempSync, writeFileSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const { pathToFileURL } = await import("node:url");
+  const { pinnedMermaid } = await import("../../src/mermaid/browser.ts");
+  const folder = mkdtempSync(join(tmpdir(), "sciengjs-pinned-"));
+  writeFileSync(join(folder, MERMAID_FILE), "window.mermaid = {};");
+  expect(() => pinnedMermaid(pathToFileURL(folder).href + "/")).toThrow(expect.objectContaining({ code: "E_INTEGRITY" }));
+});
+
+test("the notices name every runtime dependency of the pinned Mermaid build, and the licence texts ship", () => {
+  const pkg = JSON.parse(readFileSync(join(ROOT, "node_modules", "mermaid", "package.json"), "utf8")) as { dependencies: Record<string, string> };
+  const bundle = readFileSync(join(ROOT, "assets", "licenses", "mermaid-bundle.txt"), "utf8");
+  for (const name of Object.keys(pkg.dependencies).filter((n) => !n.startsWith("@types/"))) {
+    expect(bundle).toContain(`==== ${name}@`);
+  }
+  expect(bundle).toContain("Apache License");
+  expect(bundle).toContain("==== dompurify@");
+  const notices = readFileSync(join(ROOT, "THIRD_PARTY_NOTICES.md"), "utf8");
+  expect(notices).toContain("assets/licenses/mermaid-bundle.txt");
+  expect(notices).toContain("MPL-2.0 OR Apache-2.0");
+});

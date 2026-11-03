@@ -33,6 +33,17 @@ The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to t
 
 The MIT licence applies to `mermaid` 11.17.2. The build writes the file mermaid.min.js into the assets folder. That file is generated at build time and is not committed. The licence text is in `assets/licenses/MIT-mermaid.txt`.
 
+The file mermaid.min.js also holds the code of the runtime dependencies of `mermaid`. Each of these packages keeps its own licence:
+
+- MIT: `cytoscape`, `cytoscape-cose-bilkent`, `cytoscape-fcose`, `dagre-d3-es`, `dayjs`, `katex`, `khroma`, `marked`, `roughjs`, `stylis`, `ts-dedent`, `uuid`, `es-toolkit`, `fastdom`, `@braintree/sanitize-url`, `@iconify/utils`, `@upsetjs/venn.js`, `@mermaid-js/parser` and `lodash-es`.
+- ISC: `d3` and most of the `d3-*` modules.
+- BSD-3-Clause: `d3-sankey`, `d3-ease`, `rw` and the older copies of `d3-array`, `d3-shape` and `d3-path` that `d3-sankey` uses.
+- MPL-2.0 OR Apache-2.0: `dompurify`. The engine uses it under the Apache-2.0 licence.
+- Apache-2.0: `@chevrotain/types`.
+- Unlicense: `robust-predicates`.
+
+The file `assets/licenses/mermaid-bundle.txt` holds the licence text of each of the 79 packages, with its name and version. The script `scripts/mermaid-licenses.mjs` writes that file from the installed `mermaid` package. Run the script again after a change of the pinned Mermaid version.
+
 ### OpenCascade (LGPL-2.1)
 
 `occt-import-js` is licensed under the GNU Lesser General Public License 2.1. The WASM file stays a separate, unmodified file.
