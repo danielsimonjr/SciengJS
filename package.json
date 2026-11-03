@@ -21,6 +21,10 @@
       "types": "./dist/raster/index.d.ts",
       "default": "./dist/raster/index.js"
     },
+    "./mermaid": {
+      "types": "./dist/mermaid/index.d.ts",
+      "default": "./dist/mermaid/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

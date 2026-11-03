@@ -58,3 +58,18 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
   });
   return { bytes, warnings: [...dot.warnings, ...rasterWarnings(dot.svg, font)] };
 }
+
+/**
+ * Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,
+ * else the bundled font. The Mermaid PNG backend uses this function, so the font rule stays in one place.
+ */
+export async function svgDocumentToPng(svg: string, request: WorkerJob["request"]): Promise<BackendOutput> {
+  const rasterFont = request.settings.rasterFont;
+  const font = readFont(rasterFont ?? BUNDLED_FONT_PATH, rasterFont === undefined);
+  const bytes = await svgToPng(svg, {
+    scale: 1,
+    maxMemoryMb: request.settings.maxMemoryMb,
+    font,
+  });
+  return { bytes, warnings: rasterWarnings(svg, font) };
+}
