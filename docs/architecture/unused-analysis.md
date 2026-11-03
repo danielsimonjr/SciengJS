@@ -10,9 +10,9 @@
 - **Dormant files**: 14
   - **Orphaned (reachable from nothing)**: 11
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 12
+- **Potentially unused exports**: 16
   - **Unreferenced anywhere**: 2
-  - **Referenced in their own module**: 10
+  - **Referenced in their own module**: 14
   - **Not classified**: 0
 
 ## Caveats
@@ -77,6 +77,9 @@ No other file imports these names, but their own module uses them.
 
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
+- `src/mermaid/backend-png.ts`: `render`
+- `src/mermaid/backend-svg.ts`: `render`
+- `src/mermaid/common.ts`: `Context`, `DiagramKind`
 - `src/pairs.ts`: `PairSpec`
 - `src/raster/index.ts`: `SvgToPngOptions`
 - `src/raster/warnings.ts`: `CoverageTest`

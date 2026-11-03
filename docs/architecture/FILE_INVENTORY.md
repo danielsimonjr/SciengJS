@@ -8,103 +8,115 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 107
+**Total files**: 119
 
 ## Disposition counts
 
 | Disposition | Count | Meaning |
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
-| `build-entry` | 19 | A `src`-area file that is an entry root. |
+| `build-entry` | 26 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 47 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
-| `tool` | 27 | A file in a `tools/` or `scripts/` folder outside `src/`. |
+| `test` | 53 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `tool` | 26 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **107** | |
+| **Total** | **119** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 33 |
-| `tests` | 47 |
-| `tools` | 27 |
+| `src` | 40 |
+| `tests` | 53 |
+| `tools` | 26 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 88 |
-| `@danielsimonjr/sciengjs` | 19 |
+| `(root)` | 93 |
+| `@danielsimonjr/sciengjs` | 26 |
 
 ## All files
 
 | File | Package | Area | Disposition | Lines |
 | --- | --- | --- | --- | --: |
-| `scripts/prepare-build.mjs` | (root) | tools | tool | 83 |
-| `src/assets.ts` | @danielsimonjr/sciengjs | src | build-entry | 88 |
-| `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 225 |
+| `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 223 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 104 |
-| `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 53 |
-| `src/graph/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 60 |
+| `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 37 |
+| `src/graph/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 78 |
 | `src/graph/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/graph/dot.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/graph/image.ts` | @danielsimonjr/sciengjs | src | build-entry | 330 |
 | `src/graph/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 3 |
 | `src/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 28 |
+| `src/mermaid/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 14 |
+| `src/mermaid/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 9 |
+| `src/mermaid/class.ts` | @danielsimonjr/sciengjs | src | build-entry | 253 |
+| `src/mermaid/common.ts` | @danielsimonjr/sciengjs | src | build-entry | 132 |
+| `src/mermaid/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 29 |
+| `src/mermaid/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 30 |
+| `src/mermaid/sequence-layout.ts` | @danielsimonjr/sciengjs | src | build-entry | 323 |
+| `src/mermaid/sequence.ts` | @danielsimonjr/sciengjs | src | build-entry | 273 |
+| `src/mermaid/state.ts` | @danielsimonjr/sciengjs | src | build-entry | 176 |
 | `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 52 |
-| `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
+| `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 92 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 30 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 32 |
 | `src/types.ts` | @danielsimonjr/sciengjs | src | build-entry | 69 |
-| `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
-| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
+| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 33 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 117 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
+| `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 111 |
-| `test/mutation/run-mutants.mjs` | (root) | tests | test | 237 |
-| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 163 |
+| `test/mutation/run-mutants.mjs` | (root) | tests | test | 251 |
+| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 241 |
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 111 |
-| `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 97 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
+| `test/support/network-guard.ts` | (root) | tests | test | 44 |
 | `test/support/page-checker.ts` | (root) | tests | test | 357 |
 | `test/support/png-decode.ts` | (root) | tests | test | 105 |
 | `test/support/process-list.ts` | (root) | tests | test | 34 |
 | `test/support/stubs/stub-dot.ts` | (root) | tests | test | 22 |
-| `test/support/stubs/stub-foreign-error.ts` | (root) | tests | test | 14 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
 | `test/support/test-registry.ts` | (root) | tests | test | 26 |
-| `test/unit/assets.test.ts` | (root) | tests | test | 141 |
-| `test/unit/config-assets.test.ts` | (root) | tests | test | 111 |
-| `test/unit/config.test.ts` | (root) | tests | test | 263 |
-| `test/unit/errors.test.ts` | (root) | tests | test | 69 |
+| `test/unit/config.test.ts` | (root) | tests | test | 260 |
+| `test/unit/errors.test.ts` | (root) | tests | test | 34 |
 | `test/unit/graph-corpus.test.ts` | (root) | tests | test | 47 |
 | `test/unit/graph-dot.test.ts` | (root) | tests | test | 79 |
 | `test/unit/graph-image.test.ts` | (root) | tests | test | 203 |
 | `test/unit/graph-large.test.ts` | (root) | tests | test | 27 |
-| `test/unit/graph-network.test.ts` | (root) | tests | test | 135 |
-| `test/unit/graph-png.test.ts` | (root) | tests | test | 223 |
+| `test/unit/graph-network.test.ts` | (root) | tests | test | 95 |
+| `test/unit/graph-png.test.ts` | (root) | tests | test | 157 |
 | `test/unit/graph-registry.test.ts` | (root) | tests | test | 34 |
-| `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 64 |
+| `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 63 |
+| `test/unit/mermaid-class.test.ts` | (root) | tests | test | 272 |
+| `test/unit/mermaid-common.test.ts` | (root) | tests | test | 131 |
+| `test/unit/mermaid-corpus.test.ts` | (root) | tests | test | 42 |
+| `test/unit/mermaid-network.test.ts` | (root) | tests | test | 28 |
+| `test/unit/mermaid-registry.test.ts` | (root) | tests | test | 34 |
+| `test/unit/mermaid-render.test.ts` | (root) | tests | test | 123 |
+| `test/unit/mermaid-sequence.test.ts` | (root) | tests | test | 449 |
+| `test/unit/mermaid-state.test.ts` | (root) | tests | test | 231 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
 | `test/unit/page-checker-io.test.ts` | (root) | tests | test | 112 |
 | `test/unit/process-list.test.ts` | (root) | tests | test | 51 |
-| `test/unit/raster-init.test.ts` | (root) | tests | test | 41 |
+| `test/unit/raster-init.test.ts` | (root) | tests | test | 35 |
 | `test/unit/raster-warnings.test.ts` | (root) | tests | test | 153 |
-| `test/unit/raster.test.ts` | (root) | tests | test | 109 |
-| `test/unit/render.test.ts` | (root) | tests | test | 174 |
+| `test/unit/raster.test.ts` | (root) | tests | test | 106 |
+| `test/unit/readme-mermaid.test.ts` | (root) | tests | test | 21 |
+| `test/unit/render.test.ts` | (root) | tests | test | 166 |
 | `test/unit/svg-compare.test.ts` | (root) | tests | test | 74 |
 | `test/unit/teardown.test.ts` | (root) | tests | test | 33 |
-| `test/unit/version.test.ts` | (root) | tests | test | 23 |
-| `test/unit/worker-run.test.ts` | (root) | tests | test | 97 |
+| `test/unit/worker-run.test.ts` | (root) | tests | test | 84 |
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |
 | `trials/t1-graph/measure.mjs` | (root) | src | orphan | 129 |

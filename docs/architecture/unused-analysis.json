@@ -7,9 +7,9 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 12,
+    "unusedExportCount": 16,
     "unreferencedAnywhereCount": 2,
-    "referencedInModuleCount": 10,
+    "referencedInModuleCount": 14,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 7
   },
@@ -36,6 +36,16 @@
     "src/graph/image.ts": [
       "ImageRemoval",
       "StripResult"
+    ],
+    "src/mermaid/backend-png.ts": [
+      "render"
+    ],
+    "src/mermaid/backend-svg.ts": [
+      "render"
+    ],
+    "src/mermaid/common.ts": [
+      "Context",
+      "DiagramKind"
     ],
     "src/pairs.ts": [
       "PairSpec"

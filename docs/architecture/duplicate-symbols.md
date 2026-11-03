@@ -39,7 +39,7 @@ A name is listed here when two or more distinct files across the monorepo define
 
 | Name | Category | Defining files (package, public?, sub-tag) | Canonical hint |
 | --- | --- | --- | --- |
-| `render` | function | `src/graph/backend-png.ts` (unknown, public, PLAIN)<br>`src/graph/backend-svg.ts` (unknown, public, PLAIN)<br>`src/index.ts` (unknown, public, PLAIN) | **AMBIGUOUS** |
+| `render` | function | `src/graph/backend-png.ts` (unknown, public, PLAIN)<br>`src/graph/backend-svg.ts` (unknown, public, PLAIN)<br>`src/index.ts` (unknown, public, PLAIN)<br>`src/mermaid/backend-png.ts` (unknown, public, PLAIN)<br>`src/mermaid/backend-svg.ts` (unknown, public, PLAIN) | **AMBIGUOUS** |
 
 ### DISPATCH_VARIANT — distinct public typed-dispatch surfaces
 
