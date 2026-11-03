@@ -1,22 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
-import { RenderError } from "../../src/errors.ts";
+import { rejectionOf } from "../support/rejections.ts";
 import { render } from "../../src/graph/backend-svg.ts";
 import { dotSourceText, dotToSvg } from "../../src/graph/dot.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 
 function request(source: string | Uint8Array, options: Record<string, unknown> = {}): WorkerJob["request"] {
   return { type: "dot", format: "svg", source, options, settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL } };
-}
-
-async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
-  try {
-    await promise;
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the promise resolved");
 }
 
 describe("dot to svg backend", () => {

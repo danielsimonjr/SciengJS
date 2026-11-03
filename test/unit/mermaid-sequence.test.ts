@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/errors.ts";
+import { rejection } from "../support/rejections.ts";
 import { prepare } from "../../src/mermaid/common.ts";
 import { parseSequenceDiagram, type SeqEvent, type SequenceModel } from "../../src/mermaid/sequence.ts";
 import { layoutSequence } from "../../src/mermaid/sequence-layout.ts";
@@ -12,17 +12,6 @@ function parseWithWarnings(source: string, options: Record<string, unknown>): { 
   const src = prepare(source, options);
   const model = parseSequenceDiagram(src);
   return { model, warnings: src.warnings };
-}
-
-/** Runs a function that must throw a RenderError, and returns that error. */
-function rejection(fn: () => unknown): RenderError {
-  try {
-    fn();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
 }
 
 type Block = Extract<SeqEvent, { kind: "block" }>;
@@ -137,7 +126,9 @@ describe("sequenceDiagram: notes", () => {
 
 describe("sequenceDiagram: activations", () => {
   test("activate A and deactivate A give an activate event and a deactivate event", () => {
-    const m = parse("sequenceDiagram\nactivate A\ndeactivate A");
+    const source = "sequenceDiagram\nactivate A\ndeactivate A";
+    expect(() => parse(source)).not.toThrow();
+    const m = parse(source);
     expect(m.events).toEqual([
       { kind: "activate", id: "A", line: 2 },
       { kind: "deactivate", id: "A", line: 3 },
@@ -167,7 +158,9 @@ describe("sequenceDiagram: blocks", () => {
   });
 
   test("alt, else and end give two branches, each with its label", () => {
-    const m = parse("sequenceDiagram\nalt ok\nA->>B: yes\nelse fail\nA->>B: no\nend");
+    const source = "sequenceDiagram\nalt ok\nA->>B: yes\nelse fail\nA->>B: no\nend";
+    expect(() => parse(source)).not.toThrow();
+    const m = parse(source);
     const block = m.events[0] as Block;
     expect(block.type).toBe("alt");
     expect(block.branches.map((b) => b.label)).toEqual(["ok", "fail"]);

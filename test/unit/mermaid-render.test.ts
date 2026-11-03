@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/index.ts";
+import { rejectionOf } from "../support/rejections.ts";
 import { renderIsolated } from "../support/test-registry.ts";
 
 const CLASS = "classDiagram\nclass Animal\nAnimal <|-- Dog";
@@ -7,17 +7,6 @@ const STATE = "stateDiagram-v2\n[*] --> Still\nStill --> [*]";
 const SEQUENCE = "sequenceDiagram\nAlice->>Bob: Hello Bob\nBob-->>Alice: Hi Alice";
 const NETWORK_NONE = { allowNetwork: "none" } as const;
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47];
-
-/** Runs a render that must reject, and returns the RenderError. */
-async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
-  try {
-    await promise;
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the render resolved");
-}
 
 describe("mermaid through render: the native layouts draw three diagram types", () => {
   test("a class diagram renders to svg through the mermaid backend", async () => {

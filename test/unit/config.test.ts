@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { loadConfig, type ConfigDeps } from "../../src/config.ts";
-import { RenderError } from "../../src/errors.ts";
+import { rejectionOf, resolved } from "../support/rejections.ts";
 
 /** A fake file system: a map of path to text. A path that is not in the map reads as ENOENT. */
 function fakeFs(files: Record<string, string>, failures: Record<string, string> = {}) {
@@ -26,16 +26,6 @@ function deps(partial: Partial<ConfigDeps>): ConfigDeps {
     engineVersion: "9.8.7",
     ...partial,
   };
-}
-
-async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
-  try {
-    await promise;
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the promise resolved");
 }
 
 describe("loadConfig defaults", () => {
@@ -129,12 +119,12 @@ describe("loadConfig precedence: call option > environment > file > default", ()
   });
 
   test("an empty environment variable counts as unset", async () => {
-    const cfg = await loadConfig({}, deps({ env: { SCIENG_TIMEOUT_MS: "" } }));
+    const cfg = await resolved(loadConfig({}, deps({ env: { SCIENG_TIMEOUT_MS: "" } })));
     expect(cfg.timeoutMs).toBe(60000);
   });
 
   test("an empty SCIENG_CONFIG counts as unset and reads the default path", async () => {
-    const cfg = await loadConfig({}, deps({ env: { SCIENG_CONFIG: "" } }));
+    const cfg = await resolved(loadConfig({}, deps({ env: { SCIENG_CONFIG: "" } })));
     expect(cfg.timeoutMs).toBe(60000);
   });
 

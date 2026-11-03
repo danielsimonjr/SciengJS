@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/errors.ts";
+import { rejection } from "../support/rejections.ts";
 import { prepare } from "../../src/mermaid/common.ts";
 import { parseStateDiagram, stateToDot, type StateModel } from "../../src/mermaid/state.ts";
 import { dotToSvg } from "../../src/graph/dot.ts";
@@ -12,17 +12,6 @@ function parseWithWarnings(source: string, options: Record<string, unknown>): { 
   const src = prepare(source, options);
   const model = parseStateDiagram(src);
   return { model, warnings: src.warnings };
-}
-
-/** Runs a function that must throw a RenderError, and returns that error. */
-function rejection(fn: () => unknown): RenderError {
-  try {
-    fn();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
 }
 
 describe("stateDiagram-v2: states and transitions", () => {

@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { RenderError } from "../../src/errors.ts";
+import { rejectionOf, resolved } from "../support/rejections.ts";
 import { isFontFile, MAX_PNG_PIXEL_MB, svgToPng } from "../../src/raster/index.ts";
 import { countOpaquePixels, decodePng } from "../support/png-decode.ts";
 import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
@@ -13,16 +13,6 @@ const TEXT = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" vi
 const scratch = makeScratch("scieng-raster-");
 const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
 afterAll(() => removeScratch(scratch));
-
-async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
-  try {
-    await promise;
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the promise resolved");
-}
 
 describe("svgToPng", () => {
   test("writes a PNG with the signature and the size of the SVG at the scale", async () => {
@@ -53,7 +43,7 @@ describe("svgToPng", () => {
     // 512 by 512 pixels at four bytes each is exactly one mebibyte.
     const square = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#00ff00"/></svg>';
     const wide = '<svg xmlns="http://www.w3.org/2000/svg" width="513" height="512"><rect width="513" height="512" fill="#00ff00"/></svg>';
-    expect(decodePng(await svgToPng(square, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS })).width).toBe(512);
+    expect(decodePng(await resolved(svgToPng(square, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }))).width).toBe(512);
     const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
   });
