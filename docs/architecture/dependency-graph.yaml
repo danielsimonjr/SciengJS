@@ -1,10 +1,10 @@
 metadata:
-  name: agent-a1e48999a7b160336
+  name: sciengjs
   schemaVersion: 2.0.0
   language: typescript
   totalFiles: 107
   totalModules: 3
-  totalExports: 169
+  totalExports: 171
 modules:
   tools:
     scripts/prepare-build.mjs:
@@ -986,6 +986,8 @@ modules:
         - makeScratch
         - removeScratch
         - makeAssetsFolder
+        - wasmImportingMissingFunction
+        - wasmWhoseStartTraps
     test/support/bun-scan.ts:
       externalDependencies: []
       nodeDependencies:
@@ -1290,6 +1292,8 @@ modules:
             - makeAssetsFolder
             - noGlyphFont
             - realFiles
+            - wasmImportingMissingFunction
+            - wasmWhoseStartTraps
             - wasmWithCustomSection
           typeOnly: false
       exports: []
@@ -1622,8 +1626,8 @@ statistics:
   totalTypeScriptFiles: 107
   totalSourceFiles: 107
   totalModules: 3
-  totalLinesOfCode: 11606
-  totalExports: 169
+  totalLinesOfCode: 11697
+  totalExports: 171
   entryRoots: 19
   reachableFiles: 19
   dormantFiles: 14
@@ -1641,7 +1645,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 5
   totalInterfaces: 23
-  totalFunctions: 84
+  totalFunctions: 86
   totalTypeGuards: 2
   totalEnums: 0
   totalConstants: 31

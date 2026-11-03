@@ -33,7 +33,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 59
+      "loc": 81
     },
     {
       "file": "src/config.ts",
@@ -110,7 +110,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 104
+      "loc": 102
     },
     {
       "file": "src/raster/warnings.ts",
@@ -229,7 +229,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 56
+      "loc": 87
     },
     {
       "file": "test/support/bun-scan.ts",
@@ -292,7 +292,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 96
+      "loc": 122
     },
     {
       "file": "test/unit/config-assets.test.ts",
@@ -355,7 +355,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 209
+      "loc": 223
     },
     {
       "file": "test/unit/graph-registry.test.ts",

@@ -692,12 +692,12 @@ graph TD
 |----------|-------|
 | Total Source Files | 107 |
 | Subsystems | 11 |
-| Total Lines of Code | 11606 |
-| Total Exports | 169 |
+| Total Lines of Code | 11697 |
+| Total Exports | 171 |
 | Total Re-exports | 18 |
 | Total Classes | 5 |
 | Total Interfaces | 23 |
-| Total Functions | 84 |
+| Total Functions | 86 |
 | Total Type Guards | 2 |
 | Total Enums | 0 |
 | Type-only Imports | 14 |
