@@ -425,7 +425,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 42
+      "loc": 48
     },
     {
       "file": "test/unit/mermaid-network.test.ts",

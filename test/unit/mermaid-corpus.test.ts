@@ -28,6 +28,12 @@ describe("Mermaid corpus", () => {
     }
   });
 
+  for (const entry of approval.entries) {
+    test(`${entry.source} is approved by a maintainer; set approved to true in test/corpus/mermaid/approval.json`, () => {
+      expect(entry.approved).toBe(true);
+    });
+  }
+
   for (const file of sources) {
     test(`${file} matches its expected SVG and gives no warning`, async () => {
       const source = readFileSync(join(CORPUS, file), "utf8");

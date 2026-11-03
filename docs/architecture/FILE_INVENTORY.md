@@ -101,7 +101,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 53 |
 | `test/unit/mermaid-class.test.ts` | (root) | tests | test | 279 |
 | `test/unit/mermaid-common.test.ts` | (root) | tests | test | 131 |
-| `test/unit/mermaid-corpus.test.ts` | (root) | tests | test | 42 |
+| `test/unit/mermaid-corpus.test.ts` | (root) | tests | test | 48 |
 | `test/unit/mermaid-network.test.ts` | (root) | tests | test | 28 |
 | `test/unit/mermaid-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/mermaid-render.test.ts` | (root) | tests | test | 113 |
