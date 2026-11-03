@@ -1,7 +1,7 @@
 {
   "metadata": {
     "name": "@danielsimonjr/sciengjs",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "schemaVersion": "2.0.0",
     "language": "typescript"
   },
@@ -13,16 +13,6 @@
     }
   ],
   "modules": {
-    "browser": {
-      "src/browser/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
     "root": {
       "src/config.ts": {
         "description": "Resolves the configuration. Precedence: call option, then environment, then file, then default.",
@@ -421,16 +411,6 @@
         ]
       }
     },
-    "html": {
-      "src/html/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
     "entry": {
       "src/index.ts": {
         "description": "Package entry point for src (re-exports 15 symbols)",
@@ -543,46 +523,6 @@
         ]
       }
     },
-    "math": {
-      "src/math/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
-    "mermaid": {
-      "src/mermaid/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
-    "mesh": {
-      "src/mesh/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
-    "plot": {
-      "src/plot/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
     "raster": {
       "src/raster/index.ts": {
         "description": "The most megabytes of RGBA pixels that one PNG render accepts. Measured: a render holds about two",
@@ -648,26 +588,6 @@
           "fontCovers",
           "rasterWarnings"
         ]
-      }
-    },
-    "sysml": {
-      "src/sysml/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
-      }
-    },
-    "tex": {
-      "src/tex/index.ts": {
-        "description": "Package entry point",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "workspaceDependencies": [],
-        "exports": []
       }
     },
     "worker": {
@@ -1130,12 +1050,6 @@
   },
   "layers": [
     {
-      "name": "Browser",
-      "files": [
-        "src/browser/index.ts"
-      ]
-    },
-    {
       "name": "Root",
       "files": [
         "src/config.ts",
@@ -1157,39 +1071,9 @@
       ]
     },
     {
-      "name": "Html",
-      "files": [
-        "src/html/index.ts"
-      ]
-    },
-    {
       "name": "Entry",
       "files": [
         "src/index.ts"
-      ]
-    },
-    {
-      "name": "Math",
-      "files": [
-        "src/math/index.ts"
-      ]
-    },
-    {
-      "name": "Mermaid",
-      "files": [
-        "src/mermaid/index.ts"
-      ]
-    },
-    {
-      "name": "Mesh",
-      "files": [
-        "src/mesh/index.ts"
-      ]
-    },
-    {
-      "name": "Plot",
-      "files": [
-        "src/plot/index.ts"
       ]
     },
     {
@@ -1197,18 +1081,6 @@
       "files": [
         "src/raster/index.ts",
         "src/raster/warnings.ts"
-      ]
-    },
-    {
-      "name": "Sysml",
-      "files": [
-        "src/sysml/index.ts"
-      ]
-    },
-    {
-      "name": "Tex",
-      "files": [
-        "src/tex/index.ts"
       ]
     },
     {

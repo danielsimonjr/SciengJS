@@ -8,14 +8,14 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 107
+**Total files**: 99
 
 ## Disposition counts
 
 | Disposition | Count | Meaning |
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
-| `build-entry` | 25 | A `src`-area file that is an entry root. |
+| `build-entry` | 17 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
 | `test` | 42 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
@@ -23,13 +23,13 @@ This report lists each source file that the map census finds, with a disposition
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **107** | |
+| **Total** | **99** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 39 |
+| `src` | 31 |
 | `tests` | 42 |
 | `tools` | 26 |
 
@@ -38,13 +38,12 @@ This report lists each source file that the map census finds, with a disposition
 | Package | Files |
 | --- | --: |
 | `(root)` | 82 |
-| `@danielsimonjr/sciengjs` | 25 |
+| `@danielsimonjr/sciengjs` | 17 |
 
 ## All files
 
 | File | Package | Area | Disposition | Lines |
 | --- | --- | --- | --- | --: |
-| `src/browser/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 223 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 104 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 37 |
@@ -53,18 +52,11 @@ This report lists each source file that the map census finds, with a disposition
 | `src/graph/dot.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/graph/image.ts` | @danielsimonjr/sciengjs | src | build-entry | 330 |
 | `src/graph/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 3 |
-| `src/html/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 28 |
-| `src/math/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
-| `src/mermaid/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
-| `src/mesh/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 52 |
-| `src/plot/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 92 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
 | `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 30 |
-| `src/sysml/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
-| `src/tex/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/types.ts` | @danielsimonjr/sciengjs | src | build-entry | 69 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
 | `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 33 |
@@ -77,7 +69,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 61 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 70 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/page-checker.ts` | (root) | tests | test | 357 |
 | `test/support/png-decode.ts` | (root) | tests | test | 105 |

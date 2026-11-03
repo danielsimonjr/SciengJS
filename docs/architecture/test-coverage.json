@@ -1,33 +1,25 @@
 {
   "metadata": {
-    "totalSourceFiles": 39,
+    "totalSourceFiles": 31,
     "totalTestFiles": 28,
     "testedCount": 17,
-    "untestedCount": 22,
-    "coveragePercent": "43.6",
+    "untestedCount": 14,
+    "coveragePercent": "54.8",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 39,
+      "activeFiles": 31,
       "testedActive": 17,
-      "activeUntested": 22,
+      "activeUntested": 14,
       "excludedTotal": 0,
-      "percent": "43.6",
+      "percent": "54.8",
       "breakdown": {
-        "active_untested": 22
+        "active_untested": 14
       }
     }
   },
   "untestedFiles": [
-    "src/browser/index.ts",
     "src/graph/index.ts",
-    "src/html/index.ts",
-    "src/math/index.ts",
-    "src/mermaid/index.ts",
-    "src/mesh/index.ts",
     "src/pairs.ts",
-    "src/plot/index.ts",
-    "src/sysml/index.ts",
-    "src/tex/index.ts",
     "src/worker/entry.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
@@ -61,7 +53,6 @@
     "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
   ],
   "coverageMap": {
-    "src/browser/index.ts": [],
     "src/config.ts": [
       "test/unit/config.test.ts",
       "test/unit/graph-large.test.ts",
@@ -100,16 +91,11 @@
       "test/unit/graph-image.test.ts"
     ],
     "src/graph/index.ts": [],
-    "src/html/index.ts": [],
     "src/index.ts": [
       "test/unit/graph-large.test.ts",
       "test/unit/graph-network.test.ts"
     ],
-    "src/math/index.ts": [],
-    "src/mermaid/index.ts": [],
-    "src/mesh/index.ts": [],
     "src/pairs.ts": [],
-    "src/plot/index.ts": [],
     "src/raster/index.ts": [
       "test/unit/graph-network.test.ts",
       "test/unit/raster.test.ts"
@@ -120,8 +106,6 @@
     "src/registry.ts": [
       "test/unit/graph-registry.test.ts"
     ],
-    "src/sysml/index.ts": [],
-    "src/tex/index.ts": [],
     "src/types.ts": [
       "test/unit/graph-large.test.ts",
       "test/unit/graph-network.test.ts",
@@ -242,43 +226,11 @@
   },
   "classifiedUntested": [
     {
-      "file": "src/browser/index.ts",
-      "category": null
-    },
-    {
       "file": "src/graph/index.ts",
       "category": null
     },
     {
-      "file": "src/html/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/math/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/mermaid/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/mesh/index.ts",
-      "category": null
-    },
-    {
       "file": "src/pairs.ts",
-      "category": null
-    },
-    {
-      "file": "src/plot/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/sysml/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/tex/index.ts",
       "category": null
     },
     {

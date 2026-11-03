@@ -8,56 +8,24 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 39 |
+| Total Source Files | 31 |
 | Total Test Files | 28 |
 | Source Files with Tests | 17 |
-| Source Files without Tests | 22 |
-| Coverage (raw, direct-import) | **43.6%** |
+| Source Files without Tests | 14 |
+| Coverage (raw, direct-import) | **54.8%** |
 ---
 
 ## Source Files Without Test Coverage
 
-The following 22 source files are not directly imported by any test file:
-
-### browser/
-
-- `src/browser/index.ts`
+The following 14 source files are not directly imported by any test file:
 
 ### graph/
 
 - `src/graph/index.ts`
 
-### html/
-
-- `src/html/index.ts`
-
-### math/
-
-- `src/math/index.ts`
-
-### mermaid/
-
-- `src/mermaid/index.ts`
-
-### mesh/
-
-- `src/mesh/index.ts`
-
 ### root/
 
 - `src/pairs.ts`
-
-### plot/
-
-- `src/plot/index.ts`
-
-### sysml/
-
-- `src/sysml/index.ts`
-
-### tex/
-
-- `src/tex/index.ts`
 
 ### worker/
 

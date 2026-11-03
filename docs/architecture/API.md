@@ -69,14 +69,6 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | Subpath | Status in increment I1 |
 |---|---|
 | `./graph` | DOT to SVG through the viz library. It exports `dotToSvg`. |
-| `./mermaid` | Stub. |
-| `./math` | Stub. |
-| `./tex` | Stub. |
-| `./plot` | Stub. |
-| `./sysml` | Stub. |
-| `./mesh` | Stub. |
-| `./browser` | Stub. |
-| `./html` | Stub. |
 | `./raster` | SVG to PNG through resvg. It exports `svgToPng` and `isFontFile`. |
 
-Each stage fills its subpath in its own increment. A caller that imports a subpath loads no WASM file.
+The package exports only the subpaths that have content. Each later stage adds its subpath in its own increment. A caller that imports a subpath loads no WASM file.
