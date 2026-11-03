@@ -200,7 +200,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - The stage bundles one default font: Liberation Serif Regular, version 2.1.5, under the SIL Open Font License 1.1. The font is metric-compatible with Times New Roman. Times-Roman, the default font of Graphviz, resolves to this font. The font file and its licence are in the `assets/fonts/` folder of the package. `THIRD_PARTY_NOTICES.md` lists the font.
 - Every font family of an input resolves to the font in use. The font has one face. Bold and italic text draw in that face, and the render reports one warning for bold text and one for italic text. A character that the font does not hold draws no pixel, and the render reports one warning with the number of such characters.
 - The configuration key `rasterFont` names a TrueType or OpenType file. The file replaces the default font. A file that cannot be read rejects the render with `E_CONFIG`. A file without a font signature also rejects the render with `E_CONFIG`. A TrueType collection (`ttcf` signature) is not one font and also rejects with `E_CONFIG`. A bundled font that is missing or has no font signature rejects the render with `E_STAGE_MISSING`.
-- A PNG whose RGBA pixel buffer is larger than `maxMemoryMb` megabytes, or larger than 1024 megabytes, rejects with `E_LIMIT`. The bound of 1024 megabytes comes from a measure: resvg in WASM holds about two copies of the pixel buffer, and the WASM memory ends at 4 GiB.
+- A PNG whose RGBA pixel buffer is larger than `maxMemoryMb` megabytes, or larger than 1024 megabytes, rejects with `E_LIMIT`. The bound of 1024 megabytes comes from a measure. Resvg in WASM holds about two copies of the pixel buffer. The WASM memory ends at 4 GiB.
 
 ## Backends
 
