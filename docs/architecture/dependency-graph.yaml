@@ -2,11 +2,19 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 157
+  totalFiles: 161
   totalModules: 3
   totalExports: 308
 modules:
   tools:
+    scripts/mermaid-licenses.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports: []
     scripts/prepare-build.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -1506,6 +1514,37 @@ modules:
             - PROFILE_PREFIX
           typeOnly: false
       exports: []
+    test/integration/mermaid-browser-capture.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:module
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/browser/page.ts
+          imports:
+            - mermaidPageHtml
+          typeOnly: false
+        - file: src/browser/pinned.ts
+          imports:
+            - MERMAID_CDN_URL
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - renderHtmlPage
+          typeOnly: false
+        - file: src/mermaid/browser.ts
+          imports:
+            - pinnedMermaid
+          typeOnly: false
+      exports: []
     test/integration/mermaid-browser.test.ts:
       externalDependencies:
         - bun:test
@@ -2297,6 +2336,37 @@ modules:
             - renderIsolated
           typeOnly: false
       exports: []
+    test/unit/mermaid-route-lenient.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - renderIsolated
+          typeOnly: false
+        - file: src/index.ts
+          imports:
+            - '*'
+          typeOnly: false
+      exports: []
+    test/unit/mermaid-routing-scan.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mermaid/common.ts
+          imports:
+            - routesToBrowser
+          typeOnly: false
+      exports: []
     test/unit/mermaid-routing.test.ts:
       externalDependencies:
         - bun:test
@@ -2715,10 +2785,10 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 157
-  totalSourceFiles: 157
+  totalTypeScriptFiles: 161
+  totalSourceFiles: 161
   totalModules: 3
-  totalLinesOfCode: 17141
+  totalLinesOfCode: 17398
   totalExports: 308
   entryRoots: 42
   reachableFiles: 42
@@ -2729,7 +2799,7 @@ statistics:
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 23
   noImporterFileCount: 7
-  unusedExportsCount: 21
+  unusedExportsCount: 20
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0

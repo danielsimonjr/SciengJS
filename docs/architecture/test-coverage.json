@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 56,
-    "totalTestFiles": 55,
+    "totalTestFiles": 58,
     "testedCount": 37,
     "untestedCount": 19,
     "coveragePercent": "66.1",
@@ -98,9 +98,11 @@
       "test/unit/browser-input.test.ts"
     ],
     "src/browser/page.ts": [
+      "test/integration/mermaid-browser-capture.test.ts",
       "test/unit/browser-page.test.ts"
     ],
     "src/browser/pinned.ts": [
+      "test/integration/mermaid-browser-capture.test.ts",
       "test/unit/browser-pinned.test.ts"
     ],
     "src/browser/profile.ts": [
@@ -110,15 +112,18 @@
       "test/unit/browser-proxy.test.ts"
     ],
     "src/browser/render.ts": [
-      "test/integration/browser-render.test.ts"
+      "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser-capture.test.ts"
     ],
     "src/config.ts": [
       "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
       "test/unit/graph-svg-backend.test.ts",
+      "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
@@ -132,6 +137,7 @@
     ],
     "src/errors.ts": [
       "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
@@ -139,6 +145,7 @@
       "test/unit/graph-png.test.ts",
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
+      "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
@@ -165,12 +172,15 @@
     "src/graph/index.ts": [],
     "src/index.ts": [
       "test/integration/browser-render.test.ts",
-      "test/integration/mermaid-browser.test.ts"
+      "test/integration/mermaid-browser-capture.test.ts",
+      "test/integration/mermaid-browser.test.ts",
+      "test/unit/mermaid-route-lenient.test.ts"
     ],
     "src/mermaid/backend-pdf.ts": [],
     "src/mermaid/backend-png.ts": [],
     "src/mermaid/backend-svg.ts": [],
     "src/mermaid/browser.ts": [
+      "test/integration/mermaid-browser-capture.test.ts",
       "test/unit/browser-pinned.test.ts"
     ],
     "src/mermaid/class.ts": [
@@ -180,6 +190,7 @@
     "src/mermaid/common.ts": [
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
+      "test/unit/mermaid-routing-scan.test.ts",
       "test/unit/mermaid-routing.test.ts",
       "test/unit/mermaid-sequence.test.ts",
       "test/unit/mermaid-state.test.ts",
@@ -222,7 +233,9 @@
     ],
     "src/types.ts": [
       "test/integration/browser-render.test.ts",
+      "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/version.ts": [
@@ -267,6 +280,16 @@
       "src/types.ts",
       "src/browser/render.ts",
       "src/browser/profile.ts"
+    ],
+    "test/integration/mermaid-browser-capture.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts",
+      "src/browser/page.ts",
+      "src/browser/pinned.ts",
+      "src/browser/render.ts",
+      "src/mermaid/browser.ts"
     ],
     "test/integration/mermaid-browser.test.ts": [
       "src/index.ts",
@@ -374,6 +397,15 @@
       "src/registry.ts"
     ],
     "test/unit/mermaid-render.test.ts": [],
+    "test/unit/mermaid-route-lenient.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
+    "test/unit/mermaid-routing-scan.test.ts": [
+      "src/mermaid/common.ts"
+    ],
     "test/unit/mermaid-routing.test.ts": [
       "src/mermaid/common.ts"
     ],

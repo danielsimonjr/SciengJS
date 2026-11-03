@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 157
+**Total files**: 161
 
 ## Disposition counts
 
@@ -18,32 +18,33 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 42 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 74 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
-| `tool` | 27 | A file in a `tools/` or `scripts/` folder outside `src/`. |
+| `test` | 77 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `tool` | 28 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **157** | |
+| **Total** | **161** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 56 |
-| `tests` | 74 |
-| `tools` | 27 |
+| `tests` | 77 |
+| `tools` | 28 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 115 |
+| `(root)` | 119 |
 | `@danielsimonjr/sciengjs` | 42 |
 
 ## All files
 
 | File | Package | Area | Disposition | Lines |
 | --- | --- | --- | --- | --: |
+| `scripts/mermaid-licenses.mjs` | (root) | tools | tool | 41 |
 | `scripts/prepare-build.mjs` | (root) | tools | tool | 91 |
 | `src/assets.ts` | @danielsimonjr/sciengjs | src | build-entry | 88 |
 | `src/browser/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 16 |
@@ -90,6 +91,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
 | `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |
+| `test/integration/mermaid-browser-capture.test.ts` | (root) | tests | test | 111 |
 | `test/integration/mermaid-browser.test.ts` | (root) | tests | test | 85 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 124 |
 | `test/mutation/run-mutants.mjs` | (root) | tests | test | 250 |
@@ -137,6 +139,8 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mermaid-network.test.ts` | (root) | tests | test | 33 |
 | `test/unit/mermaid-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/mermaid-render.test.ts` | (root) | tests | test | 134 |
+| `test/unit/mermaid-route-lenient.test.ts` | (root) | tests | test | 56 |
+| `test/unit/mermaid-routing-scan.test.ts` | (root) | tests | test | 49 |
 | `test/unit/mermaid-routing.test.ts` | (root) | tests | test | 44 |
 | `test/unit/mermaid-sequence.test.ts` | (root) | tests | test | 467 |
 | `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
