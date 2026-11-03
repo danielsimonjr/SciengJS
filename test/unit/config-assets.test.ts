@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
-import { copyFileSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, realpathSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -90,7 +90,7 @@ describe("the loader reads no package file at run time", () => {
       expect(run.status).toBe(0);
       const out = JSON.parse(run.stdout.trim().split("\n").pop() as string) as { texBundleUrl: string; assetsUrl: string };
       expect(out.texBundleUrl).toBe(`https://github.com/danielsimonjr/sciengjs/releases/download/v${ENGINE_VERSION}/`);
-      expect(out.assetsUrl).toBe(pathToFileURL(join(root, "assets")).href + "/");
+      expect(out.assetsUrl).toBe(pathToFileURL(join(realpathSync(root), "assets")).href + "/");
     } finally {
       rmSync(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
     }
