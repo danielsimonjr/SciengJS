@@ -12,8 +12,8 @@ Version: each row gives the version that the engine pins.
 |---|---|---|---|
 | graph | `@viz-js/viz` 3.31.0 (Graphviz 16.1.0 compiled to WASM) | Wrapper: MIT. Graphviz: EPL-2.0 | a dependency |
 | math | `@mathjax/src` | Apache-2.0 | not yet a dependency |
-| tex | TikZJax toolchain (TeX compiled to WASM) | LPPL-1.3c. The licence of each other toolchain part is an open item of the T3 trial | not yet a dependency |
-| tex | TeX packages (bundles) | Mostly LPPL. Each package keeps its own licence | not yet a dependency |
+| tex | The own WASM build of `tex.web` with `etex.ch` (trials T5 and T6) | The "tex" stage of the design gives the licence of each input | not yet a dependency |
+| tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
 | mesh | `occt-import-js` (OpenCascade compiled to WASM) | LGPL-2.1 | not yet a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
 | mesh (viewer page) | `three` | MIT | not yet a dependency |
@@ -42,7 +42,7 @@ The font `assets/fonts/LiberationSerif-Regular.ttf` is Liberation Serif Regular,
 
 ### TeX toolchain and packages
 
-The TikZJax toolchain is licensed under the LaTeX Project Public License 1.3c. TeX packages keep their own licences, mostly the LPPL. The font set licence is an open item of the T3 trial.
+This release does not ship the tex stage. The "tex" stage of the design gives the licence of each TeX input. A bundle holds only packages under the LPPL or in the public domain. Each package keeps its own licence.
 
 ### Template method credit
 

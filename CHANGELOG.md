@@ -4,9 +4,19 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-02
+
+The first release on npm. The release renders Graphviz DOT to SVG and PNG.
+
+### Removed
+
+- The eight subpaths with no content (`./mermaid`, `./math`, `./tex`, `./plot`, `./sysml`, `./mesh`, `./browser`, `./html`). Each subpath returns with the increment that gives the subpath content. The smoke test checks that the package refuses each subpath.
+
 ### Changed
 
-- Trial T6: the T5 compiler builds `tex.web` with `etex.ch` and five utility primitives (`\expanded`, `\filesize`, `\pdfstrcmp`, `\creationdate`, `\shellescape`). The build passes the e-TRIP gate, makes the LaTeX format in extended mode with the pgf driver `pgfsys-dvisvgm.def`, and renders a `circuitikz` circuit with each glyph as a `<path>` under Bun and Node. Report: `docs/analysis/t6-etex-build.md`.
+- README: the package page. The page gives the scope of the release, the install, the API with tested examples, the error codes, the configuration and the roadmap.
+- Third-party notices: the TeX rows name the own WASM build of `tex.web` and refer to the design for the licence of each TeX input.
+- Trial T6: the T5 compiler builds `tex.web` with `etex.ch` and five utility primitives (`\expanded`, `\filesize`, `\pdfstrcmp`, `\creationdate`, `\shellescape`). The build passes the e-TRIP gate. The build makes the LaTeX format in extended mode with the pgf driver `pgfsys-dvisvgm.def`. The build renders a `circuitikz` circuit with each glyph as a `<path>` under Bun and Node. Report: `docs/analysis/t6-etex-build.md`.
 - Trial T5 tools: the tangler starts a module at a line that ends in `@`. The download, the program build and the trip steps move into shared modules. The T5 results do not change.
 
 - Design, tex stage: the build tangles `tex.web` with `etex.ch`, then one engine change file per concern. The engine writes the utility primitives that the LaTeX kernel needs from their published behaviour. The build never uses the name TeX or e-TeX. CI runs the trip test and the e-TRIP test (trial T5).

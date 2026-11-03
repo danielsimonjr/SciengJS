@@ -1,8 +1,8 @@
 {
-  "totalFiles": 107,
+  "totalFiles": 99,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 25,
+    "build-entry": 17,
     "test-only": 3,
     "orphan": 11,
     "test": 42,
@@ -12,22 +12,15 @@
     "example": 0
   },
   "byArea": {
-    "src": 39,
+    "src": 31,
     "tests": 42,
     "tools": 26
   },
   "byPackage": {
-    "@danielsimonjr/sciengjs": 25,
+    "@danielsimonjr/sciengjs": 17,
     "(root)": 82
   },
   "files": [
-    {
-      "file": "src/browser/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
-    },
     {
       "file": "src/config.ts",
       "package": "@danielsimonjr/sciengjs",
@@ -85,13 +78,6 @@
       "loc": 3
     },
     {
-      "file": "src/html/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
-    },
-    {
       "file": "src/index.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -99,39 +85,11 @@
       "loc": 28
     },
     {
-      "file": "src/math/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
-    },
-    {
-      "file": "src/mermaid/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
-    },
-    {
-      "file": "src/mesh/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
-    },
-    {
       "file": "src/pairs.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
       "loc": 52
-    },
-    {
-      "file": "src/plot/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
     },
     {
       "file": "src/raster/index.ts",
@@ -153,20 +111,6 @@
       "area": "src",
       "disposition": "build-entry",
       "loc": 30
-    },
-    {
-      "file": "src/sysml/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
-    },
-    {
-      "file": "src/tex/index.ts",
-      "package": "@danielsimonjr/sciengjs",
-      "area": "src",
-      "disposition": "build-entry",
-      "loc": 2
     },
     {
       "file": "src/types.ts",
@@ -257,7 +201,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 61
+      "loc": 70
     },
     {
       "file": "test/support/bun-scan.ts",

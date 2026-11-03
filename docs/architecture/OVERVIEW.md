@@ -2,7 +2,7 @@
 
 `@danielsimonjr/sciengjs` is a TypeScript library. The library renders science and engineering sources to SVG, PNG, PDF, HTML, and Markdown. The library runs on the local machine. The library sends no source to a web service.
 
-Status: increment I1, the graph and raster stages. The package renders DOT to SVG and DOT to PNG. The other stages are still stubs. A pair of a stub stage rejects with `E_UNSUPPORTED`.
+Status: increment I1, the graph and raster stages. The package renders DOT to SVG and DOT to PNG. The other stages do not exist yet. A pair of a missing stage rejects with `E_UNSUPPORTED`.
 
 ## What the engine does
 
@@ -24,7 +24,6 @@ Status: increment I1, the graph and raster stages. The package renders DOT to SV
 | `src/worker/` | The worker runner and the worker entry. |
 | `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner and the two backends (SVG and PNG). |
 | `src/raster/` | The raster stage: SVG to PNG through resvg, and the font check. |
-| `src/mermaid`, `src/math`, `src/tex`, `src/plot`, `src/sysml`, `src/mesh`, `src/browser`, `src/html` | The subpath stubs. Each stage fills its folder in its increment. |
 | `assets/` | The files that ship in the package: the bundled raster font and the licence texts. |
 | `test/unit/` | Unit tests of each module. |
 | `test/corpus/` | The DOT corpus: each source and its expected SVG. |
@@ -46,9 +45,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 107 | repo-tools map |
-| totalLinesOfCode | 10982 | repo-tools map |
+| totalSourceFiles | 99 | repo-tools map |
+| totalLinesOfCode | 10975 | repo-tools map |
 | totalExports | 151 | repo-tools map |
 | totalTypeOnlyImports | 14 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 25 | repo-tools map |
+| entryRoots | 17 | repo-tools map |

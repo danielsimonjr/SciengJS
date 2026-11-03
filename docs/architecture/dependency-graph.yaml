@@ -1,17 +1,12 @@
 metadata:
-  name: agent-a6856fc4f03855145
+  name: sciengjs
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 107
+  totalFiles: 99
   totalModules: 3
   totalExports: 151
 modules:
   src:
-    src/browser/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
     src/config.ts:
       externalDependencies: []
       nodeDependencies:
@@ -174,11 +169,6 @@ modules:
       exports:
         - dotToSvg
         - DotSvgResult
-    src/html/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
     src/index.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -244,21 +234,6 @@ modules:
         - Capability
         - render
         - capabilities
-    src/math/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
-    src/mermaid/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
-    src/mesh/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
     src/pairs.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -272,11 +247,6 @@ modules:
         - PairSpec
         - PAIRS
         - findPair
-    src/plot/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
     src/raster/index.ts:
       externalDependencies:
         - '@resvg/resvg-wasm'
@@ -312,16 +282,6 @@ modules:
         - Registry
         - DEFAULT_REGISTRY
         - registryKey
-    src/sysml/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
-    src/tex/index.ts:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports: []
     src/types.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1460,13 +1420,13 @@ modules:
       exports:
         - addedPrimitives
 statistics:
-  totalTypeScriptFiles: 107
-  totalSourceFiles: 107
+  totalTypeScriptFiles: 99
+  totalSourceFiles: 99
   totalModules: 3
-  totalLinesOfCode: 10982
+  totalLinesOfCode: 10975
   totalExports: 151
-  entryRoots: 25
-  reachableFiles: 25
+  entryRoots: 17
+  reachableFiles: 17
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
@@ -1491,14 +1451,6 @@ reachability:
   roots:
     - src/index.ts
     - src/graph/index.ts
-    - src/mermaid/index.ts
-    - src/math/index.ts
-    - src/tex/index.ts
-    - src/plot/index.ts
-    - src/sysml/index.ts
-    - src/mesh/index.ts
-    - src/browser/index.ts
-    - src/html/index.ts
     - src/raster/index.ts
     - src/config.ts
     - src/core.ts
@@ -1514,7 +1466,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 25
+  reachableCount: 17
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs

@@ -1,6 +1,5 @@
 {
   "surfaces": {
-    "browser": [],
     "entry": [
       "Capability",
       "INPUT_TYPES",
@@ -30,11 +29,6 @@
       "renderPng",
       "stripImageAttributes"
     ],
-    "html": [],
-    "math": [],
-    "mermaid": [],
-    "mesh": [],
-    "plot": [],
     "raster": [
       "MAX_PNG_PIXEL_MB",
       "fontCovers",
@@ -56,8 +50,6 @@
       "registryKey",
       "renderWithRegistry"
     ],
-    "sysml": [],
-    "tex": [],
     "trials": [],
     "worker": [
       "runInWorker"

@@ -4,7 +4,7 @@
 
 # @danielsimonjr/sciengjs - Dependency Graph
 
-**Version**: 0.0.0
+**Version**: 0.1.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -14,29 +14,21 @@ This document provides a comprehensive dependency graph of all files, components
 
 1. [Overview](#overview)
 2. [Package Dependencies](#package-dependencies)
-3. [Browser Dependencies](#browser-dependencies)
-4. [Root Dependencies](#root-dependencies)
-5. [Graph Dependencies](#graph-dependencies)
-6. [Html Dependencies](#html-dependencies)
-7. [Entry Dependencies](#entry-dependencies)
-8. [Math Dependencies](#math-dependencies)
-9. [Mermaid Dependencies](#mermaid-dependencies)
-10. [Mesh Dependencies](#mesh-dependencies)
-11. [Plot Dependencies](#plot-dependencies)
-12. [Raster Dependencies](#raster-dependencies)
-13. [Sysml Dependencies](#sysml-dependencies)
-14. [Tex Dependencies](#tex-dependencies)
-15. [Worker Dependencies](#worker-dependencies)
-16. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-17. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-18. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-19. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-20. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-21. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-22. [Dependency Matrix](#dependency-matrix)
-23. [Circular Dependency Analysis](#circular-dependency-analysis)
-24. [Visual Dependency Graph](#visual-dependency-graph)
-25. [Summary Statistics](#summary-statistics)
+3. [Root Dependencies](#root-dependencies)
+4. [Graph Dependencies](#graph-dependencies)
+5. [Entry Dependencies](#entry-dependencies)
+6. [Raster Dependencies](#raster-dependencies)
+7. [Worker Dependencies](#worker-dependencies)
+8. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+9. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+10. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+11. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+12. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+13. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+14. [Dependency Matrix](#dependency-matrix)
+15. [Circular Dependency Analysis](#circular-dependency-analysis)
+16. [Visual Dependency Graph](#visual-dependency-graph)
+17. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -45,18 +37,10 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **browser**: 1 file
 - **root**: 6 files
 - **graph**: 5 files
-- **html**: 1 file
 - **entry**: 1 file
-- **math**: 1 file
-- **mermaid**: 1 file
-- **mesh**: 1 file
-- **plot**: 1 file
 - **raster**: 2 files
-- **sysml**: 1 file
-- **tex**: 1 file
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
 - **trials/t2-mesh**: 1 file
@@ -64,14 +48,6 @@ The codebase is organized into the following modules:
 - **trials/t4-browser**: 2 files
 - **trials/t5-tex-build**: 6 files
 - **trials/t6-etex-build**: 1 file
-
----
-
-<a id="browser-dependencies"></a>
-
-## Browser Dependencies
-
-### `src/browser/index.ts` - Package entry point
 
 ---
 
@@ -241,14 +217,6 @@ The codebase is organized into the following modules:
 
 ---
 
-<a id="html-dependencies"></a>
-
-## Html Dependencies
-
-### `src/html/index.ts` - Package entry point
-
----
-
 <a id="entry-dependencies"></a>
 
 ## Entry Dependencies
@@ -276,38 +244,6 @@ The codebase is organized into the following modules:
   RenderAsset, Capability
   ```
 
-
----
-
-<a id="math-dependencies"></a>
-
-## Math Dependencies
-
-### `src/math/index.ts` - Package entry point
-
----
-
-<a id="mermaid-dependencies"></a>
-
-## Mermaid Dependencies
-
-### `src/mermaid/index.ts` - Package entry point
-
----
-
-<a id="mesh-dependencies"></a>
-
-## Mesh Dependencies
-
-### `src/mesh/index.ts` - Package entry point
-
----
-
-<a id="plot-dependencies"></a>
-
-## Plot Dependencies
-
-### `src/plot/index.ts` - Package entry point
 
 ---
 
@@ -345,22 +281,6 @@ The codebase is organized into the following modules:
 **Exports:**
 - Types: `CoverageTest`
 - Functions: `fontCovers`, `rasterWarnings`
-
----
-
-<a id="sysml-dependencies"></a>
-
-## Sysml Dependencies
-
-### `src/sysml/index.ts` - Package entry point
-
----
-
-<a id="tex-dependencies"></a>
-
-## Tex Dependencies
-
-### `src/tex/index.ts` - Package entry point
 
 ---
 
@@ -605,14 +525,6 @@ The codebase is organized into the following modules:
 | `trials/t5-tex-build/runtime/run.mjs` | 1 file | 0 files |
 | `trials/t5-tex-build/runtime/tfm.mjs` | 0 files | 1 file |
 | `trials/t5-tex-build/runtime/type1.mjs` | 0 files | 1 file |
-| `src/browser/index` | 0 files | 0 files |
-| `src/html/index` | 0 files | 0 files |
-| `src/math/index` | 0 files | 0 files |
-| `src/mermaid/index` | 0 files | 0 files |
-| `src/mesh/index` | 0 files | 0 files |
-| `src/plot/index` | 0 files | 0 files |
-| `src/sysml/index` | 0 files | 0 files |
-| `src/tex/index` | 0 files | 0 files |
 | `trials/t1-graph/compare-layout.mjs` | 0 files | 0 files |
 | `trials/t1-graph/make-sources.mjs` | 0 files | 0 files |
 | `trials/t1-graph/measure.mjs` | 0 files | 0 files |
@@ -636,135 +548,103 @@ The codebase is organized into the following modules:
 
 ```mermaid
 graph TD
-    subgraph Browser
-        N0[index]
-    end
-
     subgraph Root
-        N1[config]
-        N2[core]
-        N3[errors]
-        N4[pairs]
-        N5[registry]
-        N6[types]
+        N0[config]
+        N1[core]
+        N2[errors]
+        N3[pairs]
+        N4[registry]
+        N5[types]
     end
 
     subgraph Graph
-        N7[backend-png]
-        N8[backend-svg]
-        N9[dot]
-        N10[image]
-        N11[index]
-    end
-
-    subgraph Html
-        N12[index]
+        N6[backend-png]
+        N7[backend-svg]
+        N8[dot]
+        N9[image]
+        N10[index]
     end
 
     subgraph Entry
-        N13[index]
-    end
-
-    subgraph Math
-        N14[index]
-    end
-
-    subgraph Mermaid
-        N15[index]
-    end
-
-    subgraph Mesh
-        N16[index]
-    end
-
-    subgraph Plot
-        N17[index]
+        N11[index]
     end
 
     subgraph Raster
-        N18[index]
-        N19[warnings]
-    end
-
-    subgraph Sysml
-        N20[index]
-    end
-
-    subgraph Tex
-        N21[index]
+        N12[index]
+        N13[warnings]
     end
 
     subgraph Worker
-        N22[entry]
-        N23[protocol]
-        N24[run]
+        N14[entry]
+        N15[protocol]
+        N16[run]
     end
 
     subgraph Trials/t1-graph
-        N25[compare-layout.mjs]
-        N26[make-sources.mjs]
-        N27[measure.mjs]
+        N17[compare-layout.mjs]
+        N18[make-sources.mjs]
+        N19[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N28[measure.mjs]
+        N20[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N29[index.cjs]
+        N21[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N30[pinned.js]
-        N31[measure.mjs]
+        N22[pinned.js]
+        N23[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N32[dvi2svg.mjs]
-        N33[host.mjs]
-        N34[run.mjs]
-        N35[tfm.mjs]
-        N36[type1.mjs]
-        N37[vfs.mjs]
+        N24[dvi2svg.mjs]
+        N25[host.mjs]
+        N26[run.mjs]
+        N27[tfm.mjs]
+        N28[type1.mjs]
+        N29[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N38[dvisvgm-specials.mjs]
+        N30[dvisvgm-specials.mjs]
     end
 
+    N0 --> N2
+    N1 --> N0
+    N1 --> N2
     N1 --> N3
-    N2 --> N1
-    N2 --> N3
-    N2 --> N4
-    N2 --> N5
-    N2 --> N24
-    N2 --> N6
-    N7 --> N3
-    N7 --> N23
-    N7 --> N9
-    N7 --> N18
-    N7 --> N19
-    N8 --> N3
-    N8 --> N23
+    N1 --> N4
+    N1 --> N16
+    N1 --> N5
+    N6 --> N2
+    N6 --> N15
+    N6 --> N8
+    N6 --> N12
+    N6 --> N13
+    N7 --> N2
+    N7 --> N15
+    N7 --> N8
+    N8 --> N2
     N8 --> N9
-    N9 --> N3
-    N9 --> N10
-    N11 --> N9
-    N13 --> N2
-    N13 --> N5
-    N13 --> N1
-    N13 --> N6
-    N13 --> N3
-    N4 --> N6
-    N18 --> N3
-    N22 --> N3
-    N22 --> N23
-    N23 --> N6
-    N24 --> N3
-    N24 --> N23
-    N32 --> N35
-    N32 --> N36
-    N34 --> N33
+    N10 --> N8
+    N11 --> N1
+    N11 --> N4
+    N11 --> N0
+    N11 --> N5
+    N11 --> N2
+    N3 --> N5
+    N12 --> N2
+    N14 --> N2
+    N14 --> N15
+    N15 --> N5
+    N16 --> N2
+    N16 --> N15
+    N24 --> N27
+    N24 --> N28
+    N26 --> N25
 ```
 
 ---
@@ -774,9 +654,9 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 107 |
-| Subsystems | 19 |
-| Total Lines of Code | 10982 |
+| Total Source Files | 99 |
+| Subsystems | 11 |
+| Total Lines of Code | 10975 |
 | Total Exports | 151 |
 | Total Re-exports | 18 |
 | Total Classes | 5 |
@@ -792,4 +672,4 @@ graph TD
 
 ---
 
-*Version*: 0.0.0
+*Version*: 0.1.0

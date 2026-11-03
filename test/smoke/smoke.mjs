@@ -35,8 +35,17 @@ try {
     `import { capabilities, render, RenderError } from "@danielsimonjr/sciengjs";
 import * as graph from "@danielsimonjr/sciengjs/graph";
 import * as raster from "@danielsimonjr/sciengjs/raster";
-import * as plot from "@danielsimonjr/sciengjs/plot";
-if (typeof graph !== "object" || typeof raster !== "object" || typeof plot !== "object") throw new Error("a stage subpath did not load");
+if (typeof graph.dotToSvg !== "function" || typeof raster.svgToPng !== "function") throw new Error("a stage subpath did not load");
+for (const empty of ["mermaid", "math", "tex", "plot", "sysml", "mesh", "browser", "html"]) {
+  let refused = false;
+  try {
+    await import("@danielsimonjr/sciengjs/" + empty);
+  } catch (err) {
+    refused = err && err.code === "ERR_PACKAGE_PATH_NOT_EXPORTED";
+    if (!refused) throw err;
+  }
+  if (!refused) throw new Error("the subpath ./" + empty + " has no content and must not be exported");
+}
 const caps = await capabilities({});
 if (!Array.isArray(caps) || caps.length === 0) throw new Error("capabilities returned no pairs");
 const svg = await render({ type: "dot", source: "digraph G { a -> b }", format: "svg" }, {});

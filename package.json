@@ -1,6 +1,6 @@
 {
   "name": "@danielsimonjr/sciengjs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "description": "A local rendering engine for science and engineering diagrams, documents and models",
   "license": "MIT",
@@ -16,38 +16,6 @@
     "./graph": {
       "types": "./dist/graph/index.d.ts",
       "default": "./dist/graph/index.js"
-    },
-    "./mermaid": {
-      "types": "./dist/mermaid/index.d.ts",
-      "default": "./dist/mermaid/index.js"
-    },
-    "./math": {
-      "types": "./dist/math/index.d.ts",
-      "default": "./dist/math/index.js"
-    },
-    "./tex": {
-      "types": "./dist/tex/index.d.ts",
-      "default": "./dist/tex/index.js"
-    },
-    "./plot": {
-      "types": "./dist/plot/index.d.ts",
-      "default": "./dist/plot/index.js"
-    },
-    "./sysml": {
-      "types": "./dist/sysml/index.d.ts",
-      "default": "./dist/sysml/index.js"
-    },
-    "./mesh": {
-      "types": "./dist/mesh/index.d.ts",
-      "default": "./dist/mesh/index.js"
-    },
-    "./browser": {
-      "types": "./dist/browser/index.d.ts",
-      "default": "./dist/browser/index.js"
-    },
-    "./html": {
-      "types": "./dist/html/index.d.ts",
-      "default": "./dist/html/index.js"
     },
     "./raster": {
       "types": "./dist/raster/index.d.ts",
