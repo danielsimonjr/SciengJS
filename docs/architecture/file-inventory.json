@@ -1,11 +1,11 @@
 {
-  "totalFiles": 130,
+  "totalFiles": 146,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 28,
+    "build-entry": 37,
     "test-only": 3,
     "orphan": 11,
-    "test": 61,
+    "test": 68,
     "tool": 27,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 27,
-    "src": 42,
-    "tests": 61
+    "src": 51,
+    "tests": 68
   },
   "byPackage": {
-    "(root)": 102,
-    "@danielsimonjr/sciengjs": 28
+    "(root)": 109,
+    "@danielsimonjr/sciengjs": 37
   },
   "files": [
     {
@@ -36,6 +36,69 @@
       "loc": 88
     },
     {
+      "file": "src/browser/backend-pdf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 16
+    },
+    {
+      "file": "src/browser/backend-png.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 19
+    },
+    {
+      "file": "src/browser/cdp.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 215
+    },
+    {
+      "file": "src/browser/flags.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 38
+    },
+    {
+      "file": "src/browser/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 5
+    },
+    {
+      "file": "src/browser/input.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 109
+    },
+    {
+      "file": "src/browser/profile.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 35
+    },
+    {
+      "file": "src/browser/proxy.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 74
+    },
+    {
+      "file": "src/browser/render.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 374
+    },
+    {
       "file": "src/config.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -47,7 +110,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 104
+      "loc": 110
     },
     {
       "file": "src/errors.ts",
@@ -187,7 +250,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 32
+      "loc": 34
     },
     {
       "file": "src/types.ts",
@@ -215,7 +278,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 35
+      "loc": 39
     },
     {
       "file": "src/worker/run.ts",
@@ -237,6 +300,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 63
+    },
+    {
+      "file": "test/integration/browser-render.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 170
     },
     {
       "file": "test/integration/page-checker.test.ts",
@@ -292,7 +362,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 130
+      "loc": 132
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -377,6 +447,41 @@
       "area": "tests",
       "disposition": "test",
       "loc": 131
+    },
+    {
+      "file": "test/unit/browser-cdp.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 147
+    },
+    {
+      "file": "test/unit/browser-flags.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 32
+    },
+    {
+      "file": "test/unit/browser-input.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 109
+    },
+    {
+      "file": "test/unit/browser-proxy.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 51
+    },
+    {
+      "file": "test/unit/browser-stage.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 63
     },
     {
       "file": "test/unit/config-assets.test.ts",
@@ -524,6 +629,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 39
+    },
+    {
+      "file": "test/unit/no-sandbox-flag.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 35
     },
     {
       "file": "test/unit/page-checker-io.test.ts",

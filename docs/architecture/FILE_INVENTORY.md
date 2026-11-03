@@ -8,37 +8,37 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 130
+**Total files**: 146
 
 ## Disposition counts
 
 | Disposition | Count | Meaning |
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
-| `build-entry` | 28 | A `src`-area file that is an entry root. |
+| `build-entry` | 37 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 61 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 68 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 27 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **130** | |
+| **Total** | **146** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 42 |
-| `tests` | 61 |
+| `src` | 51 |
+| `tests` | 68 |
 | `tools` | 27 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 102 |
-| `@danielsimonjr/sciengjs` | 28 |
+| `(root)` | 109 |
+| `@danielsimonjr/sciengjs` | 37 |
 
 ## All files
 
@@ -46,8 +46,17 @@ This report lists each source file that the map census finds, with a disposition
 | --- | --- | --- | --- | --: |
 | `scripts/prepare-build.mjs` | (root) | tools | tool | 83 |
 | `src/assets.ts` | @danielsimonjr/sciengjs | src | build-entry | 88 |
+| `src/browser/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 16 |
+| `src/browser/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
+| `src/browser/cdp.ts` | @danielsimonjr/sciengjs | src | build-entry | 215 |
+| `src/browser/flags.ts` | @danielsimonjr/sciengjs | src | build-entry | 38 |
+| `src/browser/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 5 |
+| `src/browser/input.ts` | @danielsimonjr/sciengjs | src | build-entry | 109 |
+| `src/browser/profile.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
+| `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 74 |
+| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 374 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 225 |
-| `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 104 |
+| `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 110 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 53 |
 | `src/graph/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 80 |
 | `src/graph/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
@@ -67,14 +76,15 @@ This report lists each source file that the map census finds, with a disposition
 | `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 52 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 32 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 34 |
 | `src/types.ts` | @danielsimonjr/sciengjs | src | build-entry | 69 |
 | `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
-| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
+| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 39 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 117 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
+| `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 124 |
 | `test/mutation/run-mutants.mjs` | (root) | tests | test | 250 |
 | `test/mutation/run-mutants.test.ts` | (root) | tests | test | 292 |
@@ -82,7 +92,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 130 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 132 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
@@ -95,6 +105,11 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
 | `test/support/test-registry.ts` | (root) | tests | test | 33 |
 | `test/unit/assets.test.ts` | (root) | tests | test | 131 |
+| `test/unit/browser-cdp.test.ts` | (root) | tests | test | 147 |
+| `test/unit/browser-flags.test.ts` | (root) | tests | test | 32 |
+| `test/unit/browser-input.test.ts` | (root) | tests | test | 109 |
+| `test/unit/browser-proxy.test.ts` | (root) | tests | test | 51 |
+| `test/unit/browser-stage.test.ts` | (root) | tests | test | 63 |
 | `test/unit/config-assets.test.ts` | (root) | tests | test | 111 |
 | `test/unit/config.test.ts` | (root) | tests | test | 253 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 69 |
@@ -116,6 +131,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
 | `test/unit/mermaid-xml.test.ts` | (root) | tests | test | 190 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
+| `test/unit/no-sandbox-flag.test.ts` | (root) | tests | test | 35 |
 | `test/unit/page-checker-io.test.ts` | (root) | tests | test | 148 |
 | `test/unit/process-list.test.ts` | (root) | tests | test | 51 |
 | `test/unit/raster-init.test.ts` | (root) | tests | test | 41 |

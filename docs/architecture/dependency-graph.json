@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "name": "sciengjs",
+    "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 130,
+    "totalFiles": 146,
     "totalModules": 3,
-    "totalExports": 245
+    "totalExports": 287
   },
   "modules": {
     "tools": {
@@ -570,6 +570,273 @@
           "assetFile",
           "bundledFontPathIn",
           "readAsset"
+        ]
+      },
+      "src/browser/backend-pdf.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/browser/input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "htmlSource",
+              "parsePdfOptions"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
+      "src/browser/backend-png.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/browser/input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "htmlSource",
+              "parsePngOptions"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
+      "src/browser/cdp.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "CdpSocket",
+          "CdpConnection",
+          "connectCdp"
+        ]
+      },
+      "src/browser/flags.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "FlagInputs",
+          "forcedBrowserFlags"
+        ]
+      },
+      "src/browser/index.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/cdp.ts",
+            "imports": [
+              "CdpConnection",
+              "CdpSocket"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/flags.ts",
+            "imports": [
+              "forcedBrowserFlags",
+              "FlagInputs"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/proxy.ts",
+            "imports": [
+              "startRefusingProxy",
+              "RefusingProxy"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/render.ts",
+            "imports": [
+              "renderHtmlPage",
+              "HtmlPageRequest",
+              "HtmlPageResult",
+              "HtmlFormat"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "CdpConnection",
+          "CdpSocket",
+          "forcedBrowserFlags",
+          "FlagInputs",
+          "startRefusingProxy",
+          "RefusingProxy",
+          "renderHtmlPage",
+          "HtmlPageRequest",
+          "HtmlPageResult",
+          "HtmlFormat"
+        ]
+      },
+      "src/browser/input.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "DEFAULT_WIDTH",
+          "DEFAULT_HEIGHT",
+          "DEFAULT_SCALE",
+          "MAX_SIDE",
+          "MAX_SCALE",
+          "MAX_DEVICE_PIXELS",
+          "MAX_BLOCKED_WARNINGS",
+          "MAX_WARNING_URL_CHARS",
+          "PngOptions",
+          "parsePngOptions",
+          "parsePdfOptions",
+          "htmlSource",
+          "browserPathOf",
+          "blockedWarnings"
+        ]
+      },
+      "src/browser/profile.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "PROFILE_PREFIX",
+          "makeProfile",
+          "removeProfile"
+        ]
+      },
+      "src/browser/proxy.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:events",
+          "node:http",
+          "node:net"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "RefusingProxy",
+          "startRefusingProxy"
+        ]
+      },
+      "src/browser/render.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/cdp.ts",
+            "imports": [
+              "CdpConnection",
+              "connectCdp"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/flags.ts",
+            "imports": [
+              "forcedBrowserFlags"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/profile.ts",
+            "imports": [
+              "makeProfile",
+              "removeProfile"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/proxy.ts",
+            "imports": [
+              "startRefusingProxy",
+              "RefusingProxy"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "PAGE_URL",
+          "HtmlFormat",
+          "HtmlPageRequest",
+          "HtmlPageResult",
+          "capturePage",
+          "renderHtmlPage"
         ]
       },
       "src/config.ts": {
@@ -1645,6 +1912,42 @@
         ],
         "exports": []
       },
+      "test/integration/browser-render.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:net",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/profile.ts",
+            "imports": [
+              "PROFILE_PREFIX"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/integration/page-checker.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -1808,7 +2111,23 @@
           "node:path",
           "node:url"
         ],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/flags.ts",
+            "imports": [
+              "forcedBrowserFlags"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/proxy.ts",
+            "imports": [
+              "startRefusingProxy",
+              "RefusingProxy"
+            ],
+            "typeOnly": false
+          }
+        ],
         "exports": [
           "PageCheckOptions",
           "PageCheckResult",
@@ -1990,6 +2309,138 @@
               "makeAssetsFolder",
               "makeScratch",
               "removeScratch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/browser-cdp.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/cdp.ts",
+            "imports": [
+              "CdpConnection",
+              "connectCdp",
+              "CdpSocket"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/browser-flags.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/flags.ts",
+            "imports": [
+              "forcedBrowserFlags"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/browser-input.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "DEFAULT_HEIGHT",
+              "DEFAULT_SCALE",
+              "DEFAULT_WIDTH",
+              "htmlSource",
+              "MAX_BLOCKED_WARNINGS",
+              "MAX_DEVICE_PIXELS",
+              "MAX_SCALE",
+              "MAX_SIDE",
+              "MAX_WARNING_URL_CHARS",
+              "parsePdfOptions",
+              "parsePngOptions"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/browser-proxy.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:http"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/browser/proxy.ts",
+            "imports": [
+              "startRefusingProxy"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/browser-stage.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "capabilitiesWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/backend-png.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/backend-pdf.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "ISOLATED_CONFIG_DEPS",
+              "renderIsolated"
             ],
             "typeOnly": false
           }
@@ -2738,6 +3189,17 @@
         ],
         "exports": []
       },
+      "test/unit/no-sandbox-flag.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
       "test/unit/page-checker-io.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -3181,41 +3643,50 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 130,
-    "totalSourceFiles": 130,
+    "totalTypeScriptFiles": 146,
+    "totalSourceFiles": 146,
     "totalModules": 3,
-    "totalLinesOfCode": 14937,
-    "totalExports": 245,
-    "entryRoots": 28,
-    "reachableFiles": 28,
+    "totalLinesOfCode": 16443,
+    "totalExports": 287,
+    "entryRoots": 37,
+    "reachableFiles": 37,
     "dormantFiles": 14,
     "orphanedFiles": 11,
     "testOnlyFiles": 3,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 18,
+    "totalTypeOnlyImports": 21,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 17,
+    "unusedExportsCount": 19,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
     "runtimeFilesInCycles": 0,
     "typeOnlyFilesInCycles": 0,
-    "totalClasses": 5,
-    "totalInterfaces": 42,
-    "totalFunctions": 109,
+    "totalClasses": 6,
+    "totalInterfaces": 47,
+    "totalFunctions": 123,
     "totalTypeGuards": 2,
     "totalEnums": 0,
-    "totalConstants": 32,
-    "totalReExports": 45
+    "totalConstants": 42,
+    "totalReExports": 55
   },
   "reachability": {
     "roots": [
       "src/index.ts",
       "src/graph/index.ts",
       "src/raster/index.ts",
+      "src/browser/index.ts",
       "src/mermaid/index.ts",
       "src/assets.ts",
+      "src/browser/backend-pdf.ts",
+      "src/browser/backend-png.ts",
+      "src/browser/cdp.ts",
+      "src/browser/flags.ts",
+      "src/browser/input.ts",
+      "src/browser/profile.ts",
+      "src/browser/proxy.ts",
+      "src/browser/render.ts",
       "src/config.ts",
       "src/core.ts",
       "src/errors.ts",
@@ -3240,7 +3711,7 @@
       "src/worker/protocol.ts",
       "src/worker/run.ts"
     ],
-    "reachableCount": 28,
+    "reachableCount": 37,
     "dormantCount": 14,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",

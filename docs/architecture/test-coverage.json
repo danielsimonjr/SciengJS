@@ -1,25 +1,25 @@
 {
   "metadata": {
-    "totalSourceFiles": 42,
-    "totalTestFiles": 42,
-    "testedCount": 24,
+    "totalSourceFiles": 51,
+    "totalTestFiles": 49,
+    "testedCount": 33,
     "untestedCount": 18,
-    "coveragePercent": "57.1",
+    "coveragePercent": "64.7",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 42,
-      "testedActive": 24,
+      "activeFiles": 51,
+      "testedActive": 33,
       "activeUntested": 18,
       "excludedTotal": 0,
-      "percent": "57.1",
+      "percent": "64.7",
       "breakdown": {
         "active_untested": 18
       }
     }
   },
   "untestedFiles": [
+    "src/browser/index.ts",
     "src/graph/index.ts",
-    "src/index.ts",
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
@@ -39,6 +39,14 @@
   ],
   "testedFiles": [
     "src/assets.ts",
+    "src/browser/backend-pdf.ts",
+    "src/browser/backend-png.ts",
+    "src/browser/cdp.ts",
+    "src/browser/flags.ts",
+    "src/browser/input.ts",
+    "src/browser/profile.ts",
+    "src/browser/proxy.ts",
+    "src/browser/render.ts",
     "src/config.ts",
     "src/core.ts",
     "src/errors.ts",
@@ -46,6 +54,7 @@
     "src/graph/backend-svg.ts",
     "src/graph/dot.ts",
     "src/graph/image.ts",
+    "src/index.ts",
     "src/mermaid/class.ts",
     "src/mermaid/common.ts",
     "src/mermaid/render.ts",
@@ -67,7 +76,33 @@
     "src/assets.ts": [
       "test/unit/assets.test.ts"
     ],
+    "src/browser/backend-pdf.ts": [
+      "test/unit/browser-stage.test.ts"
+    ],
+    "src/browser/backend-png.ts": [
+      "test/unit/browser-stage.test.ts"
+    ],
+    "src/browser/cdp.ts": [
+      "test/unit/browser-cdp.test.ts"
+    ],
+    "src/browser/flags.ts": [
+      "test/unit/browser-flags.test.ts"
+    ],
+    "src/browser/index.ts": [],
+    "src/browser/input.ts": [
+      "test/unit/browser-input.test.ts"
+    ],
+    "src/browser/profile.ts": [
+      "test/integration/browser-render.test.ts"
+    ],
+    "src/browser/proxy.ts": [
+      "test/unit/browser-proxy.test.ts"
+    ],
+    "src/browser/render.ts": [
+      "test/integration/browser-render.test.ts"
+    ],
     "src/config.ts": [
+      "test/integration/browser-render.test.ts",
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
@@ -76,12 +111,14 @@
       "test/unit/worker-run.test.ts"
     ],
     "src/core.ts": [
+      "test/unit/browser-stage.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/errors.ts": [
+      "test/integration/browser-render.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
@@ -111,7 +148,9 @@
       "test/unit/graph-image.test.ts"
     ],
     "src/graph/index.ts": [],
-    "src/index.ts": [],
+    "src/index.ts": [
+      "test/integration/browser-render.test.ts"
+    ],
     "src/mermaid/backend-png.ts": [],
     "src/mermaid/backend-svg.ts": [],
     "src/mermaid/class.ts": [
@@ -152,11 +191,13 @@
       "test/unit/raster-warnings.test.ts"
     ],
     "src/registry.ts": [
+      "test/unit/browser-stage.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
       "test/unit/mermaid-registry.test.ts"
     ],
     "src/types.ts": [
+      "test/integration/browser-render.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/version.ts": [
@@ -165,6 +206,7 @@
     ],
     "src/worker/entry.ts": [],
     "src/worker/protocol.ts": [
+      "test/unit/browser-stage.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-svg-backend.test.ts"
     ],
@@ -193,11 +235,38 @@
     ]
   },
   "testToSourceMap": {
+    "test/integration/browser-render.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts",
+      "src/browser/render.ts",
+      "src/browser/profile.ts"
+    ],
     "test/integration/page-checker.test.ts": [],
     "test/mutation/run-mutants.test.ts": [],
     "test/unit/assets.test.ts": [
       "src/assets.ts",
       "src/config.ts"
+    ],
+    "test/unit/browser-cdp.test.ts": [
+      "src/browser/cdp.ts"
+    ],
+    "test/unit/browser-flags.test.ts": [
+      "src/browser/flags.ts"
+    ],
+    "test/unit/browser-input.test.ts": [
+      "src/browser/input.ts"
+    ],
+    "test/unit/browser-proxy.test.ts": [
+      "src/browser/proxy.ts"
+    ],
+    "test/unit/browser-stage.test.ts": [
+      "src/core.ts",
+      "src/registry.ts",
+      "src/browser/backend-png.ts",
+      "src/browser/backend-pdf.ts",
+      "src/worker/protocol.ts"
     ],
     "test/unit/config-assets.test.ts": [
       "src/config.ts",
@@ -282,6 +351,7 @@
       "src/raster/index.ts"
     ],
     "test/unit/no-bun-api.test.ts": [],
+    "test/unit/no-sandbox-flag.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
     "test/unit/process-list.test.ts": [],
     "test/unit/raster-init.test.ts": [],
@@ -324,11 +394,11 @@
   },
   "classifiedUntested": [
     {
-      "file": "src/graph/index.ts",
+      "file": "src/browser/index.ts",
       "category": null
     },
     {
-      "file": "src/index.ts",
+      "file": "src/graph/index.ts",
       "category": null
     },
     {

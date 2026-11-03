@@ -304,6 +304,407 @@
         ]
       }
     },
+    "browser": {
+      "src/browser/backend-pdf.ts": {
+        "description": "backend-pdf module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "htmlSource",
+              "parsePdfOptions"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/browser/backend-png.ts": {
+        "description": "backend-png module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "htmlSource",
+              "parsePngOptions"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/browser/cdp.ts": {
+        "description": "Sends one request. A request with no reply before its deadline rejects with E_TIMEOUT, and its pending entry",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "CdpConnection",
+          "connectCdp"
+        ],
+        "classes": [
+          "CdpConnection"
+        ],
+        "interfaces": [
+          "CdpSocket"
+        ],
+        "functions": [
+          "connectCdp"
+        ]
+      },
+      "src/browser/flags.ts": {
+        "description": "The flags of every browser start. Each flag closes one route off the host. The client never adds",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "forcedBrowserFlags"
+        ],
+        "interfaces": [
+          "FlagInputs"
+        ],
+        "functions": [
+          "forcedBrowserFlags"
+        ]
+      },
+      "src/browser/index.ts": {
+        "description": "Package entry point for browser (re-exports 10 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./cdp.ts",
+            "imports": [
+              "CdpConnection",
+              "CdpSocket"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./flags.ts",
+            "imports": [
+              "forcedBrowserFlags",
+              "FlagInputs"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./proxy.ts",
+            "imports": [
+              "startRefusingProxy",
+              "RefusingProxy"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderHtmlPage",
+              "HtmlPageRequest",
+              "HtmlPageResult",
+              "HtmlFormat"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "CdpConnection",
+          "CdpSocket",
+          "forcedBrowserFlags",
+          "FlagInputs",
+          "startRefusingProxy",
+          "RefusingProxy",
+          "renderHtmlPage",
+          "HtmlPageRequest",
+          "HtmlPageResult",
+          "HtmlFormat"
+        ],
+        "reExported": [
+          "CdpConnection",
+          "CdpSocket",
+          "forcedBrowserFlags",
+          "FlagInputs",
+          "startRefusingProxy",
+          "RefusingProxy",
+          "renderHtmlPage",
+          "HtmlPageRequest",
+          "HtmlPageResult",
+          "HtmlFormat"
+        ]
+      },
+      "src/browser/input.ts": {
+        "description": "Checks the options of html to png. An unknown key, a bad value, a side over MAX_SIDE, a scale over MAX_SCALE",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "DEFAULT_WIDTH",
+          "DEFAULT_HEIGHT",
+          "DEFAULT_SCALE",
+          "MAX_SIDE",
+          "MAX_SCALE",
+          "MAX_DEVICE_PIXELS",
+          "MAX_BLOCKED_WARNINGS",
+          "MAX_WARNING_URL_CHARS",
+          "parsePngOptions",
+          "parsePdfOptions",
+          "htmlSource",
+          "browserPathOf",
+          "blockedWarnings"
+        ],
+        "interfaces": [
+          "PngOptions"
+        ],
+        "functions": [
+          "parsePngOptions",
+          "parsePdfOptions",
+          "htmlSource",
+          "browserPathOf",
+          "blockedWarnings"
+        ],
+        "constants": [
+          "DEFAULT_WIDTH",
+          "DEFAULT_HEIGHT",
+          "DEFAULT_SCALE",
+          "MAX_SIDE",
+          "MAX_SCALE",
+          "MAX_DEVICE_PIXELS",
+          "MAX_BLOCKED_WARNINGS",
+          "MAX_WARNING_URL_CHARS"
+        ]
+      },
+      "src/browser/profile.ts": {
+        "description": "Removes the profile. A held file is retried until the deadline, a Date.now() time. Any other error, or a deadline with t",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "mkdtempSync",
+              "rmSync"
+            ]
+          },
+          {
+            "module": "os",
+            "imports": [
+              "tmpdir"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "join"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "PROFILE_PREFIX",
+          "makeProfile",
+          "removeProfile"
+        ],
+        "functions": [
+          "makeProfile",
+          "removeProfile"
+        ],
+        "constants": [
+          "PROFILE_PREFIX"
+        ]
+      },
+      "src/browser/proxy.ts": {
+        "description": "The host of an absolute URL, or of the authority of a CONNECT request (\"host:port\"). A value that is",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "net",
+            "imports": [
+              "Server",
+              "Socket"
+            ]
+          },
+          {
+            "module": "events",
+            "imports": [
+              "once"
+            ]
+          },
+          {
+            "module": "http",
+            "imports": [
+              "IncomingMessage",
+              "ServerResponse"
+            ]
+          },
+          {
+            "module": "http",
+            "imports": [
+              "createServer"
+            ]
+          }
+        ],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "startRefusingProxy"
+        ],
+        "interfaces": [
+          "RefusingProxy"
+        ],
+        "functions": [
+          "startRefusingProxy"
+        ]
+      },
+      "src/browser/render.ts": {
+        "description": "The share of the render time that the page work may use. The rest is the budget for stopping the browser",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "child_process",
+            "imports": [
+              "spawn",
+              "spawnSync",
+              "ChildProcess"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync",
+              "existsSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "join"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./cdp.ts",
+            "imports": [
+              "CdpConnection",
+              "connectCdp"
+            ]
+          },
+          {
+            "file": "./flags.ts",
+            "imports": [
+              "forcedBrowserFlags"
+            ]
+          },
+          {
+            "file": "./profile.ts",
+            "imports": [
+              "makeProfile",
+              "removeProfile"
+            ]
+          },
+          {
+            "file": "./proxy.ts",
+            "imports": [
+              "startRefusingProxy",
+              "RefusingProxy"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "PAGE_URL",
+          "capturePage",
+          "renderHtmlPage"
+        ],
+        "interfaces": [
+          "HtmlPageResult"
+        ],
+        "functions": [
+          "capturePage",
+          "renderHtmlPage"
+        ],
+        "constants": [
+          "PAGE_URL"
+        ]
+      }
+    },
     "graph": {
       "src/graph/backend-png.ts": {
         "description": "Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,",
@@ -1562,6 +1963,20 @@
         "src/registry.ts",
         "src/types.ts",
         "src/version.ts"
+      ]
+    },
+    {
+      "name": "Browser",
+      "files": [
+        "src/browser/backend-pdf.ts",
+        "src/browser/backend-png.ts",
+        "src/browser/cdp.ts",
+        "src/browser/flags.ts",
+        "src/browser/index.ts",
+        "src/browser/input.ts",
+        "src/browser/profile.ts",
+        "src/browser/proxy.ts",
+        "src/browser/render.ts"
       ]
     },
     {
