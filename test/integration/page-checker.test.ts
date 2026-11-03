@@ -1,12 +1,15 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { checkPage } from "../support/page-checker.ts";
+import { checkPage, WARM_UP_START_TIMEOUT_MS, warmBrowser } from "../support/page-checker.ts";
 import { processesHolding } from "../support/process-list.ts";
 
 const FIXTURES = fileURLToPath(new URL("../fixtures/pages/", import.meta.url));
 const browserPath = process.env.SCIENG_BROWSER ?? "";
 const haveBrowser = browserPath !== "" && existsSync(browserPath);
+// The warm-up check waits up to the warm-up budget for the port and again for the page load. Its teardown takes up to
+// 60 s more: 20 s to close, 10 s to stop and 30 s to remove the profile. The last 20 s are spare.
+const WARM_UP_TEST_TIMEOUT_MS = 2 * WARM_UP_START_TIMEOUT_MS + 80000;
 
 // CI must name a browser and must never skip these tests. Locally a missing browser skips them with a reason.
 if (process.env.CI && !haveBrowser) {
@@ -17,6 +20,16 @@ if (!haveBrowser) {
 }
 
 describe.skipIf(!haveBrowser)("page checker", () => {
+  // The first start of a browser on a fresh runner can take longer than a timed check allows. This check starts the
+  // browser once, with its own budget, before the timed checks. It is a normal test: a failed start fails it with the
+  // start evidence, and its duration is logged.
+  test("the browser starts once before the timed checks", async () => {
+    await warmBrowser(
+      () => checkPage({ browserPath, htmlPath: `${FIXTURES}good.html`, startTimeoutMs: WARM_UP_START_TIMEOUT_MS }),
+      (line) => console.log(line),
+    );
+  }, WARM_UP_TEST_TIMEOUT_MS);
+
   test("passes a good drawing", async () => {
     const result = await checkPage({
       browserPath,
