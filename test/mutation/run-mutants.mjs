@@ -1,7 +1,8 @@
 // Mutation audit runner. It reads the mutants of a JSON config, applies one mutant at a time to its file,
 // runs the test file of the mutant, and restores the original file. A mutant is killed only when bun reports
 // a failing test (a "(fail)" line) and exits non-zero. A passing baseline runs before the first mutant and
-// after the last one; the run stops when a baseline fails.
+// after the last one; the run stops when a baseline fails. A run that times out is never a kill: the runner's
+// own limit and bun's per-test limit each give the result "timeout".
 //
 // Each file is copied to a backup (the file name plus BACKUP_SUFFIX) before a mutant is written. The SHA-256
 // of the mutated text goes to a hash file (the file name plus HASH_SUFFIX). The backup restores the file on
@@ -107,6 +108,9 @@ process.on("uncaughtException", (err) => {
 });
 process.on("exit", () => restoreFromBackups({ quiet: true }));
 
+// bun prints this text under a test that it stopped at its own time limit.
+const BUN_TIME_LIMIT = /timed out after \d+ms/;
+
 function runBun(testFile) {
   return new Promise((resolveRun, rejectRun) => {
     const child = spawn(bun, ["test", testFile], { cwd: root, stdio: ["ignore", "pipe", "pipe"] });
@@ -114,7 +118,11 @@ function runBun(testFile) {
     let out = "";
     child.stdout.on("data", (chunk) => (out += chunk));
     child.stderr.on("data", (chunk) => (out += chunk));
-    const timer = setTimeout(() => child.kill("SIGKILL"), timeoutMs);
+    let stoppedByRunner = false;
+    const timer = setTimeout(() => {
+      stoppedByRunner = true;
+      child.kill("SIGKILL");
+    }, timeoutMs);
     child.once("error", (err) => {
       clearTimeout(timer);
       activeChild = null;
@@ -123,7 +131,11 @@ function runBun(testFile) {
     child.once("close", (status) => {
       clearTimeout(timer);
       activeChild = null;
-      resolveRun({ passed: status === 0, failedLine: /\(fail\)/.test(out) });
+      resolveRun({
+        passed: status === 0,
+        failedLine: /\(fail\)/.test(out),
+        timedOut: stoppedByRunner || BUN_TIME_LIMIT.test(out),
+      });
     });
   });
 }
@@ -177,13 +189,14 @@ async function main() {
     try {
       writeFileSync(path, mutatedBytes);
       const run = await runBun(m.test);
-      const killed = !run.passed && run.failedLine;
+      // A timeout is never a kill, even when a test failed earlier in the same run.
+      const result = run.timedOut ? "timeout" : !run.passed && run.failedLine ? "killed" : "survived";
       results.push({
         ...m,
         line,
         originalLine: lineAt(original, line),
         mutatedLine: lineAt(mutated, line),
-        result: killed ? "killed" : "survived",
+        result,
       });
     } finally {
       const { conflicts } = restoreFromBackups();
@@ -196,7 +209,8 @@ async function main() {
   const scored = valid.filter((r) => r.equivalent === null);
   const killed = scored.filter((r) => r.result === "killed").length;
   const equivalent = valid.filter((r) => r.equivalent !== null).length;
-  const summary = `killed ${killed} of ${scored.length} non-equivalent mutants; ${equivalent} equivalent excluded; ${results.length - valid.length} invalid`;
+  const timeouts = scored.filter((r) => r.result === "timeout").length;
+  const summary = `killed ${killed} of ${scored.length} non-equivalent mutants; ${timeouts} timed out (never a kill); ${equivalent} equivalent excluded; ${results.length - valid.length} invalid`;
 
   if (reportPath !== "") {
     const lines = [

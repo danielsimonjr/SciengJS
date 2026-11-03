@@ -61,10 +61,11 @@ describe("svgToPng", () => {
 
 describe("svgToPng pixel cap", () => {
   test("a PNG over the fixed pixel cap rejects with E_LIMIT even when maxMemoryMb is larger", async () => {
-    // The cap holds because resvg keeps about two copies of the pixel buffer in a WASM memory of at most 4 GiB.
-    const side = Math.ceil(Math.sqrt(((MAX_PNG_PIXEL_MB + 1) * 1048576) / 4));
-    const huge = `<svg xmlns="http://www.w3.org/2000/svg" width="${side}" height="${side}"><rect width="1" height="1"/></svg>`;
-    const err = await rejectionOf(svgToPng(huge, { scale: 1, maxMemoryMb: 8192, assetsUrl: ASSETS }));
+    // One row of 1.5 billion pixels is 6 GB of pixels: over the cap, and more than the 4 GiB of WASM memory.
+    // The check rejects it before resvg draws. A square input over the cap would draw a 1 GiB buffer if the
+    // cap were removed, and that run would stop at its time limit instead of failing an assertion.
+    const wide = `<svg xmlns="http://www.w3.org/2000/svg" width="1500000000" height="1"><rect width="1" height="1"/></svg>`;
+    const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 8192, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
     expect(err.message).toContain("pixel");
   });
