@@ -271,6 +271,7 @@ One loader reads the configuration. Each key has one default, in the loader. An 
 | `maxMemoryMb` | `SCIENG_MAX_MEMORY_MB` | 2048 | the heap limit of the worker of one render |
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` | the network uses that are allowed: `none`, `tex-bundles`, or `tex-bundles,images` |
 | `rasterFont` | `SCIENG_RASTER_FONT` | none (the bundled font of the raster stage) | the path of a TrueType or OpenType font for the raster stage |
+| `assetsUrl` | `SCIENG_ASSETS_URL` | the `assets/` folder of the package, resolved from `dist/config.js` | the `file:` URL of the folder that holds `fonts/` and the resvg WASM file `index_bg.wasm`. The build copies the WASM file into that folder. A value without a trailing slash gets one. A value that is not a `file:` URL rejects with `E_CONFIG`. A missing or unusable file under the folder rejects the render with `E_STAGE_MISSING`. |
 
 The user directories follow the platform: `%APPDATA%` and `%LOCALAPPDATA%` on Windows, `~/Library` on macOS, `XDG_CONFIG_HOME` and `XDG_CACHE_HOME` on Linux. The loader rejects an unreadable configuration file with `E_CONFIG`. The loader never falls back to the defaults.
 
@@ -288,7 +289,7 @@ The user directories follow the platform: `%APPDATA%` and `%LOCALAPPDATA%` on Wi
 - `render_html` keeps its typed blocks. Each block element carries a `data-scieng-source` attribute with its source. A `plot` block can render as a static SVG through the engine.
 - New tools: `render` (any input type and output format, with `output_path`), `html_to_markdown`, and `capabilities`.
 - `ooxml_replace` stays in the adapter. It edits Word documents and is not a renderer.
-- The plugin ships `bundle/index.mjs`, which `node` starts with no shell. The WASM files and the pinned Mermaid and Three.js builds ship in `bundle/assets/`. The engine finds them through `import.meta.url`. A CI step builds the bundle again and compares it with the committed bundle, as `memory-mcp` and `math-mcp` do.
+- The plugin ships `bundle/index.mjs`, which `node` starts with no shell. The WASM files and the pinned Mermaid and Three.js builds ship in `bundle/assets/`. The engine reads them from the folder that the `assetsUrl` key names, and the adapter sets that key to `bundle/assets/`. A CI step builds the bundle again and compares it with the committed bundle, as `memory-mcp` and `math-mcp` do.
 - The adapter has one slash command per input type, as the existing commands do. The existing commands stay: `mermaid`, `dot`, `latex`, `wavedrom`, `plot`, `circuit`, `playground`. The new commands are `tikz`, `sysml`, `step`, `cad` and `markdown`.
 
 ## Security
