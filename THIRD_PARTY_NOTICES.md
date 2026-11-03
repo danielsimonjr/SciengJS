@@ -34,7 +34,7 @@ The Eclipse Public License 2.0 applies to Graphviz. The wrapper `@viz-js/viz` is
 
 ### resvg (MPL-2.0)
 
-The Mozilla Public License 2.0 applies to `@resvg/resvg-wasm`. The WASM file stays a separate, unmodified file. The licence text is in `assets/licenses/MPL-2.0.txt`.
+The Mozilla Public License 2.0 applies to `@resvg/resvg-wasm`. The WASM file stays a separate, unmodified file. The source code is in the repository https://github.com/yisibl/resvg-js, which builds the npm package. The licence text is in `assets/licenses/MPL-2.0.txt`.
 
 ### Liberation Serif (SIL Open Font License 1.1)
 
