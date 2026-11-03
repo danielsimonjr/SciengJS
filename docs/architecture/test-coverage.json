@@ -2,18 +2,18 @@
   "metadata": {
     "totalSourceFiles": 56,
     "totalTestFiles": 55,
-    "testedCount": 36,
-    "untestedCount": 20,
-    "coveragePercent": "64.3",
+    "testedCount": 37,
+    "untestedCount": 19,
+    "coveragePercent": "66.1",
     "effectiveCoverage": {
       "policyLoaded": false,
       "activeFiles": 56,
-      "testedActive": 36,
-      "activeUntested": 20,
+      "testedActive": 37,
+      "activeUntested": 19,
       "excludedTotal": 0,
-      "percent": "64.3",
+      "percent": "66.1",
       "breakdown": {
-        "active_untested": 20
+        "active_untested": 19
       }
     }
   },
@@ -24,7 +24,6 @@
     "src/mermaid/backend-pdf.ts",
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
-    "src/mermaid/browser.ts",
     "src/mermaid/index.ts",
     "src/worker/entry.ts",
     "trials/t1-graph/compare-layout.mjs",
@@ -59,6 +58,7 @@
     "src/graph/dot.ts",
     "src/graph/image.ts",
     "src/index.ts",
+    "src/mermaid/browser.ts",
     "src/mermaid/class.ts",
     "src/mermaid/common.ts",
     "src/mermaid/render.ts",
@@ -170,7 +170,9 @@
     "src/mermaid/backend-pdf.ts": [],
     "src/mermaid/backend-png.ts": [],
     "src/mermaid/backend-svg.ts": [],
-    "src/mermaid/browser.ts": [],
+    "src/mermaid/browser.ts": [
+      "test/unit/browser-pinned.test.ts"
+    ],
     "src/mermaid/class.ts": [
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-xml.test.ts"
@@ -296,7 +298,8 @@
       "src/registry.ts"
     ],
     "test/unit/browser-pinned.test.ts": [
-      "src/browser/pinned.ts"
+      "src/browser/pinned.ts",
+      "src/mermaid/browser.ts"
     ],
     "test/unit/browser-proxy.test.ts": [
       "src/browser/proxy.ts"
@@ -459,10 +462,6 @@
     },
     {
       "file": "src/mermaid/backend-svg.ts",
-      "category": null
-    },
-    {
-      "file": "src/mermaid/browser.ts",
       "category": null
     },
     {

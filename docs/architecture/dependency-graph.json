@@ -5,7 +5,7 @@
     "language": "typescript",
     "totalFiles": 157,
     "totalModules": 3,
-    "totalExports": 305
+    "totalExports": 308
   },
   "modules": {
     "tools": {
@@ -764,6 +764,7 @@
         "internalDependencies": [],
         "exports": [
           "MERMAID_VERSION",
+          "MERMAID_SHA256",
           "MERMAID_FILE",
           "MERMAID_CDN_URL",
           "PinnedAsset",
@@ -832,6 +833,13 @@
             "file": "src/browser/flags.ts",
             "imports": [
               "forcedBrowserFlags"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/input.ts",
+            "imports": [
+              "MAX_DEVICE_PIXELS"
             ],
             "typeOnly": false
           },
@@ -1067,6 +1075,7 @@
           }
         ],
         "exports": [
+          "readScale",
           "render",
           "renderPng",
           "svgDocumentToPng"
@@ -1303,8 +1312,23 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "src/browser/input.ts",
+            "imports": [
+              "MAX_SCALE"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
             "file": "src/graph/backend-png.ts",
             "imports": [
+              "readScale",
               "svgDocumentToPng"
             ],
             "typeOnly": false
@@ -1387,7 +1411,9 @@
       },
       "src/mermaid/browser.ts": {
         "externalDependencies": [],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          "node:crypto"
+        ],
         "internalDependencies": [
           {
             "file": "src/browser/input.ts",
@@ -1401,7 +1427,15 @@
             "file": "src/browser/pinned.ts",
             "imports": [
               "MERMAID_CDN_URL",
-              "MERMAID_FILE"
+              "MERMAID_FILE",
+              "MERMAID_SHA256"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
             ],
             "typeOnly": false
           },
@@ -1437,7 +1471,8 @@
           "BrowserSettings",
           "BrowserDraw",
           "drawMermaidInBrowser",
-          "drawSvgToPdf"
+          "drawSvgToPdf",
+          "pinnedMermaid"
         ]
       },
       "src/mermaid/class.ts": {
@@ -2650,7 +2685,15 @@
               "MERMAID_CDN_URL",
               "MERMAID_FILE",
               "MERMAID_VERSION",
-              "PINNED_ASSETS"
+              "PINNED_ASSETS",
+              "*"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mermaid/browser.ts",
+            "imports": [
+              "*"
             ],
             "typeOnly": false
           }
@@ -3958,8 +4001,8 @@
     "totalTypeScriptFiles": 157,
     "totalSourceFiles": 157,
     "totalModules": 3,
-    "totalLinesOfCode": 17006,
-    "totalExports": 305,
+    "totalLinesOfCode": 17141,
+    "totalExports": 308,
     "entryRoots": 42,
     "reachableFiles": 42,
     "dormantFiles": 14,
@@ -3969,7 +4012,7 @@
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 23,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 25,
+    "unusedExportsCount": 21,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -3977,10 +4020,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 51,
-    "totalFunctions": 131,
+    "totalFunctions": 133,
     "totalTypeGuards": 2,
     "totalEnums": 0,
-    "totalConstants": 48,
+    "totalConstants": 49,
     "totalReExports": 55
   },
   "reachability": {

@@ -562,6 +562,7 @@
         "workspaceDependencies": [],
         "exports": [
           "MERMAID_VERSION",
+          "MERMAID_SHA256",
           "MERMAID_FILE",
           "MERMAID_CDN_URL",
           "PINNED_ASSETS"
@@ -571,6 +572,7 @@
         ],
         "constants": [
           "MERMAID_VERSION",
+          "MERMAID_SHA256",
           "MERMAID_FILE",
           "MERMAID_CDN_URL",
           "PINNED_ASSETS"
@@ -712,6 +714,12 @@
             ]
           },
           {
+            "file": "./input.ts",
+            "imports": [
+              "MAX_DEVICE_PIXELS"
+            ]
+          },
+          {
             "file": "./profile.ts",
             "imports": [
               "makeProfile",
@@ -788,7 +796,7 @@
         ]
       },
       "src/graph/backend-png.ts": {
-        "description": "Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,",
+        "description": "Rasterizes one SVG document to PNG at the given scale. The font follows render: the rasterFont setting when set,",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -842,11 +850,13 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "readScale",
           "render",
           "renderPng",
           "svgDocumentToPng"
         ],
         "functions": [
+          "readScale",
           "render",
           "renderPng",
           "svgDocumentToPng"
@@ -1136,8 +1146,21 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../browser/input.ts",
+            "imports": [
+              "MAX_SCALE"
+            ]
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
             "file": "../graph/backend-png.ts",
             "imports": [
+              "readScale",
               "svgDocumentToPng"
             ]
           },
@@ -1223,7 +1246,14 @@
       "src/mermaid/browser.ts": {
         "description": "Draws one Mermaid source of a browser type through the browser stage. The page names the pinned Mermaid URL.",
         "externalDependencies": [],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          }
+        ],
         "internalDependencies": [
           {
             "file": "../browser/input.ts",
@@ -1236,7 +1266,14 @@
             "file": "../browser/pinned.ts",
             "imports": [
               "MERMAID_CDN_URL",
-              "MERMAID_FILE"
+              "MERMAID_FILE",
+              "MERMAID_SHA256"
+            ]
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
             ]
           },
           {
@@ -1267,7 +1304,8 @@
           "MERMAID_BROWSER_BACKEND",
           "MERMAID_NATIVE_PDF_BACKEND",
           "drawMermaidInBrowser",
-          "drawSvgToPdf"
+          "drawSvgToPdf",
+          "pinnedMermaid"
         ],
         "interfaces": [
           "BrowserSettings",
@@ -1275,7 +1313,8 @@
         ],
         "functions": [
           "drawMermaidInBrowser",
-          "drawSvgToPdf"
+          "drawSvgToPdf",
+          "pinnedMermaid"
         ],
         "constants": [
           "MERMAID_BROWSER_BACKEND",

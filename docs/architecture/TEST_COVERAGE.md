@@ -10,14 +10,14 @@
 |--------|-------|
 | Total Source Files | 56 |
 | Total Test Files | 55 |
-| Source Files with Tests | 36 |
-| Source Files without Tests | 20 |
-| Coverage (raw, direct-import) | **64.3%** |
+| Source Files with Tests | 37 |
+| Source Files without Tests | 19 |
+| Coverage (raw, direct-import) | **66.1%** |
 ---
 
 ## Source Files Not Imported By A Test
 
-The following 20 source files are not directly imported by any test file:
+The following 19 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -33,7 +33,6 @@ The following 20 source files are not directly imported by any test file:
 - `src/mermaid/backend-pdf.ts`
 - `src/mermaid/backend-png.ts`
 - `src/mermaid/backend-svg.ts`
-- `src/mermaid/browser.ts`
 - `src/mermaid/index.ts`
 
 ### worker/
@@ -91,6 +90,7 @@ The following 20 source files are not directly imported by any test file:
 | `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `mermaid-class.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts`, `raster-warnings.test.ts` |
 | `graph/image.ts` | `graph-image.test.ts` |
 | `src/index.ts` | `browser-render.test.ts`, `mermaid-browser.test.ts` |
+| `mermaid/browser.ts` | `browser-pinned.test.ts` |
 | `mermaid/class.ts` | `mermaid-class.test.ts`, `mermaid-xml.test.ts` |
 | `mermaid/common.ts` | `mermaid-class.test.ts`, `mermaid-common.test.ts`, `mermaid-routing.test.ts`, `mermaid-sequence.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
 | `mermaid/render.ts` | `mermaid-corpus.test.ts`, `mermaid-xml.test.ts` |
@@ -125,7 +125,7 @@ The following 20 source files are not directly imported by any test file:
 | `unit/browser-input.test.ts` | 1 files |
 | `unit/browser-page.test.ts` | 1 files |
 | `unit/browser-pdf-pairs.test.ts` | 3 files |
-| `unit/browser-pinned.test.ts` | 1 files |
+| `unit/browser-pinned.test.ts` | 2 files |
 | `unit/browser-proxy.test.ts` | 1 files |
 | `unit/browser-stage.test.ts` | 5 files |
 | `unit/config-assets.test.ts` | 3 files |

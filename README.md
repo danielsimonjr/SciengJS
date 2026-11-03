@@ -143,6 +143,8 @@ A subpath call runs in the calling thread, without the worker and its limits. Us
 
 The `mermaid` input draws class, state and sequence diagrams without a browser. A line outside the grammar rejects the render with `E_INPUT`, and the message names the line. Set `lenient` to `true` to skip such a line and get a warning instead.
 
+Other Mermaid types, for example `flowchart` and `gantt`, need the browser stage. A `png` takes the option `scale` (above 0, not more than 8, default 1) on both paths. The browser path sizes the page from the `viewBox` of the diagram. The `svg` of the browser path has an explicit `width` and `height`. Any other `png` option rejects with `E_INPUT`.
+
 ```js
 import { render } from "@danielsimonjr/sciengjs";
 

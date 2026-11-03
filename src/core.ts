@@ -103,6 +103,7 @@ export async function capabilitiesWithRegistry(
     const browserReady = pair.stage !== "browser" || cfg.browser !== undefined;
     const ready = registered && browserReady;
     const cap: Capability = { type: pair.type, format: pair.format, stage: pair.stage, ready };
+    if (pair.note !== undefined) cap.note = pair.note;
     if (!registered) cap.reason = "no backend is built in this release";
     else if (!browserReady) cap.reason = "no browser path is configured (SCIENG_BROWSER)";
     return cap;

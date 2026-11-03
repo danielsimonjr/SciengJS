@@ -66,4 +66,6 @@ export interface Capability {
   ready: boolean;
   /** Why the pair is not ready, when it is not. */
   reason?: string;
+  /** A note on the pair, for example that some inputs of the pair need another stage. */
+  note?: string;
 }

@@ -276,7 +276,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PinnedAsset`
-- Constants: `MERMAID_VERSION`, `MERMAID_FILE`, `MERMAID_CDN_URL`, `PINNED_ASSETS`
+- Constants: `MERMAID_VERSION`, `MERMAID_SHA256`, `MERMAID_FILE`, `MERMAID_CDN_URL`, `PINNED_ASSETS`
 
 ---
 
@@ -331,6 +331,7 @@ The codebase is organized into the following modules:
 | `../errors.ts` | `RenderError` | Import |
 | `./cdp.ts` | `CdpConnection, connectCdp` | Import |
 | `./flags.ts` | `forcedBrowserFlags` | Import |
+| `./input.ts` | `MAX_DEVICE_PIXELS` | Import |
 | `./profile.ts` | `makeProfile, removeProfile` | Import |
 | `./proxy.ts` | `startRefusingProxy, RefusingProxy` | Import |
 
@@ -361,7 +362,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/graph/backend-png.ts` - Rasterizes one SVG document to PNG at scale 1. The font follows render: the rasterFont setting when set,
+### `src/graph/backend-png.ts` - Rasterizes one SVG document to PNG at the given scale. The font follows render: the rasterFont setting when set,
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -379,7 +380,7 @@ The codebase is organized into the following modules:
 | `../raster/warnings.ts` | `rasterWarnings` | Import |
 
 **Exports:**
-- Functions: `render`, `renderPng`, `svgDocumentToPng`
+- Functions: `readScale`, `render`, `renderPng`, `svgDocumentToPng`
 
 ---
 
@@ -486,7 +487,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../graph/backend-png.ts` | `svgDocumentToPng` | Import |
+| `../browser/input.ts` | `MAX_SCALE` | Import |
+| `../errors.ts` | `RenderError` | Import |
+| `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
 | `./common.ts` | `readLenient, routesToBrowser, sourceText` | Import |
 | `./browser.ts` | `drawMermaidInBrowser` | Import |
@@ -514,18 +517,24 @@ The codebase is organized into the following modules:
 
 ### `src/mermaid/browser.ts` - Draws one Mermaid source of a browser type through the browser stage. The page names the pinned Mermaid URL.
 
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `../browser/input.ts` | `blockedWarnings, browserPathOf` | Import |
-| `../browser/pinned.ts` | `MERMAID_CDN_URL, MERMAID_FILE` | Import |
+| `../browser/pinned.ts` | `MERMAID_CDN_URL, MERMAID_FILE, MERMAID_SHA256` | Import |
+| `../errors.ts` | `RenderError` | Import |
 | `../browser/page.ts` | `mermaidPageHtml, svgPageHtml` | Import |
 | `../browser/render.ts` | `renderHtmlPage, HtmlFormat, HtmlPageRequest, PinnedBytes` | Import |
 | `../assets.ts` | `readAsset` | Import |
 
 **Exports:**
 - Interfaces: `BrowserSettings`, `BrowserDraw`
-- Functions: `drawMermaidInBrowser`, `drawSvgToPdf`
+- Functions: `drawMermaidInBrowser`, `drawSvgToPdf`, `pinnedMermaid`
 - Constants: `MERMAID_BROWSER_BACKEND`, `MERMAID_NATIVE_PDF_BACKEND`
 
 ---
@@ -893,22 +902,22 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 16 files |
+| `src/errors` | 0 files | 18 files |
 | `src/worker/protocol` | 1 file | 10 files |
+| `src/browser/render` | 6 files | 4 files |
+| `src/mermaid/browser` | 6 files | 4 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
-| `src/browser/render` | 5 files | 4 files |
-| `src/mermaid/browser` | 5 files | 4 files |
 | `src/core` | 6 files | 1 file |
 | `src/graph/backend-png` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
+| `src/mermaid/backend-png` | 7 files | 0 files |
+| `src/browser/input` | 1 file | 5 files |
 | `src/config` | 3 files | 3 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/assets` | 1 file | 4 files |
 | `src/index` | 5 files | 0 files |
-| `src/mermaid/backend-png` | 5 files | 0 files |
 | `src/browser/index` | 4 files | 0 files |
-| `src/browser/input` | 1 file | 3 files |
 | `src/graph/backend-pdf` | 4 files | 0 files |
 | `src/mermaid/backend-pdf` | 4 files | 0 files |
 | `src/mermaid/backend-svg` | 4 files | 0 files |
@@ -1087,6 +1096,8 @@ graph TD
     N26 --> N31
     N26 --> N29
     N26 --> N33
+    N27 --> N13
+    N27 --> N3
     N27 --> N20
     N27 --> N40
     N27 --> N31
@@ -1098,6 +1109,7 @@ graph TD
     N28 --> N33
     N29 --> N13
     N29 --> N15
+    N29 --> N3
     N29 --> N14
     N29 --> N0
     N30 --> N31
@@ -1114,9 +1126,6 @@ graph TD
     N33 --> N34
     N34 --> N31
     N34 --> N35
-    N35 --> N31
-    N4 --> N6
-    N37 --> N0
 ```
 
 ---
@@ -1128,12 +1137,12 @@ graph TD
 |----------|-------|
 | Total Source Files | 157 |
 | Subsystems | 13 |
-| Total Lines of Code | 17006 |
-| Total Exports | 305 |
+| Total Lines of Code | 17141 |
+| Total Exports | 308 |
 | Total Re-exports | 55 |
 | Total Classes | 6 |
 | Total Interfaces | 51 |
-| Total Functions | 131 |
+| Total Functions | 133 |
 | Total Type Guards | 2 |
 | Total Enums | 0 |
 | Type-only Imports | 23 |
