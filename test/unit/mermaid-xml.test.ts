@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { dotToSvg } from "../../src/graph/dot.ts";
 import { classToDot, parseClassDiagram, type ClassModel } from "../../src/mermaid/class.ts";
 import { prepare, xmlSafe } from "../../src/mermaid/common.ts";
@@ -7,6 +7,11 @@ import type { SequenceModel } from "../../src/mermaid/sequence.ts";
 import { layoutSequence } from "../../src/mermaid/sequence-layout.ts";
 import { stateToDot, type StateModel } from "../../src/mermaid/state.ts";
 import { svgToPng } from "../../src/raster/index.ts";
+import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
+
+const scratch = makeScratch("scieng-mermaid-xml-");
+const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
+afterAll(() => removeScratch(scratch));
 
 /**
  * The first code point that XML 1.0 does not allow, written as U+ and four hex digits, or "" when none is found.
@@ -25,7 +30,7 @@ function firstForbiddenChar(text: string): string {
 /** The error that resvg raises for the SVG, or "" when resvg accepts it. resvg is the XML parser of the PNG output. */
 async function resvgError(svg: string): Promise<string> {
   try {
-    await svgToPng(svg, { scale: 1, maxMemoryMb: 1024 });
+    await svgToPng(svg, { scale: 1, maxMemoryMb: 1024, assetsUrl: ASSETS });
     return "";
   } catch (err) {
     return String(err);
