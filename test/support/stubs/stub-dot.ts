@@ -2,8 +2,11 @@
 export const FIXED_SVG =
   `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10"/></svg>`;
 
-export function render(request: { source: string | Uint8Array }): { bytes: Uint8Array; warnings: string[] } {
+export function render(request: { source: string | Uint8Array; settings?: unknown }): { bytes: Uint8Array; warnings: string[] } {
   const source = typeof request.source === "string" ? request.source : "";
+  if (source === "settings") {
+    return { bytes: new TextEncoder().encode(JSON.stringify(request.settings)), warnings: [] };
+  }
   if (source === "loop") {
     for (;;) {
       // Busy loop on purpose: the worker must be terminated by the time limit.

@@ -142,6 +142,53 @@ describe("loadConfig precedence: call option > environment > file > default", ()
   });
 });
 
+describe("loadConfig rasterFont", () => {
+  const FILE = "/home/u/.config/scieng/config.json";
+
+  test("the key has no default", async () => {
+    const cfg = await loadConfig({}, deps({}));
+    expect(cfg.rasterFont).toBeUndefined();
+    expect("rasterFont" in cfg).toBe(false);
+  });
+
+  test("SCIENG_RASTER_FONT sets the key", async () => {
+    const cfg = await loadConfig({}, deps({ env: { SCIENG_RASTER_FONT: "/f/env.ttf" } }));
+    expect(cfg.rasterFont).toBe("/f/env.ttf");
+  });
+
+  test("the file key sets the key", async () => {
+    const readFile = fakeFs({ [FILE]: JSON.stringify({ rasterFont: "/f/file.ttf" }) });
+    const cfg = await loadConfig({}, deps({ readFile }));
+    expect(cfg.rasterFont).toBe("/f/file.ttf");
+  });
+
+  test("the call option beats the environment, and the environment beats the file", async () => {
+    const readFile = fakeFs({ [FILE]: JSON.stringify({ rasterFont: "/f/file.ttf" }) });
+    const env = { SCIENG_RASTER_FONT: "/f/env.ttf" };
+    expect((await loadConfig({}, deps({ readFile, env }))).rasterFont).toBe("/f/env.ttf");
+    expect((await loadConfig({ rasterFont: "/f/opt.ttf" }, deps({ readFile, env }))).rasterFont).toBe("/f/opt.ttf");
+  });
+
+  test("an empty or non-string value in the file rejects with E_CONFIG and names the key", async () => {
+    for (const value of ["", 5, null, ["a"]]) {
+      const readFile = fakeFs({ [FILE]: JSON.stringify({ rasterFont: value }) });
+      const err = await rejectionOf(loadConfig({}, deps({ readFile })));
+      expect(err.code).toBe("E_CONFIG");
+      expect(err.message).toContain("rasterFont");
+    }
+  });
+
+  test("an empty call option value rejects with E_CONFIG", async () => {
+    const err = await rejectionOf(loadConfig({ rasterFont: "" }, deps({})));
+    expect(err.code).toBe("E_CONFIG");
+  });
+
+  test("an empty SCIENG_RASTER_FONT counts as unset", async () => {
+    const cfg = await loadConfig({}, deps({ env: { SCIENG_RASTER_FONT: "" } }));
+    expect(cfg.rasterFont).toBeUndefined();
+  });
+});
+
 describe("loadConfig failures", () => {
   test("an unreadable config file rejects with E_CONFIG and never falls back to defaults", async () => {
     const readFile = fakeFs({}, { "/home/u/.config/scieng/config.json": "EACCES" });

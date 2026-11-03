@@ -148,3 +148,19 @@ describe("capabilitiesWithRegistry", () => {
     expect(withBrowser.find((c) => c.type === "dot" && c.format === "pdf")?.ready).toBe(true);
   });
 });
+
+describe("renderWithRegistry settings pass-through", () => {
+  test("the rasterFont of the configuration reaches the backend", async () => {
+    const result = await renderWithRegistry(dotSvg("settings"), { rasterFont: "/f/x.ttf" }, TEST_REGISTRY, ISOLATED_CONFIG_DEPS);
+    const settings = JSON.parse(new TextDecoder().decode(result.bytes)) as { rasterFont?: string; maxMemoryMb: number };
+    expect(settings.rasterFont).toBe("/f/x.ttf");
+    expect(settings.maxMemoryMb).toBe(2048);
+  });
+
+  test("SCIENG_RASTER_FONT reaches the backend, and no value reaches it as undefined", async () => {
+    const withEnv = await renderWithRegistry(dotSvg("settings"), {}, TEST_REGISTRY, { ...ISOLATED_CONFIG_DEPS, env: { SCIENG_RASTER_FONT: "/f/env.ttf" } });
+    expect(JSON.parse(new TextDecoder().decode(withEnv.bytes)).rasterFont).toBe("/f/env.ttf");
+    const without = await renderWithRegistry(dotSvg("settings"), {}, TEST_REGISTRY, ISOLATED_CONFIG_DEPS);
+    expect(JSON.parse(new TextDecoder().decode(without.bytes)).rasterFont).toBeUndefined();
+  });
+});

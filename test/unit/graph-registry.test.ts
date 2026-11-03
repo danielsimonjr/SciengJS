@@ -21,4 +21,14 @@ describe("the default registry of the graph stage", () => {
     expect(svg?.ready).toBe(true);
     expect(svg?.stage).toBe("graph");
   });
+
+  test("the stage rule of the design: dot to png lists graph and needs no browser, dot to pdf lists browser", async () => {
+    const caps = await capabilitiesWithRegistry({}, DEFAULT_REGISTRY, ISOLATED_CONFIG_DEPS);
+    const png = caps.find((c) => c.type === "dot" && c.format === "png");
+    const pdf = caps.find((c) => c.type === "dot" && c.format === "pdf");
+    expect(png?.stage).toBe("graph");
+    expect(png?.ready).toBe(true);
+    expect(pdf?.stage).toBe("browser");
+    expect(pdf?.ready).toBe(false);
+  });
 });
