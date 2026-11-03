@@ -31,6 +31,17 @@ The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5.
 
 The default `timeoutMs` is 60000. On one development host, the graph stage renders a 100-node seeded random graph in 0.79 s to 1.21 s warm. It renders a 200-node seeded random graph in 3.3 s to 6.6 s warm. The random graphs have two edges per node, drawn from a fixed seed. The times come from five runs. The trial graph `large200.dot` has 200 nodes and 399 edges. It takes 40 s to 44 s per warm render on the same host. The trial report T1 measured it at 12 s to 51 s per warm render, and at 153 s in one local run. Layout time depends on the graph, not only on the node count. A large graph can therefore pass `timeoutMs`. Such a render rejects with `E_TIMEOUT`. The caller raises `timeoutMs` for that graph.
 
+### Options of the Mermaid stage
+
+| Pair | Option | Type | Default | Meaning |
+|---|---|---|---|---|
+| `mermaid` to `svg` | `lenient` | `true` or `false` | `false` | Strict mode rejects a line outside the grammar with `E_INPUT`. The message gives the line number and the line text. Lenient mode skips the line and adds one warning that names the line. Any other option rejects with `E_INPUT`. |
+| `mermaid` to `png` | `lenient` | `true` or `false` | `false` | The same as `mermaid` to `svg`. |
+
+The stage reads the header line of the source after the front matter, the directives and the comment lines. The header names the diagram type: `classDiagram`, `stateDiagram-v2` or `sequenceDiagram`. Any other Mermaid type rejects with `E_UNSUPPORTED`, and the message names the browser stage. A class diagram and a state diagram go through the graph stage. A sequence diagram uses the layout of the Mermaid stage.
+
+The sequence layout measures each text run as 8 px for each character. A label with wide characters can run past its box. The PNG render of a Mermaid source uses the same font rule as the DOT render. The key `rasterFont` changes the font of the Mermaid render and the DOT render.
+
 ### `capabilities(config?)`
 
 Lists each supported pair with its stage and its readiness.
@@ -66,9 +77,10 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 
 ## Subpaths
 
-| Subpath | Status in increment I1 |
+| Subpath | Content |
 |---|---|
 | `./graph` | DOT to SVG through the viz library. It exports `dotToSvg`. |
 | `./raster` | SVG to PNG through resvg. It exports `svgToPng` and `isFontFile`. |
+| `./mermaid` | The Mermaid parsers, the DOT builders, the sequence layout and the SVG render. It exports `prepare`, `parseClassDiagram`, `classToDot`, `parseStateDiagram`, `stateToDot`, `parseSequenceDiagram`, `layoutSequence` and `renderMermaidSvg`. |
 
-The package exports only the subpaths that have content. Each later stage adds its subpath in its own increment. A caller that imports a subpath loads no WASM file.
+The package exports only the subpaths that have content. A caller that imports a subpath loads no WASM file.

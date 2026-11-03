@@ -27,6 +27,16 @@
 4. `dotToSvg` in `src/graph/dot.ts` removes each `image` attribute and reports one warning for each. It renders the source with the viz library. It then removes each SVG image element of the output.
 5. `svgToPng` in `src/raster/index.ts` loads resvg once for the process. It checks the pixel buffer against `maxMemoryMb` before it renders. It renders the SVG at the scale and returns the PNG bytes.
 
+## A Mermaid render
+
+1. The registry names the backend `mermaid/native` for `mermaid` to `svg`. The module is `src/mermaid/backend-svg.ts`. For `mermaid` to `png`, the registry names `mermaid/native+raster/resvg`. The module is `src/mermaid/backend-png.ts`.
+2. `prepare` in `src/mermaid/common.ts` reads the front matter, the directives and the comment lines. It reads the header line. A type that the native layouts do not draw rejects with `E_UNSUPPORTED`. It reads the option `lenient`. Any other option rejects with `E_INPUT`.
+3. A class diagram goes to `parseClassDiagram` and `classToDot`. A state diagram goes to `parseStateDiagram` and `stateToDot`. Each DOT source goes to `dotToSvg` in `src/graph/dot.ts`.
+4. A sequence diagram goes to `parseSequenceDiagram`. `layoutSequence` in `src/mermaid/sequence-layout.ts` writes the SVG. The viz library does not run for a sequence diagram.
+5. A line outside the grammar rejects the render with `E_INPUT` in strict mode. In lenient mode, the parser skips the line and adds one warning.
+6. The PNG backend renders the SVG with `svgDocumentToPng` in `src/graph/backend-png.ts`. The PNG backend uses the same font rule as the DOT render.
+7. The result holds the bytes and the warnings. The warnings are the parser warnings, then the DOT warnings.
+
 ## Errors
 
 A backend throws a `RenderError` to report a code. Any other error becomes `E_INTERNAL` with its message.

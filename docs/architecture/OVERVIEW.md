@@ -2,12 +2,13 @@
 
 `@danielsimonjr/sciengjs` is a TypeScript library. The library renders science and engineering sources to SVG, PNG, PDF, HTML, and Markdown. The library runs on the local machine. The library sends no source to a web service.
 
-Status: increment I1, the graph and raster stages. The package renders DOT to SVG and DOT to PNG. The other stages do not exist yet. A pair of a missing stage rejects with `E_UNSUPPORTED`.
+Status: the graph, raster and Mermaid stages exist. The package renders DOT to SVG and DOT to PNG. It renders Mermaid class, state and sequence diagrams to SVG and PNG. The other stages do not exist yet. A pair of a missing stage rejects with `E_UNSUPPORTED`.
 
 ## What the engine does
 
 - It accepts a source and an output format. The render returns the bytes, the MIME type, the backend name and the warnings.
 - It rejects an unsupported pair with `E_UNSUPPORTED`. It never falls back to another format.
+- The engine draws Mermaid class, state and sequence diagrams. The graph stage draws a class diagram and a state diagram. The engine draws a sequence diagram with its own layout. Other Mermaid diagram types reject with `E_UNSUPPORTED`.
 - It runs each render in a worker thread. A render that passes its time limit ends with `E_TIMEOUT`.
 - It reads its settings from a configuration file, from environment variables and from the call options. The precedence is: call option, environment, file, default.
 
@@ -26,12 +27,13 @@ Status: increment I1, the graph and raster stages. The package renders DOT to SV
 | `src/worker/` | The worker runner and the worker entry. |
 | `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner and the two backends (SVG and PNG). |
 | `src/raster/` | The raster stage: SVG to PNG through resvg, and the font check. |
+| `src/mermaid/` | The Mermaid stage: the header and option reader, the parsers of the class, state and sequence diagrams, the DOT builders, the sequence layout and the SVG render. |
 | `assets/` | The files that ship in the package: the bundled raster font, the resvg WASM file `index_bg.wasm` and the licence texts. |
 | `scripts/` | `prepare-build.mjs`, which the build runs. The script writes `src/version.ts` and copies `index_bg.wasm` into `assets/`. |
 | `test/unit/` | Unit tests of each module. |
-| `test/corpus/` | The DOT corpus: each source and its expected SVG. |
+| `test/corpus/` | The DOT and Mermaid corpora: each source and its expected SVG. |
 | `test/integration/` | The page checker tests. They need a browser. |
-| `test/support/` | Test-only helpers: the SVG comparison, the Bun global scan, the page checker and the stub backends. |
+| `test/support/` | Test-only helpers: the SVG comparison, the Bun global scan, the network guard, the page checker and the stub backends. |
 | `test/smoke/smoke.mjs` | The Node smoke test of the built package. |
 
 ## Numbers
@@ -48,9 +50,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 107 | repo-tools map |
-| totalLinesOfCode | 11733 | repo-tools map |
-| totalExports | 171 | repo-tools map |
-| totalTypeOnlyImports | 14 | repo-tools map |
+| totalSourceFiles | 119 | repo-tools map |
+| totalLinesOfCode | 13754 | repo-tools map |
+| totalExports | 217 | repo-tools map |
+| totalTypeOnlyImports | 17 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 19 | repo-tools map |
+| entryRoots | 26 | repo-tools map |

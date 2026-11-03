@@ -87,7 +87,7 @@ export const DEFAULT_REGISTRY: Registry;
 export function registryKey(type: string, format: string): string;
 ```
 
-`DEFAULT_REGISTRY` is empty in increment I0.
+`DEFAULT_REGISTRY` names the backends of `dot` to `svg`, `dot` to `png`, `mermaid` to `svg` and `mermaid` to `png`.
 
 ## `src/pairs.ts`
 
@@ -122,9 +122,11 @@ Purpose: renders a DOT source to SVG with the viz library. The module removes th
 
 ```ts
 export interface DotSvgResult { svg: string; warnings: string[] }
-export function dotToSvg(source: string): Promise<DotSvgResult>;
+export function dotToSvg(source: string, getViz?: () => Promise<Viz>): Promise<DotSvgResult>;
 export function dotSourceText(source: string | Uint8Array): string;
 ```
+
+`getViz` returns the viz instance. The default is the shared instance. A test passes a new instance for each source, so that the library gives its warnings for each source.
 
 ## `src/graph/image.ts`
 
@@ -143,15 +145,111 @@ Purpose: the backend of `dot` to `svg`. It takes no options. Any option rejects 
 
 Purpose: the backend of `dot` to `png`. It takes the option `scale`. It reads the raster font, which is the file of `rasterFont` or the bundled font. It renders the SVG with `dotToSvg`, and then it renders the PNG with `svgToPng`.
 
+```ts
+export function svgDocumentToPng(svg: string, request: WorkerJob["request"]): Promise<BackendOutput>;
+```
+
+`svgDocumentToPng` renders an SVG document to PNG with the font rule of the DOT backend. The Mermaid PNG backend uses it.
+
 ## `src/raster/index.ts`
 
-Purpose: SVG to PNG through resvg. It loads the WASM file once for the process. It checks the pixel buffer against `maxMemoryMb` before it renders. It checks the signature of a font file.
+Purpose: SVG to PNG through resvg. The raster module loads the WASM file once for the process. It checks the pixel buffer against `maxMemoryMb` and against the fixed cap of 1024 MB before it renders. It checks the signature of a font file.
 
 ```ts
-export interface SvgToPngOptions { scale: number; maxMemoryMb: number; font?: Uint8Array }
+export interface SvgToPngOptions {
+  scale: number;
+  maxMemoryMb: number;
+  font?: Uint8Array;
+  readWasm?: () => Uint8Array;
+}
 export function svgToPng(svg: string, options: SvgToPngOptions): Promise<Uint8Array>;
 export function isFontFile(bytes: Uint8Array): boolean;
 ```
+
+`readWasm` replaces the reader of the resvg WASM file. The tests use it to fail the first start.
+
+## `src/mermaid/common.ts`
+
+Purpose: the header and option reader of each Mermaid source. It reads the front matter, the directives, the comment lines and the header line. It rejects a Mermaid type that the native layouts do not draw with `E_UNSUPPORTED`. It reads the option `lenient`. Any other option rejects with `E_INPUT`.
+
+```ts
+export type DiagramKind = "class" | "state" | "sequence";
+export function prepare(source: string, options: Record<string, unknown>, extra?: readonly string[]): Source;
+export function sourceText(source: string | Uint8Array): string;
+```
+
+`Source` holds the diagram kind, the header line, the content lines, the lenient flag and the warnings.
+
+## `src/mermaid/class.ts`
+
+Purpose: parses a `classDiagram` and builds the DOT source of the diagram.
+
+```ts
+export function parseClassDiagram(src: Source): ClassModel;
+export function classToDot(model: ClassModel): string;
+```
+
+It exports the types `ClassModel`, `ClassDef`, `ClassRelation`, `ClassArrow` and `Marker`.
+
+## `src/mermaid/state.ts`
+
+Purpose: parses a `stateDiagram-v2` and builds the DOT source of the diagram. A composite state is outside the grammar. In lenient mode, the parser skips the state and its body.
+
+```ts
+export function parseStateDiagram(src: Source): StateModel;
+export function stateToDot(model: StateModel): string;
+```
+
+It exports the types `StateModel`, `StateDef` and `StateTransition`.
+
+## `src/mermaid/sequence.ts`
+
+Purpose: parses a `sequenceDiagram` into participants and events. The events are messages, notes, activations, deactivations and blocks. A block holds one or more branches.
+
+```ts
+export function parseSequenceDiagram(src: Source): SequenceModel;
+```
+
+It exports the types `SequenceModel`, `Participant`, `MessageEvent`, `NoteEvent`, `ActivateEvent`, `DeactivateEvent`, `Branch`, `BlockEvent` and `SeqEvent`.
+
+## `src/mermaid/sequence-layout.ts`
+
+Purpose: lays out a sequence model as one SVG document. There is one column for each participant. There is one row for each message or note. Each element carries its source line in `data-scieng-line`.
+
+```ts
+export function layoutSequence(model: SequenceModel): string;
+```
+
+The layout measures each text run as 8 px for each character.
+
+## `src/mermaid/render.ts`
+
+Purpose: renders one Mermaid source to SVG. A class diagram or a state diagram goes through its DOT builder and `dotToSvg`. A sequence diagram goes through `layoutSequence`.
+
+```ts
+export interface MermaidSvg { svg: string; warnings: string[] }
+export function renderMermaidSvg(source: string, options: Record<string, unknown>): Promise<MermaidSvg>;
+```
+
+## `src/mermaid/backend-svg.ts`
+
+Purpose: the backend of `mermaid` to `svg`. The backend returns the SVG from `renderMermaidSvg`.
+
+```ts
+export function render(request: WorkerJob["request"]): Promise<BackendOutput>;
+```
+
+## `src/mermaid/backend-png.ts`
+
+Purpose: the backend of `mermaid` to `png`. It renders the SVG with `renderMermaidSvg`. It then renders the PNG with `svgDocumentToPng`.
+
+```ts
+export function render(request: WorkerJob["request"]): Promise<BackendOutput>;
+```
+
+## `src/mermaid/index.ts`
+
+Purpose: the public entry of the `./mermaid` subpath. It re-exports the functions and the types of the Mermaid stage.
 
 ## `src/types.ts`
 
