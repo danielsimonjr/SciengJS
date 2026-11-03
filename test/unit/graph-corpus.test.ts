@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { instance } from "@viz-js/viz";
 import { dotToSvg } from "../../src/graph/dot.ts";
 import { compareSvg } from "../support/svg-compare.ts";
 
@@ -35,7 +36,8 @@ describe("DOT corpus", () => {
     test(`${file} matches its expected SVG`, async () => {
       const source = readFileSync(join(CORPUS, file), "utf8");
       const expected = readFileSync(join(CORPUS, file.replace(/\.dot$/, ".expected.svg")), "utf8");
-      const r = await dotToSvg(source);
+      // Graphviz gives its non-ASCII width warning once for each viz instance, so each source gets a new instance.
+      const r = await dotToSvg(source, () => instance());
       const cmp = compareSvg(r.svg, expected);
       if (!cmp.equal) throw new Error(`${file}: ${cmp.diff}`);
       expect(cmp.equal).toBe(true);
