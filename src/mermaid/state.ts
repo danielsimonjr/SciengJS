@@ -1,4 +1,4 @@
-import { inputError, outside, type ContentLine, type Source } from "./common.ts";
+import { inputError, outside, xmlSafe, type ContentLine, type Source } from "./common.ts";
 
 /** One declared state of a stateDiagram-v2. */
 export interface StateDef {
@@ -146,7 +146,7 @@ export function parseStateDiagram(src: Source): StateModel {
 }
 
 function escapeDotText(text: string): string {
-  return text.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
 /** Builds the DOT source of a parsed state diagram. Each state is a rounded box. */

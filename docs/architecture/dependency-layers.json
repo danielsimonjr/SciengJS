@@ -610,6 +610,7 @@
             "imports": [
               "inputError",
               "outside",
+              "xmlSafe",
               "ContentLine",
               "Source"
             ]
@@ -647,6 +648,7 @@
         "exports": [
           "readLenient",
           "sourceText",
+          "xmlSafe",
           "inputError",
           "outside",
           "prepare"
@@ -659,6 +661,7 @@
         "functions": [
           "readLenient",
           "sourceText",
+          "xmlSafe",
           "inputError",
           "outside",
           "prepare"
@@ -854,6 +857,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "./common.ts",
+            "imports": [
+              "xmlSafe"
+            ]
+          },
+          {
             "file": "./sequence.ts",
             "imports": [
               "BlockEvent",
@@ -915,6 +924,7 @@
             "imports": [
               "inputError",
               "outside",
+              "xmlSafe",
               "ContentLine",
               "Source"
             ]

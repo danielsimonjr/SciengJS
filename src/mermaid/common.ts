@@ -62,6 +62,17 @@ export function sourceText(source: string | Uint8Array): string {
   return typeof source === "string" ? source : new TextDecoder().decode(source);
 }
 
+/**
+ * Replaces each code point that XML 1.0 forbids with U+FFFD.
+ * Valid text, including surrogate pairs, stays unchanged.
+ */
+export function xmlSafe(text: string): string {
+  return text.replace(
+    /[^\u{9}\u{A}\u{D}\u{20}-\u{D7FF}\u{E000}-\u{FFFD}\u{10000}-\u{10FFFF}]/gu,
+    "\u{FFFD}",
+  );
+}
+
 /** An input error that names its source line. */
 export function inputError(line: number, message: string): RenderError {
   return new RenderError("E_INPUT", `line ${line}: ${message}`, { line });
@@ -105,6 +116,9 @@ export function prepare(source: string, options: Record<string, unknown>, extra:
       continue;
     }
     if (text.startsWith("%%")) continue;
+    if (xmlSafe(text) !== text) {
+      ctx.warnings.push(`line ${number}: each character outside the XML 1.0 range is shown as U+FFFD`);
+    }
     content.push({ number, text });
   }
 

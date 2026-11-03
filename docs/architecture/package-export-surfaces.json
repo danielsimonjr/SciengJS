@@ -62,7 +62,8 @@
       "render",
       "renderMermaidSvg",
       "sourceText",
-      "stateToDot"
+      "stateToDot",
+      "xmlSafe"
     ],
     "raster": [
       "MAX_PNG_PIXEL_MB",

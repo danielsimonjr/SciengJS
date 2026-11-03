@@ -195,6 +195,31 @@ describe("sequenceDiagram: blocks", () => {
   });
 });
 
+describe("sequenceDiagram: hyphenated ids", () => {
+  test("a participant id may hold hyphens between its letters and digits", () => {
+    expect(() => parse("sequenceDiagram\nUser-1->>Web-2: hi")).not.toThrow();
+    const m = parse("sequenceDiagram\nUser-1->>Web-2: hi");
+    expect(m.participants.map((p) => p.id)).toEqual(["User-1", "Web-2"]);
+    expect(m.events[0]).toMatchObject({ kind: "message", from: "User-1", to: "Web-2", text: "hi" });
+  });
+
+  test("an arrow next to a hyphenated id still reads as the arrow", () => {
+    expect(() => parse("sequenceDiagram\nA-->B: x\nA-1->>B-2: x\nA->>+B: hi\nB-->>-A-1: bye")).not.toThrow();
+    expect(parse("sequenceDiagram\nA-->B: x").events[0]).toMatchObject({ from: "A", to: "B", token: "-->", dashed: true, arrowhead: false });
+    expect(parse("sequenceDiagram\nA-1->>B-2: x").events[0]).toMatchObject({ from: "A-1", to: "B-2", token: "->>", arrowhead: true });
+    expect(rejection(() => parse("sequenceDiagram\nA->>-B: x")).line).toBe(2);
+    const m = parse("sequenceDiagram\nA->>+B: hi\nB-->>-A-1: bye");
+    expect(m.events[1]).toMatchObject({ kind: "message", from: "B", to: "A-1", deactivateSource: true });
+  });
+
+  test("a hyphenated id works in a note, an activation and a deactivation", () => {
+    expect(() => parse("sequenceDiagram\nactivate User-1\nNote over User-1: hi\ndeactivate User-1")).not.toThrow();
+    const m = parse("sequenceDiagram\nactivate User-1\nNote over User-1: hi\ndeactivate User-1");
+    expect(m.participants.map((p) => p.id)).toEqual(["User-1"]);
+    expect(m.events.map((e) => e.kind)).toEqual(["activate", "note", "deactivate"]);
+  });
+});
+
 describe("sequenceDiagram: rejections name the source line", () => {
   test("an unknown construct rejects with E_INPUT on its line", () => {
     const err = rejection(() => parse("sequenceDiagram\nA->>B: x\ntitle Demo"));

@@ -16,7 +16,14 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The smoke test imports the `./mermaid` subpath and renders the three diagram types from the packed tarball. It checks that a flowchart rejects with `E_UNSUPPORTED`.
 - The raster cap test uses one row of 1.5 billion pixels. The former square input drew a 1 GiB buffer without the cap, and the mutation audit timed out on that test.
 - The README and the architecture documents describe the Mermaid stage and remove the increment-I0 and increment-I1 status claims.
-- The mutation audit gives the full text of each mutant in its report. Each kill names its cause: an assertion, or an error that the code throws. The rejection helpers of the test suite fail as assertions. An assertion kills all 92 non-equivalent mutants.
+- The mutation audit gives the full text of each mutant in its report. Each kill names its cause: an assertion, or an error that the code throws. The rejection helpers of the test suite fail as assertions. An assertion kills all 104 non-equivalent mutants.
+
+### Fixed
+
+- The `mermaid` input replaces each character that XML 1.0 forbids with U+FFFD. The forbidden characters include a lone surrogate. Before this fix, the SVG kept the character, and the PNG render failed with `resvg cannot read the SVG`.
+- The `mermaid` input warns once for each source line that holds a forbidden character.
+- A class relation label accepts a colon with no space before it, as in `Driver --> Car: drives`.
+- A sequence id accepts a hyphen between name parts, as in `User-1->>Web-2: hi`.
 
 ## [0.1.1] - 2026-11-03
 

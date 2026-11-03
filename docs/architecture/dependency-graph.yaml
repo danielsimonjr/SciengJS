@@ -2,9 +2,9 @@ metadata:
   name: agent-a2a6677e562e80502
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 120
+  totalFiles: 121
   totalModules: 3
-  totalExports: 221
+  totalExports: 222
 modules:
   src:
     src/config.ts:
@@ -285,6 +285,7 @@ modules:
           imports:
             - inputError
             - outside
+            - xmlSafe
             - ContentLine
             - Source
           typeOnly: false
@@ -311,6 +312,7 @@ modules:
         - Source
         - readLenient
         - sourceText
+        - xmlSafe
         - inputError
         - outside
         - prepare
@@ -428,6 +430,10 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: src/mermaid/common.ts
+          imports:
+            - xmlSafe
+          typeOnly: false
         - file: src/mermaid/sequence.ts
           imports:
             - BlockEvent
@@ -467,6 +473,7 @@ modules:
           imports:
             - inputError
             - outside
+            - xmlSafe
             - ContentLine
             - Source
           typeOnly: false
@@ -1256,6 +1263,48 @@ modules:
             - dotToSvg
           typeOnly: false
       exports: []
+    test/unit/mermaid-xml.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+        - file: src/mermaid/class.ts
+          imports:
+            - classToDot
+            - parseClassDiagram
+            - ClassModel
+          typeOnly: false
+        - file: src/mermaid/common.ts
+          imports:
+            - prepare
+            - xmlSafe
+          typeOnly: false
+        - file: src/mermaid/render.ts
+          imports:
+            - renderMermaidSvg
+          typeOnly: false
+        - file: src/mermaid/sequence.ts
+          imports:
+            - SequenceModel
+          typeOnly: true
+        - file: src/mermaid/sequence-layout.ts
+          imports:
+            - layoutSequence
+          typeOnly: false
+        - file: src/mermaid/state.ts
+          imports:
+            - stateToDot
+            - StateModel
+          typeOnly: false
+        - file: src/raster/index.ts
+          imports:
+            - svgToPng
+          typeOnly: false
+      exports: []
     test/unit/no-bun-api.test.ts:
       externalDependencies:
         - bun:test
@@ -1881,11 +1930,11 @@ modules:
       exports:
         - addedPrimitives
 statistics:
-  totalTypeScriptFiles: 120
-  totalSourceFiles: 120
+  totalTypeScriptFiles: 121
+  totalSourceFiles: 121
   totalModules: 3
-  totalLinesOfCode: 13791
-  totalExports: 221
+  totalLinesOfCode: 14025
+  totalExports: 222
   entryRoots: 26
   reachableFiles: 26
   dormantFiles: 14
@@ -1893,7 +1942,7 @@ statistics:
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 17
+  totalTypeOnlyImports: 18
   noImporterFileCount: 7
   unusedExportsCount: 17
   circularDepsTruncated: false
@@ -1903,7 +1952,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 5
   totalInterfaces: 42
-  totalFunctions: 92
+  totalFunctions: 93
   totalTypeGuards: 1
   totalEnums: 0
   totalConstants: 25

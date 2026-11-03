@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 40 |
-| Total Test Files | 37 |
+| Total Test Files | 38 |
 | Source Files with Tests | 22 |
 | Source Files without Tests | 18 |
 | Coverage (raw, direct-import) | **55.0%** |
@@ -75,15 +75,15 @@ The following 18 source files are not directly imported by any test file:
 | `src/errors.ts` | `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `mermaid-class.test.ts`, `mermaid-common.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `graph/backend-png.ts` | `graph-png.test.ts` |
 | `graph/backend-svg.ts` | `graph-svg-backend.test.ts` |
-| `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `mermaid-class.test.ts`, `mermaid-state.test.ts`, `raster-warnings.test.ts` |
+| `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `mermaid-class.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts`, `raster-warnings.test.ts` |
 | `graph/image.ts` | `graph-image.test.ts` |
-| `mermaid/class.ts` | `mermaid-class.test.ts` |
-| `mermaid/common.ts` | `mermaid-class.test.ts`, `mermaid-common.test.ts`, `mermaid-sequence.test.ts`, `mermaid-state.test.ts` |
-| `mermaid/render.ts` | `mermaid-corpus.test.ts` |
-| `mermaid/sequence-layout.ts` | `mermaid-sequence.test.ts` |
-| `mermaid/sequence.ts` | `mermaid-sequence.test.ts` |
-| `mermaid/state.ts` | `mermaid-state.test.ts` |
-| `raster/index.ts` | `graph-network.test.ts`, `raster.test.ts` |
+| `mermaid/class.ts` | `mermaid-class.test.ts`, `mermaid-xml.test.ts` |
+| `mermaid/common.ts` | `mermaid-class.test.ts`, `mermaid-common.test.ts`, `mermaid-sequence.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
+| `mermaid/render.ts` | `mermaid-corpus.test.ts`, `mermaid-xml.test.ts` |
+| `mermaid/sequence-layout.ts` | `mermaid-sequence.test.ts`, `mermaid-xml.test.ts` |
+| `mermaid/sequence.ts` | `mermaid-sequence.test.ts`, `mermaid-xml.test.ts` |
+| `mermaid/state.ts` | `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
+| `raster/index.ts` | `graph-network.test.ts`, `mermaid-xml.test.ts`, `raster.test.ts` |
 | `raster/warnings.ts` | `raster-warnings.test.ts` |
 | `src/registry.ts` | `graph-registry.test.ts`, `mermaid-registry.test.ts` |
 | `src/types.ts` | `render.test.ts` |
@@ -119,6 +119,7 @@ The following 18 source files are not directly imported by any test file:
 | `unit/mermaid-render.test.ts` | 0 files |
 | `unit/mermaid-sequence.test.ts` | 3 files |
 | `unit/mermaid-state.test.ts` | 3 files |
+| `unit/mermaid-xml.test.ts` | 8 files |
 | `unit/no-bun-api.test.ts` | 0 files |
 | `unit/page-checker-io.test.ts` | 0 files |
 | `unit/process-list.test.ts` | 0 files |

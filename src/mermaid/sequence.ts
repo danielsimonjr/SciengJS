@@ -68,14 +68,16 @@ export interface SequenceModel {
   events: SeqEvent[];
 }
 
-const PARTICIPANT_RE = /^(?:participant|actor)[ \t]+([A-Za-z_][A-Za-z0-9_]*)(?:[ \t]+as[ \t]+(.+))?$/;
-const ACTIVATION_RE = /^(activate|deactivate)[ \t]+([A-Za-z_][A-Za-z0-9_]*)$/;
-const NOTE_RE = /^Note[ \t]+(left of|right of|over)[ \t]+([A-Za-z_][A-Za-z0-9_]*)(?:[ \t]*,[ \t]*([A-Za-z_][A-Za-z0-9_]*))?[ \t]*:[ \t]*(.+)$/;
+/** One participant id: a letter or an underscore, then letters, digits and underscores, with hyphens between them. */
+const ID_SOURCE = "[A-Za-z_][A-Za-z0-9_]*(?:-[A-Za-z0-9_]+)*";
+const PARTICIPANT_RE = new RegExp(`^(?:participant|actor)[ \\t]+(${ID_SOURCE})(?:[ \\t]+as[ \\t]+(.+))?$`);
+const ACTIVATION_RE = new RegExp(`^(activate|deactivate)[ \\t]+(${ID_SOURCE})$`);
+const NOTE_RE = new RegExp(`^Note[ \\t]+(left of|right of|over)[ \\t]+(${ID_SOURCE})(?:[ \\t]*,[ \\t]*(${ID_SOURCE}))?[ \\t]*:[ \\t]*(.+)$`);
 const BLOCK_RE = /^(loop|alt|par)(?:[ \t]+(.*))?$/;
 const BRANCH_RE = /^(else|and)(?:[ \t]+(.*))?$/;
 const END_RE = /^end$/;
 const UNSUPPORTED_BLOCK_RE = /^(opt|critical|break|rect)(?:[ \t]+(.*))?$/;
-const MESSAGE_RE = /^([A-Za-z_][A-Za-z0-9_]*)[ \t]*(-->>|->>|-->|->)[ \t]*([+-]?)[ \t]*([A-Za-z_][A-Za-z0-9_]*)[ \t]*:[ \t]*(.*)$/;
+const MESSAGE_RE = new RegExp(`^(${ID_SOURCE})[ \\t]*(-->>|->>|-->|->)[ \\t]*([+-]?)[ \\t]*(${ID_SOURCE})[ \\t]*:[ \\t]*(.*)$`);
 const ANY_BLOCK_OPENER_RE = /^(?:loop|alt|par|opt|critical|break|rect)(?:[ \t]+.*)?$/;
 
 /** Parses the lines of a sequence diagram into its participants and events. */

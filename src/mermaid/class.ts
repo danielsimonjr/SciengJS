@@ -1,4 +1,4 @@
-import { inputError, outside, type ContentLine, type Source } from "./common.ts";
+import { inputError, outside, xmlSafe, type ContentLine, type Source } from "./common.ts";
 
 /** The shape at one end of a class relation: none, an open arrow, a triangle, or a diamond that is filled or open. */
 export type Marker = "none" | "arrow" | "triangle" | "diamond" | "filled-diamond";
@@ -64,7 +64,7 @@ const ARROW_PATTERN = [...ARROW_SPECS]
 const IDENT_SOURCE = "[A-Za-z_][A-Za-z0-9_]*";
 
 const RELATION_PATTERN = new RegExp(
-  `^(${IDENT_SOURCE}) +(?:"([^"]*)" )?(${ARROW_PATTERN}) +(?:"([^"]*)" )?(${IDENT_SOURCE})(?: : (.+))?$`,
+  `^(${IDENT_SOURCE}) +(?:"([^"]*)" )?(${ARROW_PATTERN}) +(?:"([^"]*)" )?(${IDENT_SOURCE})(?: *: *(.+))?$`,
 );
 
 const MEMBER_PATTERN = /^([A-Za-z_][A-Za-z0-9_]*) *:(.*)$/;
@@ -198,11 +198,11 @@ const DOT_MARKERS: Record<Marker, string> = {
 };
 
 function escapeDot(text: string): string {
-  return text.replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
 }
 
 function escapeRecord(text: string): string {
-  return text.replace(/\\/g, "\\\\").replace(/[{}|<>"]/g, "\\$&");
+  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/[{}|<>"]/g, "\\$&");
 }
 
 function memberDisplay(text: string): string {

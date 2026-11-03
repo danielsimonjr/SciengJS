@@ -287,7 +287,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./common.ts` | `inputError, outside, ContentLine, Source` | Import |
+| `./common.ts` | `inputError, outside, xmlSafe, ContentLine, Source` | Import |
 
 **Exports:**
 - Interfaces: `ClassArrow`, `ClassDef`, `ClassRelation`, `ClassModel`
@@ -306,7 +306,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `ContentLine`, `Context`, `Source`
 - Types: `DiagramKind`
-- Functions: `readLenient`, `sourceText`, `inputError`, `outside`, `prepare`
+- Functions: `readLenient`, `sourceText`, `xmlSafe`, `inputError`, `outside`, `prepare`
 
 ---
 
@@ -358,6 +358,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `./common.ts` | `xmlSafe` | Import |
 | `./sequence.ts` | `BlockEvent, Branch, MessageEvent, SeqEvent, SequenceModel` | Import (type-only) |
 
 **Exports:**
@@ -384,7 +385,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./common.ts` | `inputError, outside, ContentLine, Source` | Import |
+| `./common.ts` | `inputError, outside, xmlSafe, ContentLine, Source` | Import |
 
 **Exports:**
 - Interfaces: `StateDef`, `StateTransition`, `StateModel`
@@ -649,8 +650,8 @@ The codebase is organized into the following modules:
 | File | Imports From | Exports To |
 |------|--------------|------------|
 | `src/errors` | 0 files | 10 files |
+| `src/mermaid/common` | 1 file | 8 files |
 | `src/mermaid/render` | 6 files | 3 files |
-| `src/mermaid/common` | 1 file | 7 files |
 | `src/core` | 6 files | 1 file |
 | `src/worker/protocol` | 1 file | 6 files |
 | `src/graph/backend-png` | 5 files | 1 file |
@@ -658,13 +659,13 @@ The codebase is organized into the following modules:
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/index` | 5 files | 0 files |
 | `src/mermaid/backend-png` | 4 files | 0 files |
+| `src/mermaid/sequence-layout` | 2 files | 2 files |
 | `src/mermaid/sequence` | 1 file | 3 files |
 | `src/types` | 0 files | 4 files |
 | `src/config` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
 | `src/mermaid/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
-| `src/mermaid/sequence-layout` | 1 file | 2 files |
 | `src/mermaid/state` | 1 file | 2 files |
 | `src/worker/run` | 2 files | 1 file |
 | `src/pairs` | 1 file | 1 file |
@@ -822,6 +823,7 @@ graph TD
     N17 --> N19
     N17 --> N18
     N17 --> N20
+    N18 --> N15
     N18 --> N19
     N19 --> N15
     N20 --> N15
@@ -844,17 +846,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 120 |
+| Total Source Files | 121 |
 | Subsystems | 12 |
-| Total Lines of Code | 13791 |
-| Total Exports | 221 |
+| Total Lines of Code | 14025 |
+| Total Exports | 222 |
 | Total Re-exports | 45 |
 | Total Classes | 5 |
 | Total Interfaces | 42 |
-| Total Functions | 92 |
+| Total Functions | 93 |
 | Total Type Guards | 1 |
 | Total Enums | 0 |
-| Type-only Imports | 17 |
+| Type-only Imports | 18 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

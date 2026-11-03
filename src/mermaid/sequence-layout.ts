@@ -1,3 +1,4 @@
+import { xmlSafe } from "./common.ts";
 import type { BlockEvent, Branch, MessageEvent, SeqEvent, SequenceModel } from "./sequence.ts";
 
 const MARGIN = 20;
@@ -27,9 +28,9 @@ function textWidth(value: string): number {
   return value.length * CHAR_WIDTH;
 }
 
-/** Escapes the special XML characters in one text value, replacing the ampersand first. */
+/** Makes one text value safe for XML: it replaces each forbidden character, then escapes the markup characters. */
 function escapeXml(value: string): string {
-  return value
+  return xmlSafe(value)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

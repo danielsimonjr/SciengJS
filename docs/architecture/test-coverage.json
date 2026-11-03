@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 40,
-    "totalTestFiles": 37,
+    "totalTestFiles": 38,
     "testedCount": 22,
     "untestedCount": 18,
     "coveragePercent": "55.0",
@@ -92,6 +92,7 @@
       "test/unit/graph-svg-backend.test.ts",
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-state.test.ts",
+      "test/unit/mermaid-xml.test.ts",
       "test/unit/raster-warnings.test.ts"
     ],
     "src/graph/image.ts": [
@@ -102,30 +103,37 @@
     "src/mermaid/backend-png.ts": [],
     "src/mermaid/backend-svg.ts": [],
     "src/mermaid/class.ts": [
-      "test/unit/mermaid-class.test.ts"
+      "test/unit/mermaid-class.test.ts",
+      "test/unit/mermaid-xml.test.ts"
     ],
     "src/mermaid/common.ts": [
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
       "test/unit/mermaid-sequence.test.ts",
-      "test/unit/mermaid-state.test.ts"
+      "test/unit/mermaid-state.test.ts",
+      "test/unit/mermaid-xml.test.ts"
     ],
     "src/mermaid/index.ts": [],
     "src/mermaid/render.ts": [
-      "test/unit/mermaid-corpus.test.ts"
+      "test/unit/mermaid-corpus.test.ts",
+      "test/unit/mermaid-xml.test.ts"
     ],
     "src/mermaid/sequence-layout.ts": [
-      "test/unit/mermaid-sequence.test.ts"
+      "test/unit/mermaid-sequence.test.ts",
+      "test/unit/mermaid-xml.test.ts"
     ],
     "src/mermaid/sequence.ts": [
-      "test/unit/mermaid-sequence.test.ts"
+      "test/unit/mermaid-sequence.test.ts",
+      "test/unit/mermaid-xml.test.ts"
     ],
     "src/mermaid/state.ts": [
-      "test/unit/mermaid-state.test.ts"
+      "test/unit/mermaid-state.test.ts",
+      "test/unit/mermaid-xml.test.ts"
     ],
     "src/pairs.ts": [],
     "src/raster/index.ts": [
       "test/unit/graph-network.test.ts",
+      "test/unit/mermaid-xml.test.ts",
       "test/unit/raster.test.ts"
     ],
     "src/raster/warnings.ts": [
@@ -233,6 +241,16 @@
       "src/mermaid/common.ts",
       "src/mermaid/state.ts",
       "src/graph/dot.ts"
+    ],
+    "test/unit/mermaid-xml.test.ts": [
+      "src/graph/dot.ts",
+      "src/mermaid/class.ts",
+      "src/mermaid/common.ts",
+      "src/mermaid/render.ts",
+      "src/mermaid/sequence.ts",
+      "src/mermaid/sequence-layout.ts",
+      "src/mermaid/state.ts",
+      "src/raster/index.ts"
     ],
     "test/unit/no-bun-api.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],

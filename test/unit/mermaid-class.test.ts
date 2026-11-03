@@ -102,6 +102,13 @@ describe("classDiagram: relations", () => {
     expect(rel.fromCardinality).toBeUndefined();
   });
 
+  test("the label colon may stand next to the class name with no space, as well as with one", () => {
+    expect(() => parse("classDiagram\nDriver --> Car: drives")).not.toThrow();
+    expect(() => parse("classDiagram\nDriver --> Car:drives")).not.toThrow();
+    expect(parse("classDiagram\nDriver --> Car: drives").relations[0]!.label).toBe("drives");
+    expect(parse("classDiagram\nDriver --> Car:drives").relations[0]!.label).toBe("drives");
+  });
+
   test("a cardinality and a label may both be given", () => {
     const rel = parse('classDiagram\nPerson "1" o-- "*" Pet : owns').relations[0]!;
     expect(rel.arrow.tail).toBe("diamond");
