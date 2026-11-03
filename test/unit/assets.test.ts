@@ -33,6 +33,7 @@ describe("checkAssetsUrl", () => {
     const err = errorOf(() => checkAssetsUrl("https://example.test/assets/", "call option: assetsUrl"));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("call option: assetsUrl");
+    expect(err.message).toContain("must be a file: URL");
   });
 
   test("rejects text that is not a URL, and names the label", () => {
@@ -48,6 +49,23 @@ describe("checkAssetsUrl", () => {
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("must be a string");
     expect(err.message).toContain("assetsUrl");
+  });
+
+  test("rejects a query or a fragment in the folder URL, and says so", () => {
+    for (const value of ["file:///srv/assets?revision=1", "file:///srv/assets#part", "file:///srv/assets?"]) {
+      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      expect(err.code).toBe("E_CONFIG");
+      expect(err.message).toContain("no query and no fragment");
+      expect(err.message).toContain("assetsUrl");
+    }
+  });
+
+  test("rejects an encoded slash or an encoded backslash in the path, and says so", () => {
+    for (const value of ["file:///srv/assets%2Fprivate/", "file:///srv/assets%5Cprivate/", "file:///srv/ASSETS%2fprivate/"]) {
+      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      expect(err.code).toBe("E_CONFIG");
+      expect(err.message).toContain("encoded slash or backslash");
+    }
   });
 });
 
@@ -79,6 +97,14 @@ describe("assetFile", () => {
 
   test("rejects a folder URL that is not a file URL with E_CONFIG", () => {
     expect(errorOf(() => assetFile("https://example.test/assets/", BUNDLED_FONT_FILE)).code).toBe("E_CONFIG");
+  });
+
+  test("a folder URL that this system cannot open as a folder rejects with E_CONFIG", () => {
+    // A POSIX path is not absolute on Windows. A host name is not allowed on POSIX.
+    const value = process.platform === "win32" ? "file:///srv/assets/" : "file://server/assets/";
+    const err = errorOf(() => assetFile(value, RESVG_WASM_FILE));
+    expect(err.code).toBe("E_CONFIG");
+    expect(err.message).toContain("assetsUrl");
   });
 });
 

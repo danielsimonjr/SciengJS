@@ -31,12 +31,34 @@ export function checkAssetsUrl(value: unknown, label: string): string {
       label + " must be a file: URL, but got protocol " + url.protocol,
     );
   }
-  return url.href.endsWith("/") ? url.href : url.href + "/";
+  if (/[?#]/.test(value)) {
+    throw new RenderError(
+      "E_CONFIG",
+      label + " must be a folder URL with no query and no fragment: " + JSON.stringify(value),
+    );
+  }
+  if (/%2F|%5C/i.test(url.pathname)) {
+    throw new RenderError(
+      "E_CONFIG",
+      label + " must not hold an encoded slash or backslash in its path: " + JSON.stringify(value),
+    );
+  }
+  if (!url.pathname.endsWith("/")) url.pathname += "/";
+  return url.href;
 }
 
 /** Resolves a relative file under the assets folder URL to an OS path. */
 export function assetFile(assetsUrl: string, file: string): string {
-  return fileURLToPath(new URL(file, checkAssetsUrl(assetsUrl, "assetsUrl")));
+  const base = checkAssetsUrl(assetsUrl, "assetsUrl");
+  try {
+    return fileURLToPath(new URL(file, base));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new RenderError(
+      "E_CONFIG",
+      "assetsUrl cannot be opened as a folder on this system: " + JSON.stringify(assetsUrl) + ": " + message,
+    );
+  }
 }
 
 /** Resolves the OS path of the bundled font inside the assets folder. */

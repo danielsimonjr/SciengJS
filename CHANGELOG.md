@@ -10,7 +10,7 @@ The asset root for bundled use. A bundle of the engine names the folder of its f
 
 ### Added
 
-- The configuration key `assetsUrl`, with the environment variable `SCIENG_ASSETS_URL`. The key names the folder URL that holds the `fonts` folder and the resvg WASM file `index_bg.wasm`. The default is the `assets/` folder of the package. A value without a trailing slash gets a trailing slash. A value that is not a `file:` URL rejects with `E_CONFIG`. The configuration has nine keys.
+- The configuration key `assetsUrl`, with the environment variable `SCIENG_ASSETS_URL`. The key names the folder URL that holds the `fonts` folder and the resvg WASM file `index_bg.wasm`. The default is the `assets/` folder of the package. A value without a trailing slash gets a trailing slash. A value that is not a `file:` URL rejects with `E_CONFIG`. A value with a query, a fragment, or an encoded slash or backslash in its path rejects with `E_CONFIG`. A value that the operating system cannot open as a folder rejects the render with `E_CONFIG`. The configuration has nine keys.
 - The build copies `index_bg.wasm` into `assets/`. The packed tarball ships the file. The smoke test checks that the shipped file equals the locked file. The smoke test renders a PNG from the packed package.
 
 ### Changed
