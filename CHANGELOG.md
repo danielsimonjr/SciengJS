@@ -16,7 +16,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The smoke test imports the `./mermaid` subpath and renders the three diagram types from the packed tarball. It checks that a flowchart rejects with `E_UNSUPPORTED`.
 - The raster cap test uses one row of 1.5 billion pixels. The former square input drew a 1 GiB buffer without the cap, and the mutation audit timed out on that test.
 - The README and the architecture documents describe the Mermaid stage and remove the increment-I0 and increment-I1 status claims.
-- The mutation audit gives the full text of each mutant in its report. Each kill names its cause: an assertion, or an error that the code throws. The rejection helpers of the test suite fail as assertions. An assertion kills all 104 non-equivalent mutants.
+- The mutation audit gives the full text of each mutant in its report. Each kill names its cause: an assertion, or an error that the code throws. The rejection helpers of the test suite fail as assertions. An assertion kills all 127 non-equivalent mutants.
 - The Mermaid corpus test requires a maintainer approval for each expected SVG file. A maintainer records each approval in `test/corpus/mermaid/approval.json`. Nine expected SVG files await approval.
 
 ### Fixed

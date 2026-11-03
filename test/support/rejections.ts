@@ -31,6 +31,19 @@ export async function rejectionOf(promise: Promise<unknown>): Promise<RenderErro
   return caught as RenderError;
 }
 
+/** Runs a function that must return, and returns its value. A throw fails as an assertion. */
+export function returned<T>(fn: () => T): T {
+  let value: T | undefined;
+  let thrown: unknown;
+  try {
+    value = fn();
+  } catch (err) {
+    thrown = err;
+  }
+  expect(thrown).toBeUndefined();
+  return value as T;
+}
+
 /** Returns the value of a promise that must resolve. A rejection fails as an assertion. */
 export async function resolved<T>(promise: Promise<T>): Promise<T> {
   await expect(promise).resolves.toBeDefined();

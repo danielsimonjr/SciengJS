@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, test } from "bun:test";
+import { Resvg } from "@resvg/resvg-wasm";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { rejectionOf, resolved } from "../support/rejections.ts";
@@ -46,6 +47,23 @@ describe("svgToPng", () => {
     expect(decodePng(await resolved(svgToPng(square, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }))).width).toBe(512);
     const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
+  });
+});
+
+describe("svgToPng releases its resvg handle", () => {
+  test("each render frees its handle exactly once, also when the render succeeds", async () => {
+    const original = Resvg.prototype.free;
+    let frees = 0;
+    Resvg.prototype.free = function countFree(this: unknown) {
+      frees += 1;
+      return original.call(this);
+    };
+    try {
+      await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS });
+    } finally {
+      Resvg.prototype.free = original;
+    }
+    expect(frees).toBe(1);
   });
 });
 
