@@ -137,6 +137,19 @@ const png = await svgToPng(svg, { scale: 1, maxMemoryMb: 512 });
 
 A subpath call runs in the calling thread, without the worker and its limits. Use `render` for input that you do not trust.
 
+## Mermaid
+
+The `mermaid` input draws class, state and sequence diagrams without a browser. A line outside the grammar rejects the render with `E_INPUT`, and the message names the line. Set `lenient` to `true` to skip such a line and get a warning instead.
+
+```js
+import { render } from "@danielsimonjr/sciengjs";
+
+const source = "sequenceDiagram\nAlice->>Bob: Hello Bob\nBob-->>Alice: Hi Alice";
+const { bytes, warnings } = await render({ type: "mermaid", source, format: "svg" }, {});
+```
+
+Other Mermaid diagram types reject with `E_UNSUPPORTED`.
+
 ## Roadmap
 
 The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives the order of the increments. Each increment adds one input type, its tests and one release. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the API, the stages, the security controls and the licence of each engine.
@@ -144,7 +157,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Input type | Stage | Status |
 |---|---|---|
 | DOT | graph, raster | released in 0.1.0 |
-| Mermaid | mermaid, browser | planned |
+| Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: planned |
 | LaTeX math | math (MathJax) | planned |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
 | Plots | plot | planned |
