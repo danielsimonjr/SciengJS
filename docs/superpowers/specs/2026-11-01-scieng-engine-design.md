@@ -139,6 +139,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
   - `--proxy-bypass-list=<-loopback>` sends loopback connections through the same proxy.
   - `--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1` stops every DNS lookup.
   - `--force-webrtc-ip-handling-policy=disable_non_proxied_udp` keeps WebRTC on the proxy.
+  - `--disable-background-networking`, `--disable-component-update`, `--disable-sync`, `--no-pings` and `--disable-component-extensions-with-background-pages` stop the requests that the browser makes by itself.
 - The client never passes `--no-sandbox`. A host where the browser sandbox cannot start rejects the render with `E_STAGE_MISSING`.
 - The client intercepts every request through the `Fetch` domain. The client fulfils two kinds of request from the process. The first is the page that the client loads. The second is each exact pinned URL in the asset list of the engine. The list holds the Mermaid, Plotly, KaTeX, WaveDrom and Three.js builds that the engine pages name. The client fulfils a pinned URL with the local copy in the engine package. The client refuses every other network request and every other `file:` request.
 - A page keeps its pinned CDN URLs, so the page also works in a normal browser. With the forced flags and the `Fetch` interception, a render sends no request and opens no connection out of the process. See `docs/analysis/t4-browser.md`.
