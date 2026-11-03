@@ -1,10 +1,10 @@
 metadata:
-  name: agent-a2a6677e562e80502
+  name: sciengjs
   schemaVersion: 2.0.0
   language: typescript
   totalFiles: 130
   totalModules: 3
-  totalExports: 243
+  totalExports: 245
 modules:
   tools:
     scripts/prepare-build.mjs:
@@ -1166,6 +1166,8 @@ modules:
         - file: test/support/page-checker.ts
           imports:
             - checkPage
+            - WARM_UP_START_TIMEOUT_MS
+            - warmBrowser
           typeOnly: false
         - file: test/support/process-list.ts
           imports:
@@ -1286,12 +1288,14 @@ modules:
       exports:
         - PageCheckOptions
         - PageCheckResult
+        - WARM_UP_START_TIMEOUT_MS
         - PROFILE_PREFIX
         - waitForDevToolsPort
         - removeProfile
         - launchEvidence
         - checkPage
         - teardownLaunch
+        - warmBrowser
     test/support/png-decode.ts:
       externalDependencies: []
       nodeDependencies:
@@ -1893,6 +1897,7 @@ modules:
             - launchEvidence
             - removeProfile
             - waitForDevToolsPort
+            - warmBrowser
           typeOnly: false
       exports: []
     test/unit/process-list.test.ts:
@@ -2169,8 +2174,8 @@ statistics:
   totalTypeScriptFiles: 130
   totalSourceFiles: 130
   totalModules: 3
-  totalLinesOfCode: 14859
-  totalExports: 243
+  totalLinesOfCode: 14937
+  totalExports: 245
   entryRoots: 28
   reachableFiles: 28
   dormantFiles: 14
@@ -2188,10 +2193,10 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 5
   totalInterfaces: 42
-  totalFunctions: 108
+  totalFunctions: 109
   totalTypeGuards: 2
   totalEnums: 0
-  totalConstants: 31
+  totalConstants: 32
   totalReExports: 45
 reachability:
   roots:

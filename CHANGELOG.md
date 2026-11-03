@@ -26,6 +26,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The `mermaid` input warns once for each source line that holds a forbidden character.
 - A class relation label accepts a colon with no space before it, as in `Driver --> Car: drives`.
 - A sequence id accepts a hyphen between name parts, as in `User-1->>Web-2: hi`.
+- The page checker starts the browser once before its timed checks. A first browser start on a fresh CI runner can exceed the 20 s start budget and fail a timed check. The warm-up has its own start budget of 60 s. The timed checks keep their 20 s budget.
 
 ## [0.1.1] - 2026-11-03
 

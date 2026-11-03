@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
-import { launchEvidence, removeProfile, waitForDevToolsPort } from "../support/page-checker.ts";
+import { launchEvidence, removeProfile, waitForDevToolsPort, warmBrowser } from "../support/page-checker.ts";
 
 function errnoError(code: string): NodeJS.ErrnoException {
   const err = new Error(`${code}: test`) as NodeJS.ErrnoException;
@@ -108,5 +108,41 @@ describe("launchEvidence records why a launched process gave no port", () => {
     } finally {
       child.kill();
     }
+  });
+});
+
+// The clock is a list of readings, so the duration is exact and no test depends on wall-clock time.
+describe("warmBrowser starts the browser once and reports its duration", () => {
+  test("a launch that passes gives its duration to the log", async () => {
+    const lines: string[] = [];
+    const ticks = [1000, 1234];
+    const ms = await warmBrowser(
+      async () => undefined,
+      (line) => lines.push(line),
+      () => ticks.shift() ?? NaN,
+    );
+    expect(ms).toBe(234);
+    expect(lines).toEqual(["page checker warm-up: 234 ms"]);
+  });
+
+  test("a launch that fails rethrows its evidence and still logs the duration", async () => {
+    const lines: string[] = [];
+    const ticks = [1000, 61000];
+    const evidence =
+      "the browser did not publish its DevTools port in time (profile/DevToolsActivePort); launched process: still running; stderr tail: (empty)";
+    let thrown = "";
+    try {
+      await warmBrowser(
+        async () => {
+          throw new Error(evidence);
+        },
+        (line) => lines.push(line),
+        () => ticks.shift() ?? NaN,
+      );
+    } catch (err) {
+      thrown = (err as Error).message;
+    }
+    expect(thrown).toBe(evidence);
+    expect(lines).toEqual(["page checker warm-up failed after 60000 ms"]);
   });
 });
