@@ -1,26 +1,33 @@
 {
-  "totalFiles": 157,
+  "totalFiles": 161,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 42,
     "test-only": 3,
     "orphan": 11,
-    "test": 74,
-    "tool": 27,
+    "test": 77,
+    "tool": 28,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "tools": 27,
+    "tools": 28,
     "src": 56,
-    "tests": 74
+    "tests": 77
   },
   "byPackage": {
-    "(root)": 115,
+    "(root)": 119,
     "@danielsimonjr/sciengjs": 42
   },
   "files": [
+    {
+      "file": "scripts/mermaid-licenses.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 41
+    },
     {
       "file": "scripts/prepare-build.mjs",
       "package": "(root)",
@@ -342,6 +349,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 170
+    },
+    {
+      "file": "test/integration/mermaid-browser-capture.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 111
     },
     {
       "file": "test/integration/mermaid-browser.test.ts",
@@ -671,6 +685,20 @@
       "area": "tests",
       "disposition": "test",
       "loc": 134
+    },
+    {
+      "file": "test/unit/mermaid-route-lenient.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 56
+    },
+    {
+      "file": "test/unit/mermaid-routing-scan.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 49
     },
     {
       "file": "test/unit/mermaid-routing.test.ts",
