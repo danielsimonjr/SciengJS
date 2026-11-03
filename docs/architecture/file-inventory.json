@@ -327,7 +327,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 45
+      "loc": 47
     },
     {
       "file": "test/unit/graph-dot.test.ts",

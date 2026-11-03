@@ -87,7 +87,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/test-registry.ts` | (root) | tests | test | 26 |
 | `test/unit/config.test.ts` | (root) | tests | test | 260 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 34 |
-| `test/unit/graph-corpus.test.ts` | (root) | tests | test | 45 |
+| `test/unit/graph-corpus.test.ts` | (root) | tests | test | 47 |
 | `test/unit/graph-dot.test.ts` | (root) | tests | test | 79 |
 | `test/unit/graph-image.test.ts` | (root) | tests | test | 203 |
 | `test/unit/graph-large.test.ts` | (root) | tests | test | 27 |

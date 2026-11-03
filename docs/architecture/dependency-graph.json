@@ -974,6 +974,7 @@
       },
       "test/unit/graph-corpus.test.ts": {
         "externalDependencies": [
+          "@viz-js/viz",
           "bun:test"
         ],
         "nodeDependencies": [
@@ -2115,7 +2116,7 @@
     "totalTypeScriptFiles": 107,
     "totalSourceFiles": 107,
     "totalModules": 3,
-    "totalLinesOfCode": 10980,
+    "totalLinesOfCode": 10982,
     "totalExports": 151,
     "entryRoots": 25,
     "reachableFiles": 25,
