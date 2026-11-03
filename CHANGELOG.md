@@ -17,7 +17,7 @@ The asset root for bundled use. A bundle of the engine names the folder of its f
 
 - `scripts/prepare-build.mjs` writes the engine version to `src/version.ts` at build time. The loader reads no package file at run time, so a single-file bundle runs with no `node_modules` folder. A test checks the version against `package.json`.
 - The PNG render reads the bundled font and the WASM file from `assetsUrl`. The raster function `svgToPng` takes an optional `assetsUrl`. The default is the `assets/` folder of the package.
-- A WASM file that the runtime cannot compile rejects with `E_STAGE_MISSING`, and the message names `index_bg.wasm`.
+- A WASM file that the runtime cannot compile, link or start rejects with `E_STAGE_MISSING`, and the message names `index_bg.wasm`.
 - The build script runs `scripts/prepare-build.mjs` before `tsc`.
 - Design, configuration: the design has the `assetsUrl` row. The adapter sets the key to `bundle/assets/`.
 

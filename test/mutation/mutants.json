@@ -34,6 +34,7 @@
     { "id": "ras-3", "file": "src/raster/index.ts", "test": "test/unit/raster-init.test.ts", "original": "wasmPromise = undefined;", "replacement": "wasmPromise = started;", "equivalent": null },
     { "id": "ras-4", "file": "src/raster/index.ts", "test": "test/unit/raster.test.ts", "original": "resvg.free();", "replacement": "void 0;", "equivalent": "Freeing the handle releases WASM memory at once. No test can read that memory, so the mutant gives the same output." },
     { "id": "ras-5", "file": "src/raster/index.ts", "test": "test/unit/raster.test.ts", "original": "0x4f && b1 === 0x54", "replacement": "0x4f && b1 === 0x55", "equivalent": null },
+    { "id": "ras-6", "file": "src/raster/index.ts", "test": "test/unit/graph-png.test.ts", "original": "throw new RenderError(\"E_STAGE_MISSING\", RESVG_WASM_FILE + \" is not a usable WebAssembly module: \" + message);", "replacement": "throw err;", "equivalent": null },
     { "id": "warn-1", "file": "src/raster/warnings.ts", "test": "test/unit/raster-warnings.test.ts", "original": "Number(value) >= 600", "replacement": "Number(value) > 600", "equivalent": null },
     { "id": "warn-2", "file": "src/raster/warnings.ts", "test": "test/unit/raster-warnings.test.ts", "original": "if (cp > 0xffff) {", "replacement": "if (cp > 0xfff) {", "equivalent": null },
     { "id": "warn-3", "file": "src/raster/warnings.ts", "test": "test/unit/raster-warnings.test.ts", "original": "(cp + view.getUint16(deltas + s * 2)) & 0xffff", "replacement": "cp & 0xffff", "equivalent": null },

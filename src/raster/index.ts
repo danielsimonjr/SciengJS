@@ -36,10 +36,8 @@ function ensureWasm(readWasm: () => Uint8Array): Promise<void> {
       try {
         await initWasm(bytes);
       } catch (err) {
-        if (err instanceof Error && err.name === "CompileError") {
-          throw new RenderError("E_STAGE_MISSING", RESVG_WASM_FILE + " is not a usable WebAssembly module: " + err.message);
-        }
-        throw err;
+        const message = err instanceof Error ? err.message : String(err);
+        throw new RenderError("E_STAGE_MISSING", RESVG_WASM_FILE + " is not a usable WebAssembly module: " + message);
       }
     })();
     wasmPromise = started;

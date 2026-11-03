@@ -10,7 +10,7 @@ import { countDarkPixels, decodePng } from "../support/png-decode.ts";
 import { renderWithRegistry } from "../../src/core.ts";
 import { DEFAULT_REGISTRY } from "../../src/registry.ts";
 import { ISOLATED_CONFIG_DEPS } from "../support/test-registry.ts";
-import { makeAssetsFolder, noGlyphFont, realFiles, wasmWithCustomSection } from "../support/assets-fixture.ts";
+import { makeAssetsFolder, noGlyphFont, realFiles, wasmImportingMissingFunction, wasmWhoseStartTraps, wasmWithCustomSection } from "../support/assets-fixture.ts";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const SOURCE = 'digraph G { a -> b [label="Hello"] }';
@@ -194,6 +194,20 @@ describe("dot to png through the worker reads its files from assetsUrl", () => {
     const url = makeAssetsFolder(scratch, "cut-wasm", { font: realFiles().font, wasm: realFiles().wasm.subarray(0, 100) });
     const err = await rejectionOf(pngAt(url));
     expect(err.code).toBe("E_STAGE_MISSING");
+  });
+
+  test("a WASM file that imports a function the glue does not provide rejects with E_STAGE_MISSING", async () => {
+    const url = makeAssetsFolder(scratch, "link-wasm", { font: realFiles().font, wasm: wasmImportingMissingFunction() });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("index_bg.wasm");
+  });
+
+  test("a WASM file whose start function traps rejects with E_STAGE_MISSING", async () => {
+    const url = makeAssetsFolder(scratch, "trap-wasm", { font: realFiles().font, wasm: wasmWhoseStartTraps() });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("index_bg.wasm");
   });
 
   test("a WASM file with one extra custom section starts and renders", async () => {

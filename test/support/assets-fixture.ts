@@ -54,3 +54,34 @@ export function makeAssetsFolder(root: string, name: string, files: { font?: Uin
   if (files.wasm !== undefined) writeFileSync(join(folder, "index_bg.wasm"), files.wasm);
   return pathToFileURL(folder).href + "/";
 }
+
+/** Bytes of a WebAssembly module that imports one function from the module wbg. The glue does not provide it, so the link fails. */
+export function wasmImportingMissingFunction(): Uint8Array {
+  return wasmModule([
+    sectionBytes(1, [1, 0x60, 0, 0]),
+    sectionBytes(2, [1, ...nameBytes("wbg"), ...nameBytes("nonexistent"), 0x00, 0x00]),
+  ]);
+}
+
+/** Bytes of a WebAssembly module whose start function runs unreachable, so the instantiation traps. */
+export function wasmWhoseStartTraps(): Uint8Array {
+  return wasmModule([
+    sectionBytes(1, [1, 0x60, 0, 0]),
+    sectionBytes(3, [1, 0]),
+    sectionBytes(8, [0]),
+    sectionBytes(10, [1, 3, 0, 0, 0x0b]),
+  ]);
+}
+
+function wasmModule(sections: number[][]): Uint8Array {
+  return new Uint8Array([0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00, ...sections.flat()]);
+}
+
+function sectionBytes(id: number, body: number[]): number[] {
+  return [id, body.length, ...body];
+}
+
+function nameBytes(text: string): number[] {
+  const bytes = [...new TextEncoder().encode(text)];
+  return [bytes.length, ...bytes];
+}
