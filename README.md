@@ -112,7 +112,7 @@ Each render takes an optional configuration as its second argument. An environme
 | `maxSourceBytes` | `SCIENG_MAX_SOURCE_BYTES` | 10485760 (10 MiB) |
 | `maxMemoryMb` | `SCIENG_MAX_MEMORY_MB` | 2048 |
 | `rasterFont` | `SCIENG_RASTER_FONT` | the bundled Liberation Serif |
-| `assetsUrl` | `SCIENG_ASSETS_URL` | the `assets/` folder of the package, which holds the font and `index_bg.wasm` |
+| `assetsUrl` | `SCIENG_ASSETS_URL` | the `assets/` folder of the package, which holds the font and `index_bg.wasm`. A `file:` URL with a host other than `localhost` rejects with `E_CONFIG`. |
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` (the DOT path makes no request) |
 
 `SCIENG_CONFIG` names a JSON configuration file. `loadConfig` returns the resolved configuration.

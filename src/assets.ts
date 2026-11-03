@@ -31,6 +31,13 @@ export function checkAssetsUrl(value: unknown, label: string): string {
       label + " must be a file: URL, but got protocol " + url.protocol,
     );
   }
+  // The URL parser maps the host localhost to an empty host. Any other host names a network share on Windows.
+  if (url.hostname !== "") {
+    throw new RenderError(
+      "E_CONFIG",
+      label + " must be a file: URL with no host or with the host localhost: " + JSON.stringify(value),
+    );
+  }
   if (/[?#]/.test(value)) {
     throw new RenderError(
       "E_CONFIG",

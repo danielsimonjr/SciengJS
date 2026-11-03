@@ -63,6 +63,8 @@
     { "id": "ast-16", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "file + \" cannot be read: \" + path + \": \" + message,", "replacement": "file + \" cannot be read: \" + path,", "equivalent": null },
     { "id": "ast-17", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "if (/%2F|%5C/i.test(url.pathname)) {", "replacement": "if (false) {", "equivalent": null },
     { "id": "ast-18", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "if (/[?#]/.test(value)) {", "replacement": "if (false) {", "equivalent": null },
-    { "id": "ast-19", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "const message = error instanceof Error ? error.message : String(error);", "replacement": "throw error;", "equivalent": null }
+    { "id": "ast-19", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "const message = error instanceof Error ? error.message : String(error);", "replacement": "throw error;", "equivalent": null },
+    { "id": "ast-20", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "if (url.hostname !== \"\") {", "replacement": "if (false) {", "equivalent": null },
+    { "id": "ast-21", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "if (url.hostname !== \"\") {", "replacement": "if (url.hostname === \"\") {", "equivalent": null }
   ]
 }

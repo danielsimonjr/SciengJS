@@ -67,6 +67,19 @@ describe("checkAssetsUrl", () => {
       expect(err.message).toContain("encoded slash or backslash");
     }
   });
+
+  test("rejects a file URL with a host other than localhost, and says so", () => {
+    for (const value of ["file://server/share/assets/", "file://server/assets", "file://127.0.0.1/assets/"]) {
+      const err = errorOf(() => checkAssetsUrl(value, "assetsUrl"));
+      expect(err.code).toBe("E_CONFIG");
+      expect(err.message).toContain("no host or with the host localhost");
+      expect(err.message).toContain("assetsUrl");
+    }
+  });
+
+  test("accepts a file URL with the host localhost, which the URL parser reads as no host", () => {
+    expect(checkAssetsUrl("file://localhost/srv/assets/", "assetsUrl")).toBe("file:///srv/assets/");
+  });
 });
 
 describe("readAsset", () => {
@@ -105,6 +118,12 @@ describe("assetFile", () => {
     const err = errorOf(() => assetFile(value, RESVG_WASM_FILE));
     expect(err.code).toBe("E_CONFIG");
     expect(err.message).toContain("assetsUrl");
+  });
+
+  test("rejects a folder URL with a host on every platform, before a path is built", () => {
+    const err = errorOf(() => assetFile("file://server/share/assets/", RESVG_WASM_FILE));
+    expect(err.code).toBe("E_CONFIG");
+    expect(err.message).toContain("no host or with the host localhost");
   });
 });
 
