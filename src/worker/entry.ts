@@ -1,5 +1,5 @@
 import { parentPort, workerData } from "node:worker_threads";
-import { RenderError, RENDER_ERROR_CODES, type RenderErrorCode } from "../errors.ts";
+import { RenderError, RENDER_ERROR_CODES, isRenderError, type RenderErrorCode } from "../errors.ts";
 import type { BackendOutput, WorkerJob, WorkerMessage } from "./protocol.ts";
 
 /**
@@ -15,7 +15,7 @@ async function run(job: WorkerJob): Promise<WorkerMessage> {
     const out = await mod.render(job.request);
     return { ok: true, bytes: out.bytes, warnings: out.warnings ?? [] };
   } catch (err) {
-    if (err instanceof RenderError) {
+    if (isRenderError(err)) {
       return { ok: false, code: err.code, message: err.message, line: err.line, column: err.column };
     }
     const message = err instanceof Error ? err.message : String(err);
