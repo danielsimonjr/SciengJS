@@ -4,10 +4,12 @@ import type { Worker } from "node:worker_threads";
 import { runInWorker } from "../../src/worker/run.ts";
 import { RenderError } from "../../src/errors.ts";
 import { TEST_REGISTRY } from "../support/test-registry.ts";
+import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
 
 const moduleUrl = TEST_REGISTRY["dot:svg"]!.moduleUrl;
-const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined };
+const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL };
 const OK_JOB = { moduleUrl, backend: "test/fixed", request: { type: "dot" as const, format: "svg" as const, source: "ok", options: {}, settings: SETTINGS } };
+const FOREIGN_MODULE_URL = new URL("../support/stubs/stub-foreign-error.ts", import.meta.url).href;
 
 /** A worker double. It answers with one ok message and lets the test choose how terminate behaves. */
 function fakeWorkerWith(terminate: () => Promise<number>): () => Worker {
@@ -80,5 +82,16 @@ describe("runInWorker", () => {
     );
     expect(result).toBe("E_INTERNAL");
     expect(Date.now() - started).toBeLessThan(2000);
+  });
+
+  test("keeps the code of a RenderError that another copy of the error module made", async () => {
+    const result = await runInWorker(
+      { moduleUrl: FOREIGN_MODULE_URL, backend: "test/foreign", request: { type: "dot", format: "svg", source: "x", options: {}, settings: SETTINGS } },
+      { timeoutMs: 5000, maxMemoryMb: 512 },
+    ).then(
+      () => "resolved",
+      (err: RenderError) => `${err.code}: ${err.message}`,
+    );
+    expect(result).toBe("E_STAGE_MISSING: the foreign stage is missing");
   });
 });

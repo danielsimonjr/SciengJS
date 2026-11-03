@@ -8,11 +8,11 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 31 |
-| Total Test Files | 28 |
-| Source Files with Tests | 17 |
+| Total Source Files | 33 |
+| Total Test Files | 31 |
+| Source Files with Tests | 19 |
 | Source Files without Tests | 14 |
-| Coverage (raw, direct-import) | **54.8%** |
+| Coverage (raw, direct-import) | **57.6%** |
 ---
 
 ## Source Files Without Test Coverage
@@ -63,9 +63,10 @@ The following 14 source files are not directly imported by any test file:
 
 | Source File | Test Files |
 |-------------|------------|
-| `src/config.ts` | `config.test.ts`, `graph-large.test.ts`, `graph-network.test.ts` |
-| `src/core.ts` | `graph-registry.test.ts`, `render.test.ts` |
-| `src/errors.ts` | `config.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-large.test.ts`, `graph-network.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `raster.test.ts`, `render.test.ts`, `worker-run.test.ts` |
+| `src/assets.ts` | `assets.test.ts` |
+| `src/config.ts` | `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `graph-large.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `render.test.ts`, `worker-run.test.ts` |
+| `src/core.ts` | `graph-png.test.ts`, `graph-registry.test.ts`, `render.test.ts` |
+| `src/errors.ts` | `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-large.test.ts`, `graph-network.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `raster.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `graph/backend-png.ts` | `graph-png.test.ts` |
 | `graph/backend-svg.ts` | `graph-svg-backend.test.ts` |
 | `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `raster-warnings.test.ts` |
@@ -73,8 +74,9 @@ The following 14 source files are not directly imported by any test file:
 | `src/index.ts` | `graph-large.test.ts`, `graph-network.test.ts` |
 | `raster/index.ts` | `graph-network.test.ts`, `raster.test.ts` |
 | `raster/warnings.ts` | `raster-warnings.test.ts` |
-| `src/registry.ts` | `graph-registry.test.ts` |
+| `src/registry.ts` | `graph-png.test.ts`, `graph-registry.test.ts` |
 | `src/types.ts` | `graph-large.test.ts`, `graph-network.test.ts`, `render.test.ts` |
+| `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
 | `worker/protocol.ts` | `graph-png.test.ts`, `graph-svg-backend.test.ts` |
 | `worker/run.ts` | `worker-run.test.ts` |
 | `runtime/tfm.mjs` | `type1.test.mjs` |
@@ -89,6 +91,8 @@ The following 14 source files are not directly imported by any test file:
 |-----------|---------------------|
 | `integration/page-checker.test.ts` | 0 files |
 | `mutation/run-mutants.test.ts` | 0 files |
+| `unit/assets.test.ts` | 3 files |
+| `unit/config-assets.test.ts` | 3 files |
 | `unit/config.test.ts` | 2 files |
 | `unit/errors.test.ts` | 1 files |
 | `unit/graph-corpus.test.ts` | 1 files |
@@ -96,19 +100,20 @@ The following 14 source files are not directly imported by any test file:
 | `unit/graph-image.test.ts` | 1 files |
 | `unit/graph-large.test.ts` | 4 files |
 | `unit/graph-network.test.ts` | 6 files |
-| `unit/graph-png.test.ts` | 3 files |
+| `unit/graph-png.test.ts` | 5 files |
 | `unit/graph-registry.test.ts` | 2 files |
-| `unit/graph-svg-backend.test.ts` | 4 files |
+| `unit/graph-svg-backend.test.ts` | 5 files |
 | `unit/no-bun-api.test.ts` | 0 files |
 | `unit/page-checker-io.test.ts` | 0 files |
 | `unit/process-list.test.ts` | 0 files |
 | `unit/raster-init.test.ts` | 0 files |
 | `unit/raster-warnings.test.ts` | 2 files |
 | `unit/raster.test.ts` | 2 files |
-| `unit/render.test.ts` | 3 files |
+| `unit/render.test.ts` | 4 files |
 | `unit/svg-compare.test.ts` | 0 files |
 | `unit/teardown.test.ts` | 0 files |
-| `unit/worker-run.test.ts` | 2 files |
+| `unit/version.test.ts` | 1 files |
+| `unit/worker-run.test.ts` | 3 files |
 | `test/tangle.test.mjs` | 0 files |
 | `test/trip-gate.test.mjs` | 0 files |
 | `test/type1.test.mjs` | 2 files |

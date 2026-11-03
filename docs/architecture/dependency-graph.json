@@ -3,1539 +3,23 @@
     "name": "sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 99,
+    "totalFiles": 107,
     "totalModules": 3,
-    "totalExports": 151
+    "totalExports": 171
   },
   "modules": {
-    "src": {
-      "src/config.ts": {
+    "tools": {
+      "scripts/prepare-build.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
           "node:fs/promises",
-          "node:os",
-          "node:path"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "NetworkPolicy",
-          "SciengConfig",
-          "ConfigDeps",
-          "loadConfig"
-        ]
-      },
-      "src/core.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/config.ts",
-            "imports": [
-              "loadConfig",
-              "ConfigDeps",
-              "SciengConfig"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/pairs.ts",
-            "imports": [
-              "PAIRS",
-              "findPair"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/registry.ts",
-            "imports": [
-              "registryKey",
-              "Registry"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/run.ts",
-            "imports": [
-              "runInWorker"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/types.ts",
-            "imports": [
-              "BINARY_INPUT_TYPES",
-              "INPUT_TYPES",
-              "OUTPUT_FORMATS",
-              "Capability",
-              "OutputFormat",
-              "RenderOptions",
-              "RenderRequest",
-              "RenderResult"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "renderWithRegistry",
-          "capabilitiesWithRegistry"
-        ]
-      },
-      "src/errors.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "RENDER_ERROR_CODES",
-          "RenderErrorCode",
-          "RenderErrorPosition",
-          "RenderError"
-        ]
-      },
-      "src/graph/backend-png.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:fs",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/protocol.ts",
-            "imports": [
-              "BackendOutput",
-              "WorkerJob"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotSourceText",
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/raster/index.ts",
-            "imports": [
-              "isFontFile",
-              "svgToPng"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/raster/warnings.ts",
-            "imports": [
-              "rasterWarnings"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "render",
-          "renderPng"
-        ]
-      },
-      "src/graph/backend-svg.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/protocol.ts",
-            "imports": [
-              "BackendOutput",
-              "WorkerJob"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotSourceText",
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "render"
-        ]
-      },
-      "src/graph/dot.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/image.ts",
-            "imports": [
-              "stripImageAttributes",
-              "dropImageElements",
-              "dropStylesheetInstructions"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "DotSvgResult",
-          "dotToSvg",
-          "dotSourceText"
-        ]
-      },
-      "src/graph/image.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "ImageRemoval",
-          "StripResult",
-          "stripImageAttributes",
-          "dropImageElements",
-          "dropStylesheetInstructions"
-        ]
-      },
-      "src/graph/index.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "DotSvgResult"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "dotToSvg",
-          "DotSvgResult"
-        ]
-      },
-      "src/index.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/core.ts",
-            "imports": [
-              "capabilitiesWithRegistry",
-              "renderWithRegistry"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/registry.ts",
-            "imports": [
-              "DEFAULT_REGISTRY"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/config.ts",
-            "imports": [
-              "SciengConfig"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "src/types.ts",
-            "imports": [
-              "Capability",
-              "RenderRequest",
-              "RenderResult"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError",
-              "RENDER_ERROR_CODES",
-              "RenderErrorCode"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/config.ts",
-            "imports": [
-              "loadConfig",
-              "SciengConfig",
-              "NetworkPolicy"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/types.ts",
-            "imports": [
-              "INPUT_TYPES",
-              "OUTPUT_FORMATS",
-              "InputType",
-              "OutputFormat",
-              "RenderOptions",
-              "RenderRequest",
-              "RenderResult",
-              "RenderAsset",
-              "Capability"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "RenderError",
-          "RENDER_ERROR_CODES",
-          "RenderErrorCode",
-          "loadConfig",
-          "SciengConfig",
-          "NetworkPolicy",
-          "INPUT_TYPES",
-          "OUTPUT_FORMATS",
-          "InputType",
-          "OutputFormat",
-          "RenderOptions",
-          "RenderRequest",
-          "RenderResult",
-          "RenderAsset",
-          "Capability",
-          "render",
-          "capabilities"
-        ]
-      },
-      "src/pairs.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/types.ts",
-            "imports": [
-              "InputType",
-              "OutputFormat"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "PairSpec",
-          "PAIRS",
-          "findPair"
-        ]
-      },
-      "src/raster/index.ts": {
-        "externalDependencies": [
-          "@resvg/resvg-wasm"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:module"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "MAX_PNG_PIXEL_MB",
-          "SvgToPngOptions",
-          "svgToPng",
-          "isFontFile"
-        ]
-      },
-      "src/raster/warnings.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "CoverageTest",
-          "fontCovers",
-          "rasterWarnings"
-        ]
-      },
-      "src/registry.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": [
-          "BackendEntry",
-          "Registry",
-          "DEFAULT_REGISTRY",
-          "registryKey"
-        ]
-      },
-      "src/types.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "INPUT_TYPES",
-          "InputType",
-          "OUTPUT_FORMATS",
-          "OutputFormat",
-          "BINARY_INPUT_TYPES",
-          "RenderOptions",
-          "RenderRequest",
-          "RenderAsset",
-          "RenderResult",
-          "Capability"
-        ]
-      },
-      "src/worker/entry.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:worker_threads"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError",
-              "RENDER_ERROR_CODES",
-              "RenderErrorCode"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/protocol.ts",
-            "imports": [
-              "BackendOutput",
-              "WorkerJob",
-              "WorkerMessage"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": []
-      },
-      "src/worker/protocol.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/types.ts",
-            "imports": [
-              "InputType",
-              "OutputFormat",
-              "RenderOptions"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "BackendSettings",
-          "WorkerJob",
-          "BackendOutput",
-          "WorkerMessage"
-        ]
-      },
-      "src/worker/run.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:path",
-          "node:url",
-          "node:worker_threads"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/protocol.ts",
-            "imports": [
-              "BackendOutput",
-              "WorkerJob",
-              "WorkerMessage"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "WorkerExit",
-          "WorkerLimits",
-          "runInWorker"
-        ]
-      },
-      "trials/t1-graph/compare-layout.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:fs"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "trials/t1-graph/make-sources.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:fs",
+          "node:module",
           "node:path",
           "node:url"
         ],
         "internalDependencies": [],
         "exports": []
       },
-      "trials/t1-graph/measure.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:crypto",
-          "node:fs",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "trials/t2-mesh/measure.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:crypto",
-          "node:fs",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "trials/t3-tex/shim/index.cjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "trials/t4-browser/assets/pinned.js": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "trials/t4-browser/measure.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:fs",
-          "node:net",
-          "node:os",
-          "node:path",
-          "node:url",
-          "node:zlib"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "trials/t5-tex-build/runtime/dvi2svg.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "trials/t5-tex-build/runtime/tfm.mjs",
-            "imports": [
-              "readTfm"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "trials/t5-tex-build/runtime/type1.mjs",
-            "imports": [
-              "readType1"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "dviToSvg"
-        ]
-      },
-      "trials/t5-tex-build/runtime/host.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "ExitSignal",
-          "Host"
-        ]
-      },
-      "trials/t5-tex-build/runtime/run.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "trials/t5-tex-build/runtime/host.mjs",
-            "imports": [
-              "Host",
-              "ExitSignal"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "runProgram"
-        ]
-      },
-      "trials/t5-tex-build/runtime/tfm.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "readTfm"
-        ]
-      },
-      "trials/t5-tex-build/runtime/type1.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "readType1"
-        ]
-      },
-      "trials/t5-tex-build/runtime/vfs.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:fs",
-          "node:path"
-        ],
-        "internalDependencies": [],
-        "exports": [
-          "TreeFS",
-          "flatName"
-        ]
-      },
-      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "unitPerPt",
-          "createSpecials"
-        ]
-      }
-    },
-    "tests": {
-      "test/corpus/regenerate-dot.ts": {
-        "externalDependencies": [
-          "@viz-js/viz"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "test/integration/page-checker.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "test/support/page-checker.ts",
-            "imports": [
-              "checkPage"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "test/support/process-list.ts",
-            "imports": [
-              "processesHolding"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/mutation/run-mutants.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:crypto",
-          "node:fs",
-          "node:path"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "test/mutation/run-mutants.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:fs",
-          "node:os",
-          "node:path"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "test/node/backends/heap.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "render"
-        ]
-      },
-      "test/node/backends/loop.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "render"
-        ]
-      },
-      "test/node/backends/ok.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "render"
-        ]
-      },
-      "test/node/worker.node.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:assert/strict",
-          "node:path",
-          "node:test",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "test/smoke/smoke.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:fs",
-          "node:os",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "test/support/bun-scan.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:fs",
-          "node:os",
-          "node:path"
-        ],
-        "internalDependencies": [],
-        "exports": [
-          "BUN_GLOBAL",
-          "BunHit",
-          "scanForBunGlobal",
-          "makePlantedTree",
-          "removeTree",
-          "assertNoBunGlobal"
-        ]
-      },
-      "test/support/page-checker.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:fs",
-          "node:os",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": [
-          "PageCheckOptions",
-          "PageCheckResult",
-          "PROFILE_PREFIX",
-          "waitForDevToolsPort",
-          "removeProfile",
-          "launchEvidence",
-          "checkPage",
-          "teardownLaunch"
-        ]
-      },
-      "test/support/png-decode.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:zlib"
-        ],
-        "internalDependencies": [],
-        "exports": [
-          "DecodedPng",
-          "decodePng",
-          "countDarkPixels",
-          "countOpaquePixels"
-        ]
-      },
-      "test/support/process-list.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:child_process"
-        ],
-        "internalDependencies": [],
-        "exports": [
-          "listCommandLines",
-          "holdsFolder",
-          "processesHolding"
-        ]
-      },
-      "test/support/stubs/stub-dot.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "FIXED_SVG",
-          "render"
-        ]
-      },
-      "test/support/svg-compare.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "normalizeSvg",
-          "SvgComparison",
-          "compareSvg"
-        ]
-      },
-      "test/support/test-registry.ts": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/config.ts",
-            "imports": [
-              "ConfigDeps"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "src/registry.ts",
-            "imports": [
-              "Registry"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "test/support/stubs/stub-dot.ts",
-            "imports": [
-              "FIXED_SVG"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": [
-          "FIXED_SVG",
-          "TEST_REGISTRY",
-          "ISOLATED_CONFIG_DEPS"
-        ]
-      },
-      "test/unit/config.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/config.ts",
-            "imports": [
-              "loadConfig",
-              "ConfigDeps"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/errors.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError",
-              "RENDER_ERROR_CODES"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-corpus.test.ts": {
-        "externalDependencies": [
-          "@viz-js/viz",
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "test/support/svg-compare.ts",
-            "imports": [
-              "compareSvg"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-dot.test.ts": {
-        "externalDependencies": [
-          "@viz-js/viz",
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-image.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/graph/image.ts",
-            "imports": [
-              "dropImageElements",
-              "dropStylesheetInstructions",
-              "stripImageAttributes"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-large.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/index.ts",
-            "imports": [
-              "render"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-network.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:dns",
-          "node:http",
-          "node:https",
-          "node:net"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/raster/index.ts",
-            "imports": [
-              "svgToPng"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/index.ts",
-            "imports": [
-              "render"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-png.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:os",
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/backend-png.ts",
-            "imports": [
-              "render",
-              "renderPng"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/protocol.ts",
-            "imports": [
-              "WorkerJob"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "test/support/png-decode.ts",
-            "imports": [
-              "countDarkPixels",
-              "decodePng"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-registry.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/core.ts",
-            "imports": [
-              "capabilitiesWithRegistry"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/registry.ts",
-            "imports": [
-              "DEFAULT_REGISTRY"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "test/support/test-registry.ts",
-            "imports": [
-              "ISOLATED_CONFIG_DEPS"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/graph-svg-backend.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/backend-svg.ts",
-            "imports": [
-              "render"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotSourceText",
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/worker/protocol.ts",
-            "imports": [
-              "WorkerJob"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/no-bun-api.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:path",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "test/support/bun-scan.ts",
-            "imports": [
-              "assertNoBunGlobal",
-              "makePlantedTree",
-              "removeTree",
-              "scanForBunGlobal"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/page-checker-io.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:fs",
-          "node:os",
-          "node:path"
-        ],
-        "internalDependencies": [
-          {
-            "file": "test/support/page-checker.ts",
-            "imports": [
-              "launchEvidence",
-              "removeProfile",
-              "waitForDevToolsPort"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/process-list.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:os",
-          "node:path"
-        ],
-        "internalDependencies": [
-          {
-            "file": "test/support/page-checker.ts",
-            "imports": [
-              "PROFILE_PREFIX"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "test/support/process-list.ts",
-            "imports": [
-              "holdsFolder",
-              "listCommandLines",
-              "processesHolding"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/raster-init.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:child_process",
-          "node:url"
-        ],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "test/unit/raster-warnings.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/raster/warnings.ts",
-            "imports": [
-              "fontCovers",
-              "rasterWarnings"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/graph/dot.ts",
-            "imports": [
-              "dotToSvg"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/raster.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:url"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/raster/index.ts",
-            "imports": [
-              "isFontFile",
-              "MAX_PNG_PIXEL_MB",
-              "svgToPng"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "test/support/png-decode.ts",
-            "imports": [
-              "countOpaquePixels",
-              "decodePng"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/render.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "src/core.ts",
-            "imports": [
-              "renderWithRegistry",
-              "capabilitiesWithRegistry"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/types.ts",
-            "imports": [
-              "RenderRequest"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "test/support/test-registry.ts",
-            "imports": [
-              "ISOLATED_CONFIG_DEPS",
-              "TEST_REGISTRY",
-              "FIXED_SVG"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/svg-compare.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "test/support/svg-compare.ts",
-            "imports": [
-              "compareSvg",
-              "normalizeSvg"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/teardown.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "test/support/page-checker.ts",
-            "imports": [
-              "teardownLaunch"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "test/unit/worker-run.test.ts": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:events",
-          "node:worker_threads"
-        ],
-        "internalDependencies": [
-          {
-            "file": "src/worker/run.ts",
-            "imports": [
-              "runInWorker"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "src/errors.ts",
-            "imports": [
-              "RenderError"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "test/support/test-registry.ts",
-            "imports": [
-              "TEST_REGISTRY"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "trials/t5-tex-build/test/tangle.test.mjs": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "trials/t5-tex-build/tools/tangle.mjs",
-            "imports": [
-              "tangle"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "trials/t5-tex-build/test/trip-gate.test.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:assert/strict",
-          "node:fs",
-          "node:os",
-          "node:path",
-          "node:test"
-        ],
-        "internalDependencies": [
-          {
-            "file": "trials/t5-tex-build/tools/trip-gate.mjs",
-            "imports": [
-              "tripGate",
-              "buildBanner"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "trials/t5-tex-build/test/type1.test.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:assert/strict",
-          "node:fs",
-          "node:path",
-          "node:test"
-        ],
-        "internalDependencies": [
-          {
-            "file": "trials/t5-tex-build/runtime/type1.mjs",
-            "imports": [
-              "readType1"
-            ],
-            "typeOnly": false
-          },
-          {
-            "file": "trials/t5-tex-build/runtime/tfm.mjs",
-            "imports": [
-              "readTfm"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "trials/t6-etex-build/test/dvisvgm-specials.test.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:assert/strict",
-          "node:test"
-        ],
-        "internalDependencies": [
-          {
-            "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
-            "imports": [
-              "createSpecials"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "trials/t6-etex-build/test/etrip-gate.test.mjs": {
-        "externalDependencies": [],
-        "nodeDependencies": [
-          "node:assert/strict",
-          "node:test"
-        ],
-        "internalDependencies": [
-          {
-            "file": "trials/t6-etex-build/tools/etrip-gate.mjs",
-            "imports": [
-              "judgeFile",
-              "parseReferenceDiffs",
-              "etripConstants",
-              "etripMessageOf",
-              "dropEchoText"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      },
-      "trials/t6-etex-build/test/primitives.test.mjs": {
-        "externalDependencies": [
-          "bun:test"
-        ],
-        "nodeDependencies": [
-          "node:fs",
-          "node:path"
-        ],
-        "internalDependencies": [
-          {
-            "file": "trials/t6-etex-build/tools/primitives.mjs",
-            "imports": [
-              "addedPrimitives"
-            ],
-            "typeOnly": false
-          }
-        ],
-        "exports": []
-      }
-    },
-    "tools": {
       "trials/t3-tex/tools/build-format.cjs": {
         "externalDependencies": [],
         "nodeDependencies": [],
@@ -2062,16 +546,1832 @@
           "addedPrimitives"
         ]
       }
+    },
+    "src": {
+      "src/assets.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "BUNDLED_FONT_FILE",
+          "RESVG_WASM_FILE",
+          "checkAssetsUrl",
+          "assetFile",
+          "bundledFontPathIn",
+          "readAsset"
+        ]
+      },
+      "src/config.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs/promises",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/version.ts",
+            "imports": [
+              "ENGINE_VERSION"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/assets.ts",
+            "imports": [
+              "checkAssetsUrl"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "NetworkPolicy",
+          "SciengConfig",
+          "ConfigDeps",
+          "DEFAULT_ASSETS_URL",
+          "loadConfig"
+        ]
+      },
+      "src/core.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "loadConfig",
+              "ConfigDeps",
+              "SciengConfig"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/pairs.ts",
+            "imports": [
+              "PAIRS",
+              "findPair"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "registryKey",
+              "Registry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/run.ts",
+            "imports": [
+              "runInWorker"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "BINARY_INPUT_TYPES",
+              "INPUT_TYPES",
+              "OUTPUT_FORMATS",
+              "Capability",
+              "OutputFormat",
+              "RenderOptions",
+              "RenderRequest",
+              "RenderResult"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "renderWithRegistry",
+          "capabilitiesWithRegistry"
+        ]
+      },
+      "src/errors.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "RENDER_ERROR_CODES",
+          "RenderErrorCode",
+          "RenderErrorPosition",
+          "RenderError",
+          "isRenderError"
+        ]
+      },
+      "src/graph/backend-png.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/assets.ts",
+            "imports": [
+              "bundledFontPathIn"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotSourceText",
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/raster/index.ts",
+            "imports": [
+              "isFontFile",
+              "svgToPng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/raster/warnings.ts",
+            "imports": [
+              "rasterWarnings"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render",
+          "renderPng"
+        ]
+      },
+      "src/graph/backend-svg.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotSourceText",
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
+      "src/graph/dot.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/image.ts",
+            "imports": [
+              "stripImageAttributes",
+              "dropImageElements",
+              "dropStylesheetInstructions"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "DotSvgResult",
+          "dotToSvg",
+          "dotSourceText"
+        ]
+      },
+      "src/graph/image.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "ImageRemoval",
+          "StripResult",
+          "stripImageAttributes",
+          "dropImageElements",
+          "dropStylesheetInstructions"
+        ]
+      },
+      "src/graph/index.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "DotSvgResult"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "dotToSvg",
+          "DotSvgResult"
+        ]
+      },
+      "src/index.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "capabilitiesWithRegistry",
+              "renderWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "SciengConfig"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "Capability",
+              "RenderRequest",
+              "RenderResult"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError",
+              "RENDER_ERROR_CODES",
+              "RenderErrorCode"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "loadConfig",
+              "SciengConfig",
+              "NetworkPolicy"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "INPUT_TYPES",
+              "OUTPUT_FORMATS",
+              "InputType",
+              "OutputFormat",
+              "RenderOptions",
+              "RenderRequest",
+              "RenderResult",
+              "RenderAsset",
+              "Capability"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "RenderError",
+          "RENDER_ERROR_CODES",
+          "RenderErrorCode",
+          "loadConfig",
+          "SciengConfig",
+          "NetworkPolicy",
+          "INPUT_TYPES",
+          "OUTPUT_FORMATS",
+          "InputType",
+          "OutputFormat",
+          "RenderOptions",
+          "RenderRequest",
+          "RenderResult",
+          "RenderAsset",
+          "Capability",
+          "render",
+          "capabilities"
+        ]
+      },
+      "src/pairs.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "InputType",
+              "OutputFormat"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "PairSpec",
+          "PAIRS",
+          "findPair"
+        ]
+      },
+      "src/raster/index.ts": {
+        "externalDependencies": [
+          "@resvg/resvg-wasm"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/assets.ts",
+            "imports": [
+              "readAsset",
+              "RESVG_WASM_FILE"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "DEFAULT_ASSETS_URL"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "MAX_PNG_PIXEL_MB",
+          "SvgToPngOptions",
+          "svgToPng",
+          "isFontFile"
+        ]
+      },
+      "src/raster/warnings.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "CoverageTest",
+          "fontCovers",
+          "rasterWarnings"
+        ]
+      },
+      "src/registry.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "BackendEntry",
+          "Registry",
+          "DEFAULT_REGISTRY",
+          "registryKey"
+        ]
+      },
+      "src/types.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "INPUT_TYPES",
+          "InputType",
+          "OUTPUT_FORMATS",
+          "OutputFormat",
+          "BINARY_INPUT_TYPES",
+          "RenderOptions",
+          "RenderRequest",
+          "RenderAsset",
+          "RenderResult",
+          "Capability"
+        ]
+      },
+      "src/version.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "ENGINE_VERSION"
+        ]
+      },
+      "src/worker/entry.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:worker_threads"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError",
+              "RENDER_ERROR_CODES",
+              "isRenderError",
+              "RenderErrorCode"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob",
+              "WorkerMessage"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": []
+      },
+      "src/worker/protocol.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "InputType",
+              "OutputFormat",
+              "RenderOptions"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "BackendSettings",
+          "WorkerJob",
+          "BackendOutput",
+          "WorkerMessage"
+        ]
+      },
+      "src/worker/run.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:path",
+          "node:url",
+          "node:worker_threads"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob",
+              "WorkerMessage"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "WorkerExit",
+          "WorkerLimits",
+          "runInWorker"
+        ]
+      },
+      "trials/t1-graph/compare-layout.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t1-graph/make-sources.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t1-graph/measure.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:crypto",
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t2-mesh/measure.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:crypto",
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t3-tex/shim/index.cjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t4-browser/assets/pinned.js": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t4-browser/measure.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:net",
+          "node:os",
+          "node:path",
+          "node:url",
+          "node:zlib"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "trials/t5-tex-build/runtime/dvi2svg.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/runtime/tfm.mjs",
+            "imports": [
+              "readTfm"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "trials/t5-tex-build/runtime/type1.mjs",
+            "imports": [
+              "readType1"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "dviToSvg"
+        ]
+      },
+      "trials/t5-tex-build/runtime/host.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "ExitSignal",
+          "Host"
+        ]
+      },
+      "trials/t5-tex-build/runtime/run.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/runtime/host.mjs",
+            "imports": [
+              "Host",
+              "ExitSignal"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "runProgram"
+        ]
+      },
+      "trials/t5-tex-build/runtime/tfm.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "readTfm"
+        ]
+      },
+      "trials/t5-tex-build/runtime/type1.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "readType1"
+        ]
+      },
+      "trials/t5-tex-build/runtime/vfs.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "TreeFS",
+          "flatName"
+        ]
+      },
+      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "unitPerPt",
+          "createSpecials"
+        ]
+      }
+    },
+    "tests": {
+      "test/corpus/regenerate-dot.ts": {
+        "externalDependencies": [
+          "@viz-js/viz"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/integration/page-checker.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "checkPage"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/process-list.ts",
+            "imports": [
+              "processesHolding"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/mutation/run-mutants.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:crypto",
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/mutation/run-mutants.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/node/backends/heap.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/node/backends/loop.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/node/backends/ok.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/node/worker.node.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:path",
+          "node:test",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/smoke/smoke.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:module",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/support/assets-fixture.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:module",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "REAL_FONT_PATH",
+          "REAL_WASM_PATH",
+          "realFiles",
+          "noGlyphFont",
+          "wasmWithCustomSection",
+          "makeScratch",
+          "removeScratch",
+          "makeAssetsFolder",
+          "wasmImportingMissingFunction",
+          "wasmWhoseStartTraps"
+        ]
+      },
+      "test/support/bun-scan.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "BUN_GLOBAL",
+          "BunHit",
+          "scanForBunGlobal",
+          "makePlantedTree",
+          "removeTree",
+          "assertNoBunGlobal"
+        ]
+      },
+      "test/support/page-checker.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "PageCheckOptions",
+          "PageCheckResult",
+          "PROFILE_PREFIX",
+          "waitForDevToolsPort",
+          "removeProfile",
+          "launchEvidence",
+          "checkPage",
+          "teardownLaunch"
+        ]
+      },
+      "test/support/png-decode.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:zlib"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "DecodedPng",
+          "decodePng",
+          "countDarkPixels",
+          "countOpaquePixels"
+        ]
+      },
+      "test/support/process-list.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "listCommandLines",
+          "holdsFolder",
+          "processesHolding"
+        ]
+      },
+      "test/support/stubs/stub-dot.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "FIXED_SVG",
+          "render"
+        ]
+      },
+      "test/support/stubs/stub-foreign-error.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "render"
+        ]
+      },
+      "test/support/svg-compare.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "normalizeSvg",
+          "SvgComparison",
+          "compareSvg"
+        ]
+      },
+      "test/support/test-registry.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "ConfigDeps"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "Registry"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "test/support/stubs/stub-dot.ts",
+            "imports": [
+              "FIXED_SVG"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "FIXED_SVG",
+          "TEST_REGISTRY",
+          "ISOLATED_CONFIG_DEPS"
+        ]
+      },
+      "test/unit/assets.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/assets.ts",
+            "imports": [
+              "assetFile",
+              "BUNDLED_FONT_FILE",
+              "bundledFontPathIn",
+              "checkAssetsUrl",
+              "readAsset",
+              "RESVG_WASM_FILE"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "DEFAULT_ASSETS_URL"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "makeScratch",
+              "removeScratch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/config-assets.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "loadConfig",
+              "ConfigDeps"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/version.ts",
+            "imports": [
+              "ENGINE_VERSION"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/config.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "loadConfig",
+              "ConfigDeps"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/errors.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "isRenderError",
+              "RenderError",
+              "RENDER_ERROR_CODES"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-corpus.test.ts": {
+        "externalDependencies": [
+          "@viz-js/viz",
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/svg-compare.ts",
+            "imports": [
+              "compareSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-dot.test.ts": {
+        "externalDependencies": [
+          "@viz-js/viz",
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-image.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/graph/image.ts",
+            "imports": [
+              "dropImageElements",
+              "dropStylesheetInstructions",
+              "stripImageAttributes"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-large.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-network.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:dns",
+          "node:http",
+          "node:https",
+          "node:net"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/raster/index.ts",
+            "imports": [
+              "svgToPng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "makeScratch",
+              "realFiles",
+              "removeScratch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-png.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/backend-png.ts",
+            "imports": [
+              "render",
+              "renderPng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "test/support/png-decode.ts",
+            "imports": [
+              "countDarkPixels",
+              "decodePng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "renderWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "ISOLATED_CONFIG_DEPS"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "noGlyphFont",
+              "realFiles",
+              "wasmImportingMissingFunction",
+              "wasmWhoseStartTraps",
+              "wasmWithCustomSection"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-registry.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "capabilitiesWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "ISOLATED_CONFIG_DEPS"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/graph-svg-backend.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "DEFAULT_ASSETS_URL"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/backend-svg.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotSourceText",
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/no-bun-api.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/bun-scan.ts",
+            "imports": [
+              "assertNoBunGlobal",
+              "makePlantedTree",
+              "removeTree",
+              "scanForBunGlobal"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/page-checker-io.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "launchEvidence",
+              "removeProfile",
+              "waitForDevToolsPort"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/process-list.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "PROFILE_PREFIX"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/process-list.ts",
+            "imports": [
+              "holdsFolder",
+              "listCommandLines",
+              "processesHolding"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/raster-init.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "makeScratch",
+              "realFiles",
+              "removeScratch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/raster-warnings.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/raster/warnings.ts",
+            "imports": [
+              "fontCovers",
+              "rasterWarnings"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/raster.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/raster/index.ts",
+            "imports": [
+              "isFontFile",
+              "MAX_PNG_PIXEL_MB",
+              "svgToPng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/png-decode.ts",
+            "imports": [
+              "countOpaquePixels",
+              "decodePng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "makeScratch",
+              "realFiles",
+              "removeScratch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/render.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "renderWithRegistry",
+              "capabilitiesWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "DEFAULT_ASSETS_URL"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "RenderRequest"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "ISOLATED_CONFIG_DEPS",
+              "TEST_REGISTRY",
+              "FIXED_SVG"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/svg-compare.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "test/support/svg-compare.ts",
+            "imports": [
+              "compareSvg",
+              "normalizeSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/teardown.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "test/support/page-checker.ts",
+            "imports": [
+              "teardownLaunch"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/version.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/version.ts",
+            "imports": [
+              "ENGINE_VERSION"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/worker-run.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:events",
+          "node:worker_threads"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/worker/run.ts",
+            "imports": [
+              "runInWorker"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "TEST_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "DEFAULT_ASSETS_URL"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t5-tex-build/test/tangle.test.mjs": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/tangle.mjs",
+            "imports": [
+              "tangle"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t5-tex-build/test/trip-gate.test.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/tools/trip-gate.mjs",
+            "imports": [
+              "tripGate",
+              "buildBanner"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t5-tex-build/test/type1.test.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:fs",
+          "node:path",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t5-tex-build/runtime/type1.mjs",
+            "imports": [
+              "readType1"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "trials/t5-tex-build/runtime/tfm.mjs",
+            "imports": [
+              "readTfm"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/test/dvisvgm-specials.test.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
+            "imports": [
+              "createSpecials"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/test/etrip-gate.test.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t6-etex-build/tools/etrip-gate.mjs",
+            "imports": [
+              "judgeFile",
+              "parseReferenceDiffs",
+              "etripConstants",
+              "etripMessageOf",
+              "dropEchoText"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "trials/t6-etex-build/test/primitives.test.mjs": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "trials/t6-etex-build/tools/primitives.mjs",
+            "imports": [
+              "addedPrimitives"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      }
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 99,
-    "totalSourceFiles": 99,
+    "totalTypeScriptFiles": 107,
+    "totalSourceFiles": 107,
     "totalModules": 3,
-    "totalLinesOfCode": 10975,
-    "totalExports": 151,
-    "entryRoots": 17,
-    "reachableFiles": 17,
+    "totalLinesOfCode": 11697,
+    "totalExports": 171,
+    "entryRoots": 19,
+    "reachableFiles": 19,
     "dormantFiles": 14,
     "orphanedFiles": 11,
     "testOnlyFiles": 3,
@@ -2087,10 +2387,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 5,
     "totalInterfaces": 23,
-    "totalFunctions": 72,
-    "totalTypeGuards": 1,
+    "totalFunctions": 86,
+    "totalTypeGuards": 2,
     "totalEnums": 0,
-    "totalConstants": 25,
+    "totalConstants": 31,
     "totalReExports": 18
   },
   "reachability": {
@@ -2098,6 +2398,7 @@
       "src/index.ts",
       "src/graph/index.ts",
       "src/raster/index.ts",
+      "src/assets.ts",
       "src/config.ts",
       "src/core.ts",
       "src/errors.ts",
@@ -2109,11 +2410,12 @@
       "src/raster/warnings.ts",
       "src/registry.ts",
       "src/types.ts",
+      "src/version.ts",
       "src/worker/entry.ts",
       "src/worker/protocol.ts",
       "src/worker/run.ts"
     ],
-    "reachableCount": 17,
+    "reachableCount": 19,
     "dormantCount": 14,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",

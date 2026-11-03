@@ -2,6 +2,8 @@ import { homedir as osHomedir } from "node:os";
 import { readFile as fsReadFile } from "node:fs/promises";
 import path from "node:path";
 import { RenderError } from "./errors.ts";
+import { ENGINE_VERSION } from "./version.ts";
+import { checkAssetsUrl } from "./assets.ts";
 
 /** The network uses that a render may make. The design lists these three network values only. */
 export type NetworkPolicy = "none" | "tex-bundles" | "tex-bundles,images";
@@ -16,6 +18,8 @@ export interface SciengConfig {
   maxSourceBytes: number;
   maxMemoryMb: number;
   allowNetwork: NetworkPolicy;
+  /** The folder URL that holds the fonts folder and the resvg WASM file. */
+  assetsUrl: string;
   /** Path of a TrueType or OpenType file that the raster stage uses in place of the bundled font. */
   rasterFont?: string;
 }
@@ -29,6 +33,9 @@ export interface ConfigDeps {
   engineVersion: string;
 }
 
+/** The assets folder of the package, resolved relative to this file. */
+export const DEFAULT_ASSETS_URL = new URL("../assets/", import.meta.url).href;
+
 const ENV = {
   configFile: "SCIENG_CONFIG",
   browser: "SCIENG_BROWSER",
@@ -38,6 +45,7 @@ const ENV = {
   maxSourceBytes: "SCIENG_MAX_SOURCE_BYTES",
   maxMemoryMb: "SCIENG_MAX_MEMORY_MB",
   allowNetwork: "SCIENG_ALLOW_NETWORK",
+  assetsUrl: "SCIENG_ASSETS_URL",
   rasterFont: "SCIENG_RASTER_FONT",
 } as const;
 
@@ -47,16 +55,6 @@ const CONFIG_FILE_NAME = "config.json";
 const APP_FOLDER = "scieng";
 
 type ConfigKey = keyof SciengConfig;
-
-/** Reads the engine version from the package file one folder above `src` or `dist`. */
-async function readEngineVersion(): Promise<string> {
-  const text = await fsReadFile(new URL("../package.json", import.meta.url), "utf8");
-  const version = (JSON.parse(text) as { version?: unknown }).version;
-  if (typeof version !== "string") {
-    throw new RenderError("E_CONFIG", "package.json has no version string");
-  }
-  return version;
-}
 
 /** The platform folder for configuration. A missing platform variable fails loudly. */
 function configBaseDir(d: ConfigDeps): string {
@@ -92,6 +90,7 @@ function defaults(engineVersion: string): Required<Omit<SciengConfig, "browser" 
     maxSourceBytes: 10485760,
     maxMemoryMb: 2048,
     allowNetwork: "tex-bundles",
+    assetsUrl: DEFAULT_ASSETS_URL,
   };
 }
 
@@ -124,6 +123,8 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
         return fail(`must be one of ${NETWORK_POLICIES.join(", ")}`);
       }
       return value as NetworkPolicy;
+    case "assetsUrl":
+      return checkAssetsUrl(value, `${source}: ${key}`);
   }
 }
 
@@ -146,6 +147,7 @@ const ENV_KEYS: Record<Exclude<ConfigKey, never>, string> = {
   maxSourceBytes: ENV.maxSourceBytes,
   maxMemoryMb: ENV.maxMemoryMb,
   allowNetwork: ENV.allowNetwork,
+  assetsUrl: ENV.assetsUrl,
   rasterFont: ENV.rasterFont,
 };
 
@@ -192,7 +194,7 @@ export async function loadConfig(
     platform: process.platform,
     homedir: osHomedir(),
     readFile: (p) => fsReadFile(p, "utf8"),
-    engineVersion: await readEngineVersion(),
+    engineVersion: ENGINE_VERSION,
     ...deps,
   };
   const explicitPath = nonEmpty(d.env[ENV.configFile]);

@@ -48,6 +48,7 @@ describe("loadConfig defaults", () => {
       maxSourceBytes: 10485760,
       maxMemoryMb: 2048,
       allowNetwork: "tex-bundles",
+      assetsUrl: new URL("../../assets/", import.meta.url).href,
     });
     expect(cfg.browser).toBeUndefined();
   });
@@ -112,6 +113,7 @@ describe("loadConfig precedence: call option > environment > file > default", ()
       SCIENG_MAX_SOURCE_BYTES: "6",
       SCIENG_MAX_MEMORY_MB: "7",
       SCIENG_ALLOW_NETWORK: "tex-bundles,images",
+      SCIENG_ASSETS_URL: "file:///srv/assets/",
     };
     const cfg = await loadConfig({}, deps({ env }));
     expect(cfg).toEqual({
@@ -122,6 +124,7 @@ describe("loadConfig precedence: call option > environment > file > default", ()
       maxSourceBytes: 6,
       maxMemoryMb: 7,
       allowNetwork: "tex-bundles,images",
+      assetsUrl: "file:///srv/assets/",
     });
   });
 

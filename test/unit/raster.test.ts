@@ -1,14 +1,18 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { RenderError } from "../../src/errors.ts";
 import { isFontFile, MAX_PNG_PIXEL_MB, svgToPng } from "../../src/raster/index.ts";
 import { countOpaquePixels, decodePng } from "../support/png-decode.ts";
+import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
 
 const FONT_BYTES = new Uint8Array(readFileSync(fileURLToPath(new URL("../../assets/fonts/LiberationSerif-Regular.ttf", import.meta.url))));
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const RECT = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" viewBox="0 0 200 80"><rect x="0" y="0" width="100" height="80" fill="#ff0000"/></svg>';
 const TEXT = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" viewBox="0 0 200 80"><text x="10" y="45" font-family="Times,serif" font-size="24">Hello</text></svg>';
+const scratch = makeScratch("scieng-raster-");
+const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
+afterAll(() => removeScratch(scratch));
 
 async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
   try {
@@ -22,7 +26,7 @@ async function rejectionOf(promise: Promise<unknown>): Promise<RenderError> {
 
 describe("svgToPng", () => {
   test("writes a PNG with the signature and the size of the SVG at the scale", async () => {
-    const bytes = await svgToPng(RECT, { scale: 2, maxMemoryMb: 2048 });
+    const bytes = await svgToPng(RECT, { scale: 2, maxMemoryMb: 2048, assetsUrl: ASSETS });
     expect(Array.from(bytes.subarray(0, 8))).toEqual(PNG_SIGNATURE);
     const png = decodePng(bytes);
     expect(png.width).toBe(400);
@@ -30,18 +34,18 @@ describe("svgToPng", () => {
   });
 
   test("draws the fill of a rectangle with its colour", async () => {
-    const png = decodePng(await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048 }));
+    const png = decodePng(await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS }));
     const i = (40 * png.width + 50) * 4;
     expect(Array.from(png.rgba.subarray(i, i + 4))).toEqual([255, 0, 0, 255]);
   });
 
   test("census: without a font, a text element draws no pixel", async () => {
-    const png = decodePng(await svgToPng(TEXT, { scale: 1, maxMemoryMb: 2048 }));
+    const png = decodePng(await svgToPng(TEXT, { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS }));
     expect(countOpaquePixels(png)).toBe(0);
   });
 
   test("census: with the bundled font, the same text draws pixels", async () => {
-    const png = decodePng(await svgToPng(TEXT, { scale: 1, maxMemoryMb: 2048, font: FONT_BYTES }));
+    const png = decodePng(await svgToPng(TEXT, { scale: 1, maxMemoryMb: 2048, font: FONT_BYTES, assetsUrl: ASSETS }));
     expect(countOpaquePixels(png)).toBeGreaterThan(100);
   });
 
@@ -49,8 +53,8 @@ describe("svgToPng", () => {
     // 512 by 512 pixels at four bytes each is exactly one mebibyte.
     const square = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#00ff00"/></svg>';
     const wide = '<svg xmlns="http://www.w3.org/2000/svg" width="513" height="512"><rect width="513" height="512" fill="#00ff00"/></svg>';
-    expect(decodePng(await svgToPng(square, { scale: 1, maxMemoryMb: 1 })).width).toBe(512);
-    const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 1 }));
+    expect(decodePng(await svgToPng(square, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS })).width).toBe(512);
+    const err = await rejectionOf(svgToPng(wide, { scale: 1, maxMemoryMb: 1, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
   });
 });
@@ -60,7 +64,7 @@ describe("svgToPng pixel cap", () => {
     // The cap holds because resvg keeps about two copies of the pixel buffer in a WASM memory of at most 4 GiB.
     const side = Math.ceil(Math.sqrt(((MAX_PNG_PIXEL_MB + 1) * 1048576) / 4));
     const huge = `<svg xmlns="http://www.w3.org/2000/svg" width="${side}" height="${side}"><rect width="1" height="1"/></svg>`;
-    const err = await rejectionOf(svgToPng(huge, { scale: 1, maxMemoryMb: 8192 }));
+    const err = await rejectionOf(svgToPng(huge, { scale: 1, maxMemoryMb: 8192, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_LIMIT");
     expect(err.message).toContain("pixel");
   });
@@ -72,13 +76,13 @@ describe("svgToPng pixel cap", () => {
 
 describe("svgToPng failure paths", () => {
   test("an SVG that resvg cannot parse rejects with E_INPUT", async () => {
-    const err = await rejectionOf(svgToPng("<svg", { scale: 1, maxMemoryMb: 2048 }));
+    const err = await rejectionOf(svgToPng("<svg", { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS }));
     expect(err.code).toBe("E_INPUT");
   });
 
   test("a render after a failed render still works", async () => {
-    await rejectionOf(svgToPng("<svg", { scale: 1, maxMemoryMb: 2048 }));
-    expect((await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048 })).byteLength).toBeGreaterThan(50);
+    await rejectionOf(svgToPng("<svg", { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS }));
+    expect((await svgToPng(RECT, { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS })).byteLength).toBeGreaterThan(50);
   });
 });
 

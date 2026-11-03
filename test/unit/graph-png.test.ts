@@ -7,11 +7,16 @@ import { RenderError } from "../../src/errors.ts";
 import { render, renderPng } from "../../src/graph/backend-png.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 import { countDarkPixels, decodePng } from "../support/png-decode.ts";
+import { renderWithRegistry } from "../../src/core.ts";
+import { DEFAULT_REGISTRY } from "../../src/registry.ts";
+import { ISOLATED_CONFIG_DEPS } from "../support/test-registry.ts";
+import { makeAssetsFolder, noGlyphFont, realFiles, wasmImportingMissingFunction, wasmWhoseStartTraps, wasmWithCustomSection } from "../support/assets-fixture.ts";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const SOURCE = 'digraph G { a -> b [label="Hello"] }';
 const BUNDLED_FONT = fileURLToPath(new URL("../../assets/fonts/LiberationSerif-Regular.ttf", import.meta.url));
 const scratch = mkdtempSync(join(tmpdir(), "scieng-i1-png-"));
+const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
 
 afterAll(() => {
   rmSync(scratch, { recursive: true, force: true });
@@ -23,7 +28,7 @@ function request(options: Record<string, unknown> = {}, rasterFont: string | und
     format: "png",
     source: SOURCE,
     options,
-    settings: { maxMemoryMb: 2048, rasterFont },
+    settings: { maxMemoryMb: 2048, rasterFont, assetsUrl: ASSETS },
   };
 }
 
@@ -153,5 +158,66 @@ describe("dot to png backend", () => {
   test("a label that the font can draw gives no warning", async () => {
     const out = await render(request());
     expect(out.warnings).toEqual([]);
+  });
+});
+
+describe("dot to png through the worker reads its files from assetsUrl", () => {
+  const LABELLED = 'digraph G { a [label="WWWWWWWWWWWW"] }';
+
+  function pngAt(assetsUrl: string) {
+    return renderWithRegistry({ type: "dot", format: "png", source: LABELLED }, { assetsUrl }, DEFAULT_REGISTRY, ISOLATED_CONFIG_DEPS);
+  }
+
+  test("the bundled font is the one in assetsUrl: a font with no glyphs draws no label", async () => {
+    const blankUrl = makeAssetsFolder(scratch, "no-glyph", { font: noGlyphFont(), wasm: realFiles().wasm });
+    const drawn = await pngAt(ASSETS);
+    const blank = await pngAt(blankUrl);
+    expect(Array.from(blank.bytes.subarray(0, 8))).toEqual(PNG_SIGNATURE);
+    expect(countDarkPixels(decodePng(drawn.bytes))).toBeGreaterThan(countDarkPixels(decodePng(blank.bytes)) + 200);
+  });
+
+  test("a missing bundled font rejects with E_STAGE_MISSING and names the font file", async () => {
+    const url = makeAssetsFolder(scratch, "no-font", { wasm: realFiles().wasm });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("LiberationSerif-Regular.ttf");
+  });
+
+  test("a missing WASM file rejects with E_STAGE_MISSING and names the file", async () => {
+    const url = makeAssetsFolder(scratch, "no-wasm", { font: realFiles().font });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("index_bg.wasm");
+  });
+
+  test("a WASM file that cannot start rejects with E_STAGE_MISSING", async () => {
+    const url = makeAssetsFolder(scratch, "cut-wasm", { font: realFiles().font, wasm: realFiles().wasm.subarray(0, 100) });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+  });
+
+  test("a WASM file that imports a function the glue does not provide rejects with E_STAGE_MISSING", async () => {
+    const url = makeAssetsFolder(scratch, "link-wasm", { font: realFiles().font, wasm: wasmImportingMissingFunction() });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("index_bg.wasm");
+  });
+
+  test("a WASM file whose start function traps rejects with E_STAGE_MISSING", async () => {
+    const url = makeAssetsFolder(scratch, "trap-wasm", { font: realFiles().font, wasm: wasmWhoseStartTraps() });
+    const err = await rejectionOf(pngAt(url));
+    expect(err.code).toBe("E_STAGE_MISSING");
+    expect(err.message).toContain("index_bg.wasm");
+  });
+
+  test("a WASM file with one extra custom section starts and renders", async () => {
+    const url = makeAssetsFolder(scratch, "variant-wasm", { font: realFiles().font, wasm: wasmWithCustomSection() });
+    const out = await pngAt(url);
+    expect(Array.from(out.bytes.subarray(0, 8))).toEqual(PNG_SIGNATURE);
+  });
+
+  test("an assetsUrl that is not a file folder URL rejects with E_CONFIG before any worker starts", async () => {
+    const err = await rejectionOf(pngAt("https://example.test/assets/"));
+    expect(err.code).toBe("E_CONFIG");
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@danielsimonjr/sciengjs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "A local rendering engine for science and engineering diagrams, documents and models",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node scripts/prepare-build.mjs && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "smoke": "node test/smoke/smoke.mjs",

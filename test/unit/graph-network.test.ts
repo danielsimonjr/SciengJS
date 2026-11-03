@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import dns from "node:dns";
 import http from "node:http";
 import https from "node:https";
@@ -6,6 +6,11 @@ import net from "node:net";
 import { dotToSvg } from "../../src/graph/dot.ts";
 import { svgToPng } from "../../src/raster/index.ts";
 import { render } from "../../src/index.ts";
+import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
+
+const scratch = makeScratch("scieng-network-");
+const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
+afterAll(() => removeScratch(scratch));
 
 const SOURCE = [
   "digraph G {",
@@ -83,7 +88,7 @@ describe("graph stage with allowNetwork none", () => {
   });
 
   test("the public render to png succeeds under allowNetwork none", async () => {
-    const result = await render({ type: "dot", source: SOURCE, format: "png" }, { allowNetwork: "none" });
+    const result = await render({ type: "dot", source: SOURCE, format: "png" }, { allowNetwork: "none", assetsUrl: ASSETS });
     expect(result.mime).toBe("image/png");
     expect(result.bytes.byteLength).toBeGreaterThan(100);
   });
@@ -120,7 +125,7 @@ describe("graph stage with allowNetwork none", () => {
     try {
       const dot = await dotToSvg(SOURCE);
       expect(dot.svg).toContain("<svg");
-      const png = await svgToPng(dot.svg, { scale: 1, maxMemoryMb: 2048 });
+      const png = await svgToPng(dot.svg, { scale: 1, maxMemoryMb: 2048, assetsUrl: ASSETS });
       expect(png.byteLength).toBeGreaterThan(100);
       expect(attempts).toEqual([]);
     } finally {

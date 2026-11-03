@@ -18,13 +18,16 @@ Status: increment I1, the graph and raster stages. The package renders DOT to SV
 | `src/index.ts` | The public API: `render`, `capabilities` and the types. |
 | `src/core.ts` | The render and capability logic, with an injectable registry. |
 | `src/config.ts` | The configuration loader. |
-| `src/errors.ts` | `RenderError` and its eight codes. |
+| `src/assets.ts` | The asset folder: the check of `assetsUrl`, the bundled font path, and the reads of the font and the WASM file. |
+| `src/version.ts` | The engine version. The build writes it. Do not edit it by hand. |
+| `src/errors.ts` | `RenderError`, its eight codes and `isRenderError`. |
 | `src/registry.ts` | The stage registry: a map from `type:format` to a backend module. |
 | `src/pairs.ts` | The table of supported pairs and their stages. |
 | `src/worker/` | The worker runner and the worker entry. |
 | `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner and the two backends (SVG and PNG). |
 | `src/raster/` | The raster stage: SVG to PNG through resvg, and the font check. |
-| `assets/` | The files that ship in the package: the bundled raster font and the licence texts. |
+| `assets/` | The files that ship in the package: the bundled raster font, the resvg WASM file `index_bg.wasm` and the licence texts. |
+| `scripts/` | `prepare-build.mjs`, which the build runs. The script writes `src/version.ts` and copies `index_bg.wasm` into `assets/`. |
 | `test/unit/` | Unit tests of each module. |
 | `test/corpus/` | The DOT corpus: each source and its expected SVG. |
 | `test/integration/` | The page checker tests. They need a browser. |
@@ -45,9 +48,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 99 | repo-tools map |
-| totalLinesOfCode | 10975 | repo-tools map |
-| totalExports | 151 | repo-tools map |
+| totalSourceFiles | 107 | repo-tools map |
+| totalLinesOfCode | 11733 | repo-tools map |
+| totalExports | 171 | repo-tools map |
 | totalTypeOnlyImports | 14 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 17 | repo-tools map |
+| entryRoots | 19 | repo-tools map |

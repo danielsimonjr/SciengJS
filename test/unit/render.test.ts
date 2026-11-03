@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { renderWithRegistry, capabilitiesWithRegistry } from "../../src/core.ts";
 import { RenderError } from "../../src/errors.ts";
+import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
 import type { RenderRequest } from "../../src/types.ts";
 import { ISOLATED_CONFIG_DEPS, TEST_REGISTRY, FIXED_SVG } from "../support/test-registry.ts";
 
@@ -162,5 +163,12 @@ describe("renderWithRegistry settings pass-through", () => {
     expect(JSON.parse(new TextDecoder().decode(withEnv.bytes)).rasterFont).toBe("/f/env.ttf");
     const without = await renderWithRegistry(dotSvg("settings"), {}, TEST_REGISTRY, ISOLATED_CONFIG_DEPS);
     expect(JSON.parse(new TextDecoder().decode(without.bytes)).rasterFont).toBeUndefined();
+  });
+
+  test("the assetsUrl of the configuration reaches the backend, and the default folder is the package assets", async () => {
+    const set = await renderWithRegistry(dotSvg("settings"), { assetsUrl: "file:///srv/assets/" }, TEST_REGISTRY, ISOLATED_CONFIG_DEPS);
+    expect((JSON.parse(new TextDecoder().decode(set.bytes)) as { assetsUrl?: string }).assetsUrl).toBe("file:///srv/assets/");
+    const dflt = await renderWithRegistry(dotSvg("settings"), {}, TEST_REGISTRY, ISOLATED_CONFIG_DEPS);
+    expect((JSON.parse(new TextDecoder().decode(dflt.bytes)) as { assetsUrl?: string }).assetsUrl).toBe(DEFAULT_ASSETS_URL);
   });
 });

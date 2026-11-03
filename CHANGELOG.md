@@ -4,6 +4,30 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-02
+
+The asset root for bundled use. A bundle of the engine names the folder of its font and its WASM file.
+
+### Added
+
+- The configuration key `assetsUrl`, with the environment variable `SCIENG_ASSETS_URL`. The key names the folder URL that holds the `fonts` folder and the resvg WASM file `index_bg.wasm`. The default is the `assets/` folder of the package. A value without a trailing slash gets a trailing slash. A value that is not a `file:` URL rejects with `E_CONFIG`. A `file:` URL with a host other than `localhost` rejects with `E_CONFIG`. On Windows, such a URL names a network share. A value with a query, a fragment, or an encoded slash or backslash in its path rejects with `E_CONFIG`. A value that the operating system cannot open as a folder rejects the render with `E_CONFIG`. The configuration has nine keys.
+- The build copies `index_bg.wasm` into `assets/`. The packed tarball ships the file. The smoke test checks that the shipped file equals the locked file. The smoke test renders a PNG from the packed package.
+
+### Changed
+
+- `scripts/prepare-build.mjs` writes the engine version to `src/version.ts` at build time. The loader reads no package file at run time, so a single-file bundle runs with no `node_modules` folder. A test checks the version against `package.json`.
+- The PNG render reads the bundled font and the WASM file from `assetsUrl`. The raster function `svgToPng` takes an optional `assetsUrl`. The default is the `assets/` folder of the package.
+- A WASM file that the runtime cannot compile, link or start rejects with `E_STAGE_MISSING`, and the message names `index_bg.wasm`.
+- The build script runs `scripts/prepare-build.mjs` before `tsc`.
+- Design, configuration: the design has the `assetsUrl` row. The adapter sets the key to `bundle/assets/`.
+
+### Fixed
+
+- A render error keeps its code in a bundled build. Each output file of a bundle holds its own copy of the error class. The worker checked the class, so an error from another copy reached the caller as `E_INTERNAL`. The worker now checks the name and the code. A missing font gives `E_STAGE_MISSING`, and a DOT syntax error gives `E_INPUT`.
+- The smoke test starts npm with one quoted command on Windows, so Node prints no DEP0190 warning.
+- The loader test compares the real path of the temporary folder. It passes on macOS, where that folder is a link.
+- The generated file `src/version.ts` keeps LF line endings. The file `.gitattributes` sets `src/version.ts text eol=lf`. After `bun run build`, `git status` shows no change for the file.
+
 ## [0.1.0] - 2026-11-02
 
 The first release on npm. The release renders Graphviz DOT to SVG and PNG.
