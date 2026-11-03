@@ -1,24 +1,24 @@
 {
-  "totalFiles": 89,
+  "totalFiles": 107,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 20,
+    "build-entry": 25,
     "test-only": 3,
     "orphan": 11,
-    "test": 29,
+    "test": 42,
     "tool": 26,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "src": 34,
-    "tests": 29,
+    "src": 39,
+    "tests": 42,
     "tools": 26
   },
   "byPackage": {
-    "@danielsimonjr/sciengjs": 20,
-    "(root)": 69
+    "@danielsimonjr/sciengjs": 25,
+    "(root)": 82
   },
   "files": [
     {
@@ -33,14 +33,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 218
+      "loc": 223
     },
     {
       "file": "src/core.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 103
+      "loc": 104
     },
     {
       "file": "src/errors.ts",
@@ -50,11 +50,39 @@
       "loc": 37
     },
     {
+      "file": "src/graph/backend-png.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 63
+    },
+    {
+      "file": "src/graph/backend-svg.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 13
+    },
+    {
+      "file": "src/graph/dot.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 71
+    },
+    {
+      "file": "src/graph/image.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 330
+    },
+    {
       "file": "src/graph/index.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 2
+      "loc": 3
     },
     {
       "file": "src/html/index.ts",
@@ -110,14 +138,21 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 2
+      "loc": 92
+    },
+    {
+      "file": "src/raster/warnings.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 181
     },
     {
       "file": "src/registry.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 18
+      "loc": 30
     },
     {
       "file": "src/sysml/index.ts",
@@ -152,7 +187,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 24
+      "loc": 33
     },
     {
       "file": "src/worker/run.ts",
@@ -160,6 +195,13 @@
       "area": "src",
       "disposition": "build-entry",
       "loc": 117
+    },
+    {
+      "file": "test/corpus/regenerate-dot.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 24
     },
     {
       "file": "test/integration/page-checker.test.ts",
@@ -215,7 +257,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 56
+      "loc": 61
     },
     {
       "file": "test/support/bun-scan.ts",
@@ -232,6 +274,13 @@
       "loc": 357
     },
     {
+      "file": "test/support/png-decode.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 105
+    },
+    {
       "file": "test/support/process-list.ts",
       "package": "(root)",
       "area": "tests",
@@ -243,7 +292,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 19
+      "loc": 22
     },
     {
       "file": "test/support/svg-compare.ts",
@@ -264,7 +313,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 213
+      "loc": 260
     },
     {
       "file": "test/unit/errors.test.ts",
@@ -272,6 +321,62 @@
       "area": "tests",
       "disposition": "test",
       "loc": 34
+    },
+    {
+      "file": "test/unit/graph-corpus.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 45
+    },
+    {
+      "file": "test/unit/graph-dot.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 79
+    },
+    {
+      "file": "test/unit/graph-image.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 203
+    },
+    {
+      "file": "test/unit/graph-large.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 27
+    },
+    {
+      "file": "test/unit/graph-network.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 130
+    },
+    {
+      "file": "test/unit/graph-png.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 157
+    },
+    {
+      "file": "test/unit/graph-registry.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 34
+    },
+    {
+      "file": "test/unit/graph-svg-backend.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 63
     },
     {
       "file": "test/unit/no-bun-api.test.ts",
@@ -295,11 +400,32 @@
       "loc": 51
     },
     {
+      "file": "test/unit/raster-init.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 35
+    },
+    {
+      "file": "test/unit/raster-warnings.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 153
+    },
+    {
+      "file": "test/unit/raster.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 105
+    },
+    {
       "file": "test/unit/render.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 150
+      "loc": 166
     },
     {
       "file": "test/unit/svg-compare.test.ts",
@@ -320,7 +446,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 83
+      "loc": 84
     },
     {
       "file": "trials/t1-graph/compare-layout.mjs",

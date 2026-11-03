@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 34,
-    "totalTestFiles": 17,
-    "testedCount": 8,
-    "untestedCount": 26,
-    "coveragePercent": "23.5",
+    "totalSourceFiles": 39,
+    "totalTestFiles": 28,
+    "testedCount": 17,
+    "untestedCount": 22,
+    "coveragePercent": "43.6",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 34,
-      "testedActive": 8,
-      "activeUntested": 26,
+      "activeFiles": 39,
+      "testedActive": 17,
+      "activeUntested": 22,
       "excludedTotal": 0,
-      "percent": "23.5",
+      "percent": "43.6",
       "breakdown": {
-        "active_untested": 26
+        "active_untested": 22
       }
     }
   },
@@ -21,18 +21,14 @@
     "src/browser/index.ts",
     "src/graph/index.ts",
     "src/html/index.ts",
-    "src/index.ts",
     "src/math/index.ts",
     "src/mermaid/index.ts",
     "src/mesh/index.ts",
     "src/pairs.ts",
     "src/plot/index.ts",
-    "src/raster/index.ts",
-    "src/registry.ts",
     "src/sysml/index.ts",
     "src/tex/index.ts",
     "src/worker/entry.ts",
-    "src/worker/protocol.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
     "trials/t1-graph/measure.mjs",
@@ -49,7 +45,16 @@
     "src/config.ts",
     "src/core.ts",
     "src/errors.ts",
+    "src/graph/backend-png.ts",
+    "src/graph/backend-svg.ts",
+    "src/graph/dot.ts",
+    "src/graph/image.ts",
+    "src/index.ts",
+    "src/raster/index.ts",
+    "src/raster/warnings.ts",
+    "src/registry.ts",
     "src/types.ts",
+    "src/worker/protocol.ts",
     "src/worker/run.ts",
     "trials/t5-tex-build/runtime/tfm.mjs",
     "trials/t5-tex-build/runtime/type1.mjs",
@@ -58,34 +63,75 @@
   "coverageMap": {
     "src/browser/index.ts": [],
     "src/config.ts": [
-      "test/unit/config.test.ts"
+      "test/unit/config.test.ts",
+      "test/unit/graph-large.test.ts",
+      "test/unit/graph-network.test.ts"
     ],
     "src/core.ts": [
+      "test/unit/graph-registry.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/errors.ts": [
       "test/unit/config.test.ts",
       "test/unit/errors.test.ts",
+      "test/unit/graph-dot.test.ts",
+      "test/unit/graph-large.test.ts",
+      "test/unit/graph-network.test.ts",
+      "test/unit/graph-png.test.ts",
+      "test/unit/graph-svg-backend.test.ts",
+      "test/unit/raster.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
+    "src/graph/backend-png.ts": [
+      "test/unit/graph-png.test.ts"
+    ],
+    "src/graph/backend-svg.ts": [
+      "test/unit/graph-svg-backend.test.ts"
+    ],
+    "src/graph/dot.ts": [
+      "test/unit/graph-corpus.test.ts",
+      "test/unit/graph-dot.test.ts",
+      "test/unit/graph-network.test.ts",
+      "test/unit/graph-svg-backend.test.ts",
+      "test/unit/raster-warnings.test.ts"
+    ],
+    "src/graph/image.ts": [
+      "test/unit/graph-image.test.ts"
+    ],
     "src/graph/index.ts": [],
     "src/html/index.ts": [],
-    "src/index.ts": [],
+    "src/index.ts": [
+      "test/unit/graph-large.test.ts",
+      "test/unit/graph-network.test.ts"
+    ],
     "src/math/index.ts": [],
     "src/mermaid/index.ts": [],
     "src/mesh/index.ts": [],
     "src/pairs.ts": [],
     "src/plot/index.ts": [],
-    "src/raster/index.ts": [],
-    "src/registry.ts": [],
+    "src/raster/index.ts": [
+      "test/unit/graph-network.test.ts",
+      "test/unit/raster.test.ts"
+    ],
+    "src/raster/warnings.ts": [
+      "test/unit/raster-warnings.test.ts"
+    ],
+    "src/registry.ts": [
+      "test/unit/graph-registry.test.ts"
+    ],
     "src/sysml/index.ts": [],
     "src/tex/index.ts": [],
     "src/types.ts": [
+      "test/unit/graph-large.test.ts",
+      "test/unit/graph-network.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/worker/entry.ts": [],
-    "src/worker/protocol.ts": [],
+    "src/worker/protocol.ts": [
+      "test/unit/graph-png.test.ts",
+      "test/unit/graph-svg-backend.test.ts"
+    ],
     "src/worker/run.ts": [
       "test/unit/worker-run.test.ts"
     ],
@@ -120,9 +166,57 @@
     "test/unit/errors.test.ts": [
       "src/errors.ts"
     ],
+    "test/unit/graph-corpus.test.ts": [
+      "src/graph/dot.ts"
+    ],
+    "test/unit/graph-dot.test.ts": [
+      "src/errors.ts",
+      "src/graph/dot.ts"
+    ],
+    "test/unit/graph-image.test.ts": [
+      "src/graph/image.ts"
+    ],
+    "test/unit/graph-large.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
+    "test/unit/graph-network.test.ts": [
+      "src/graph/dot.ts",
+      "src/raster/index.ts",
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
+    "test/unit/graph-png.test.ts": [
+      "src/errors.ts",
+      "src/graph/backend-png.ts",
+      "src/worker/protocol.ts"
+    ],
+    "test/unit/graph-registry.test.ts": [
+      "src/core.ts",
+      "src/registry.ts"
+    ],
+    "test/unit/graph-svg-backend.test.ts": [
+      "src/errors.ts",
+      "src/graph/backend-svg.ts",
+      "src/graph/dot.ts",
+      "src/worker/protocol.ts"
+    ],
     "test/unit/no-bun-api.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
     "test/unit/process-list.test.ts": [],
+    "test/unit/raster-init.test.ts": [],
+    "test/unit/raster-warnings.test.ts": [
+      "src/raster/warnings.ts",
+      "src/graph/dot.ts"
+    ],
+    "test/unit/raster.test.ts": [
+      "src/errors.ts",
+      "src/raster/index.ts"
+    ],
     "test/unit/render.test.ts": [
       "src/core.ts",
       "src/errors.ts",
@@ -160,10 +254,6 @@
       "category": null
     },
     {
-      "file": "src/index.ts",
-      "category": null
-    },
-    {
       "file": "src/math/index.ts",
       "category": null
     },
@@ -184,14 +274,6 @@
       "category": null
     },
     {
-      "file": "src/raster/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/registry.ts",
-      "category": null
-    },
-    {
       "file": "src/sysml/index.ts",
       "category": null
     },
@@ -201,10 +283,6 @@
     },
     {
       "file": "src/worker/entry.ts",
-      "category": null
-    },
-    {
-      "file": "src/worker/protocol.ts",
       "category": null
     },
     {

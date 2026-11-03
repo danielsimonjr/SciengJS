@@ -1,10 +1,10 @@
 metadata:
-  name: agent-a7c2187ff35d645cc
+  name: agent-a6856fc4f03855145
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 89
+  totalFiles: 107
   totalModules: 3
-  totalExports: 126
+  totalExports: 151
 modules:
   src:
     src/browser/index.ts:
@@ -79,11 +79,101 @@ modules:
         - RenderErrorCode
         - RenderErrorPosition
         - RenderError
-    src/graph/index.ts:
+    src/graph/backend-png.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/graph/dot.ts
+          imports:
+            - dotSourceText
+            - dotToSvg
+          typeOnly: false
+        - file: src/raster/index.ts
+          imports:
+            - isFontFile
+            - svgToPng
+          typeOnly: false
+        - file: src/raster/warnings.ts
+          imports:
+            - rasterWarnings
+          typeOnly: false
+      exports:
+        - render
+        - renderPng
+    src/graph/backend-svg.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/graph/dot.ts
+          imports:
+            - dotSourceText
+            - dotToSvg
+          typeOnly: false
+      exports:
+        - render
+    src/graph/dot.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/image.ts
+          imports:
+            - stripImageAttributes
+            - dropImageElements
+            - dropStylesheetInstructions
+          typeOnly: false
+      exports:
+        - DotSvgResult
+        - dotToSvg
+        - dotSourceText
+    src/graph/image.ts:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies: []
-      exports: []
+      exports:
+        - ImageRemoval
+        - StripResult
+        - stripImageAttributes
+        - dropImageElements
+        - dropStylesheetInstructions
+    src/graph/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+        - file: src/graph/dot.ts
+          imports:
+            - DotSvgResult
+          typeOnly: true
+      exports:
+        - dotToSvg
+        - DotSvgResult
     src/html/index.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -188,13 +278,34 @@ modules:
       internalDependencies: []
       exports: []
     src/raster/index.ts:
+      externalDependencies:
+        - '@resvg/resvg-wasm'
+      nodeDependencies:
+        - node:fs
+        - node:module
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - MAX_PNG_PIXEL_MB
+        - SvgToPngOptions
+        - svgToPng
+        - isFontFile
+    src/raster/warnings.ts:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies: []
-      exports: []
+      exports:
+        - CoverageTest
+        - fontCovers
+        - rasterWarnings
     src/registry.ts:
       externalDependencies: []
-      nodeDependencies: []
+      nodeDependencies:
+        - node:path
+        - node:url
       internalDependencies: []
       exports:
         - BackendEntry
@@ -255,6 +366,7 @@ modules:
             - RenderOptions
           typeOnly: true
       exports:
+        - BackendSettings
         - WorkerJob
         - BackendOutput
         - WorkerMessage
@@ -394,6 +506,15 @@ modules:
         - unitPerPt
         - createSpecials
   tests:
+    test/corpus/regenerate-dot.ts:
+      externalDependencies:
+        - '@viz-js/viz'
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports: []
     test/integration/page-checker.test.ts:
       externalDependencies:
         - bun:test
@@ -498,6 +619,16 @@ modules:
         - launchEvidence
         - checkPage
         - teardownLaunch
+    test/support/png-decode.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:zlib
+      internalDependencies: []
+      exports:
+        - DecodedPng
+        - decodePng
+        - countDarkPixels
+        - countOpaquePixels
     test/support/process-list.ts:
       externalDependencies: []
       nodeDependencies:
@@ -569,6 +700,153 @@ modules:
             - RENDER_ERROR_CODES
           typeOnly: false
       exports: []
+    test/unit/graph-corpus.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+        - file: test/support/svg-compare.ts
+          imports:
+            - compareSvg
+          typeOnly: false
+      exports: []
+    test/unit/graph-dot.test.ts:
+      externalDependencies:
+        - '@viz-js/viz'
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+      exports: []
+    test/unit/graph-image.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/image.ts
+          imports:
+            - dropImageElements
+            - dropStylesheetInstructions
+            - stripImageAttributes
+          typeOnly: false
+      exports: []
+    test/unit/graph-large.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - render
+          typeOnly: false
+      exports: []
+    test/unit/graph-network.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:dns
+        - node:http
+        - node:https
+        - node:net
+      internalDependencies:
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+        - file: src/raster/index.ts
+          imports:
+            - svgToPng
+          typeOnly: false
+        - file: src/index.ts
+          imports:
+            - render
+          typeOnly: false
+      exports: []
+    test/unit/graph-png.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/backend-png.ts
+          imports:
+            - render
+            - renderPng
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+        - file: test/support/png-decode.ts
+          imports:
+            - countDarkPixels
+            - decodePng
+          typeOnly: false
+      exports: []
+    test/unit/graph-registry.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - capabilitiesWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+      exports: []
+    test/unit/graph-svg-backend.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/backend-svg.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/graph/dot.ts
+          imports:
+            - dotSourceText
+            - dotToSvg
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+      exports: []
     test/unit/no-bun-api.test.ts:
       externalDependencies:
         - bun:test
@@ -617,6 +895,54 @@ modules:
             - holdsFolder
             - listCommandLines
             - processesHolding
+          typeOnly: false
+      exports: []
+    test/unit/raster-init.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:child_process
+        - node:url
+      internalDependencies: []
+      exports: []
+    test/unit/raster-warnings.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/raster/warnings.ts
+          imports:
+            - fontCovers
+            - rasterWarnings
+          typeOnly: false
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+      exports: []
+    test/unit/raster.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/raster/index.ts
+          imports:
+            - isFontFile
+            - MAX_PNG_PIXEL_MB
+            - svgToPng
+          typeOnly: false
+        - file: test/support/png-decode.ts
+          imports:
+            - countOpaquePixels
+            - decodePng
           typeOnly: false
       exports: []
     test/unit/render.test.ts:
@@ -1133,33 +1459,33 @@ modules:
       exports:
         - addedPrimitives
 statistics:
-  totalTypeScriptFiles: 89
-  totalSourceFiles: 89
+  totalTypeScriptFiles: 107
+  totalSourceFiles: 107
   totalModules: 3
-  totalLinesOfCode: 8972
-  totalExports: 126
-  entryRoots: 20
-  reachableFiles: 20
+  totalLinesOfCode: 10980
+  totalExports: 151
+  entryRoots: 25
+  reachableFiles: 25
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 9
+  totalTypeOnlyImports: 14
   noImporterFileCount: 7
-  unusedExportsCount: 8
+  unusedExportsCount: 12
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 5
-  totalInterfaces: 17
-  totalFunctions: 57
-  totalTypeGuards: 0
+  totalInterfaces: 23
+  totalFunctions: 72
+  totalTypeGuards: 1
   totalEnums: 0
-  totalConstants: 24
-  totalReExports: 16
+  totalConstants: 25
+  totalReExports: 18
 reachability:
   roots:
     - src/index.ts
@@ -1176,13 +1502,18 @@ reachability:
     - src/config.ts
     - src/core.ts
     - src/errors.ts
+    - src/graph/backend-png.ts
+    - src/graph/backend-svg.ts
+    - src/graph/dot.ts
+    - src/graph/image.ts
     - src/pairs.ts
+    - src/raster/warnings.ts
     - src/registry.ts
     - src/types.ts
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 20
+  reachableCount: 25
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs

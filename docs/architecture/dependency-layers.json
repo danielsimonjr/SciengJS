@@ -282,14 +282,22 @@
               "isFontFile",
               "svgToPng"
             ]
+          },
+          {
+            "file": "../raster/warnings.ts",
+            "imports": [
+              "rasterWarnings"
+            ]
           }
         ],
         "workspaceDependencies": [],
         "exports": [
-          "render"
+          "render",
+          "renderPng"
         ],
         "functions": [
-          "render"
+          "render",
+          "renderPng"
         ]
       },
       "src/graph/backend-svg.ts": {
@@ -342,7 +350,8 @@
             "file": "./image.ts",
             "imports": [
               "stripImageAttributes",
-              "dropImageElements"
+              "dropImageElements",
+              "dropStylesheetInstructions"
             ]
           }
         ],
@@ -367,7 +376,8 @@
         "workspaceDependencies": [],
         "exports": [
           "stripImageAttributes",
-          "dropImageElements"
+          "dropImageElements",
+          "dropStylesheetInstructions"
         ],
         "interfaces": [
           "ImageRemoval",
@@ -375,7 +385,8 @@
         ],
         "functions": [
           "stripImageAttributes",
-          "dropImageElements"
+          "dropImageElements",
+          "dropStylesheetInstructions"
         ]
       },
       "src/graph/index.ts": {
@@ -574,7 +585,7 @@
     },
     "raster": {
       "src/raster/index.ts": {
-        "description": "Entry point exporting 2 symbols",
+        "description": "The most megabytes of RGBA pixels that one PNG render accepts. Measured: a render holds about two",
         "externalDependencies": [
           {
             "package": "@resvg/resvg-wasm",
@@ -608,6 +619,7 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "MAX_PNG_PIXEL_MB",
           "svgToPng",
           "isFontFile"
         ],
@@ -617,6 +629,24 @@
         "functions": [
           "svgToPng",
           "isFontFile"
+        ],
+        "constants": [
+          "MAX_PNG_PIXEL_MB"
+        ]
+      },
+      "src/raster/warnings.ts": {
+        "description": "Reads the Unicode character map of a TrueType or OpenType font (formats 4 and 12).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "fontCovers",
+          "rasterWarnings"
+        ],
+        "functions": [
+          "fontCovers",
+          "rasterWarnings"
         ]
       }
     },
@@ -1165,7 +1195,8 @@
     {
       "name": "Raster",
       "files": [
-        "src/raster/index.ts"
+        "src/raster/index.ts",
+        "src/raster/warnings.ts"
       ]
     },
     {

@@ -21,11 +21,11 @@ Rejects with `RenderError`. The codes are: `E_INPUT`, `E_UNSUPPORTED`, `E_LIMIT`
 | Pair | Option | Type | Default | Meaning |
 |---|---|---|---|---|
 | `dot` to `svg` | none | | | Any option rejects with `E_INPUT`. |
-| `dot` to `png` | `scale` | finite number above zero | `1` | Multiplies the size of the image. A pixel buffer over `maxMemoryMb` rejects with `E_LIMIT`. Any other option rejects with `E_INPUT`. |
+| `dot` to `png` | `scale` | finite number above zero | `1` | Multiplies the size of the image. A pixel buffer over `maxMemoryMb` or over 1024 MB rejects with `E_LIMIT`. Any other option rejects with `E_INPUT`. |
 
-The graph stage removes each `image` attribute of the source before it renders. It reports one warning for each removed attribute. The stage reads no image file and opens no network connection.
+The graph stage removes each `image` attribute and each `stylesheet` attribute of the source before it renders. It reports one warning for each removed attribute. It also removes any `xml-stylesheet` instruction from the SVG. A `URL` or `href` attribute stays as a hyperlink. The stage reads no image file and opens no network connection.
 
-The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5. The font is licensed under the SIL Open Font License 1.1. The package does not bundle the bold and italic faces. The configuration key `rasterFont` (environment variable `SCIENG_RASTER_FONT`) names another TrueType or OpenType file. A file that the stage cannot read rejects with `E_CONFIG`. A file with no font signature also rejects with `E_CONFIG`.
+The PNG render draws text with the bundled font, Liberation Serif Regular 2.1.5. The font is licensed under the SIL Open Font License 1.1. The package does not bundle the bold and italic faces. Bold and italic text draw in the regular face, and the render reports one warning for each. A character that the font does not hold draws no pixel, and the render reports one warning. The configuration key `rasterFont` (environment variable `SCIENG_RASTER_FONT`) names another TrueType or OpenType file. A file that the stage cannot read rejects with `E_CONFIG`. A file with no font signature, and a TrueType collection, also reject with `E_CONFIG`. A bundled font that is missing or invalid rejects with `E_STAGE_MISSING`.
 
 ### Graph size and `timeoutMs`
 

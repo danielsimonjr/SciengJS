@@ -25,7 +25,9 @@
       "dotSourceText",
       "dotToSvg",
       "dropImageElements",
+      "dropStylesheetInstructions",
       "render",
+      "renderPng",
       "stripImageAttributes"
     ],
     "html": [],
@@ -34,7 +36,10 @@
     "mesh": [],
     "plot": [],
     "raster": [
+      "MAX_PNG_PIXEL_MB",
+      "fontCovers",
       "isFontFile",
+      "rasterWarnings",
       "svgToPng"
     ],
     "root": [
