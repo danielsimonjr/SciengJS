@@ -289,7 +289,7 @@ The user directories follow the platform: `%APPDATA%` and `%LOCALAPPDATA%` on Wi
 - `render_html` keeps its typed blocks. Each block element carries a `data-scieng-source` attribute with its source. A `plot` block can render as a static SVG through the engine.
 - New tools: `render` (any input type and output format, with `output_path`), `html_to_markdown`, and `capabilities`.
 - `ooxml_replace` stays in the adapter. It edits Word documents and is not a renderer.
-- The plugin ships `bundle/index.mjs`, which `node` starts with no shell. The WASM files and the pinned Mermaid and Three.js builds ship in `bundle/assets/`. The engine reads them from the folder that the `assetsUrl` key names, and the adapter sets that key to `bundle/assets/`. A CI step builds the bundle again and compares it with the committed bundle, as `memory-mcp` and `math-mcp` do.
+- The plugin ships `bundle/index.mjs`, which `node` starts with no shell. The WASM files and the pinned Mermaid and Three.js builds ship in `bundle/assets/`. The engine reads the WASM files and the pinned Mermaid and Three.js builds from the folder that the `assetsUrl` key names. The adapter sets the `assetsUrl` key to `bundle/assets/`. A CI step builds the bundle again and compares the new bundle with the committed bundle, as `memory-mcp` and `math-mcp` do.
 - The adapter has one slash command per input type, as the existing commands do. The existing commands stay: `mermaid`, `dot`, `latex`, `wavedrom`, `plot`, `circuit`, `playground`. The new commands are `tikz`, `sysml`, `step`, `cad` and `markdown`.
 
 ## Security
