@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 144,
+    "totalFiles": 146,
     "totalModules": 3,
-    "totalExports": 280
+    "totalExports": 287
   },
   "modules": {
     "tools": {
@@ -643,10 +643,19 @@
       "src/browser/cdp.ts": {
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          }
+        ],
         "exports": [
           "CdpSocket",
-          "CdpConnection"
+          "CdpConnection",
+          "connectCdp"
         ]
       },
       "src/browser/flags.ts": {
@@ -726,6 +735,11 @@
           "DEFAULT_WIDTH",
           "DEFAULT_HEIGHT",
           "DEFAULT_SCALE",
+          "MAX_SIDE",
+          "MAX_SCALE",
+          "MAX_DEVICE_PIXELS",
+          "MAX_BLOCKED_WARNINGS",
+          "MAX_WARNING_URL_CHARS",
           "PngOptions",
           "parsePngOptions",
           "parsePdfOptions",
@@ -787,7 +801,8 @@
           {
             "file": "src/browser/cdp.ts",
             "imports": [
-              "CdpConnection"
+              "CdpConnection",
+              "connectCdp"
             ],
             "typeOnly": false
           },
@@ -809,7 +824,8 @@
           {
             "file": "src/browser/proxy.ts",
             "imports": [
-              "startRefusingProxy"
+              "startRefusingProxy",
+              "RefusingProxy"
             ],
             "typeOnly": false
           }
@@ -819,6 +835,7 @@
           "HtmlFormat",
           "HtmlPageRequest",
           "HtmlPageResult",
+          "capturePage",
           "renderHtmlPage"
         ]
       },
@@ -1900,8 +1917,11 @@
           "bun:test"
         ],
         "nodeDependencies": [
+          "node:child_process",
           "node:fs",
-          "node:os"
+          "node:net",
+          "node:os",
+          "node:path"
         ],
         "internalDependencies": [
           {
@@ -2091,7 +2111,23 @@
           "node:path",
           "node:url"
         ],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/flags.ts",
+            "imports": [
+              "forcedBrowserFlags"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/browser/proxy.ts",
+            "imports": [
+              "startRefusingProxy",
+              "RefusingProxy"
+            ],
+            "typeOnly": false
+          }
+        ],
         "exports": [
           "PageCheckOptions",
           "PageCheckResult",
@@ -2289,6 +2325,7 @@
             "file": "src/browser/cdp.ts",
             "imports": [
               "CdpConnection",
+              "connectCdp",
               "CdpSocket"
             ],
             "typeOnly": false
@@ -2306,6 +2343,34 @@
             "file": "src/browser/flags.ts",
             "imports": [
               "forcedBrowserFlags"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/browser-input.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "DEFAULT_HEIGHT",
+              "DEFAULT_SCALE",
+              "DEFAULT_WIDTH",
+              "htmlSource",
+              "MAX_BLOCKED_WARNINGS",
+              "MAX_DEVICE_PIXELS",
+              "MAX_SCALE",
+              "MAX_SIDE",
+              "MAX_WARNING_URL_CHARS",
+              "parsePdfOptions",
+              "parsePngOptions"
             ],
             "typeOnly": false
           }
@@ -3124,6 +3189,17 @@
         ],
         "exports": []
       },
+      "test/unit/no-sandbox-flag.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
       "test/unit/page-checker-io.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -3567,11 +3643,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 144,
-    "totalSourceFiles": 144,
+    "totalTypeScriptFiles": 146,
+    "totalSourceFiles": 146,
     "totalModules": 3,
-    "totalLinesOfCode": 15889,
-    "totalExports": 280,
+    "totalLinesOfCode": 16443,
+    "totalExports": 287,
     "entryRoots": 37,
     "reachableFiles": 37,
     "dormantFiles": 14,
@@ -3581,7 +3657,7 @@
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 21,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 21,
+    "unusedExportsCount": 19,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -3589,10 +3665,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 47,
-    "totalFunctions": 121,
+    "totalFunctions": 123,
     "totalTypeGuards": 2,
     "totalEnums": 0,
-    "totalConstants": 37,
+    "totalConstants": 42,
     "totalReExports": 55
   },
   "reachability": {

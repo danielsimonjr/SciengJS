@@ -1,0 +1,24 @@
+{
+  "mutants": [
+    {"id": "in-1", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "width > MAX_SIDE ||", "replacement": "width >= MAX_SIDE ||", "equivalent": null},
+    {"id": "in-2", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "|| height > MAX_SIDE", "replacement": "|| height >= MAX_SIDE", "equivalent": null},
+    {"id": "in-3", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "if (scale > MAX_SCALE)", "replacement": "if (scale >= MAX_SCALE)", "equivalent": null},
+    {"id": "in-4", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "> MAX_DEVICE_PIXELS)", "replacement": ">= MAX_DEVICE_PIXELS)", "equivalent": null},
+    {"id": "in-5", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "width * scale * (height * scale)", "replacement": "width * scale * height", "equivalent": null},
+    {"id": "in-6", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "export const MAX_SIDE = 16384;", "replacement": "export const MAX_SIDE = 16383;", "equivalent": null},
+    {"id": "in-7", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "64 * 1024 * 1024", "replacement": "64 * 1024 * 1025", "equivalent": null},
+    {"id": "in-8", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "blocked.slice(0, MAX_BLOCKED_WARNINGS)", "replacement": "blocked.slice(0, MAX_BLOCKED_WARNINGS + 1)", "equivalent": null},
+    {"id": "in-9", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "if (blocked.length > MAX_BLOCKED_WARNINGS)", "replacement": "if (blocked.length >= MAX_BLOCKED_WARNINGS)", "equivalent": null},
+    {"id": "in-10", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "url.length > MAX_WARNING_URL_CHARS ?", "replacement": "url.length >= MAX_WARNING_URL_CHARS ?", "equivalent": null},
+    {"id": "in-11", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "MAX_WARNING_URL_CHARS)}...`", "replacement": "MAX_WARNING_URL_CHARS)}`", "equivalent": null},
+    {"id": "in-12", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "return `the page requested ${escapeControls(cut)}", "replacement": "return `the page requested ${cut}", "equivalent": null},
+    {"id": "in-13", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "\\u007f-\\u009f", "replacement": "\\u0080-\\u009f", "equivalent": null},
+    {"id": "in-14", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "\\u2028\\u2029]", "replacement": "\\u2029]", "equivalent": null},
+    {"id": "in-15", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "padStart(4, \"0\")", "replacement": "padStart(2, \"0\")", "equivalent": null},
+    {"id": "in-16", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "blocked.length - MAX_BLOCKED_WARNINGS} more", "replacement": "blocked.length} more", "equivalent": null},
+    {"id": "in-17", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "Number.isInteger(value) && value > 0", "replacement": "Number.isInteger(value) && value >= 0", "equivalent": null},
+    {"id": "in-18", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "Number.isFinite(value) && value > 0", "replacement": "value > 0", "equivalent": "An infinite scale is also over MAX_SCALE, and NaN fails value > 0, so the isFinite check gives the same result."},
+    {"id": "in-19", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "browser === undefined || browser === \"\"", "replacement": "browser === undefined", "equivalent": null},
+    {"id": "in-20", "file": "src/browser/input.ts", "test": "test/unit/browser-input.test.ts", "original": "if (!allowed.includes(key))", "replacement": "if (false)", "equivalent": null}
+  ]
+}

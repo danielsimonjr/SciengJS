@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { existsSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { createServer, type Socket } from "node:net";
+import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { render } from "../../src/index.ts";
 import { renderHtmlPage } from "../../src/browser/render.ts";
@@ -35,6 +38,17 @@ c.putImageData(img, 0, 0);
 function pngSize(bytes: Uint8Array): { width: number; height: number } {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   return { width: view.getUint32(16), height: view.getUint32(20) };
+}
+
+/** The command lines of the live processes that name the profile. The profile path attributes a process to this render. */
+function processesOf(profile: string): string[] {
+  if (process.platform === "win32") {
+    const script = "Get-CimInstance Win32_Process | ForEach-Object { $_.CommandLine } | Where-Object { $_ }";
+    const out = execFileSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], { encoding: "utf8" });
+    return out.split(/\r?\n/).filter((line) => line.includes(profile) && !line.includes("Get-CimInstance"));
+  }
+  const out = execFileSync("ps", ["-eo", "args"], { encoding: "utf8" });
+  return out.split("\n").filter((line) => line.includes(profile));
 }
 
 function profilesLeft(): string[] {
@@ -83,4 +97,74 @@ describe.skipIf(!haveBrowser)("browser stage", () => {
     await render({ type: "html", format: "png", source: NETWORK_PAGE, options: { width: 200, height: 100 } }, { browser: browserPath });
     expect(profilesLeft()).toEqual(before);
   }, 60000);
+
+  test("a hung page rejects with E_TIMEOUT and leaves no browser process and no profile", async () => {
+    let profile = "";
+    const started = Date.now();
+    let error: unknown;
+    try {
+      await renderHtmlPage({
+        html: "<!DOCTYPE html><script>for(;;){}</script>",
+        format: "png", width: 100, height: 100, scale: 1,
+        browser: browserPath, timeoutMs: 10000,
+        onProfile: (dir) => { profile = dir; },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toMatchObject({ code: "E_TIMEOUT" });
+    expect((error as Error).message).toContain("did not load in time");
+    expect(Date.now() - started).toBeLessThan(15000);
+    expect(profile.startsWith(join(tmpdir(), PROFILE_PREFIX))).toBe(true);
+    expect(existsSync(profile)).toBe(false);
+    expect(processesOf(profile)).toEqual([]);
+  }, 60000);
+
+  test("a page cannot reach a local server by fetch, WebSocket, frame or window.open", async () => {
+    const connections: Socket[] = [];
+    const server = createServer((socket) => { connections.push(socket); socket.destroy(); });
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const port = (server.address() as { port: number }).port;
+    const local = `http://127.0.0.1:${port}`;
+    try {
+      const result = await renderHtmlPage({
+        html: `<!DOCTYPE html><iframe src="${local}/frame"></iframe><script>
+fetch("${local}/fetch").catch(() => {});
+try { new WebSocket("ws://127.0.0.1:${port}/ws"); } catch {}
+window.open("${local}/popup");
+</script>`,
+        format: "png", width: 200, height: 100, scale: 1, browser: browserPath, timeoutMs: 60000,
+      });
+      // The WebSocket goes to the refusing proxy, not to the Fetch domain. The page settles before the capture ends.
+      expect(result.blocked).toContain(`${local}/frame`);
+      expect(result.blocked).toContain(`${local}/fetch`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      expect(connections.length).toBe(0);
+    } finally {
+      await new Promise<void>((resolve) => server.close(() => resolve()));
+    }
+  }, 60000);
+
+  test("removes the exact profile folder of the render", async () => {
+    let profile = "";
+    await renderHtmlPage({ html: "<p>x</p>", format: "pdf", browser: browserPath, timeoutMs: 60000, onProfile: (dir) => { profile = dir; } });
+    expect(profile.startsWith(join(tmpdir(), PROFILE_PREFIX))).toBe(true);
+    expect(existsSync(profile)).toBe(false);
+    expect(processesOf(profile)).toEqual([]);
+  }, 60000);
 });
+
+test("a file that is not a browser rejects with E_STAGE_MISSING and leaves no profile", async () => {
+  const notABrowser = join(tmpdir(), `sciengjs-not-a-browser-${process.pid}.txt`);
+  writeFileSync(notABrowser, "not a program");
+  let profile = "";
+  try {
+    await expect(
+      renderHtmlPage({ html: "<p>x</p>", format: "pdf", browser: notABrowser, timeoutMs: 20000, onProfile: (dir) => { profile = dir; } }),
+    ).rejects.toMatchObject({ code: "E_STAGE_MISSING" });
+    expect(profile).not.toBe("");
+    expect(existsSync(profile)).toBe(false);
+  } finally {
+    rmSync(notABrowser, { force: true });
+  }
+}, 30000);

@@ -1,3 +1,5 @@
+import { RenderError } from "../errors.ts";
+
 /** The part of a WebSocket that the client uses. The global WebSocket of Node 22 and Bun meets it. */
 export interface CdpSocket {
   send(text: string): void;
@@ -8,6 +10,7 @@ export interface CdpSocket {
 interface PendingRequest {
   resolve: (value: unknown) => void;
   reject: (error: Error) => void;
+  timer: ReturnType<typeof setTimeout> | undefined;
 }
 
 interface EventHandlerEntry {
@@ -43,6 +46,7 @@ export class CdpConnection {
   private nextId = 1;
   private readonly pending = new Map<number, PendingRequest>();
   private readonly eventHandlers: EventHandlerEntry[] = [];
+  private deadline: number | undefined;
 
   constructor(socket: CdpSocket) {
     this.socket = socket;
@@ -54,10 +58,25 @@ export class CdpConnection {
     });
   }
 
+  /** Sets the default deadline (a Date.now() time) of each later request that names no deadline of its own. */
+  setDeadline(deadline: number | undefined): void {
+    this.deadline = deadline;
+  }
+
+  /** The count of requests that wait for a reply. */
+  pendingCount(): number {
+    return this.pending.size;
+  }
+
+  /**
+   * Sends one request. A request with no reply before its deadline rejects with E_TIMEOUT, and its pending entry
+   * is removed, so that a late reply is ignored.
+   */
   send(
     method: string,
     params?: Record<string, unknown>,
-    sessionId?: string
+    sessionId?: string,
+    deadline: number | undefined = this.deadline,
   ): Promise<unknown> {
     if (this.closed) {
       return Promise.reject(new Error(SOCKET_CLOSED_MESSAGE));
@@ -72,7 +91,14 @@ export class CdpConnection {
       payload.sessionId = sessionId;
     }
     return new Promise<unknown>((resolve, reject) => {
-      this.pending.set(id, { resolve, reject });
+      const timer =
+        deadline === undefined
+          ? undefined
+          : setTimeout(() => {
+              this.pending.delete(id);
+              reject(new RenderError("E_TIMEOUT", `the browser did not answer ${method} in time`));
+            }, Math.max(0, deadline - Date.now()));
+      this.pending.set(id, { resolve, reject, timer });
       this.socket.send(JSON.stringify(payload));
     });
   }
@@ -117,6 +143,7 @@ export class CdpConnection {
         return;
       }
       this.pending.delete(message.id);
+      clearTimeout(pending.timer);
       if (message.error !== undefined && message.error !== null) {
         pending.reject(new Error(errorText(message.error)));
       } else {
@@ -144,8 +171,45 @@ export class CdpConnection {
 
   private rejectAllPending(): void {
     for (const pending of Array.from(this.pending.values())) {
+      clearTimeout(pending.timer);
       pending.reject(new Error(SOCKET_CLOSED_MESSAGE));
     }
     this.pending.clear();
   }
+}
+
+/** The WebSocket of the runtime as a CdpSocket. */
+function runtimeSocket(address: string): CdpSocket {
+  return new WebSocket(address) as unknown as CdpSocket;
+}
+
+/**
+ * Opens a DevTools socket and returns a connection on it. An error event, or a close before the open, rejects with
+ * E_STAGE_MISSING. No open before the deadline closes the socket and rejects with E_TIMEOUT.
+ */
+export function connectCdp(
+  address: string,
+  deadline: number,
+  makeSocket: (address: string) => CdpSocket = runtimeSocket,
+): Promise<CdpConnection> {
+  const socket = makeSocket(address);
+  return new Promise<CdpConnection>((resolve, reject) => {
+    let settled = false;
+    const settle = (fn: () => void): void => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      fn();
+    };
+    const timer = setTimeout(() => {
+      settle(() => {
+        socket.close();
+        reject(new RenderError("E_TIMEOUT", `the DevTools socket ${address} did not open in time`));
+      });
+    }, Math.max(0, deadline - Date.now()));
+    socket.addEventListener("open", () => settle(() => resolve(new CdpConnection(socket))));
+    const fail = (): void => settle(() => reject(new RenderError("E_STAGE_MISSING", `cannot open the DevTools socket ${address}`)));
+    socket.addEventListener("error", fail);
+    socket.addEventListener("close", fail);
+  });
 }

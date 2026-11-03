@@ -14,5 +14,19 @@ test("the flags start a headless browser on the given profile and never disable 
   expect(flags).toContain("--headless=new");
   expect(flags).toContain("--user-data-dir=C:/tmp/profile");
   expect(flags).toContain("--remote-debugging-port=0");
-  expect(flags.some((f) => f.includes("no-sandbox"))).toBe(false);
+  expect(flags.some((f) => f.includes(["no", "sandbox"].join("-")))).toBe(false);
+});
+
+test("the flags stop the requests that the browser makes by itself", () => {
+  const flags = forcedBrowserFlags({ profileDir: "C:/tmp/profile", proxyPort: 12345 });
+  for (const flag of [
+    "--disable-background-networking",
+    "--disable-component-update",
+    "--disable-sync",
+    "--no-pings",
+    "--disable-component-extensions-with-background-pages",
+    "--disable-dev-shm-usage",
+  ]) {
+    expect(flags).toContain(flag);
+  }
 });

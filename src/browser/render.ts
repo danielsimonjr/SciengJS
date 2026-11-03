@@ -1,11 +1,11 @@
-import { spawn, type ChildProcess } from "node:child_process";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { RenderError } from "../errors.ts";
-import { CdpConnection } from "./cdp.ts";
+import { CdpConnection, connectCdp } from "./cdp.ts";
 import { forcedBrowserFlags } from "./flags.ts";
 import { makeProfile, removeProfile } from "./profile.ts";
-import { startRefusingProxy } from "./proxy.ts";
+import { startRefusingProxy, type RefusingProxy } from "./proxy.ts";
 
 /** The address of the page that the client loads. The client answers it from memory, so it names no host. */
 export const PAGE_URL = "http://sciengjs-page.invalid/";
@@ -21,6 +21,7 @@ const POLL_MS = 100;
 const PORT_FILE = "DevToolsActivePort";
 /** Codes of a read that Windows holds while the browser writes the port file. Such a read is polled again. */
 const HELD_READ_CODES = new Set(["EBUSY", "EPERM", "ENOENT"]);
+const IS_WINDOWS = process.platform === "win32";
 
 /** The output of the browser stage for an HTML page. */
 export type HtmlFormat = "png" | "pdf";
@@ -31,6 +32,8 @@ interface HtmlPageBase {
   browser: string;
   /** The time limit of the render, in milliseconds. */
   timeoutMs: number;
+  /** Called with the profile folder of this render once the folder exists. A test uses it to find leaks. */
+  onProfile?: (profile: string) => void;
 }
 
 /** One page to draw. A png has a size and a device scale. A pdf has neither. */
@@ -100,19 +103,6 @@ async function waitForBrowser(profile: string, state: LaunchState, deadline: num
   }
 }
 
-/** Opens the browser-level WebSocket and returns a connection on it. */
-function connect(address: string): Promise<CdpConnection> {
-  const socket = new WebSocket(address);
-  return new Promise<CdpConnection>((resolve, reject) => {
-    socket.addEventListener("open", () => resolve(new CdpConnection(socket)), { once: true });
-    socket.addEventListener(
-      "error",
-      () => reject(new RenderError("E_STAGE_MISSING", `cannot open the DevTools socket ${address}`)),
-      { once: true },
-    );
-  });
-}
-
 /** Rejects when the promise does not settle before the deadline. */
 async function withDeadline<T>(work: Promise<T>, deadline: number, message: string): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -126,25 +116,66 @@ async function withDeadline<T>(work: Promise<T>, deadline: number, message: stri
   }
 }
 
-/** Loads the page in a new target, refuses every request that is not the page, then captures it. */
-async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, deadline: number): Promise<HtmlPageResult> {
-  const blocked: string[] = [];
-  const faults: Error[] = [];
-  const target = (await cdp.send("Target.createTarget", { url: "about:blank" })) as { targetId: string };
-  const attached = (await cdp.send("Target.attachToTarget", { targetId: target.targetId, flatten: true })) as {
-    sessionId: string;
-  };
-  const s = attached.sessionId;
-  const record = (err: unknown): void => {
-    faults.push(err instanceof Error ? err : new Error(String(err)));
+/** The request interception of one page. It answers the page and the icon, and refuses every other request. */
+class Interceptor {
+  readonly blocked: string[] = [];
+  readonly faults: Error[] = [];
+  private readonly guarded = new Set<string>();
+  private readonly sessions = new Map<string, string>();
+  private readonly sessionWaiters = new Map<string, (sessionId: string) => void>();
+
+  constructor(
+    private readonly cdp: CdpConnection,
+    private readonly html: string,
+  ) {}
+
+  record = (err: unknown): void => {
+    this.faults.push(err instanceof Error ? err : new Error(String(err)));
   };
 
-  cdp.on("Fetch.requestPaused", s, (params) => {
+  /**
+   * Intercepts every request of the session and auto-attaches its child targets (frames in another process,
+   * workers, pop-ups) paused, so that each child is guarded the same way before it runs. A dedicated worker has no
+   * Fetch domain: the session of its page intercepts its requests.
+   */
+  async guard(sessionId: string, type = "page"): Promise<void> {
+    if (this.guarded.has(sessionId)) return;
+    this.guarded.add(sessionId);
+    const cdp = this.cdp;
+    cdp.on("Fetch.requestPaused", sessionId, (params) => this.paused(sessionId, params));
+    cdp.on("Target.attachedToTarget", sessionId, (params) => this.attached(params));
+    if (type !== "worker") await cdp.send("Fetch.enable", { patterns: [{ urlPattern: "*" }] }, sessionId);
+    await cdp.send("Target.setAutoAttach", { autoAttach: true, waitForDebuggerOnStart: true, flatten: true }, sessionId);
+  }
+
+  /** Guards a new child target, then lets it run. A child that cannot be guarded fails the render. */
+  attached(params: unknown): void {
+    const { sessionId, targetInfo } = params as { sessionId: string; targetInfo: { targetId: string; type: string } };
+    this.guard(sessionId, targetInfo.type)
+      .then(() => {
+        this.sessions.set(targetInfo.targetId, sessionId);
+        this.sessionWaiters.get(targetInfo.targetId)?.(sessionId);
+        return this.cdp.send("Runtime.runIfWaitingForDebugger", {}, sessionId);
+      })
+      .catch(this.record);
+  }
+
+  /** The session of a target, once the target is attached and guarded. */
+  sessionOf(targetId: string): Promise<string> {
+    const known = this.sessions.get(targetId);
+    if (known !== undefined) return Promise.resolve(known);
+    return new Promise((resolve) => this.sessionWaiters.set(targetId, resolve));
+  }
+
+  private paused(sessionId: string, params: unknown): void {
+    const cdp = this.cdp;
     const paused = params as { requestId: string; request: { url: string } };
     if (paused.request.url === FAVICON_URL) {
       // The browser asks for an icon of the page host by itself. The client answers it with no content, so no
       // request leaves the process and the icon is not counted as a request of the page.
-      cdp.send("Fetch.fulfillRequest", { requestId: paused.requestId, responseCode: 204, responseHeaders: [], body: "" }, s).catch(record);
+      cdp
+        .send("Fetch.fulfillRequest", { requestId: paused.requestId, responseCode: 204, responseHeaders: [], body: "" }, sessionId)
+        .catch(this.record);
       return;
     }
     if (paused.request.url === PAGE_URL) {
@@ -155,19 +186,56 @@ async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, deadline: n
             requestId: paused.requestId,
             responseCode: 200,
             responseHeaders: [{ name: "Content-Type", value: "text/html; charset=utf-8" }],
-            body: Buffer.from(req.html, "utf8").toString("base64"),
+            body: Buffer.from(this.html, "utf8").toString("base64"),
           },
-          s,
+          sessionId,
         )
-        .catch(record);
+        .catch(this.record);
       return;
     }
-    blocked.push(paused.request.url);
-    cdp.send("Fetch.failRequest", { requestId: paused.requestId, errorReason: "BlockedByClient" }, s).catch(record);
-  });
+    this.blocked.push(paused.request.url);
+    cdp.send("Fetch.failRequest", { requestId: paused.requestId, errorReason: "BlockedByClient" }, sessionId).catch(this.record);
+  }
+}
 
+/**
+ * Loads the page in a new target, refuses every request that is not the page, then captures it. Every request
+ * to the browser carries the deadline, and the whole capture runs under it. The load wait keys on the loader of
+ * the navigation, so a load event of an earlier document does not count.
+ */
+export async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, deadline: number): Promise<HtmlPageResult> {
+  return withDeadline(capture(cdp, req), deadline, "the page did not load in time");
+}
+
+async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPageResult> {
+  const guard = new Interceptor(cdp, req.html);
+  // A new page that the page opens (window.open) is a new target of the browser. The browser-level auto-attach
+  // pauses it until it is guarded. A target of the browser itself (for example a built-in extension) is not a
+  // target of the page: the client lets it run, and the forced flags keep its connections on the proxy.
+  cdp.on("Target.attachedToTarget", undefined, (params) => {
+    const { sessionId, targetInfo } = params as { sessionId: string; targetInfo: { type: string } };
+    if (targetInfo.type === "page") {
+      guard.attached(params);
+    } else {
+      cdp.send("Runtime.runIfWaitingForDebugger", {}, sessionId).catch(guard.record);
+    }
+  });
+  await cdp.send("Target.setAutoAttach", { autoAttach: true, waitForDebuggerOnStart: true, flatten: true });
+  const target = (await cdp.send("Target.createTarget", { url: "about:blank" })) as { targetId: string };
+  // The browser-level auto-attach attaches the new target and guards it. The client waits for that session.
+  const s = await guard.sessionOf(target.targetId);
+
+  const loads = new Set<string>();
+  let onLoad: (() => void) | undefined;
+  cdp.on("Page.lifecycleEvent", s, (params) => {
+    const event = params as { name: string; loaderId: string };
+    if (event.name === "load") {
+      loads.add(event.loaderId);
+      onLoad?.();
+    }
+  });
   await cdp.send("Page.enable", {}, s);
-  await cdp.send("Fetch.enable", { patterns: [{ urlPattern: "*" }] }, s);
+  await cdp.send("Page.setLifecycleEventsEnabled", { enabled: true }, s);
   if (req.format === "png") {
     await cdp.send(
       "Emulation.setDeviceMetricsOverride",
@@ -175,74 +243,132 @@ async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, deadline: n
       s,
     );
   }
-  const loaded = new Promise<void>((resolve) => cdp.on("Page.loadEventFired", s, () => resolve()));
-  await cdp.send("Page.navigate", { url: PAGE_URL }, s);
-  await withDeadline(loaded, deadline, "the page did not load in time");
+  const nav = (await cdp.send("Page.navigate", { url: PAGE_URL }, s)) as { loaderId?: string; errorText?: string };
+  if (nav.errorText !== undefined && nav.errorText !== "") {
+    throw new RenderError("E_INTERNAL", `the browser did not load the page: ${nav.errorText}`);
+  }
+  const loaderId = nav.loaderId ?? "";
+  // The load event can come before the reply of Page.navigate, so the seen loaders are checked first.
+  if (!loads.has(loaderId)) {
+    await new Promise<void>((resolve) => {
+      onLoad = () => {
+        if (loads.has(loaderId)) resolve();
+      };
+    });
+  }
 
   const data =
     req.format === "png"
       ? ((await cdp.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false }, s)) as { data: string })
       : ((await cdp.send("Page.printToPDF", { printBackground: true, preferCSSPageSize: true }, s)) as { data: string });
-  if (faults.length > 0) {
-    throw new RenderError("E_INTERNAL", `the browser rejected a page request: ${faults[0]?.message ?? "unknown"}`);
+  if (guard.faults.length > 0) {
+    throw new RenderError("E_INTERNAL", `the browser rejected a page request: ${guard.faults[0]?.message ?? "unknown"}`);
   }
-  return { bytes: Buffer.from(data.data, "base64"), blocked };
+  return { bytes: Buffer.from(data.data, "base64"), blocked: guard.blocked };
+}
+
+function hasExited(child: ChildProcess): boolean {
+  return child.exitCode !== null || child.signalCode !== null;
 }
 
 /** Waits for the browser to exit. Returns false when it is still running at the deadline. */
-async function waitForExit(child: ChildProcess, budgetMs: number): Promise<boolean> {
-  if (child.exitCode !== null || child.signalCode !== null) return true;
+async function waitForExit(child: ChildProcess, deadline: number): Promise<boolean> {
+  if (hasExited(child)) return true;
   let timer: ReturnType<typeof setTimeout> | undefined;
   const exited = new Promise<boolean>((resolve) => {
     child.once("exit", () => resolve(true));
-    timer = setTimeout(() => resolve(false), budgetMs);
+    timer = setTimeout(() => resolve(hasExited(child)), Math.max(0, deadline - Date.now()));
   });
   const result = await exited;
   clearTimeout(timer);
   return result;
 }
 
-/** Asks the browser to close, then waits for its exit. A browser still running after the budget is killed. */
-async function stopBrowser(cdp: CdpConnection | undefined, child: ChildProcess, budgetMs: number): Promise<void> {
+/**
+ * Kills the browser and every process that it started. On POSIX the browser leads its own process group, so the
+ * group dies with one signal, also after the browser itself exited. On Windows `taskkill /T` walks the tree of a
+ * live process id. After the browser exited, Windows can give its id to an unrelated process, so the call is
+ * skipped then. A process that is already gone is not an error.
+ */
+function killTree(child: ChildProcess): void {
+  const pid = child.pid;
+  if (pid === undefined) return;
+  if (IS_WINDOWS) {
+    if (hasExited(child)) return;
+    spawnSync("taskkill", ["/PID", String(pid), "/T", "/F"], { stdio: "ignore", windowsHide: true });
+    return;
+  }
+  try {
+    process.kill(-pid, "SIGKILL");
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== "ESRCH") throw err;
+  }
+}
+
+/**
+ * Asks the browser to close, then waits for its exit. A browser still running at the deadline is killed with its
+ * process tree. The tree kill also runs after a clean close, so that no helper process stays.
+ */
+async function stopBrowser(cdp: CdpConnection | undefined, child: ChildProcess, deadline: number): Promise<void> {
   if (cdp !== undefined) {
     // The exit wait below decides whether the browser stopped. A failed close request is not an error by itself.
-    await cdp.send("Browser.close").catch(() => undefined);
+    await cdp.send("Browser.close", {}, undefined, deadline).catch(() => undefined);
     cdp.close();
   }
-  if (await waitForExit(child, budgetMs)) return;
-  child.kill("SIGKILL");
-  if (!(await waitForExit(child, budgetMs))) {
+  const closed = await waitForExit(child, deadline);
+  killTree(child);
+  if (closed) return;
+  // The kill is sure to end the process, but its exit event needs a moment. The wait gets a short floor.
+  if (!(await waitForExit(child, Math.max(deadline, Date.now() + 1000)))) {
     throw new RenderError("E_INTERNAL", "the browser did not stop after it was killed");
   }
 }
 
 /**
  * Draws one HTML page in a new headless browser and returns the bytes of a PNG or a PDF.
- * The browser runs with a new profile, the forced flags and a refusing proxy. It never runs with --no-sandbox.
- * The profile, the proxy and the browser are removed on every path before the function returns.
+ * The browser runs with a new profile, the forced flags and a refusing proxy. The browser sandbox stays on.
+ * The profile, the proxy and the browser are removed on every path before the function returns. One deadline
+ * covers the whole cleanup.
  */
 export async function renderHtmlPage(req: HtmlPageRequest): Promise<HtmlPageResult> {
   const pageBudgetMs = Math.floor(req.timeoutMs * PAGE_SHARE);
   const cleanupBudgetMs = req.timeoutMs - pageBudgetMs;
-  const proxy = await startRefusingProxy();
-  const profile = makeProfile();
-  const child = spawn(req.browser, [...forcedBrowserFlags({ profileDir: profile, proxyPort: proxy.port }), "about:blank"], {
-    stdio: "ignore",
-    windowsHide: true,
-  });
-  const state = watchChild(child, req.browser);
+  const deadline = Date.now() + pageBudgetMs;
+  let proxy: RefusingProxy | undefined;
+  let profile: string | undefined;
+  let child: ChildProcess | undefined;
+  let state: LaunchState | undefined;
   let cdp: CdpConnection | undefined;
   try {
-    const deadline = Date.now() + pageBudgetMs;
+    proxy = await startRefusingProxy();
+    profile = makeProfile();
+    req.onProfile?.(profile);
+    try {
+      child = spawn(req.browser, [...forcedBrowserFlags({ profileDir: profile, proxyPort: proxy.port }), "about:blank"], {
+        stdio: "ignore",
+        windowsHide: true,
+        // On POSIX the browser leads a new process group, so that the cleanup can kill the whole tree.
+        detached: !IS_WINDOWS,
+      });
+    } catch (err) {
+      // Bun and Node on Windows throw at the spawn call for a file that cannot run.
+      throw new RenderError("E_STAGE_MISSING", `cannot start the browser at ${req.browser}: ${(err as Error).message}`);
+    }
+    state = watchChild(child, req.browser);
     const address = await waitForBrowser(profile, state, deadline);
-    cdp = await connect(address);
+    cdp = await connectCdp(address, deadline);
+    cdp.setDeadline(deadline);
     return await capturePage(cdp, req, deadline);
   } finally {
+    const cleanupDeadline = Date.now() + cleanupBudgetMs;
     try {
-      if (state.error === undefined) await stopBrowser(cdp, child, cleanupBudgetMs);
+      if (child !== undefined && state?.error === undefined) await stopBrowser(cdp, child, cleanupDeadline);
     } finally {
-      await proxy.close();
-      await removeProfile(profile, cleanupBudgetMs);
+      try {
+        await proxy?.close();
+      } finally {
+        if (profile !== undefined) await removeProfile(profile, cleanupDeadline);
+      }
     }
   }
 }

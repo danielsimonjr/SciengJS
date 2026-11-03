@@ -208,11 +208,17 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/browser/cdp.ts` - cdp module
+### `src/browser/cdp.ts` - Sends one request. A request with no reply before its deadline rejects with E_TIMEOUT, and its pending entry
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
 
 **Exports:**
 - Classes: `CdpConnection`
 - Interfaces: `CdpSocket`
+- Functions: `connectCdp`
 
 ---
 
@@ -245,7 +251,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/browser/input.ts` - input module
+### `src/browser/input.ts` - Checks the options of html to png. An unknown key, a bad value, a side over MAX_SIDE, a scale over MAX_SCALE
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -255,11 +261,11 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `PngOptions`
 - Functions: `parsePngOptions`, `parsePdfOptions`, `htmlSource`, `browserPathOf`, `blockedWarnings`
-- Constants: `DEFAULT_WIDTH`, `DEFAULT_HEIGHT`, `DEFAULT_SCALE`
+- Constants: `DEFAULT_WIDTH`, `DEFAULT_HEIGHT`, `DEFAULT_SCALE`, `MAX_SIDE`, `MAX_SCALE`, `MAX_DEVICE_PIXELS`, `MAX_BLOCKED_WARNINGS`, `MAX_WARNING_URL_CHARS`
 
 ---
 
-### `src/browser/profile.ts` - Removes the profile. A held file is retried until the deadline. Any other error, or a deadline with the
+### `src/browser/profile.ts` - Removes the profile. A held file is retried until the deadline, a Date.now() time. Any other error, or a deadline with t
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
@@ -300,7 +306,7 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
-| `child_process` | `spawn, ChildProcess` |
+| `child_process` | `spawn, spawnSync, ChildProcess` |
 | `fs` | `readFileSync, existsSync` |
 | `path` | `join` |
 
@@ -308,15 +314,15 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../errors.ts` | `RenderError` | Import |
-| `./cdp.ts` | `CdpConnection` | Import |
+| `./cdp.ts` | `CdpConnection, connectCdp` | Import |
 | `./flags.ts` | `forcedBrowserFlags` | Import |
 | `./profile.ts` | `makeProfile, removeProfile` | Import |
-| `./proxy.ts` | `startRefusingProxy` | Import |
+| `./proxy.ts` | `startRefusingProxy, RefusingProxy` | Import |
 
 **Exports:**
 - Interfaces: `HtmlPageResult`
 - Types: `HtmlFormat`, `HtmlPageRequest`
-- Functions: `renderHtmlPage`
+- Functions: `capturePage`, `renderHtmlPage`
 - Constants: `PAGE_URL`
 
 ---
@@ -822,7 +828,7 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 14 files |
+| `src/errors` | 0 files | 15 files |
 | `src/mermaid/common` | 1 file | 8 files |
 | `src/mermaid/render` | 6 files | 3 files |
 | `src/worker/protocol` | 1 file | 8 files |
@@ -842,13 +848,13 @@ The codebase is organized into the following modules:
 | `src/types` | 0 files | 4 files |
 | `src/browser/backend-pdf` | 3 files | 0 files |
 | `src/browser/backend-png` | 3 files | 0 files |
+| `src/browser/cdp` | 1 file | 2 files |
 | `src/browser/input` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
 | `src/mermaid/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
 | `src/mermaid/state` | 1 file | 2 files |
 | `src/worker/run` | 2 files | 1 file |
-| `src/browser/cdp` | 0 files | 2 files |
 | `src/browser/flags` | 0 files | 2 files |
 | `src/browser/profile` | 1 file | 1 file |
 | `src/browser/proxy` | 0 files | 2 files |
@@ -973,6 +979,7 @@ graph TD
     N9 --> N35
     N9 --> N13
     N9 --> N16
+    N10 --> N3
     N12 --> N10
     N12 --> N11
     N12 --> N15
@@ -1040,7 +1047,6 @@ graph TD
     N32 --> N1
     N32 --> N3
     N34 --> N3
-    N34 --> N35
 ```
 
 ---
@@ -1050,14 +1056,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 144 |
+| Total Source Files | 146 |
 | Subsystems | 13 |
-| Total Lines of Code | 15889 |
-| Total Exports | 280 |
+| Total Lines of Code | 16443 |
+| Total Exports | 287 |
 | Total Re-exports | 55 |
 | Total Classes | 6 |
 | Total Interfaces | 47 |
-| Total Functions | 121 |
+| Total Functions | 123 |
 | Total Type Guards | 2 |
 | Total Enums | 0 |
 | Type-only Imports | 21 |

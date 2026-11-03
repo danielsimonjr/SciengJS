@@ -380,19 +380,30 @@
         ]
       },
       "src/browser/cdp.ts": {
-        "description": "cdp module",
+        "description": "Sends one request. A request with no reply before its deadline rejects with E_TIMEOUT, and its pending entry",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
         "workspaceDependencies": [],
         "exports": [
-          "CdpConnection"
+          "CdpConnection",
+          "connectCdp"
         ],
         "classes": [
           "CdpConnection"
         ],
         "interfaces": [
           "CdpSocket"
+        ],
+        "functions": [
+          "connectCdp"
         ]
       },
       "src/browser/flags.ts": {
@@ -478,7 +489,7 @@
         ]
       },
       "src/browser/input.ts": {
-        "description": "input module",
+        "description": "Checks the options of html to png. An unknown key, a bad value, a side over MAX_SIDE, a scale over MAX_SCALE",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -494,6 +505,11 @@
           "DEFAULT_WIDTH",
           "DEFAULT_HEIGHT",
           "DEFAULT_SCALE",
+          "MAX_SIDE",
+          "MAX_SCALE",
+          "MAX_DEVICE_PIXELS",
+          "MAX_BLOCKED_WARNINGS",
+          "MAX_WARNING_URL_CHARS",
           "parsePngOptions",
           "parsePdfOptions",
           "htmlSource",
@@ -513,11 +529,16 @@
         "constants": [
           "DEFAULT_WIDTH",
           "DEFAULT_HEIGHT",
-          "DEFAULT_SCALE"
+          "DEFAULT_SCALE",
+          "MAX_SIDE",
+          "MAX_SCALE",
+          "MAX_DEVICE_PIXELS",
+          "MAX_BLOCKED_WARNINGS",
+          "MAX_WARNING_URL_CHARS"
         ]
       },
       "src/browser/profile.ts": {
-        "description": "Removes the profile. A held file is retried until the deadline. Any other error, or a deadline with the",
+        "description": "Removes the profile. A held file is retried until the deadline, a Date.now() time. Any other error, or a deadline with t",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -613,6 +634,7 @@
             "module": "child_process",
             "imports": [
               "spawn",
+              "spawnSync",
               "ChildProcess"
             ]
           },
@@ -640,7 +662,8 @@
           {
             "file": "./cdp.ts",
             "imports": [
-              "CdpConnection"
+              "CdpConnection",
+              "connectCdp"
             ]
           },
           {
@@ -659,19 +682,22 @@
           {
             "file": "./proxy.ts",
             "imports": [
-              "startRefusingProxy"
+              "startRefusingProxy",
+              "RefusingProxy"
             ]
           }
         ],
         "workspaceDependencies": [],
         "exports": [
           "PAGE_URL",
+          "capturePage",
           "renderHtmlPage"
         ],
         "interfaces": [
           "HtmlPageResult"
         ],
         "functions": [
+          "capturePage",
           "renderHtmlPage"
         ],
         "constants": [

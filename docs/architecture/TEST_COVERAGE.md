@@ -9,20 +9,19 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 51 |
-| Total Test Files | 47 |
-| Source Files with Tests | 32 |
-| Source Files without Tests | 19 |
-| Coverage (raw, direct-import) | **62.7%** |
+| Total Test Files | 49 |
+| Source Files with Tests | 33 |
+| Source Files without Tests | 18 |
+| Coverage (raw, direct-import) | **64.7%** |
 ---
 
 ## Source Files Not Imported By A Test
 
-The following 19 source files are not directly imported by any test file:
+The following 18 source files are not directly imported by any test file:
 
 ### browser/
 
 - `src/browser/index.ts`
-- `src/browser/input.ts`
 
 ### graph/
 
@@ -79,6 +78,7 @@ The following 19 source files are not directly imported by any test file:
 | `browser/backend-png.ts` | `browser-stage.test.ts` |
 | `browser/cdp.ts` | `browser-cdp.test.ts` |
 | `browser/flags.ts` | `browser-flags.test.ts` |
+| `browser/input.ts` | `browser-input.test.ts` |
 | `browser/profile.ts` | `browser-render.test.ts` |
 | `browser/proxy.ts` | `browser-proxy.test.ts` |
 | `browser/render.ts` | `browser-render.test.ts` |
@@ -119,6 +119,7 @@ The following 19 source files are not directly imported by any test file:
 | `unit/assets.test.ts` | 2 files |
 | `unit/browser-cdp.test.ts` | 1 files |
 | `unit/browser-flags.test.ts` | 1 files |
+| `unit/browser-input.test.ts` | 1 files |
 | `unit/browser-proxy.test.ts` | 1 files |
 | `unit/browser-stage.test.ts` | 5 files |
 | `unit/config-assets.test.ts` | 3 files |
@@ -142,6 +143,7 @@ The following 19 source files are not directly imported by any test file:
 | `unit/mermaid-state.test.ts` | 3 files |
 | `unit/mermaid-xml.test.ts` | 8 files |
 | `unit/no-bun-api.test.ts` | 0 files |
+| `unit/no-sandbox-flag.test.ts` | 0 files |
 | `unit/page-checker-io.test.ts` | 0 files |
 | `unit/process-list.test.ts` | 0 files |
 | `unit/raster-init.test.ts` | 0 files |

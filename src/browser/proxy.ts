@@ -19,7 +19,12 @@ export interface RefusingProxy {
  */
 function hostOf(target: string): string {
   if (/^https?:\/\//i.test(target)) {
-    return new URL(target).hostname;
+    try {
+      return new URL(target).hostname;
+    } catch {
+      // A URL that does not parse is recorded as it was sent. A throw here would crash the engine process.
+      return target;
+    }
   }
   const colon = target.lastIndexOf(":");
   return colon > 0 ? target.slice(0, colon) : target;

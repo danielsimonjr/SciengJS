@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { CdpConnection, type CdpSocket } from "../../src/browser/cdp.ts";
+import { CdpConnection, connectCdp, type CdpSocket } from "../../src/browser/cdp.ts";
 
 /** A socket that records what it sends and lets a test deliver messages. */
 class FakeSocket implements CdpSocket {
@@ -83,5 +83,65 @@ describe("CdpConnection", () => {
     cdp.close();
     expect(socket.closed).toBe(true);
     await expect(cdp.send("Browser.getVersion")).rejects.toThrow(/closed/);
+  });
+});
+
+describe("CdpConnection deadlines", () => {
+  test("a request with no reply before the deadline rejects with E_TIMEOUT and drops its pending entry", async () => {
+    const socket = new FakeSocket();
+    const cdp = new CdpConnection(socket);
+    const pending = cdp.send("Page.navigate", {}, undefined, Date.now() + 30);
+    await expect(pending).rejects.toMatchObject({ code: "E_TIMEOUT" });
+    expect(cdp.pendingCount()).toBe(0);
+    // A late reply is ignored.
+    socket.message({ id: 1, result: {} });
+    expect(cdp.pendingCount()).toBe(0);
+  });
+
+  test("the default deadline of the connection applies to each request", async () => {
+    const socket = new FakeSocket();
+    const cdp = new CdpConnection(socket);
+    cdp.setDeadline(Date.now() + 30);
+    await expect(cdp.send("Page.enable")).rejects.toMatchObject({ code: "E_TIMEOUT" });
+    expect(cdp.pendingCount()).toBe(0);
+  });
+
+  test("a reply before the deadline resolves and clears the timer", async () => {
+    const socket = new FakeSocket();
+    const cdp = new CdpConnection(socket);
+    const pending = cdp.send("Page.enable", {}, undefined, Date.now() + 5000);
+    socket.message({ id: 1, result: { ok: true } });
+    expect(await pending).toEqual({ ok: true });
+    expect(cdp.pendingCount()).toBe(0);
+  });
+});
+
+describe("connectCdp", () => {
+  test("resolves with a connection on open", async () => {
+    const socket = new FakeSocket();
+    const opened = connectCdp("ws://x", Date.now() + 5000, () => socket);
+    socket.deliver("open", {});
+    expect(await opened).toBeInstanceOf(CdpConnection);
+  });
+
+  test("rejects with E_STAGE_MISSING when the socket closes before it opens", async () => {
+    const socket = new FakeSocket();
+    const opened = connectCdp("ws://x", Date.now() + 5000, () => socket);
+    socket.deliver("close", {});
+    await expect(opened).rejects.toMatchObject({ code: "E_STAGE_MISSING" });
+  });
+
+  test("rejects with E_STAGE_MISSING on an error event", async () => {
+    const socket = new FakeSocket();
+    const opened = connectCdp("ws://x", Date.now() + 5000, () => socket);
+    socket.deliver("error", {});
+    await expect(opened).rejects.toMatchObject({ code: "E_STAGE_MISSING" });
+  });
+
+  test("rejects with E_TIMEOUT and closes the socket when it does not open before the deadline", async () => {
+    const socket = new FakeSocket();
+    const opened = connectCdp("ws://x", Date.now() + 30, () => socket);
+    await expect(opened).rejects.toMatchObject({ code: "E_TIMEOUT" });
+    expect(socket.closed).toBe(true);
   });
 });

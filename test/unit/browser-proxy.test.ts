@@ -38,3 +38,14 @@ test("the refusing proxy refuses a CONNECT tunnel and records its host", async (
     await proxy.close();
   }
 });
+
+test("the refusing proxy records an absolute URL that does not parse as it was sent and keeps running", async () => {
+  const proxy = await startRefusingProxy();
+  try {
+    expect(await send(proxy.port, "GET", "http://[bad/x")).toBe(403);
+    expect(await send(proxy.port, "GET", "http://example.invalid/after")).toBe(403);
+    expect(proxy.attempts()).toEqual(["http://[bad/x", "example.invalid"]);
+  } finally {
+    await proxy.close();
+  }
+});

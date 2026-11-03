@@ -16,11 +16,10 @@ export function makeProfile(): string {
 }
 
 /**
- * Removes the profile. A held file is retried until the deadline. Any other error, or a deadline with the
+ * Removes the profile. A held file is retried until the deadline, a Date.now() time. Any other error, or a deadline with the
  * folder still held, rejects with E_INTERNAL, so that a leak is never reported as clean.
  */
-export async function removeProfile(profile: string, budgetMs: number): Promise<void> {
-  const deadline = Date.now() + budgetMs;
+export async function removeProfile(profile: string, deadline: number): Promise<void> {
   for (;;) {
     try {
       rmSync(profile, { recursive: true, force: true });

@@ -1,25 +1,24 @@
 {
   "metadata": {
     "totalSourceFiles": 51,
-    "totalTestFiles": 47,
-    "testedCount": 32,
-    "untestedCount": 19,
-    "coveragePercent": "62.7",
+    "totalTestFiles": 49,
+    "testedCount": 33,
+    "untestedCount": 18,
+    "coveragePercent": "64.7",
     "effectiveCoverage": {
       "policyLoaded": false,
       "activeFiles": 51,
-      "testedActive": 32,
-      "activeUntested": 19,
+      "testedActive": 33,
+      "activeUntested": 18,
       "excludedTotal": 0,
-      "percent": "62.7",
+      "percent": "64.7",
       "breakdown": {
-        "active_untested": 19
+        "active_untested": 18
       }
     }
   },
   "untestedFiles": [
     "src/browser/index.ts",
-    "src/browser/input.ts",
     "src/graph/index.ts",
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
@@ -44,6 +43,7 @@
     "src/browser/backend-png.ts",
     "src/browser/cdp.ts",
     "src/browser/flags.ts",
+    "src/browser/input.ts",
     "src/browser/profile.ts",
     "src/browser/proxy.ts",
     "src/browser/render.ts",
@@ -89,7 +89,9 @@
       "test/unit/browser-flags.test.ts"
     ],
     "src/browser/index.ts": [],
-    "src/browser/input.ts": [],
+    "src/browser/input.ts": [
+      "test/unit/browser-input.test.ts"
+    ],
     "src/browser/profile.ts": [
       "test/integration/browser-render.test.ts"
     ],
@@ -253,6 +255,9 @@
     "test/unit/browser-flags.test.ts": [
       "src/browser/flags.ts"
     ],
+    "test/unit/browser-input.test.ts": [
+      "src/browser/input.ts"
+    ],
     "test/unit/browser-proxy.test.ts": [
       "src/browser/proxy.ts"
     ],
@@ -346,6 +351,7 @@
       "src/raster/index.ts"
     ],
     "test/unit/no-bun-api.test.ts": [],
+    "test/unit/no-sandbox-flag.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
     "test/unit/process-list.test.ts": [],
     "test/unit/raster-init.test.ts": [],
@@ -389,10 +395,6 @@
   "classifiedUntested": [
     {
       "file": "src/browser/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/browser/input.ts",
       "category": null
     },
     {

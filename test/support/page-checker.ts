@@ -11,6 +11,8 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { forcedBrowserFlags } from "../../src/browser/flags.ts";
+import { startRefusingProxy, type RefusingProxy } from "../../src/browser/proxy.ts";
 
 export interface PageCheckOptions {
   /** Absolute path of the Chrome or Chromium executable. */
@@ -49,20 +51,12 @@ const PROFILE_DELETE_DEADLINE_MS = 30000;
 const LAUNCHED_EXIT_GRACE_MS = 5000;
 /** The prefix of every profile folder that a check creates. The leak check looks for it. */
 export const PROFILE_PREFIX = "sciengjs-page-check-";
-const CHROME_ARGS = [
-  "--headless=new",
-  "--remote-debugging-port=0",
-  "--no-first-run",
-  "--no-default-browser-check",
-  "--disable-extensions",
+/**
+ * The flags of the checker on top of the forced flags of the browser stage. The forced flags keep the sandbox on
+ * and route every connection to a refusing proxy. The pages under check are local files.
+ */
+const CHECKER_ARGS = [
   "--disable-gpu",
-  // The page is a local test fixture. The sandbox is off so that the runner's container can start Chrome.
-  "--no-sandbox",
-  // An elevated session makes Chrome relaunch itself. This flag keeps the launched process the browser.
-  "--do-not-de-elevate",
-  // No crash reporter: its helper process holds files in the profile after the browser has stopped.
-  "--disable-breakpad",
-  "--disable-crash-reporter",
   // Chrome writes its own log to stderr, so a start failure shows what the browser did.
   "--enable-logging=stderr",
 ];
@@ -249,13 +243,15 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
   let child: ChildProcess | undefined;
   let port: number | undefined;
   let socket: WebSocket | undefined;
+  let proxy: RefusingProxy | undefined;
 
   try {
+    proxy = await startRefusingProxy();
     if (!existsSync(options.browserPath)) {
       throw new Error(`browser path does not exist: ${options.browserPath}`);
     }
     try {
-      child = spawn(options.browserPath, [...CHROME_ARGS, `--user-data-dir=${profile}`, "about:blank"], {
+      child = spawn(options.browserPath, [...forcedBrowserFlags({ profileDir: profile, proxyPort: proxy.port }), ...CHECKER_ARGS, "about:blank"], {
         stdio: ["ignore", "ignore", "pipe"],
         windowsHide: true,
       });
@@ -337,11 +333,15 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
     return { ok: problems.length === 0, problems };
   } finally {
     socket?.close();
-    await teardownLaunch({
-      close: () => closeBrowser(port, stopTimeoutMs),
-      stop: () => stopLaunched(child, LAUNCHED_EXIT_GRACE_MS),
-      remove: () => removeProfile(profile, PROFILE_DELETE_DEADLINE_MS),
-    });
+    try {
+      await teardownLaunch({
+        close: () => closeBrowser(port, stopTimeoutMs),
+        stop: () => stopLaunched(child, LAUNCHED_EXIT_GRACE_MS),
+        remove: () => removeProfile(profile, PROFILE_DELETE_DEADLINE_MS),
+      });
+    } finally {
+      await proxy?.close();
+    }
   }
 }
 
