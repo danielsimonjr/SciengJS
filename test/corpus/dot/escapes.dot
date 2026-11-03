@@ -1,0 +1,5 @@
+digraph Escapes {
+  a [label="line one\lline two\r"];
+  b [label="say \"hi\""];
+  a -> b;
+}

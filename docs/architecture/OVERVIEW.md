@@ -2,7 +2,7 @@
 
 `@danielsimonjr/sciengjs` is a TypeScript library. The library renders science and engineering sources to SVG, PNG, PDF, HTML, and Markdown. The library runs on the local machine. The library sends no source to a web service.
 
-Status: increment I0, the skeleton. The package renders no input yet. The package has the public API, the configuration loader, the worker runner, the stage registry and the test harnesses. The first backend, DOT to SVG, arrives with increment I1.
+Status: increment I1, the graph and raster stages. The package renders DOT to SVG and DOT to PNG. The other stages are still stubs. A pair of a stub stage rejects with `E_UNSUPPORTED`.
 
 ## What the engine does
 
@@ -22,8 +22,12 @@ Status: increment I0, the skeleton. The package renders no input yet. The packag
 | `src/registry.ts` | The stage registry: a map from `type:format` to a backend module. |
 | `src/pairs.ts` | The table of supported pairs and their stages. |
 | `src/worker/` | The worker runner and the worker entry. |
-| `src/graph`, `src/mermaid`, `src/math`, `src/tex`, `src/plot`, `src/sysml`, `src/mesh`, `src/browser`, `src/html`, `src/raster` | The subpath stubs. Each stage fills its folder in its increment. |
+| `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner and the two backends (SVG and PNG). |
+| `src/raster/` | The raster stage: SVG to PNG through resvg, and the font check. |
+| `src/mermaid`, `src/math`, `src/tex`, `src/plot`, `src/sysml`, `src/mesh`, `src/browser`, `src/html` | The subpath stubs. Each stage fills its folder in its increment. |
+| `assets/` | The files that ship in the package: the bundled raster font and the licence texts. |
 | `test/unit/` | Unit tests of each module. |
+| `test/corpus/` | The DOT corpus: each source and its expected SVG. |
 | `test/integration/` | The page checker tests. They need a browser. |
 | `test/support/` | Test-only helpers: the SVG comparison, the Bun global scan, the page checker and the stub backends. |
 | `test/smoke/smoke.mjs` | The Node smoke test of the built package. |
@@ -42,9 +46,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 89 | repo-tools map |
-| totalLinesOfCode | 8972 | repo-tools map |
-| totalExports | 126 | repo-tools map |
-| totalTypeOnlyImports | 9 | repo-tools map |
+| totalSourceFiles | 107 | repo-tools map |
+| totalLinesOfCode | 10982 | repo-tools map |
+| totalExports | 151 | repo-tools map |
+| totalTypeOnlyImports | 14 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 20 | repo-tools map |
+| entryRoots | 25 | repo-tools map |

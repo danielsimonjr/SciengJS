@@ -34,19 +34,24 @@ try {
     join(app, "check.mjs"),
     `import { capabilities, render, RenderError } from "@danielsimonjr/sciengjs";
 import * as graph from "@danielsimonjr/sciengjs/graph";
+import * as raster from "@danielsimonjr/sciengjs/raster";
 import * as plot from "@danielsimonjr/sciengjs/plot";
-if (typeof graph !== "object" || typeof plot !== "object") throw new Error("a stage subpath did not load");
+if (typeof graph !== "object" || typeof raster !== "object" || typeof plot !== "object") throw new Error("a stage subpath did not load");
 const caps = await capabilities({});
 if (!Array.isArray(caps) || caps.length === 0) throw new Error("capabilities returned no pairs");
+const svg = await render({ type: "dot", source: "digraph G { a -> b }", format: "svg" }, {});
+if (!new TextDecoder().decode(svg.bytes).includes("<svg")) throw new Error("dot to svg returned no svg");
+const png = await render({ type: "dot", source: "digraph G { a -> b }", format: "png" }, {});
+if (png.bytes[0] !== 0x89 || png.bytes[1] !== 0x50 || png.bytes[2] !== 0x4e || png.bytes[3] !== 0x47) throw new Error("dot to png returned no PNG");
 let code = "none";
 try {
-  await render({ type: "dot", source: "digraph {}", format: "svg" }, {});
+  await render({ type: "math", source: "x", format: "svg" }, {});
 } catch (err) {
   if (!(err instanceof RenderError)) throw err;
   code = err.code;
 }
-if (code !== "E_UNSUPPORTED") throw new Error("expected E_UNSUPPORTED with no backend in this build, got " + code);
-console.log("smoke ok: " + caps.length + " pairs, render rejected with " + code);
+if (code !== "E_UNSUPPORTED") throw new Error("expected E_UNSUPPORTED for a pair with no backend, got " + code);
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; math to svg rejected with " + code);
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

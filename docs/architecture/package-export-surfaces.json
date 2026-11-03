@@ -20,13 +20,28 @@
       "loadConfig",
       "render"
     ],
-    "graph": [],
+    "graph": [
+      "DotSvgResult",
+      "dotSourceText",
+      "dotToSvg",
+      "dropImageElements",
+      "dropStylesheetInstructions",
+      "render",
+      "renderPng",
+      "stripImageAttributes"
+    ],
     "html": [],
     "math": [],
     "mermaid": [],
     "mesh": [],
     "plot": [],
-    "raster": [],
+    "raster": [
+      "MAX_PNG_PIXEL_MB",
+      "fontCovers",
+      "isFontFile",
+      "rasterWarnings",
+      "svgToPng"
+    ],
     "root": [
       "BINARY_INPUT_TYPES",
       "DEFAULT_REGISTRY",

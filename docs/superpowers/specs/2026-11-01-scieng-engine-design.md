@@ -31,7 +31,8 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 
 | Input | Source format | Outputs | Stage |
 |---|---|---|---|
-| `dot` | Graphviz DOT | svg, png, pdf | graph |
+| `dot` | Graphviz DOT | svg, png | graph |
+| `dot` | Graphviz DOT | pdf | browser |
 | `mermaid` (class, state, sequence) | Mermaid `classDiagram`, `stateDiagram-v2`, `sequenceDiagram` | svg, png, pdf | graph or native layout |
 | `mermaid` (all other types) | Mermaid | svg, png, pdf | browser |
 | `math` | LaTeX math | svg, png, pdf | math |
@@ -42,7 +43,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 | `cad` | the CSG document of section "CAD" | html, png, glb, stl | mesh, browser |
 | `html` | an HTML document | png, pdf, md | browser, html |
 
-`png` of an SVG that the engine draws comes from the raster stage (resvg), with no browser. `png` of an SVG that the browser stage draws comes from a browser screenshot. Those SVGs can hold `foreignObject` labels, and resvg does not render them. `pdf` needs the browser stage.
+`png` of an SVG that the engine draws comes from the raster stage (resvg), with no browser. `png` of an SVG that the browser stage draws comes from a browser screenshot. Those SVGs can hold `foreignObject` labels, and resvg does not render them. `pdf` needs the browser stage. The stage column of the table names the stage that decides whether a pair is ready on a machine. A pair that needs the browser stage lists `browser`. Any other pair lists the stage that draws its vector output, and a `png` that comes from the raster stage needs no other stage. So `dot` to `png` lists `graph`, and `dot` to `pdf` lists `browser`.
 
 ### Out of scope
 
@@ -126,7 +127,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 ### graph
 
 - Input: DOT text. Output: SVG text.
-- The Graphviz WASM build has no file system access and no network access. An `image`, `URL` or `href` attribute cannot fetch a file. The backend still removes `image` attributes and reports a warning, because the SVG would reference a file that the reader does not have.
+- The Graphviz WASM build has no file system access and no network access. An `image`, `URL` or `href` attribute cannot fetch a file. The backend still removes `image` attributes and reports a warning, because the SVG would reference a file that the reader does not have. The backend also removes `stylesheet` attributes with a warning, because a viewer loads the style sheet of an `xml-stylesheet` instruction from its address. Any `xml-stylesheet` instruction in the output is removed too. A `URL` or `href` attribute stays as a hyperlink in the SVG. A viewer follows it only when a person clicks it.
 
 ### browser
 
@@ -195,6 +196,11 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 ### raster
 
 - Input: SVG. Output: PNG at a given scale. No browser.
+- The stage uses `@resvg/resvg-wasm`. The WASM build reads no file and finds no system font. A text element draws no pixel without a font.
+- The stage bundles one default font: Liberation Serif Regular, version 2.1.5, under the SIL Open Font License 1.1. The font is metric-compatible with Times New Roman. Times-Roman, the default font of Graphviz, resolves to this font. The font file and its licence are in the `assets/fonts/` folder of the package. `THIRD_PARTY_NOTICES.md` lists the font.
+- Every font family of an input resolves to the font in use. The font has one face. Bold and italic text draw in that face, and the render reports one warning for bold text and one for italic text. A character that the font does not hold draws no pixel, and the render reports one warning with the number of such characters.
+- The configuration key `rasterFont` names a TrueType or OpenType file. The file replaces the default font. A file that cannot be read rejects the render with `E_CONFIG`. A file without a font signature also rejects the render with `E_CONFIG`. A TrueType collection (`ttcf` signature) is not one font and also rejects with `E_CONFIG`. A bundled font that is missing or has no font signature rejects the render with `E_STAGE_MISSING`.
+- A PNG whose RGBA pixel buffer is larger than `maxMemoryMb` megabytes, or larger than 1024 megabytes, rejects with `E_LIMIT`. The bound of 1024 megabytes comes from a measure. Resvg in WASM holds about two copies of the pixel buffer. The WASM memory ends at 4 GiB.
 
 ## Backends
 
@@ -264,6 +270,7 @@ One loader reads the configuration. Each key has one default, in the loader. An 
 | `maxSourceBytes` | `SCIENG_MAX_SOURCE_BYTES` | 10485760 | the size limit of one source |
 | `maxMemoryMb` | `SCIENG_MAX_MEMORY_MB` | 2048 | the heap limit of the worker of one render |
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` | the network uses that are allowed: `none`, `tex-bundles`, or `tex-bundles,images` |
+| `rasterFont` | `SCIENG_RASTER_FONT` | none (the bundled font of the raster stage) | the path of a TrueType or OpenType font for the raster stage |
 
 The user directories follow the platform: `%APPDATA%` and `%LOCALAPPDATA%` on Windows, `~/Library` on macOS, `XDG_CONFIG_HOME` and `XDG_CACHE_HOME` on Linux. The loader rejects an unreadable configuration file with `E_CONFIG`. The loader never falls back to the defaults.
 

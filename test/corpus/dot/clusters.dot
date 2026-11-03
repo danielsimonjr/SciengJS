@@ -1,0 +1,15 @@
+digraph Clusters {
+  subgraph cluster_front {
+    label="Front end";
+    lexer;
+    parser;
+  }
+  subgraph cluster_back {
+    label="Back end";
+    codegen;
+    linker;
+  }
+  source -> lexer;
+  lexer -> parser -> codegen -> linker;
+  linker -> binary;
+}

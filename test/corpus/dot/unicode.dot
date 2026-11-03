@@ -1,0 +1,6 @@
+digraph Unicode {
+  charset="UTF-8";
+  alpha [label="α → β"];
+  beta [label="Ωmega café"];
+  alpha -> beta [label="λ = 2"];
+}

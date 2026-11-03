@@ -182,7 +182,20 @@
       "src/registry.ts": {
         "description": "registry module",
         "externalDependencies": [],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "path",
+            "imports": [
+              "extname"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
         "internalDependencies": [],
         "workspaceDependencies": [],
         "exports": [
@@ -224,13 +237,188 @@
       }
     },
     "graph": {
-      "src/graph/index.ts": {
-        "description": "Package entry point",
+      "src/graph/backend-png.ts": {
+        "description": "backend-png module",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./dot.ts",
+            "imports": [
+              "dotSourceText",
+              "dotToSvg"
+            ]
+          },
+          {
+            "file": "../raster/index.ts",
+            "imports": [
+              "isFontFile",
+              "svgToPng"
+            ]
+          },
+          {
+            "file": "../raster/warnings.ts",
+            "imports": [
+              "rasterWarnings"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render",
+          "renderPng"
+        ],
+        "functions": [
+          "render",
+          "renderPng"
+        ]
+      },
+      "src/graph/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./dot.ts",
+            "imports": [
+              "dotSourceText",
+              "dotToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/graph/dot.ts": {
+        "description": "dot module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./image.ts",
+            "imports": [
+              "stripImageAttributes",
+              "dropImageElements",
+              "dropStylesheetInstructions"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "dotToSvg",
+          "dotSourceText"
+        ],
+        "interfaces": [
+          "DotSvgResult"
+        ],
+        "functions": [
+          "dotToSvg",
+          "dotSourceText"
+        ]
+      },
+      "src/graph/image.ts": {
+        "description": "DOT identifiers take every byte from 0x80 upward, so every non-ASCII character counts as a letter.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "workspaceDependencies": [],
-        "exports": []
+        "exports": [
+          "stripImageAttributes",
+          "dropImageElements",
+          "dropStylesheetInstructions"
+        ],
+        "interfaces": [
+          "ImageRemoval",
+          "StripResult"
+        ],
+        "functions": [
+          "stripImageAttributes",
+          "dropImageElements",
+          "dropStylesheetInstructions"
+        ]
+      },
+      "src/graph/index.ts": {
+        "description": "Package entry point for graph (re-exports 2 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./dot.ts",
+            "imports": [
+              "dotToSvg"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dot.ts",
+            "imports": [
+              "DotSvgResult"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "dotToSvg",
+          "DotSvgResult"
+        ],
+        "reExported": [
+          "dotToSvg",
+          "DotSvgResult"
+        ]
       }
     },
     "html": {
@@ -397,12 +585,69 @@
     },
     "raster": {
       "src/raster/index.ts": {
-        "description": "Package entry point",
+        "description": "The most megabytes of RGBA pixels that one PNG render accepts. Measured: a render holds about two",
+        "externalDependencies": [
+          {
+            "package": "@resvg/resvg-wasm",
+            "imports": [
+              "initWasm",
+              "Resvg"
+            ]
+          }
+        ],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync"
+            ]
+          },
+          {
+            "module": "module",
+            "imports": [
+              "createRequire"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "MAX_PNG_PIXEL_MB",
+          "svgToPng",
+          "isFontFile"
+        ],
+        "interfaces": [
+          "SvgToPngOptions"
+        ],
+        "functions": [
+          "svgToPng",
+          "isFontFile"
+        ],
+        "constants": [
+          "MAX_PNG_PIXEL_MB"
+        ]
+      },
+      "src/raster/warnings.ts": {
+        "description": "Reads the Unicode character map of a TrueType or OpenType font (formats 4 and 12).",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "workspaceDependencies": [],
-        "exports": []
+        "exports": [
+          "fontCovers",
+          "rasterWarnings"
+        ],
+        "functions": [
+          "fontCovers",
+          "rasterWarnings"
+        ]
       }
     },
     "sysml": {
@@ -461,7 +706,7 @@
         "exports": []
       },
       "src/worker/protocol.ts": {
-        "description": "Type definitions (2 interfaces, 1 type aliases)",
+        "description": "Type definitions (3 interfaces, 1 type aliases)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -478,6 +723,7 @@
         "workspaceDependencies": [],
         "exports": [],
         "interfaces": [
+          "BackendSettings",
           "WorkerJob",
           "BackendOutput"
         ]
@@ -903,6 +1149,10 @@
     {
       "name": "Graph",
       "files": [
+        "src/graph/backend-png.ts",
+        "src/graph/backend-svg.ts",
+        "src/graph/dot.ts",
+        "src/graph/image.ts",
         "src/graph/index.ts"
       ]
     },
@@ -945,7 +1195,8 @@
     {
       "name": "Raster",
       "files": [
-        "src/raster/index.ts"
+        "src/raster/index.ts",
+        "src/raster/warnings.ts"
       ]
     },
     {

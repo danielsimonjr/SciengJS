@@ -1,5 +1,13 @@
 import type { InputType, OutputFormat, RenderOptions } from "../types.ts";
 
+/** The configuration values that a backend reads. */
+export interface BackendSettings {
+  /** The memory limit of one render, in megabytes. */
+  maxMemoryMb: number;
+  /** The path of the raster font that replaces the bundled font, or undefined for the bundled font. */
+  rasterFont: string | undefined;
+}
+
 /** What the worker receives: one render request and the backend module that serves it. */
 export interface WorkerJob {
   moduleUrl: string;
@@ -9,6 +17,7 @@ export interface WorkerJob {
     format: OutputFormat;
     source: string | Uint8Array;
     options: RenderOptions;
+    settings: BackendSettings;
   };
 }
 

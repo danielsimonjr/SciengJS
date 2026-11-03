@@ -1,0 +1,11 @@
+digraph HtmlTable {
+  node [shape=plaintext];
+  table [label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD BGCOLOR="lightgrey">Name</TD><TD>Value</TD></TR>
+      <TR><TD>alpha</TD><TD>1</TD></TR>
+      <TR><TD PORT="beta">beta</TD><TD>2</TD></TR>
+    </TABLE>>];
+  other [label="other"];
+  table:beta -> other;
+}
