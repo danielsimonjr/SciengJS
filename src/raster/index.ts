@@ -16,9 +16,9 @@ export interface SvgToPngOptions {
   maxMemoryMb: number;
   font?: Uint8Array;
   /**
-   * The folder URL of the bundled files. When it is absent, the package assets folder
-   * (DEFAULT_ASSETS_URL) is used. The WASM file is read from this folder on the first start of the
-   * module only.
+   * The folder URL of the bundled files. When the folder URL is absent, the code uses the
+   * package assets folder (DEFAULT_ASSETS_URL). The code reads the WASM file from this folder on
+   * the first start of the module only.
    */
   assetsUrl?: string;
   /** Replaces the reader of the resvg WASM file. Tests use it to fail the first start. */

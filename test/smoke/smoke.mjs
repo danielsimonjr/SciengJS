@@ -39,7 +39,7 @@ try {
   if (!readFileSync(shippedWasm).equals(readFileSync(lockedWasm))) {
     throw new Error("the shipped assets/index_bg.wasm differs from the locked @resvg/resvg-wasm file");
   }
-  // A folder with the bundled font and no WASM file: a render through it must reject with E_STAGE_MISSING.
+  // A folder with the bundled font and no WASM file: a render through the folder must reject with E_STAGE_MISSING.
   const noWasmFolder = join(app, "no-wasm-assets");
   mkdirSync(join(noWasmFolder, "fonts"), { recursive: true });
   copyFileSync(join(installedAssets, "fonts", "LiberationSerif-Regular.ttf"), join(noWasmFolder, "fonts", "LiberationSerif-Regular.ttf"));

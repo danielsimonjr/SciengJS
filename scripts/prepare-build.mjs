@@ -26,7 +26,7 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(scriptDir);
 
 async function main() {
-  // Read the root package.json and take its "version" field.
+  // Read the root package.json. Take its "version" field.
   const packageJsonPath = path.join(root, "package.json");
   let packageJson;
   try {
@@ -44,8 +44,8 @@ async function main() {
   const versionTsPath = path.join(root, VERSION_TS_PATH);
   const expectedText = `${GENERATED_HEADER}\nexport const ENGINE_VERSION = "${version}";\n`;
 
-  // Write the file only when it is missing or its text differs, so that a
-  // rebuild does not change its timestamp.
+  // Write the file only when it is missing or its text differs.
+  // Then a rebuild does not change its timestamp.
   let currentText;
   try {
     currentText = await readFile(versionTsPath, "utf8");
@@ -58,7 +58,7 @@ async function main() {
     await writeFile(versionTsPath, expectedText, "utf8");
   }
 
-  // Resolve the resvg WASM file, then read its bytes.
+  // Resolve the resvg WASM file. Then read its bytes.
   const wasmSpecifier = `${WASM_PACKAGE}/${WASM_PACKAGE_FILE}`;
   let wasmSourcePath;
   try {
@@ -68,7 +68,7 @@ async function main() {
   }
   const wasmBytes = await readFile(wasmSourcePath);
 
-  // Only after the read succeeded: create the assets folder and write the bytes.
+  // Only after the read succeeds, create the assets folder. Then write the bytes.
   await mkdir(path.join(root, ASSETS_DIR), { recursive: true });
   await writeFile(path.join(root, WASM_TARGET_PATH), wasmBytes);
 }

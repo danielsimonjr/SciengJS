@@ -39,7 +39,7 @@ export class RenderError extends Error {
 /**
  * Whether the value is a render error, decided structurally instead of by class identity.
  * A bundle can hold more than one copy of the errors module, so an error from another copy
- * fails `instanceof RenderError`; the name and code are matched instead.
+ * fails `instanceof RenderError`. The check matches the name and the code instead.
  */
 export function isRenderError(value: unknown): value is RenderError {
   if (!(value instanceof Error) || value.name !== "RenderError") {
