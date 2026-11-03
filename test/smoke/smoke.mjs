@@ -11,12 +11,26 @@ const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const work = mkdtempSync(join(tmpdir(), "sciengjs-smoke-"));
 
+// On Windows npm is a .cmd file. Node starts .cmd files only through a shell. The shell gets one quoted command string.
 function run(cmd, args, cwd, shell = false) {
-  const r = spawnSync(cmd, args, { cwd, encoding: "utf8", shell });
+  let r;
+  if (shell) {
+    const line = [cmd, ...args.map(shellArg)].join(" ");
+    r = spawnSync(line, { cwd, encoding: "utf8", shell: true });
+  } else {
+    r = spawnSync(cmd, args, { cwd, encoding: "utf8" });
+  }
   if (r.status !== 0) {
     throw new Error(`${cmd} ${args.join(" ")} failed with ${r.status}\n${r.stdout}\n${r.stderr}`);
   }
   return r.stdout;
+}
+
+function shellArg(arg) {
+  if (/["%\r\n]/.test(arg)) {
+    throw new Error("an argument cannot go through the shell: " + arg);
+  }
+  return '"' + arg + '"';
 }
 
 try {
