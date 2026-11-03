@@ -6,6 +6,8 @@ export interface BackendSettings {
   maxMemoryMb: number;
   /** The path of the raster font that replaces the bundled font, or undefined for the bundled font. */
   rasterFont: string | undefined;
+  /** The folder URL of the bundled files: the raster font and the resvg WASM file. */
+  assetsUrl: string;
 }
 
 /** What the worker receives: one render request and the backend module that serves it. */

@@ -71,7 +71,7 @@ export async function renderWithRegistry(
         format: req.format,
         source: req.source,
         options: (req.options ?? {}) as RenderOptions,
-        settings: { maxMemoryMb: cfg.maxMemoryMb, rasterFont: cfg.rasterFont },
+        settings: { maxMemoryMb: cfg.maxMemoryMb, rasterFont: cfg.rasterFont, assetsUrl: cfg.assetsUrl },
       },
     },
     { timeoutMs: cfg.timeoutMs, maxMemoryMb: cfg.maxMemoryMb },

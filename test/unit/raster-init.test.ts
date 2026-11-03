@@ -1,22 +1,28 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { makeAssetsFolder, makeScratch, realFiles, removeScratch } from "../support/assets-fixture.ts";
 
 const RASTER = fileURLToPath(new URL("../../src/raster/index.ts", import.meta.url)).replaceAll("\\", "/");
+const scratch = makeScratch("scieng-raster-init-");
+const ASSETS = makeAssetsFolder(scratch, "assets", { wasm: realFiles().wasm });
+afterAll(() => removeScratch(scratch));
 
 // A fresh process shows the first start of the WASM. Other tests in this process have started it already.
+// The first call reads a WASM file that fails. The second call reads the locked WASM file from assetsUrl.
 const SCRIPT = `
 import { svgToPng } from ${JSON.stringify(RASTER)};
+const assetsUrl = ${JSON.stringify(ASSETS)};
 const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"><rect width="4" height="4"/></svg>';
 const steps = [];
 try {
-  await svgToPng(svg, { scale: 1, maxMemoryMb: 64, readWasm: () => { throw new Error("no wasm file"); } });
+  await svgToPng(svg, { scale: 1, maxMemoryMb: 64, assetsUrl, readWasm: () => { throw new Error("no wasm file"); } });
   steps.push("first: resolved");
 } catch (err) {
   steps.push("first: " + err.message);
 }
 try {
-  const png = await svgToPng(svg, { scale: 1, maxMemoryMb: 64 });
+  const png = await svgToPng(svg, { scale: 1, maxMemoryMb: 64, assetsUrl });
   steps.push("second: png " + (png.byteLength > 20));
 } catch (err) {
   steps.push("second: " + err.message);

@@ -1,14 +1,10 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { RenderError } from "../errors.ts";
+import { bundledFontPathIn } from "../assets.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
 import { dotSourceText, dotToSvg } from "./dot.ts";
 import { isFontFile, svgToPng } from "../raster/index.ts";
 import { rasterWarnings } from "../raster/warnings.ts";
-
-const BUNDLED_FONT_PATH = fileURLToPath(
-  new URL("../../assets/fonts/LiberationSerif-Regular.ttf", import.meta.url),
-);
 
 function readFont(path: string, bundled: boolean): Buffer {
   let bytes: Buffer;
@@ -27,9 +23,9 @@ function readFont(path: string, bundled: boolean): Buffer {
   return bytes;
 }
 
-/** Renders dot to png: the SVG of the graph, then the PNG of that SVG at the option scale. */
-export function render(request: WorkerJob["request"]): Promise<BackendOutput> {
-  return renderPng(request, BUNDLED_FONT_PATH);
+/** Renders dot to png: the SVG of the graph, then the PNG of that SVG at the option scale. The bundled font comes from the assets folder named in the settings. */
+export async function render(request: WorkerJob["request"]): Promise<BackendOutput> {
+  return renderPng(request, bundledFontPathIn(request.settings.assetsUrl));
 }
 
 /** Renders dot to png with the bundled font at the given path. The path is a parameter so that a test can name a missing or invalid bundled font. */
@@ -58,6 +54,7 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
     scale,
     maxMemoryMb: request.settings.maxMemoryMb,
     font,
+    assetsUrl: request.settings.assetsUrl,
   });
   return { bytes, warnings: [...dot.warnings, ...rasterWarnings(dot.svg, font)] };
 }

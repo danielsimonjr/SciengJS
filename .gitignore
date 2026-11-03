@@ -5,3 +5,4 @@ coverage/
 .superpowers/
 *.mutation-backup
 *.mutation-hash
+assets/index_bg.wasm

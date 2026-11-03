@@ -43,6 +43,22 @@
     { "id": "warn-7", "file": "src/raster/warnings.ts", "test": "test/unit/raster-warnings.test.ts", "original": "platform === 0 || (platform === 3 && (encoding === 1 || encoding === 10))", "replacement": "false", "equivalent": null },
     { "id": "warn-8", "file": "src/raster/warnings.ts", "test": "test/unit/raster-warnings.test.ts", "original": "if (format === 4) {", "replacement": "if (false) {", "equivalent": null },
     { "id": "png-1", "file": "src/graph/backend-png.ts", "test": "test/unit/graph-png.test.ts", "original": "rasterFont ?? bundledFontPath", "replacement": "bundledFontPath", "equivalent": null },
-    { "id": "dot-1", "file": "src/graph/dot.ts", "test": "test/unit/graph-svg-backend.test.ts", "original": "error?.message ?? \"graphviz failed and gave no error message\"", "replacement": "error.message", "equivalent": null }
+    { "id": "dot-1", "file": "src/graph/dot.ts", "test": "test/unit/graph-svg-backend.test.ts", "original": "error?.message ?? \"graphviz failed and gave no error message\"", "replacement": "error.message", "equivalent": null },
+    { "id": "ast-1", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "if (typeof value !== \"string\") {", "replacement": "if (false) {", "equivalent": null },
+    { "id": "ast-2", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "if (url.protocol !== \"file:\") {", "replacement": "if (false) {", "equivalent": null },
+    { "id": "ast-3", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "return url.href.endsWith(\"/\") ? url.href : url.href + \"/\";", "replacement": "return url.href;", "equivalent": null },
+    { "id": "ast-4", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "return url.href.endsWith(\"/\") ? url.href : url.href + \"/\";", "replacement": "return url.href + \"/\";", "equivalent": null },
+    { "id": "ast-5", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "return fileURLToPath(new URL(file, checkAssetsUrl(assetsUrl, \"assetsUrl\")));", "replacement": "return file;", "equivalent": null },
+    { "id": "ast-6", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "return assetFile(assetsUrl, BUNDLED_FONT_FILE);", "replacement": "return assetFile(assetsUrl, RESVG_WASM_FILE);", "equivalent": null },
+    { "id": "ast-7", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "export const BUNDLED_FONT_FILE = \"fonts/LiberationSerif-Regular.ttf\";", "replacement": "export const BUNDLED_FONT_FILE = \"fonts/LiberationSerif-Regular.otf\";", "equivalent": null },
+    { "id": "ast-8", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "export const RESVG_WASM_FILE = \"index_bg.wasm\";", "replacement": "export const RESVG_WASM_FILE = \"index_bg.wasm.bak\";", "equivalent": null },
+    { "id": "ast-9", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "const path = assetFile(assetsUrl, file);", "replacement": "const path = file;", "equivalent": null },
+    { "id": "ast-10", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "return readFileSync(path);", "replacement": "return new Uint8Array(0);", "equivalent": null },
+    { "id": "ast-11", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "\"E_STAGE_MISSING\",", "replacement": "\"E_CONFIG\",", "equivalent": null },
+    { "id": "ast-12", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "const message = err instanceof Error ? err.message : String(err);", "replacement": "const message = \"\";", "equivalent": null },
+    { "id": "ast-13", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "label + \" must be a file: URL, but got protocol \" + url.protocol,", "replacement": "\"must be a file: URL, but got protocol \" + url.protocol,", "equivalent": null },
+    { "id": "ast-14", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "label + \" must be a string holding a file: URL, but got \" + typeof value,", "replacement": "\"must be a string holding a file: URL, but got \" + typeof value,", "equivalent": null },
+    { "id": "ast-15", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "label + \" is not a valid URL: \" + JSON.stringify(value),", "replacement": "\"is not a valid URL: \" + JSON.stringify(value),", "equivalent": null },
+    { "id": "ast-16", "file": "src/assets.ts", "test": "test/unit/assets.test.ts", "original": "file + \" cannot be read: \" + path + \": \" + message,", "replacement": "file + \" cannot be read: \" + path,", "equivalent": null }
   ]
 }

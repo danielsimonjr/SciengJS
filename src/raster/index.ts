@@ -1,6 +1,6 @@
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
-import { readFileSync } from "node:fs";
-import { createRequire } from "node:module";
+import { readAsset, RESVG_WASM_FILE } from "../assets.ts";
+import { DEFAULT_ASSETS_URL } from "../config.ts";
 import { RenderError } from "../errors.ts";
 
 /**
@@ -15,21 +15,32 @@ export interface SvgToPngOptions {
   scale: number;
   maxMemoryMb: number;
   font?: Uint8Array;
+  /**
+   * The folder URL of the bundled files. When it is absent, the package assets folder
+   * (DEFAULT_ASSETS_URL) is used. The WASM file is read from this folder on the first start of the
+   * module only.
+   */
+  assetsUrl?: string;
   /** Replaces the reader of the resvg WASM file. Tests use it to fail the first start. */
   readWasm?: () => Uint8Array;
 }
 
 let wasmPromise: Promise<void> | undefined;
 
-function defaultReadWasm(): Uint8Array {
-  return readFileSync(createRequire(import.meta.url).resolve("@resvg/resvg-wasm/index_bg.wasm"));
-}
-
+// The first start decides the bytes; later calls reuse the started module whatever their assetsUrl.
 // A failed start is not cached, so a later render can try again.
 function ensureWasm(readWasm: () => Uint8Array): Promise<void> {
   if (wasmPromise === undefined) {
     const started = (async () => {
-      await initWasm(readWasm());
+      const bytes = readWasm();
+      try {
+        await initWasm(bytes);
+      } catch (err) {
+        if (err instanceof Error && err.name === "CompileError") {
+          throw new RenderError("E_STAGE_MISSING", RESVG_WASM_FILE + " is not a usable WebAssembly module: " + err.message);
+        }
+        throw err;
+      }
     })();
     wasmPromise = started;
     started.catch(() => {
@@ -43,7 +54,8 @@ function ensureWasm(readWasm: () => Uint8Array): Promise<void> {
 
 /** Renders an SVG to PNG bytes with resvg. The scale multiplies the SVG size. A pixel buffer over maxMemoryMb or over MAX_PNG_PIXEL_MB rejects with E_LIMIT. */
 export async function svgToPng(svg: string, options: SvgToPngOptions): Promise<Uint8Array> {
-  await ensureWasm(options.readWasm ?? defaultReadWasm);
+  const assetsUrl = options.assetsUrl ?? DEFAULT_ASSETS_URL;
+  await ensureWasm(options.readWasm ?? (() => readAsset(assetsUrl, RESVG_WASM_FILE)));
   let resvg: InstanceType<typeof Resvg>;
   try {
     resvg = new Resvg(svg, {

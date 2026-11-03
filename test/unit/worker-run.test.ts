@@ -4,9 +4,10 @@ import type { Worker } from "node:worker_threads";
 import { runInWorker } from "../../src/worker/run.ts";
 import { RenderError } from "../../src/errors.ts";
 import { TEST_REGISTRY } from "../support/test-registry.ts";
+import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
 
 const moduleUrl = TEST_REGISTRY["dot:svg"]!.moduleUrl;
-const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined };
+const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL };
 const OK_JOB = { moduleUrl, backend: "test/fixed", request: { type: "dot" as const, format: "svg" as const, source: "ok", options: {}, settings: SETTINGS } };
 
 /** A worker double. It answers with one ok message and lets the test choose how terminate behaves. */
