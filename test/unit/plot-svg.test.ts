@@ -459,3 +459,35 @@ describe("tick labels at extreme magnitudes", () => {
     expect(renderError(() => plotToSvg(scatter({}, { xaxis: { tickformat: ".101f" } })))?.code).toBe("E_INPUT");
   });
 });
+
+describe("plotter errors name the full key path", () => {
+  test("an axis config outside the grid rejects", () => {
+    const error = renderError(() => plotToSvg(scatter({}, { xaxis3: { type: "log" } })));
+    expect(error?.code).toBe("E_INPUT");
+    expect(error?.message).toContain("layout.xaxis3");
+  });
+
+  test("a range with two equal ends names layout.yaxis.range", () => {
+    expect(renderError(() => plotToSvg(scatter({}, { yaxis: { range: [2, 2] } })))?.message).toContain("layout.yaxis.range");
+  });
+
+  test("a trace on axes that no subplot holds names data[0].xaxis", () => {
+    const figure = { data: [{ type: "scatter", x: [1], y: [1], xaxis: "x2" }], layout: {} };
+    expect(renderError(() => plotToSvg(figure))?.message).toContain("data[0].xaxis");
+  });
+
+  test("x and y of different lengths names data[0].x and data[0].y", () => {
+    const message = renderError(() => plotToSvg({ data: [{ type: "scatter", x: [1, 2], y: [1] }], layout: {} }))?.message;
+    expect(message).toContain("data[0].x");
+    expect(message).toContain("data[0].y");
+  });
+
+  test("a figure too small for its margins names layout.width and layout.height", () => {
+    const message = renderError(() => plotToSvg(scatter({}, { width: 50 })))?.message;
+    expect(message).toContain("layout.width");
+  });
+
+  test("a grid too dense names layout.grid", () => {
+    expect(renderError(() => plotToSvg(scatter({}, { grid: { rows: 1, columns: 40 } })))?.message).toContain("layout.grid");
+  });
+});

@@ -166,11 +166,11 @@ function fixedDecimals(format: unknown, path: string): number | undefined {
 }
 
 /** Chooses the scale of one axis: an explicit range, else the padded data extent. */
-function scaleOf(cfg: Rec, extent: [number, number] | undefined): Scale {
+function scaleOf(cfg: Rec, extent: [number, number] | undefined, path: string): Scale {
   const log = str(cfg.type, "linear") === "log";
   if (Array.isArray(cfg.range)) {
     const [a, b] = cfg.range as number[];
-    if (a === b) fail("an axis range needs two different ends");
+    if (a === b) fail(`${path}.range needs two different ends`);
     return { log, lo: Math.min(a!, b!), hi: Math.max(a!, b!), reversed: a! > b! };
   }
   if (extent === undefined) return { log, lo: 0, hi: 1, reversed: false };
@@ -406,7 +406,7 @@ function panelsOf(grid: Rec, plot: Rect, gap: number): Panel[] {
   const coupled = str(grid.pattern, "independent") === "coupled";
   const cellW = (plot.x1 - plot.x0 - gap * (cols - 1)) / cols;
   const cellH = (plot.y1 - plot.y0 - gap * (rows - 1)) / rows;
-  if (cellW <= 0 || cellH <= 0) fail("the grid is too dense for the figure size");
+  if (cellW <= 0 || cellH <= 0) fail("layout.grid is too dense for layout.width and layout.height");
   const panels: Panel[] = [];
   for (let r = 0; r < rows; r += 1) {
     for (let c = 0; c < cols; c += 1) {
@@ -462,25 +462,29 @@ export function plotToSvg(source: string | object, options?: { lenient?: boolean
     x1: width - FRAME.right - legendWidth,
     y1: height - FRAME.bottom,
   };
-  if (plot.x1 <= plot.x0 || plot.y1 <= plot.y0) fail("the figure is too small for its margins");
+  if (plot.x1 <= plot.x0 || plot.y1 <= plot.y0) fail("layout.width and layout.height are too small for the margins, the title and the legend");
   const panels = panelsOf(rec(layout.grid), plot, FRAME.gap);
 
   const traces: Trace[] = data.map((raw, index) => {
     const xAxis = str(raw.xaxis, "x");
     const yAxis = str(raw.yaxis, "y");
     const panel = panels.find((p) => p.xId === xAxis && p.yId === yAxis);
-    if (panel === undefined) fail(`data[${index}] names axes ${xAxis} and ${yAxis} that no subplot holds`);
+    if (panel === undefined) fail(`data[${index}].xaxis and data[${index}].yaxis name axes ${xAxis} and ${yAxis} that no subplot holds`);
     const ys = numbers(raw.y, `data[${index}].y`);
     const xs = numbers(raw.x, `data[${index}].x`);
     const n = ys?.length ?? xs?.length ?? 0;
     const xv = xs ?? Array.from({ length: n }, (_unused, j) => j + 1);
     const yv = ys ?? Array.from({ length: n }, (_unused, j) => j + 1);
-    if (xv.length !== yv.length) fail(`data[${index}]: x and y must have the same length`);
+    if (xv.length !== yv.length) fail(`data[${index}].x and data[${index}].y must have the same length`);
     return { raw, index, panel: panel!, xs: xv, ys: yv };
   });
 
   // Data extent per axis id, then merged across each matches group.
   const axisIds = [...new Set(panels.flatMap((p) => [p.xId, p.yId]))];
+  for (const key of Object.keys(layout)) {
+    const id = /^([xy])axis(\d*)$/.exec(key);
+    if (id !== null && !axisIds.includes(`${id[1]}${id[2]}`)) fail(`layout.${key} names an axis that no subplot holds`);
+  }
   const extent = new Map<string, [number, number]>();
   const addValues = (id: string, values: number[], path: string) => {
     const log = str(axisCfg(id).type, "linear") === "log";
@@ -508,7 +512,7 @@ export function plotToSvg(source: string | object, options?: { lenient?: boolean
   const scales = new Map<string, Scale>();
   const ticks = new Map<string, Tick[]>();
   for (const id of axisIds) {
-    const scale = scaleOf(axisCfg(id), groupExtent.get(rootOf(id, axisCfg)));
+    const scale = scaleOf(axisCfg(id), groupExtent.get(rootOf(id, axisCfg)), `layout.${axisKey(id)}`);
     scales.set(id, scale);
     ticks.set(id, ticksOf(scale, axisCfg(id), `layout.${axisKey(id)}`));
   }

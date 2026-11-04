@@ -152,3 +152,61 @@ describe("the reader rejects a dtick of zero or less", () => {
     });
   }
 });
+
+/** The E_INPUT message of a rejected read; any other outcome fails the test. */
+function rejection(input: unknown, options?: { lenient?: boolean }): string {
+  try {
+    readPlotFigure(input, options);
+  } catch (e) {
+    expect((e as RenderError).code).toBe("E_INPUT");
+    return (e as RenderError).message;
+  }
+  throw new Error("no rejection");
+}
+
+describe("the reader names axes strictly", () => {
+  for (const key of ["xaxis1", "xaxis0", "xaxis01", "yaxis1", "yaxis007"]) {
+    test(`layout.${key} rejects: the first axis is xaxis or yaxis, the others count from 2 with no leading zero`, () => {
+      expect(rejection({ data: [], layout: { [key]: {} } })).toContain(`layout.${key}`);
+    });
+  }
+
+  for (const [key, value] of [["xaxis", "x1"], ["yaxis", "y0"], ["xaxis", "y2"], ["xaxis", "x02"]] as const) {
+    test(`data[0].${key} = ${value} rejects`, () => {
+      expect(rejection({ data: [{ [key]: value }], layout: {} })).toContain(`data[0].${key}`);
+    });
+  }
+
+  test("layout.xaxis.matches must name an axis id", () => {
+    expect(rejection({ data: [], layout: { xaxis2: { matches: "x1" } } })).toContain("layout.xaxis2.matches");
+  });
+
+  test("xaxis2 and x12 are accepted", () => {
+    expect(() => readPlotFigure({ data: [{ xaxis: "x12", yaxis: "y2" }], layout: { xaxis2: {}, yaxis12: {} } })).not.toThrow();
+  });
+});
+
+describe("the reader rejects unknown top-level keys", () => {
+  test("a config key rejects with E_INPUT", () => {
+    expect(rejection({ data: [], layout: {}, config: {} })).toContain("config");
+  });
+
+  test("lenient drops a frames key with a warning", () => {
+    const { warnings } = readPlotFigure({ data: [], layout: {}, frames: [] }, { lenient: true });
+    expect(warnings.some((w) => w.includes("frames"))).toBe(true);
+  });
+});
+
+describe("the reader checks tickformat, width and height", () => {
+  for (const format of ["%Y", ".2e", ".f", ".21f", "2f"]) {
+    test(`tickformat ${format} rejects in the reader with its path`, () => {
+      expect(rejection({ data: [], layout: { yaxis: { tickformat: format } } })).toContain("layout.yaxis.tickformat");
+    });
+  }
+
+  for (const [key, value] of [["width", 0], ["height", -5]] as const) {
+    test(`${key} ${value} rejects in the reader`, () => {
+      expect(rejection({ data: [], layout: { [key]: value } })).toContain(`layout.${key}`);
+    });
+  }
+});

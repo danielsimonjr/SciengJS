@@ -7,7 +7,13 @@ type SpecTable = Map<string, string>;
 
 const SHAPES_SPEC = "shapes";
 const ENUM_PREFIX = "enum:";
-const AXIS_KEY_PATTERN = /^(x|y)axis\d*$/;
+// The first axis of a letter is xaxis or yaxis; the others count from 2 with no leading zero.
+// Plotly also takes xaxis1 as the first axis; this reader rejects it, so one axis has one name.
+const AXIS_KEY_PATTERN = /^(x|y)axis([2-9]|[1-9]\d+)?$/;
+const AXIS_ID_PATTERN = /^[xy]([2-9]|[1-9]\d+)?$/;
+// The only tickformat is ".Nf": N fixed decimals, 0 to 20.
+const TICKFORMAT_PATTERN = /^\.(\d|1\d|20)f$/;
+const TOP_LEVEL_KEYS = ["data", "layout"];
 
 const TRACE_SPECS: SpecTable = new Map<string, string>([
   ["type", "enum:scatter"],
@@ -26,15 +32,15 @@ const TRACE_SPECS: SpecTable = new Map<string, string>([
   ["marker.size", "number"],
   ["marker.color", "string"],
   ["marker.symbol", "enum:circle|square|diamond|cross|x|triangle-up"],
-  ["xaxis", "string"],
-  ["yaxis", "string"],
+  ["xaxis", "axisId:x"],
+  ["yaxis", "axisId:y"],
   ["showlegend", "boolean"],
 ]);
 
 const LAYOUT_SPECS: SpecTable = new Map<string, string>([
   ["title.text", "string"],
-  ["width", "number"],
-  ["height", "number"],
+  ["width", "positiveNumber"],
+  ["height", "positiveNumber"],
   ["paper_bgcolor", "string"],
   ["plot_bgcolor", "string"],
   ["font.color", "string"],
@@ -51,11 +57,11 @@ const AXIS_SPECS: SpecTable = new Map<string, string>([
   ["title.text", "string"],
   ["range", "pair"],
   ["dtick", "positiveNumber"],
-  ["tickformat", "string"],
+  ["tickformat", "tickformat"],
   ["gridcolor", "string"],
   ["zeroline", "boolean"],
   ["zerolinecolor", "string"],
-  ["matches", "string"],
+  ["matches", "axisId"],
 ]);
 
 const SHAPE_SPECS: SpecTable = new Map<string, string>([
@@ -93,6 +99,22 @@ function validateValue(value: unknown, spec: string, path: string): void {
       return;
     case "positiveNumber":
       if (!isNumber(value) || value <= 0) throw inputError(`${path} must be a number above zero`);
+      return;
+    case "tickformat":
+      if (typeof value !== "string" || !TICKFORMAT_PATTERN.test(value)) {
+        throw inputError(`${path} must be ".Nf" with N from 0 to 20 (got ${String(value)})`);
+      }
+      return;
+    case "axisId":
+      if (typeof value !== "string" || !AXIS_ID_PATTERN.test(value)) {
+        throw inputError(`${path} must be an axis id such as x, y or x2 (got ${String(value)})`);
+      }
+      return;
+    case "axisId:x":
+    case "axisId:y":
+      if (typeof value !== "string" || !AXIS_ID_PATTERN.test(value) || value[0] !== spec.slice(-1)) {
+        throw inputError(`${path} must be an axis id such as ${spec.slice(-1)} or ${spec.slice(-1)}2 (got ${String(value)})`);
+      }
       return;
     case "boolean":
       if (typeof value !== "boolean") throw inputError(`${path} must be a boolean`);
@@ -235,6 +257,12 @@ export function readPlotFigure(
   }
   if (!isRecord(parsed)) throw inputError('plot figure must be an object with "data" and "layout" keys');
   if (!Array.isArray(parsed.data)) throw inputError('plot figure "data" must be an array of traces');
+  for (const key of Object.keys(parsed)) {
+    if (TOP_LEVEL_KEYS.includes(key)) continue;
+    const message = `unknown plot figure key ${key}: a figure holds only data and layout`;
+    if (lenient) warnings.push(message);
+    else throw inputError(message);
+  }
   const layoutSource: unknown = parsed.layout;
   if (layoutSource !== undefined && layoutSource !== null && !isRecord(layoutSource)) {
     throw inputError('plot figure "layout" must be an object');
