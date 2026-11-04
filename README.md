@@ -186,6 +186,17 @@ const { bytes } = await render({ type: "plot", source, format: "svg" }, {});
 
 The engine reads a subset of the Plotly figure format. The subset holds `scatter` traces, page and grid layout keys, `line` and `rect` shapes, and linear or log axes. A key outside the subset rejects with `E_INPUT` and the key path. Set `lenient` to `true` to skip such a key and get a warning. The `html` output is a page that draws the figure with Plotly 4.2.0, the pinned build. The page loads that build from a CDN, with a subresource integrity hash. The package does not ship Plotly. The full subset is in the [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md), section PLOT.
 
+The reader applies these rules:
+
+- A figure has the top-level keys `data` and `layout` only.
+- The first axis of each letter is `xaxis` or `yaxis`. The other axes are `xaxis2`, `xaxis3` and up, with no leading zero. Plotly also accepts `xaxis1` for the first axis. This reader rejects `xaxis1`, so that each axis has one name.
+- An axis key must name an axis of a subplot in `layout.grid`.
+- `tickformat` is `.Nf` only, with N from 0 to 20. N sets the fixed decimals of the tick labels.
+- `dtick`, `width` and `height` must be above zero.
+- One axis has 1000 ticks at most. A `dtick` that gives more ticks rejects with `E_INPUT` and the key path, for example `layout.xaxis.dtick`.
+
+A tick label that needs more than 20 decimals uses exponent form, for example `1e-300`. A log axis that spans too many decades for minor ticks shows major ticks only.
+
 ### Control helpers
 
 The `./plot` subpath has six helpers. Each helper takes a transfer function `{ num, den }` with the coefficients of the numerator and the denominator, highest power first. Each helper returns `{ figure, numbers }`. The `figure` is a plot figure. Pass it to `render` as JSON text to draw it. The `numbers` hold the key values that the analysis derives from the same model.
@@ -209,6 +220,10 @@ import { step } from "@danielsimonjr/sciengjs/plot";
 const { figure, numbers } = step({ num: [1], den: [1, 0.6, 1] });
 // numbers.overshoot is about 37.2, numbers.riseTime is about 1.32
 ```
+
+The step helper measures the peak and the overshoot in the direction of the final value, so a negative DC gain gives a correct overshoot. A response with no peak before the end of the time grid has a `peakTime` of `null` and an `overshoot` of 0. A system with a pole on or right of the imaginary axis has no final value: each number is `null`. The rise and settling times are interpolated between samples.
+
+The helpers reject with `E_INPUT` when the roots of the model do not converge, or when a computed value is not finite. A pole or a zero at 0 is exact and does not set the frequency range.
 
 `impulse` returns the peak value and its time:
 
