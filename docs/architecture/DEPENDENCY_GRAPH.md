@@ -489,7 +489,9 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
-| `net` | `isIP` |
+| `http` | `request, IncomingMessage` |
+| `https` | `request` |
+| `net` | `isIP, LookupFunction` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1554,7 +1556,7 @@ graph TD
 |----------|-------|
 | Total Source Files | 204 |
 | Subsystems | 16 |
-| Total Lines of Code | 23598 |
+| Total Lines of Code | 23683 |
 | Total Exports | 424 |
 | Total Re-exports | 81 |
 | Total Classes | 6 |

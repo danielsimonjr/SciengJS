@@ -67,9 +67,9 @@ This report lists each source file that the map census finds, with a disposition
 | `src/graph/dot.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/graph/image.ts` | @danielsimonjr/sciengjs | src | build-entry | 330 |
 | `src/graph/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 3 |
-| `src/html/backend-md.ts` | @danielsimonjr/sciengjs | src | build-entry | 56 |
+| `src/html/backend-md.ts` | @danielsimonjr/sciengjs | src | build-entry | 55 |
 | `src/html/convert.ts` | @danielsimonjr/sciengjs | src | build-entry | 513 |
-| `src/html/fetch-image.ts` | @danielsimonjr/sciengjs | src | build-entry | 147 |
+| `src/html/fetch-image.ts` | @danielsimonjr/sciengjs | src | build-entry | 189 |
 | `src/html/images.ts` | @danielsimonjr/sciengjs | src | build-entry | 62 |
 | `src/html/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/html/md.ts` | @danielsimonjr/sciengjs | src | build-entry | 89 |
@@ -162,7 +162,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 54 |
 | `test/unit/html-convert-escape.test.ts` | (root) | tests | test | 189 |
 | `test/unit/html-convert.test.ts` | (root) | tests | test | 153 |
-| `test/unit/html-fetch-image.test.ts` | (root) | tests | test | 109 |
+| `test/unit/html-fetch-image.test.ts` | (root) | tests | test | 153 |
 | `test/unit/html-md-render.test.ts` | (root) | tests | test | 123 |
 | `test/unit/math-backends.test.ts` | (root) | tests | test | 130 |
 | `test/unit/math-registry.test.ts` | (root) | tests | test | 34 |

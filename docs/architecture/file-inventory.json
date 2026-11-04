@@ -187,7 +187,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 56
+      "loc": 55
     },
     {
       "file": "src/html/convert.ts",
@@ -201,7 +201,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 147
+      "loc": 189
     },
     {
       "file": "src/html/images.ts",
@@ -852,7 +852,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 109
+      "loc": 153
     },
     {
       "file": "test/unit/html-md-render.test.ts",
