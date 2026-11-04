@@ -76,7 +76,8 @@ describe("html to md through render()", () => {
   (haveBrowser ? test : test.skip)("browser: true converts the script-built page to the script content", async () => {
     const out = await md(SCRIPT_PAGE, { browser: true }, { browser: browserPath });
     expect(out.text).toContain("SCRIPT-BUILT");
-  });
+    // A headless browser start can take more than the 5 s default of bun test on a CI runner.
+  }, 30000);
 });
 
 describe("convertPage image download rules", () => {
