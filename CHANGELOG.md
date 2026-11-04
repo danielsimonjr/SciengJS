@@ -8,6 +8,9 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 - The `html` to `md` pair renders through `render()`. The render returns the Markdown and the images in `assets`. The option `downloadImages: true` saves each image as `image-N.<ext>`. A remote image is fetched only when `allowNetwork` is `tex-bundles,images`. A data: image needs no network. The option `browser: true` reads the DOM after the page scripts run, through the browser stage.
 - `capabilities()` reports `html` to `md` as ready in the `html` stage.
+- A remote image download of html to md accepts http and https only. It follows a maximum of three redirects. Each hop must resolve to public addresses only. The reply must have an `image/*` type. The new keys `imageTimeoutMs` (default 15000) and `maxImageBytes` (default 10485760) set the limits. A refused image keeps its URL and gives a warning.
+- html to md escapes a block marker at a line start, `$` in text, and `&` before an entity form. It writes the blocks of a list item under the item. It escapes `|` in a table cell, also in a code span. It wraps a link destination that has a space or a parenthesis in `<...>`.
+- The images and the SVGs of one page use one asset counter, so no two asset names are equal. Only an image that the Markdown shows is downloaded.
 - The `render` result carries an `assets` list for extra files, for example images.
 
 - The `./html` subpath converts HTML to GitHub Flavored Markdown with `htmlToMarkdown()`, through `parse5` 8.1.0. A `data-scieng-source` block becomes a fenced block of its exact source. MathML TeX becomes `$…$` or `$$…$$`. `convertHtml()` also returns the inline SVG assets, linked as `image-N.svg`, with the `assetPrefix` option.

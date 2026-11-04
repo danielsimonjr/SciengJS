@@ -88,7 +88,7 @@ No other file imports these names, but their own module uses them.
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
 - `src/html/backend-md.ts`: `render`
 - `src/html/convert.ts`: `Asset`, `ConvertOptions`, `ConvertResult`
-- `src/html/images.ts`: `FetchedImage`
+- `src/html/fetch-image.ts`: `ImageFetcherOptions`
 - `src/html/md.ts`: `PageOptions`, `PageResult`
 - `src/math/font-ranges.ts`: `MHCHEM_ALIASES`
 - `src/math/tex.ts`: `MATH_PACKAGES`, `exToPx`, `rejectFontFallback`, `standaloneSvg`, `stripRequires`

@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 201
+  totalFiles: 204
   totalModules: 3
-  totalExports: 418
+  totalExports: 424
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -826,7 +826,8 @@ modules:
         - DotSvgResult
     src/html/backend-md.ts:
       externalDependencies: []
-      nodeDependencies: []
+      nodeDependencies:
+        - node:dns/promises
       internalDependencies:
         - file: src/worker/protocol.ts
           imports:
@@ -850,6 +851,10 @@ modules:
           imports:
             - convertPage
           typeOnly: false
+        - file: src/html/fetch-image.ts
+          imports:
+            - createImageFetcher
+          typeOnly: false
       exports:
         - render
     src/html/convert.ts:
@@ -860,9 +865,26 @@ modules:
       exports:
         - Asset
         - ConvertOptions
+        - AssetCounter
         - ConvertResult
+        - isDropped
         - convertHtml
         - htmlToMarkdown
+    src/html/fetch-image.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:net
+      internalDependencies:
+        - file: src/html/images.ts
+          imports:
+            - FetchedImage
+            - FetchImage
+          typeOnly: true
+      exports:
+        - LookupAll
+        - ImageFetcherOptions
+        - isPrivateAddress
+        - createImageFetcher
     src/html/images.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -890,6 +912,8 @@ modules:
         - file: src/html/convert.ts
           imports:
             - convertHtml
+            - isDropped
+            - AssetCounter
           typeOnly: false
         - file: src/html/images.ts
           imports:
@@ -2782,6 +2806,26 @@ modules:
             - WorkerJob
           typeOnly: true
       exports: []
+    test/unit/html-convert-escape.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/html/convert.ts
+          imports:
+            - htmlToMarkdown
+          typeOnly: false
+        - file: src/html/md.ts
+          imports:
+            - convertPage
+          typeOnly: false
+        - file: src/html/images.ts
+          imports:
+            - FetchImage
+          typeOnly: true
+      exports: []
     test/unit/html-convert.test.ts:
       externalDependencies:
         - bun:test
@@ -2793,6 +2837,18 @@ modules:
           imports:
             - convertHtml
             - htmlToMarkdown
+          typeOnly: false
+      exports: []
+    test/unit/html-fetch-image.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/html/fetch-image.ts
+          imports:
+            - createImageFetcher
+            - isPrivateAddress
+            - LookupAll
           typeOnly: false
       exports: []
     test/unit/html-md-render.test.ts:
@@ -3635,19 +3691,19 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 201
-  totalSourceFiles: 201
+  totalTypeScriptFiles: 204
+  totalSourceFiles: 204
   totalModules: 3
-  totalLinesOfCode: 23019
-  totalExports: 418
-  entryRoots: 61
-  reachableFiles: 61
+  totalLinesOfCode: 23598
+  totalExports: 424
+  entryRoots: 62
+  reachableFiles: 62
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 37
+  totalTypeOnlyImports: 39
   noImporterFileCount: 7
   unusedExportsCount: 41
   circularDepsTruncated: false
@@ -3656,9 +3712,9 @@ statistics:
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 72
-  totalFunctions: 187
-  totalTypeGuards: 4
+  totalInterfaces: 74
+  totalFunctions: 190
+  totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 57
   totalReExports: 81
@@ -3693,6 +3749,7 @@ reachability:
     - src/graph/image.ts
     - src/html/backend-md.ts
     - src/html/convert.ts
+    - src/html/fetch-image.ts
     - src/html/images.ts
     - src/html/md.ts
     - src/math/backend-pdf.ts
@@ -3725,7 +3782,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 61
+  reachableCount: 62
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs

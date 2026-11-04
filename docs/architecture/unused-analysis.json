@@ -73,8 +73,8 @@
       "ConvertOptions",
       "ConvertResult"
     ],
-    "src/html/images.ts": [
-      "FetchedImage"
+    "src/html/fetch-image.ts": [
+      "ImageFetcherOptions"
     ],
     "src/html/md.ts": [
       "PageOptions",

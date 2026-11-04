@@ -999,7 +999,14 @@
       "src/html/backend-md.ts": {
         "description": "backend-md module",
         "externalDependencies": [],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "dns/promises",
+            "imports": [
+              "lookup"
+            ]
+          }
+        ],
         "internalDependencies": [
           {
             "file": "../worker/protocol.ts",
@@ -1033,6 +1040,12 @@
             "imports": [
               "convertPage"
             ]
+          },
+          {
+            "file": "./fetch-image.ts",
+            "imports": [
+              "createImageFetcher"
+            ]
           }
         ],
         "workspaceDependencies": [],
@@ -1044,7 +1057,7 @@
         ]
       },
       "src/html/convert.ts": {
-        "description": "Converts an HTML document to GitHub Flavored Markdown and its assets.",
+        "description": "Escapes the block marker at the start of each line of a run of inline Markdown.",
         "externalDependencies": [
           {
             "package": "parse5",
@@ -1059,17 +1072,54 @@
         "internalDependencies": [],
         "workspaceDependencies": [],
         "exports": [
+          "isDropped",
           "convertHtml",
           "htmlToMarkdown"
         ],
         "interfaces": [
           "Asset",
           "ConvertOptions",
+          "AssetCounter",
           "ConvertResult"
         ],
         "functions": [
+          "isDropped",
           "convertHtml",
           "htmlToMarkdown"
+        ]
+      },
+      "src/html/fetch-image.ts": {
+        "description": "True when the address is loopback, private, link-local or unspecified:",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "net",
+            "imports": [
+              "isIP"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "./images.ts",
+            "imports": [
+              "FetchedImage",
+              "FetchImage"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "isPrivateAddress",
+          "createImageFetcher"
+        ],
+        "interfaces": [
+          "ImageFetcherOptions"
+        ],
+        "functions": [
+          "isPrivateAddress",
+          "createImageFetcher"
         ]
       },
       "src/html/images.ts": {
@@ -1128,7 +1178,9 @@
           {
             "file": "./convert.ts",
             "imports": [
-              "convertHtml"
+              "convertHtml",
+              "isDropped",
+              "AssetCounter"
             ]
           },
           {
@@ -3232,6 +3284,7 @@
       "files": [
         "src/html/backend-md.ts",
         "src/html/convert.ts",
+        "src/html/fetch-image.ts",
         "src/html/images.ts",
         "src/html/index.ts",
         "src/html/md.ts"

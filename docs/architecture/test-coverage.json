@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "totalSourceFiles": 75,
-    "totalTestFiles": 71,
-    "testedCount": 49,
+    "totalSourceFiles": 76,
+    "totalTestFiles": 73,
+    "testedCount": 50,
     "untestedCount": 26,
-    "coveragePercent": "65.3",
+    "coveragePercent": "65.8",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 75,
-      "testedActive": 49,
+      "activeFiles": 76,
+      "testedActive": 50,
       "activeUntested": 26,
       "excludedTotal": 0,
-      "percent": "65.3",
+      "percent": "65.8",
       "breakdown": {
         "active_untested": 26
       }
@@ -65,6 +65,7 @@
     "src/graph/dot.ts",
     "src/graph/image.ts",
     "src/html/convert.ts",
+    "src/html/fetch-image.ts",
     "src/html/images.ts",
     "src/html/md.ts",
     "src/index.ts",
@@ -201,13 +202,19 @@
     "src/graph/index.ts": [],
     "src/html/backend-md.ts": [],
     "src/html/convert.ts": [
+      "test/unit/html-convert-escape.test.ts",
       "test/unit/html-convert.test.ts"
     ],
+    "src/html/fetch-image.ts": [
+      "test/unit/html-fetch-image.test.ts"
+    ],
     "src/html/images.ts": [
+      "test/unit/html-convert-escape.test.ts",
       "test/unit/html-md-render.test.ts"
     ],
     "src/html/index.ts": [],
     "src/html/md.ts": [
+      "test/unit/html-convert-escape.test.ts",
       "test/unit/html-md-render.test.ts"
     ],
     "src/index.ts": [
@@ -459,8 +466,16 @@
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
     ],
+    "test/unit/html-convert-escape.test.ts": [
+      "src/html/convert.ts",
+      "src/html/md.ts",
+      "src/html/images.ts"
+    ],
     "test/unit/html-convert.test.ts": [
       "src/html/convert.ts"
+    ],
+    "test/unit/html-fetch-image.test.ts": [
+      "src/html/fetch-image.ts"
     ],
     "test/unit/html-md-render.test.ts": [
       "src/index.ts",
