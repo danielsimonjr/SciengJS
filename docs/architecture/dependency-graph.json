@@ -3,7 +3,7 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 166,
+    "totalFiles": 168,
     "totalModules": 3,
     "totalExports": 327
   },
@@ -2410,6 +2410,27 @@
         "internalDependencies": [],
         "exports": []
       },
+      "test/node/fixtures/render-under-node-test.fixture.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/node/worker-execargv.node.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:child_process",
+          "node:path",
+          "node:test",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
       "test/node/worker.node.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
@@ -4217,10 +4238,10 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 166,
-    "totalSourceFiles": 166,
+    "totalTypeScriptFiles": 168,
+    "totalSourceFiles": 168,
     "totalModules": 3,
-    "totalLinesOfCode": 18025,
+    "totalLinesOfCode": 18069,
     "totalExports": 327,
     "entryRoots": 42,
     "reachableFiles": 42,

@@ -74,6 +74,7 @@ const INVALID_EXEC_ARGV = "ERR_WORKER_INVALID_EXEC_ARGV";
  * 1. When workerExecArgv removes no flag, the worker gets no execArgv key. Node then inherits the parent flags.
  * 2. When it removes a flag, the worker gets the filtered list.
  * 3. When the constructor throws `ERR_WORKER_INVALID_EXEC_ARGV`, the worker is constructed again with an empty list.
+ * The empty list drops every parent flag, also `--conditions`, `--import` and `--require`. The built worker entry needs none of them.
  * Other errors pass through. `ctor` receives the options and returns the worker. Tests pass a double.
  */
 export function constructWorker(

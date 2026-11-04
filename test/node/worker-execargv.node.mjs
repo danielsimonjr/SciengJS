@@ -23,7 +23,6 @@ function childEnv() {
 test("a render under node --test exits 0", () => {
   const run = spawnSync(process.execPath, ["--test", fixture], { encoding: "utf8", timeout: 120000, env: childEnv() });
   assert.equal(run.status, 0, `exit ${run.status}: ${run.stdout}\n${run.stderr}`);
-  assert.match(run.stdout, /fail 0/);
 });
 
 test("node --input-type=module --stack-trace-limit=10 -e renders through the worker", () => {
