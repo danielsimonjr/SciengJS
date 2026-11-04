@@ -17,22 +17,23 @@ This document provides a comprehensive dependency graph of all files, components
 3. [Root Dependencies](#root-dependencies)
 4. [Browser Dependencies](#browser-dependencies)
 5. [Graph Dependencies](#graph-dependencies)
-6. [Entry Dependencies](#entry-dependencies)
-7. [Math Dependencies](#math-dependencies)
-8. [Mermaid Dependencies](#mermaid-dependencies)
-9. [Plot Dependencies](#plot-dependencies)
-10. [Raster Dependencies](#raster-dependencies)
-11. [Worker Dependencies](#worker-dependencies)
-12. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-13. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-14. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-15. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-16. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-17. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-18. [Dependency Matrix](#dependency-matrix)
-19. [Circular Dependency Analysis](#circular-dependency-analysis)
-20. [Visual Dependency Graph](#visual-dependency-graph)
-21. [Summary Statistics](#summary-statistics)
+6. [Html Dependencies](#html-dependencies)
+7. [Entry Dependencies](#entry-dependencies)
+8. [Math Dependencies](#math-dependencies)
+9. [Mermaid Dependencies](#mermaid-dependencies)
+10. [Plot Dependencies](#plot-dependencies)
+11. [Raster Dependencies](#raster-dependencies)
+12. [Worker Dependencies](#worker-dependencies)
+13. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+14. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+15. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+16. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+17. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+18. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+19. [Dependency Matrix](#dependency-matrix)
+20. [Circular Dependency Analysis](#circular-dependency-analysis)
+21. [Visual Dependency Graph](#visual-dependency-graph)
+22. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -44,6 +45,7 @@ The codebase is organized into the following modules:
 - **root**: 8 files
 - **browser**: 11 files
 - **graph**: 6 files
+- **html**: 2 files
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
@@ -440,6 +442,35 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Re-exports: `dotToSvg`, `DotSvgResult`
+
+---
+
+<a id="html-dependencies"></a>
+
+## Html Dependencies
+
+### `src/html/convert.ts` - Converts an HTML document to GitHub Flavored Markdown and its assets.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `parse5` | `parse, serializeOuter, DefaultTreeAdapterMap` |
+
+**Exports:**
+- Interfaces: `Asset`, `ConvertOptions`, `ConvertResult`
+- Functions: `convertHtml`, `htmlToMarkdown`
+
+---
+
+### `src/html/index.ts` - Package entry point for html (re-exports 1 symbols)
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./convert.ts` | `htmlToMarkdown` | Re-export |
+
+**Exports:**
+- Re-exports: `htmlToMarkdown`
 
 ---
 
@@ -1275,91 +1306,96 @@ graph TD
         N24[index]
     end
 
+    subgraph Html
+        N25[convert]
+        N26[index]
+    end
+
     subgraph Entry
-        N25[index]
+        N27[index]
     end
 
     subgraph Math
-        N26[backend-pdf]
-        N27[backend-png]
-        N28[backend-svg]
-        N29[font-ranges]
-        N30[index]
-        N31[tex]
+        N28[backend-pdf]
+        N29[backend-png]
+        N30[backend-svg]
+        N31[font-ranges]
+        N32[index]
+        N33[tex]
     end
 
     subgraph Mermaid
-        N32[backend-pdf]
-        N33[backend-png]
-        N34[backend-svg]
-        N35[browser]
-        N36[class]
-        N37[common]
-        N38[index]
-        N39[render]
-        N40[sequence-layout]
-        N41[sequence]
-        N42[...1 more]
+        N34[backend-pdf]
+        N35[backend-png]
+        N36[backend-svg]
+        N37[browser]
+        N38[class]
+        N39[common]
+        N40[index]
+        N41[render]
+        N42[sequence-layout]
+        N43[sequence]
+        N44[...1 more]
     end
 
     subgraph Plot
-        N43[backend-html]
-        N44[backend-png]
-        N45[backend-svg]
-        N46[control]
-        N47[index]
-        N48[plotter]
-        N49[reader]
-        N50[ticks]
+        N45[backend-html]
+        N46[backend-png]
+        N47[backend-svg]
+        N48[control]
+        N49[index]
+        N50[plotter]
+        N51[reader]
+        N52[ticks]
     end
 
     subgraph Raster
-        N51[index]
-        N52[warnings]
+        N53[index]
+        N54[warnings]
     end
 
     subgraph Worker
-        N53[entry]
-        N54[protocol]
-        N55[run]
+        N55[entry]
+        N56[protocol]
+        N57[run]
     end
 
     subgraph Trials/t1-graph
-        N56[compare-layout.mjs]
-        N57[make-sources.mjs]
-        N58[measure.mjs]
+        N58[compare-layout.mjs]
+        N59[make-sources.mjs]
+        N60[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N59[measure.mjs]
+        N61[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N60[index.cjs]
+        N62[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N61[pinned.js]
-        N62[measure.mjs]
+        N63[pinned.js]
+        N64[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N63[dvi2svg.mjs]
-        N64[host.mjs]
-        N65[run.mjs]
-        N66[tfm.mjs]
-        N67[type1.mjs]
-        N68[vfs.mjs]
+        N65[dvi2svg.mjs]
+        N66[host.mjs]
+        N67[run.mjs]
+        N68[tfm.mjs]
+        N69[type1.mjs]
+        N70[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N69[dvisvgm-specials.mjs]
+        N71[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N54
+    N8 --> N56
     N8 --> N13
-    N9 --> N54
+    N9 --> N56
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1374,63 +1410,63 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N55
+    N2 --> N57
     N2 --> N6
     N19 --> N3
-    N19 --> N54
-    N19 --> N35
+    N19 --> N56
+    N19 --> N37
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N54
+    N20 --> N56
     N20 --> N22
-    N20 --> N51
-    N20 --> N52
+    N20 --> N53
+    N20 --> N54
     N21 --> N3
-    N21 --> N54
+    N21 --> N56
     N21 --> N22
     N22 --> N3
     N22 --> N23
     N24 --> N22
-    N25 --> N2
-    N25 --> N5
-    N25 --> N1
-    N25 --> N6
-    N25 --> N3
-    N26 --> N3
-    N26 --> N35
-    N26 --> N54
-    N26 --> N31
+    N26 --> N25
+    N27 --> N2
+    N27 --> N5
+    N27 --> N1
+    N27 --> N6
     N27 --> N3
-    N27 --> N20
-    N27 --> N54
-    N27 --> N31
     N28 --> N3
-    N28 --> N54
-    N28 --> N31
-    N30 --> N31
-    N31 --> N3
-    N31 --> N29
-    N32 --> N54
-    N32 --> N37
-    N32 --> N35
-    N32 --> N39
-    N33 --> N13
+    N28 --> N37
+    N28 --> N56
+    N28 --> N33
+    N29 --> N3
+    N29 --> N20
+    N29 --> N56
+    N29 --> N33
+    N30 --> N3
+    N30 --> N56
+    N30 --> N33
+    N32 --> N33
     N33 --> N3
-    N33 --> N20
-    N33 --> N54
-    N33 --> N37
-    N33 --> N35
-    N33 --> N39
-    N34 --> N54
-    N34 --> N37
-    N34 --> N35
+    N33 --> N31
+    N34 --> N56
     N34 --> N39
+    N34 --> N37
+    N34 --> N41
     N35 --> N13
-    N35 --> N15
     N35 --> N3
-    N35 --> N14
-    N35 --> N0
+    N35 --> N20
+    N35 --> N56
+    N35 --> N39
+    N35 --> N37
+    N35 --> N41
+    N36 --> N56
+    N36 --> N39
+    N36 --> N37
+    N36 --> N41
+    N37 --> N13
+    N37 --> N15
+    N37 --> N3
+    N37 --> N14
 ```
 
 ---
@@ -1440,14 +1476,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 194 |
-| Subsystems | 15 |
-| Total Lines of Code | 22106 |
-| Total Exports | 404 |
-| Total Re-exports | 80 |
+| Total Source Files | 197 |
+| Subsystems | 16 |
+| Total Lines of Code | 22671 |
+| Total Exports | 410 |
+| Total Re-exports | 81 |
 | Total Classes | 6 |
-| Total Interfaces | 66 |
-| Total Functions | 181 |
+| Total Interfaces | 69 |
+| Total Functions | 183 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
 | Type-only Imports | 32 |

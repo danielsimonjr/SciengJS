@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 70,
-    "totalTestFiles": 69,
-    "testedCount": 46,
-    "untestedCount": 24,
-    "coveragePercent": "65.7",
+    "totalSourceFiles": 72,
+    "totalTestFiles": 70,
+    "testedCount": 47,
+    "untestedCount": 25,
+    "coveragePercent": "65.3",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 70,
-      "testedActive": 46,
-      "activeUntested": 24,
+      "activeFiles": 72,
+      "testedActive": 47,
+      "activeUntested": 25,
       "excludedTotal": 0,
-      "percent": "65.7",
+      "percent": "65.3",
       "breakdown": {
-        "active_untested": 24
+        "active_untested": 25
       }
     }
   },
@@ -21,6 +21,7 @@
     "src/browser/index.ts",
     "src/graph/backend-pdf.ts",
     "src/graph/index.ts",
+    "src/html/index.ts",
     "src/math/font-ranges.ts",
     "src/mermaid/backend-pdf.ts",
     "src/mermaid/backend-png.ts",
@@ -62,6 +63,7 @@
     "src/graph/backend-svg.ts",
     "src/graph/dot.ts",
     "src/graph/image.ts",
+    "src/html/convert.ts",
     "src/index.ts",
     "src/math/backend-pdf.ts",
     "src/math/backend-png.ts",
@@ -192,6 +194,10 @@
       "test/unit/graph-image.test.ts"
     ],
     "src/graph/index.ts": [],
+    "src/html/convert.ts": [
+      "test/unit/html-convert.test.ts"
+    ],
+    "src/html/index.ts": [],
     "src/index.ts": [
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
@@ -439,6 +445,9 @@
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
     ],
+    "test/unit/html-convert.test.ts": [
+      "src/html/convert.ts"
+    ],
     "test/unit/math-backends.test.ts": [
       "src/math/backend-svg.ts",
       "src/math/backend-png.ts",
@@ -591,6 +600,10 @@
     },
     {
       "file": "src/graph/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/html/index.ts",
       "category": null
     },
     {

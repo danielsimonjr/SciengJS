@@ -995,6 +995,58 @@
         ]
       }
     },
+    "html": {
+      "src/html/convert.ts": {
+        "description": "Converts an HTML document to GitHub Flavored Markdown and its assets.",
+        "externalDependencies": [
+          {
+            "package": "parse5",
+            "imports": [
+              "parse",
+              "serializeOuter",
+              "DefaultTreeAdapterMap"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "convertHtml",
+          "htmlToMarkdown"
+        ],
+        "interfaces": [
+          "Asset",
+          "ConvertOptions",
+          "ConvertResult"
+        ],
+        "functions": [
+          "convertHtml",
+          "htmlToMarkdown"
+        ]
+      },
+      "src/html/index.ts": {
+        "description": "Package entry point for html (re-exports 1 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./convert.ts",
+            "imports": [
+              "htmlToMarkdown"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "htmlToMarkdown"
+        ],
+        "reExported": [
+          "htmlToMarkdown"
+        ]
+      }
+    },
     "entry": {
       "src/index.ts": {
         "description": "Package entry point for src (re-exports 15 symbols)",
@@ -3045,6 +3097,13 @@
         "src/graph/dot.ts",
         "src/graph/image.ts",
         "src/graph/index.ts"
+      ]
+    },
+    {
+      "name": "Html",
+      "files": [
+        "src/html/convert.ts",
+        "src/html/index.ts"
       ]
     },
     {
