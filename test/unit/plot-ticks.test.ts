@@ -85,3 +85,9 @@ describe("logTicks tick limit", () => {
     expect(logTicks(1e-50, 1e50).length).toBeLessThanOrEqual(1000);
   });
 });
+
+describe("linearTicks step choice", () => {
+  test("a raw step of 1.4 rounds to a step of 1, not 2", () => {
+    expect(linearTicks(0, 5.6)).toEqual([0, 1, 2, 3, 4, 5]);
+  });
+});

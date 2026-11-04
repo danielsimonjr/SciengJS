@@ -403,14 +403,14 @@ describe("plotToSvg grid numbering", () => {
   });
 });
 
-/** The RenderError of a rejected call, or undefined. A raw error fails the test. */
+/** The RenderError of a rejected call, or undefined. A raw error fails an assertion. */
 function renderError(fn: () => unknown): RenderError | undefined {
   try {
     fn();
     return undefined;
   } catch (error) {
-    if (!(error instanceof RenderError)) throw error;
-    return error;
+    expect(error).toBeInstanceOf(RenderError);
+    return error as RenderError;
   }
 }
 
@@ -446,12 +446,16 @@ describe("tick labels at extreme magnitudes", () => {
   });
 
   test("log data near 1e-300 draws without a raw error", () => {
-    const { svg } = plotToSvg(scatter({ x: [1e-300, 1e-299], y: [1, 2] }, { xaxis: { type: "log" } }));
+    const figure = scatter({ x: [1e-300, 1e-299], y: [1, 2] }, { xaxis: { type: "log" } });
+    expect(renderError(() => plotToSvg(figure))).toBeUndefined();
+    const { svg } = plotToSvg(figure);
     expect(svg.startsWith("<svg")).toBe(true);
   });
 
   test("linear data near 1e-300 draws with exponent labels", () => {
-    const { svg } = plotToSvg(scatter({ x: [0, 4e-300], y: [1, 2] }));
+    const figure = scatter({ x: [0, 4e-300], y: [1, 2] });
+    expect(renderError(() => plotToSvg(figure))).toBeUndefined();
+    const { svg } = plotToSvg(figure);
     expect(texts(svg).some((t) => /e-30\d$/.test(t))).toBe(true);
   });
 
@@ -499,5 +503,22 @@ describe("text labels and the clip path", () => {
     expect(clipped).not.toContain(">high<");
     expect(texts(svg)).toContain("high");
     expect(clipped).toContain("<circle");
+  });
+});
+
+describe("log axis scale details", () => {
+  test("one value on a log axis sits in the middle of the plot area", () => {
+    const { svg } = plotToSvg(scatter({ mode: "markers", x: [10, 10], y: [1, 2] }, { xaxis: { type: "log" } }));
+    const clip = /<clipPath id="clip0"><rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)"/.exec(svg)!;
+    const middle = Number(clip[1]) + Number(clip[2]) / 2;
+    const cx = Number(/<circle cx="([\d.]+)"/.exec(svg)![1]);
+    expect(Math.abs(cx - middle)).toBeLessThan(0.01);
+  });
+
+  test("a log axis of 600 decades shows about ten major labels", () => {
+    const { svg } = plotToSvg(scatter({ x: [1, 2], y: [1, 2] }, { xaxis: { type: "log", range: [-300, 300] } }));
+    const labels = texts(svg).filter((t) => /^1e[+-]\d+$/.test(t));
+    expect(labels.length).toBeGreaterThan(5);
+    expect(labels.length).toBeLessThanOrEqual(12);
   });
 });

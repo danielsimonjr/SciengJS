@@ -304,3 +304,41 @@ describe("root finding failure", () => {
     expect(step({ num: [1], den: [1, 3, 3, 1] }).numbers.finalValue).toBeCloseTo(1, 12);
   });
 });
+
+describe("details that the mutation audit found untested", () => {
+  test("a root below 1e-9 of the largest root is numerical zero and does not set the range", () => {
+    const w = bode({ num: [1], den: [1, 1, 1e-13] }).figure.data[0]!.x as number[];
+    expect(w[0]).toBeCloseTo(0.01, 12);
+  });
+
+  test("the bode range starts two decades below the smallest root", () => {
+    const w = bode({ num: [1], den: [1, 3, 2] }).figure.data[0]!.x as number[];
+    expect(w[0]).toBeCloseTo(0.01, 12);
+    expect(w[w.length - 1]).toBeCloseTo(200, 9);
+  });
+
+  test("the phase of -1/(s+1) starts near -180 degrees, not +180", () => {
+    const phase = bode({ num: [-1], den: [1, 1] }).figure.data[1]!.y as number[];
+    expect(Math.abs(phase[0]! + 180)).toBeLessThan(1);
+  });
+
+  test("a step response that overflows rejects with E_INPUT naming the plotted values", () => {
+    let error: unknown;
+    try {
+      step({ num: [1e300], den: [1e-300, 1] });
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeInstanceOf(RenderError);
+    expect((error as RenderError).message).toContain("step y[");
+  });
+
+  test("the peak time is refined between samples: 200 points still give pi/sqrt(3) to 2e-3", () => {
+    const { numbers } = step(B, { tEnd: 10, points: 200 });
+    expect(Math.abs(numbers.peakTime! - Math.PI / Math.sqrt(3))).toBeLessThan(2e-3);
+  });
+
+  test("polynomialRoots gives no zero root for a polynomial with a nonzero constant term", () => {
+    expect(polynomialRoots([1, 3, 2]).some((r) => r.re === 0 && r.im === 0)).toBe(false);
+  });
+});

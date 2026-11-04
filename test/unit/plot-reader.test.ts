@@ -142,26 +142,22 @@ function getPath(obj: object, path: string): unknown {
 describe("the reader rejects a dtick of zero or less", () => {
   for (const dtick of [0, -1]) {
     test(`dtick ${dtick} rejects with E_INPUT and the path`, () => {
-      try {
-        readPlotFigure({ data: [], layout: { xaxis: { dtick } } });
-        throw new Error("no rejection");
-      } catch (e) {
-        expect((e as RenderError).code).toBe("E_INPUT");
-        expect((e as RenderError).message).toContain("layout.xaxis.dtick");
-      }
+      expect(rejection({ data: [], layout: { xaxis: { dtick } } })).toContain("layout.xaxis.dtick");
     });
   }
 });
 
-/** The E_INPUT message of a rejected read; any other outcome fails the test. */
+/** The E_INPUT message of a rejected read; a read that does not reject fails an assertion. */
 function rejection(input: unknown, options?: { lenient?: boolean }): string {
+  let error: unknown;
   try {
     readPlotFigure(input, options);
   } catch (e) {
-    expect((e as RenderError).code).toBe("E_INPUT");
-    return (e as RenderError).message;
+    error = e;
   }
-  throw new Error("no rejection");
+  expect(error).toBeInstanceOf(RenderError);
+  expect((error as RenderError).code).toBe("E_INPUT");
+  return (error as RenderError).message;
 }
 
 describe("the reader names axes strictly", () => {
