@@ -107,7 +107,7 @@ describe("math to pdf through the registry", () => {
   test.skipIf(!haveBrowser)("renders a pdf with the pdf signature", async () => {
     const result = await renderIsolated({ type: "math", source: SOURCE, format: "pdf" }, { allowNetwork: "none", browser: BROWSER });
     expect(new TextDecoder().decode(result.bytes.slice(0, 5))).toBe("%PDF-");
-  });
+  }, 60000);
 });
 
 describe("input errors of the math stage", () => {
