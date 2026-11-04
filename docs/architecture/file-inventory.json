@@ -1,11 +1,11 @@
 {
-  "totalFiles": 177,
+  "totalFiles": 179,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 48,
     "test-only": 3,
     "orphan": 11,
-    "test": 87,
+    "test": 89,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 28,
     "src": 62,
-    "tests": 87
+    "tests": 89
   },
   "byPackage": {
-    "(root)": 129,
+    "(root)": 131,
     "@danielsimonjr/sciengjs": 48
   },
   "files": [
@@ -484,6 +484,13 @@
       "loc": 10
     },
     {
+      "file": "test/node/math.node.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 32
+    },
+    {
       "file": "test/node/worker-execargv.node.mjs",
       "package": "(root)",
       "area": "tests",
@@ -580,6 +587,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 33
+    },
+    {
+      "file": "test/support/xml-wellformed.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 45
     },
     {
       "file": "test/unit/assets.test.ts",

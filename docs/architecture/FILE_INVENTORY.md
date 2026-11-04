@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 177
+**Total files**: 179
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 48 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 87 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 89 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 28 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **177** | |
+| **Total** | **179** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 62 |
-| `tests` | 87 |
+| `tests` | 89 |
 | `tools` | 28 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 129 |
+| `(root)` | 131 |
 | `@danielsimonjr/sciengjs` | 48 |
 
 ## All files
@@ -110,6 +110,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/browser-probe.node.mjs` | (root) | tests | test | 73 |
 | `test/node/eval-render.node.mjs` | (root) | tests | test | 17 |
 | `test/node/fixtures/render-under-node-test.fixture.mjs` | (root) | tests | test | 10 |
+| `test/node/math.node.mjs` | (root) | tests | test | 32 |
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
 | `test/smoke/smoke.mjs` | (root) | tests | test | 159 |
@@ -124,6 +125,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/stubs/stub-foreign-error.ts` | (root) | tests | test | 14 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
 | `test/support/test-registry.ts` | (root) | tests | test | 33 |
+| `test/support/xml-wellformed.ts` | (root) | tests | test | 45 |
 | `test/unit/assets.test.ts` | (root) | tests | test | 131 |
 | `test/unit/browser-cdp.test.ts` | (root) | tests | test | 147 |
 | `test/unit/browser-flags.test.ts` | (root) | tests | test | 32 |

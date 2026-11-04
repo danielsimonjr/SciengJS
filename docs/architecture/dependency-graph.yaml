@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 177
+  totalFiles: 179
   totalModules: 3
-  totalExports: 342
+  totalExports: 343
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1856,6 +1856,15 @@ modules:
         - node:test
       internalDependencies: []
       exports: []
+    test/node/math.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
     test/node/worker-execargv.node.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -2047,6 +2056,12 @@ modules:
         - TEST_REGISTRY
         - ISOLATED_CONFIG_DEPS
         - renderIsolated
+    test/support/xml-wellformed.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - xmlErrors
     test/unit/assets.test.ts:
       externalDependencies:
         - bun:test
@@ -2538,6 +2553,10 @@ modules:
         - file: test/support/rejections.ts
           imports:
             - rejectionOf
+          typeOnly: false
+        - file: test/support/xml-wellformed.ts
+          imports:
+            - xmlErrors
           typeOnly: false
       exports: []
     test/unit/mermaid-browser-route.test.ts:
@@ -3130,11 +3149,11 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 177
-  totalSourceFiles: 177
+  totalTypeScriptFiles: 179
+  totalSourceFiles: 179
   totalModules: 3
-  totalLinesOfCode: 18675
-  totalExports: 342
+  totalLinesOfCode: 18752
+  totalExports: 343
   entryRoots: 48
   reachableFiles: 48
   dormantFiles: 14
@@ -3152,7 +3171,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 6
   totalInterfaces: 52
-  totalFunctions: 161
+  totalFunctions: 162
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 52
