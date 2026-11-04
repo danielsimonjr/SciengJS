@@ -140,3 +140,14 @@ describe("inline SVG assets", () => {
     expect(result.assets).toHaveLength(0);
   });
 });
+
+describe("I8 gate: a page that render_html writes converts back to its exact sources", () => {
+  test("six block types with titles in one page come back in order", () => {
+    const page = SCIENG_CASES.map((c, i) => `<section><h2>Block ${i + 1}: ${c.language}</h2>${sciengBlock(c.source, c.inner)}</section>`).join(
+      "\n",
+    );
+    const expected =
+      SCIENG_CASES.map((c, i) => `## Block ${i + 1}: ${c.language}\n\n${fenceOf(c.language, c.source).trimEnd()}`).join("\n\n") + "\n";
+    expect(htmlToMarkdown(page)).toBe(expected);
+  });
+});
