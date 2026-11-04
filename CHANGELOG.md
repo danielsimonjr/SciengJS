@@ -15,6 +15,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The mutation audit of the glb writer and the glb limit is in `test/mutation/mesh-glb-mutants.json`. An assertion kills all 46 non-equivalent mutants. Three mutants are equivalent.
 - The smoke test renders a BREP sample to `glb` from the installed tarball under Node. `test:node` runs a mesh test against `dist/`.
 
+### Fixed
+
+- The browser test of html to md in `test/unit/html-md-render.test.ts` has a timeout of 30 s. A headless browser start on a CI runner can take more than the 5 s default of `bun test`.
+
 ## [0.6.0] - 2026-11-04
 
 ### Added
