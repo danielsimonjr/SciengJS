@@ -2340,6 +2340,164 @@
         ]
       }
     },
+    "mesh": {
+      "src/mesh/backend-glb.ts": {
+        "description": "Checks the options of a glb render. STEP and IGES take linearUnit. BREP takes no option.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./glb.ts",
+            "imports": [
+              "writeGlb"
+            ]
+          },
+          {
+            "file": "./read.ts",
+            "imports": [
+              "readCad",
+              "CadFormat",
+              "LinearUnit"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readMeshOptions",
+          "render"
+        ],
+        "functions": [
+          "readMeshOptions",
+          "render"
+        ]
+      },
+      "src/mesh/glb.ts": {
+        "description": "Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./read.ts",
+            "imports": [
+              "CadFace",
+              "CadMesh"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "writeGlb"
+        ],
+        "functions": [
+          "writeGlb"
+        ]
+      },
+      "src/mesh/index.ts": {
+        "description": "Package entry point for mesh (re-exports 7 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./read.ts",
+            "imports": [
+              "readCad"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./read.ts",
+            "imports": [
+              "CadFormat",
+              "CadFace",
+              "CadMesh",
+              "LinearUnit"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          },
+          {
+            "file": "./glb.ts",
+            "imports": [
+              "writeGlb"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "readMeshOptions"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readCad",
+          "CadFormat",
+          "CadFace",
+          "CadMesh",
+          "LinearUnit",
+          "writeGlb",
+          "readMeshOptions"
+        ],
+        "reExported": [
+          "readCad",
+          "CadFormat",
+          "CadFace",
+          "CadMesh",
+          "LinearUnit",
+          "writeGlb",
+          "readMeshOptions"
+        ]
+      },
+      "src/mesh/occt-import-js.d.ts": {
+        "description": "The package occt-import-js 0.0.23 ships no type declarations. This file declares its factory.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": []
+      },
+      "src/mesh/read.ts": {
+        "description": "Reads a STEP, IGES or BREP file to meshes. The linear unit applies to STEP and IGES only.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readCad"
+        ],
+        "interfaces": [
+          "CadFace",
+          "CadMesh"
+        ],
+        "functions": [
+          "readCad"
+        ]
+      }
+    },
     "plot": {
       "src/plot/backend-html.ts": {
         "description": "backend-html module",
@@ -3335,6 +3493,16 @@
         "src/mermaid/sequence-layout.ts",
         "src/mermaid/sequence.ts",
         "src/mermaid/state.ts"
+      ]
+    },
+    {
+      "name": "Mesh",
+      "files": [
+        "src/mesh/backend-glb.ts",
+        "src/mesh/glb.ts",
+        "src/mesh/index.ts",
+        "src/mesh/occt-import-js.d.ts",
+        "src/mesh/read.ts"
       ]
     },
     {

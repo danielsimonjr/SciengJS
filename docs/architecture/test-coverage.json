@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 76,
-    "totalTestFiles": 73,
-    "testedCount": 50,
-    "untestedCount": 26,
-    "coveragePercent": "65.8",
+    "totalSourceFiles": 80,
+    "totalTestFiles": 74,
+    "testedCount": 51,
+    "untestedCount": 29,
+    "coveragePercent": "63.7",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 76,
-      "testedActive": 50,
-      "activeUntested": 26,
+      "activeFiles": 80,
+      "testedActive": 51,
+      "activeUntested": 29,
       "excludedTotal": 0,
-      "percent": "65.8",
+      "percent": "63.7",
       "breakdown": {
-        "active_untested": 26
+        "active_untested": 29
       }
     }
   },
@@ -28,6 +28,9 @@
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
+    "src/mesh/backend-glb.ts",
+    "src/mesh/glb.ts",
+    "src/mesh/index.ts",
     "src/plot/backend-html.ts",
     "src/plot/backend-png.ts",
     "src/plot/backend-svg.ts",
@@ -81,6 +84,7 @@
     "src/mermaid/sequence-layout.ts",
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
+    "src/mesh/read.ts",
     "src/pairs.ts",
     "src/plot/control.ts",
     "src/plot/plotter.ts",
@@ -156,6 +160,7 @@
       "test/unit/graph-registry.test.ts",
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
+      "test/unit/mesh-glb.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts",
       "test/unit/render.test.ts"
@@ -278,6 +283,12 @@
       "test/unit/mermaid-state.test.ts",
       "test/unit/mermaid-xml.test.ts"
     ],
+    "src/mesh/backend-glb.ts": [],
+    "src/mesh/glb.ts": [],
+    "src/mesh/index.ts": [],
+    "src/mesh/read.ts": [
+      "test/unit/mesh-glb.test.ts"
+    ],
     "src/pairs.ts": [
       "test/unit/browser-pdf-pairs.test.ts"
     ],
@@ -314,6 +325,7 @@
       "test/unit/graph-registry.test.ts",
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
+      "test/unit/mesh-glb.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts"
     ],
@@ -552,6 +564,11 @@
       "src/mermaid/state.ts",
       "src/raster/index.ts"
     ],
+    "test/unit/mesh-glb.test.ts": [
+      "src/core.ts",
+      "src/registry.ts",
+      "src/mesh/read.ts"
+    ],
     "test/unit/no-bun-api.test.ts": [],
     "test/unit/no-sandbox-flag.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
@@ -665,6 +682,18 @@
     },
     {
       "file": "src/mermaid/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/mesh/backend-glb.ts",
+      "category": null
+    },
+    {
+      "file": "src/mesh/glb.ts",
+      "category": null
+    },
+    {
+      "file": "src/mesh/index.ts",
       "category": null
     },
     {

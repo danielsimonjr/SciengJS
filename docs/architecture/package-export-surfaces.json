@@ -142,6 +142,16 @@
       "stateToDot",
       "xmlSafe"
     ],
+    "mesh": [
+      "CadFace",
+      "CadFormat",
+      "CadMesh",
+      "LinearUnit",
+      "readCad",
+      "readMeshOptions",
+      "render",
+      "writeGlb"
+    ],
     "plot": [
       "BodeNumbers",
       "Complex",

@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 204
+  totalFiles: 211
   totalModules: 3
-  totalExports: 424
+  totalExports: 442
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1501,6 +1501,93 @@ modules:
         - StateModel
         - parseStateDiagram
         - stateToDot
+    src/mesh/backend-glb.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mesh/glb.ts
+          imports:
+            - writeGlb
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - readCad
+            - CadFormat
+            - LinearUnit
+          typeOnly: false
+      exports:
+        - readMeshOptions
+        - render
+    src/mesh/glb.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/read.ts
+          imports:
+            - CadFace
+            - CadMesh
+          typeOnly: true
+      exports:
+        - writeGlb
+    src/mesh/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/read.ts
+          imports:
+            - readCad
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - CadFormat
+            - CadFace
+            - CadMesh
+            - LinearUnit
+          typeOnly: true
+        - file: src/mesh/glb.ts
+          imports:
+            - writeGlb
+          typeOnly: false
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - readMeshOptions
+          typeOnly: false
+      exports:
+        - readCad
+        - CadFormat
+        - CadFace
+        - CadMesh
+        - LinearUnit
+        - writeGlb
+        - readMeshOptions
+    src/mesh/occt-import-js.d.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports: []
+    src/mesh/read.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - CadFormat
+        - LinearUnit
+        - CadFace
+        - CadMesh
+        - readCad
     src/pairs.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2264,6 +2351,14 @@ modules:
         - makePlantedTree
         - removeTree
         - assertNoBunGlobal
+    test/support/glb-reader.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - GlbPrimitive
+        - GlbDocument
+        - readGlb
     test/support/network-guard.ts:
       externalDependencies: []
       nodeDependencies:
@@ -3229,6 +3324,34 @@ modules:
             - removeScratch
           typeOnly: false
       exports: []
+    test/unit/mesh-glb.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - renderWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - readCad
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+        - file: test/support/glb-reader.ts
+          imports:
+            - readGlb
+          typeOnly: false
+      exports: []
     test/unit/no-bun-api.test.ts:
       externalDependencies:
         - bun:test
@@ -3695,33 +3818,33 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 204
-  totalSourceFiles: 204
+  totalTypeScriptFiles: 211
+  totalSourceFiles: 211
   totalModules: 3
-  totalLinesOfCode: 23695
-  totalExports: 424
-  entryRoots: 62
-  reachableFiles: 62
-  dormantFiles: 14
-  orphanedFiles: 11
+  totalLinesOfCode: 24261
+  totalExports: 442
+  entryRoots: 66
+  reachableFiles: 66
+  dormantFiles: 15
+  orphanedFiles: 12
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 39
-  noImporterFileCount: 7
-  unusedExportsCount: 41
+  totalTypeOnlyImports: 42
+  noImporterFileCount: 8
+  unusedExportsCount: 42
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 74
-  totalFunctions: 190
+  totalInterfaces: 78
+  totalFunctions: 195
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 57
-  totalReExports: 81
+  totalReExports: 88
 reachability:
   roots:
     - src/index.ts
@@ -3732,6 +3855,7 @@ reachability:
     - src/math/index.ts
     - src/plot/index.ts
     - src/html/index.ts
+    - src/mesh/index.ts
     - src/assets.ts
     - src/browser/backend-pdf.ts
     - src/browser/backend-png.ts
@@ -3771,6 +3895,9 @@ reachability:
     - src/mermaid/sequence-layout.ts
     - src/mermaid/sequence.ts
     - src/mermaid/state.ts
+    - src/mesh/backend-glb.ts
+    - src/mesh/glb.ts
+    - src/mesh/read.ts
     - src/pairs.ts
     - src/plot/backend-html.ts
     - src/plot/backend-png.ts
@@ -3786,9 +3913,10 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 62
-  dormantCount: 14
+  reachableCount: 66
+  dormantCount: 15
   orphaned:
+    - src/mesh/occt-import-js.d.ts
     - trials/t1-graph/compare-layout.mjs
     - trials/t1-graph/make-sources.mjs
     - trials/t1-graph/measure.mjs
@@ -3804,6 +3932,4 @@ reachability:
     - trials/t5-tex-build/runtime/tfm.mjs
     - trials/t5-tex-build/runtime/type1.mjs
     - trials/t6-etex-build/runtime/dvisvgm-specials.mjs
-warnings:
-  - package.json entry './dist/mesh/index.d.ts' did not resolve to a known source file. The entry is ignored.
-  - package.json entry './dist/mesh/index.js' did not resolve to a known source file. The entry is ignored.
+warnings: []
