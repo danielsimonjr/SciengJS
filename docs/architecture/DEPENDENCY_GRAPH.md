@@ -1023,7 +1023,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../types.ts` | `InputType, OutputFormat, RenderOptions` | Import (type-only) |
+| `../config.ts` | `NetworkPolicy` | Import (type-only) |
+| `../types.ts` | `InputType, OutputFormat, RenderAsset, RenderOptions` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `BackendSettings`, `WorkerJob`, `BackendOutput`
@@ -1219,17 +1220,17 @@ The codebase is organized into the following modules:
 | File | Imports From | Exports To |
 |------|--------------|------------|
 | `src/errors` | 0 files | 27 files |
-| `src/worker/protocol` | 1 file | 16 files |
+| `src/worker/protocol` | 2 files | 16 files |
 | `src/mermaid/browser` | 6 files | 5 files |
 | `src/browser/render` | 6 files | 4 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
 | `src/graph/backend-png` | 6 files | 3 files |
+| `src/config` | 3 files | 4 files |
 | `src/core` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
 | `src/mermaid/backend-png` | 7 files | 0 files |
 | `src/browser/input` | 1 file | 5 files |
-| `src/config` | 3 files | 3 files |
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/plot/plotter` | 3 files | 3 files |
@@ -1478,7 +1479,7 @@ graph TD
 |----------|-------|
 | Total Source Files | 197 |
 | Subsystems | 16 |
-| Total Lines of Code | 22671 |
+| Total Lines of Code | 22697 |
 | Total Exports | 410 |
 | Total Re-exports | 81 |
 | Total Classes | 6 |
@@ -1486,7 +1487,7 @@ graph TD
 | Total Functions | 183 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 32 |
+| Type-only Imports | 33 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

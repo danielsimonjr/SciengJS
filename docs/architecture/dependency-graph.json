@@ -2470,10 +2470,18 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "src/config.ts",
+            "imports": [
+              "NetworkPolicy"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "src/types.ts",
             "imports": [
               "InputType",
               "OutputFormat",
+              "RenderAsset",
               "RenderOptions"
             ],
             "typeOnly": true
@@ -5212,7 +5220,7 @@
     "totalTypeScriptFiles": 197,
     "totalSourceFiles": 197,
     "totalModules": 3,
-    "totalLinesOfCode": 22671,
+    "totalLinesOfCode": 22697,
     "totalExports": 410,
     "entryRoots": 58,
     "reachableFiles": 58,
@@ -5221,7 +5229,7 @@
     "testOnlyFiles": 3,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 32,
+    "totalTypeOnlyImports": 33,
     "noImporterFileCount": 7,
     "unusedExportsCount": 37,
     "circularDepsTruncated": false,

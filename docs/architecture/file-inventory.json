@@ -117,7 +117,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 509
+      "loc": 516
     },
     {
       "file": "src/config.ts",
@@ -131,7 +131,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 111
+      "loc": 113
     },
     {
       "file": "src/errors.ts",
@@ -404,7 +404,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 42
+      "loc": 43
     },
     {
       "file": "src/types.ts",
@@ -432,7 +432,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 41
+      "loc": 46
     },
     {
       "file": "src/worker/run.ts",
@@ -810,7 +810,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 142
+      "loc": 153
     },
     {
       "file": "test/unit/math-backends.test.ts",

@@ -284,7 +284,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Plots | plot | svg, png and html are built, not yet released; pdf is not planned |
 | SysML v2 | sysml | planned |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | trial build passes |
-| HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: planned |
+| HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: built, not yet released |
 
 ## Use from an agent
 

@@ -57,9 +57,9 @@ This report lists each source file that the map census finds, with a disposition
 | `src/browser/pinned.ts` | @danielsimonjr/sciengjs | src | build-entry | 29 |
 | `src/browser/profile.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
 | `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 77 |
-| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 509 |
+| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 516 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 225 |
-| `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 111 |
+| `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 113 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 53 |
 | `src/graph/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 15 |
 | `src/graph/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 80 |
@@ -98,11 +98,11 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/ticks.ts` | @danielsimonjr/sciengjs | src | build-entry | 76 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 42 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 43 |
 | `src/types.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
-| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 41 |
+| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 46 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 183 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
@@ -156,7 +156,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/graph-png.test.ts` | (root) | tests | test | 223 |
 | `test/unit/graph-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 54 |
-| `test/unit/html-convert.test.ts` | (root) | tests | test | 142 |
+| `test/unit/html-convert.test.ts` | (root) | tests | test | 153 |
 | `test/unit/math-backends.test.ts` | (root) | tests | test | 130 |
 | `test/unit/math-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/math-svg.test.ts` | (root) | tests | test | 134 |

@@ -6,6 +6,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Added
 
+- The `html` to `md` pair renders through `render()`. The render returns the Markdown and the images in `assets`. The option `downloadImages: true` saves each image as `image-N.<ext>`. A remote image is fetched only when `allowNetwork` is `tex-bundles,images`. A data: image needs no network. The option `browser: true` reads the DOM after the page scripts run, through the browser stage.
+- `capabilities()` reports `html` to `md` as ready in the `html` stage.
+- The `render` result carries an `assets` list for extra files, for example images.
+
 - The `./html` subpath converts HTML to GitHub Flavored Markdown with `htmlToMarkdown()`, through `parse5` 8.1.0. A `data-scieng-source` block becomes a fenced block of its exact source. MathML TeX becomes `$…$` or `$$…$$`. `convertHtml()` also returns the inline SVG assets, linked as `image-N.svg`, with the `assetPrefix` option.
 
 ## [0.5.1] - 2026-11-04
