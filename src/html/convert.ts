@@ -16,6 +16,13 @@ export interface Asset {
 export interface ConvertOptions {
   /** The path prefix of each asset link, for example `assets/`. The default is empty. */
   readonly assetPrefix?: string;
+  /** The asset counter of the whole conversion. A caller that also names assets passes its counter, so no two names are equal. */
+  readonly counter?: AssetCounter;
+}
+
+/** The count of the assets that one conversion has named. The next asset is image-(count + 1). */
+export interface AssetCounter {
+  count: number;
 }
 
 /** The result of one conversion: the Markdown and the assets that it links. */
@@ -29,6 +36,9 @@ interface Context {
   readonly footnotes: string[];
   readonly assets: Asset[];
   readonly assetPrefix: string;
+  readonly counter: AssetCounter;
+  /** True while the walk is inside a table cell. */
+  inCell: boolean;
 }
 
 /** The block type of a scieng page block when the page does not name it. */
@@ -44,7 +54,16 @@ const INLINE = new Set([
 ]);
 
 /** Markdown characters that a text node escapes. */
-const SPECIAL = /[\\*_`[\]<>|~]/g;
+const SPECIAL = /[\\*_`[\]<>|~$]/g;
+
+/** An ampersand that starts an entity form: a named, decimal or hexadecimal character reference. */
+const ENTITY_START = /&(?=#[0-9]+;|#[xX][0-9a-fA-F]+;|[A-Za-z][A-Za-z0-9]*;)/g;
+
+/** A line start that Markdown reads as a block marker: a list item, a heading, a quote or a setext underline. */
+const BLOCK_START = /^( *)([0-9]{1,9}(?=[.)])|[-+=#>])/;
+
+/** The fence info text of a data-scieng-type. Any other value falls back to the inferred type. */
+const BLOCK_TYPE = /^[A-Za-z0-9_+-]+$/;
 
 function isElement(node: Node): node is Element {
   return "tagName" in node;
@@ -105,6 +124,11 @@ function inferBlockType(el: Element): string {
   return RAW_HTML;
 }
 
+/** True for an element that the walk drops with its content, or a scieng block whose markup the walk does not read. */
+export function isDropped(el: Element): boolean {
+  return SKIP.has(el.tagName) || isSciengBlock(el);
+}
+
 /** True for a scieng page block: a div with the source attribute. */
 function isSciengBlock(el: Element): boolean {
   return el.tagName === "div" && attr(el, "data-scieng-source") !== undefined;
@@ -112,7 +136,8 @@ function isSciengBlock(el: Element): boolean {
 
 /** The fenced block of a scieng block. Its markup is not read. The fence language is the block type. */
 function sciengFence(el: Element): string {
-  const type = attr(el, "data-scieng-type") ?? inferBlockType(el);
+  const named = attr(el, "data-scieng-type");
+  const type = named !== undefined && BLOCK_TYPE.test(named) ? named : inferBlockType(el);
   const language = type === RAW_HTML ? "html" : type;
   return fenced(attr(el, "data-scieng-source") ?? "", language);
 }
@@ -135,13 +160,66 @@ function svgAsset(el: Element, ctx: Context): string {
   if (attr(el, "xmlns") === undefined) {
     markup = markup.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
   }
-  const name = `image-${ctx.assets.length + 1}.svg`;
+  ctx.counter.count += 1;
+  const name = `image-${ctx.counter.count}.svg`;
   ctx.assets.push({ name, data: new TextEncoder().encode(markup), mediaType: "image/svg+xml" });
   return `![](${ctx.assetPrefix}${name})`;
 }
 
 function escapeText(value: string): string {
-  return value.replace(SPECIAL, "\\$&");
+  return value.replace(SPECIAL, "\\$&").replace(ENTITY_START, "\\&");
+}
+
+/**
+ * Escapes the block marker at the start of each line of a run of inline Markdown.
+ * A line starts at the start of the run and after each hard break. The spaces at a line start are removed.
+ * A line that starts with a code span starts with a backtick, so the escape never changes code.
+ */
+function escapeLineStarts(text: string): string {
+  return text
+    .split("\\\n")
+    .map((line, i) =>
+      (i === 0 ? line : line.replace(/^ +/, "")).replace(BLOCK_START, (_m, sp: string, mark: string) =>
+        /^[0-9]/.test(mark) ? `${sp}${mark}\\` : `${sp}\\${mark}`))
+    .join("\\\n");
+}
+
+/** Inline Markdown of a run that forms one block: a paragraph, a list item or a footnote. */
+function blockText(nodes: readonly Node[], ctx: Context): string {
+  return escapeLineStarts(inline(nodes, ctx).trim());
+}
+
+/** A link destination. A destination with a space, a paren or an angle bracket goes in angle brackets. */
+function destination(url: string): string {
+  const flat = url.replace(/[\r\n]/g, (c) => encodeURIComponent(c));
+  return /[\s()<>]/.test(flat) || flat === "" ? `<${flat.replace(/[<>]/g, "\\$&")}>` : flat;
+}
+
+/** Emphasis around a text. The spaces at the edges of the text move outside the markers. */
+function emphasis(text: string, marker: string): string {
+  const inner = text.trim();
+  if (inner === "") {
+    return "";
+  }
+  const lead = /^\s/.test(text) ? " " : "";
+  const trail = /\s$/.test(text) ? " " : "";
+  return `${lead}${marker}${inner}${marker}${trail}`;
+}
+
+/** A code span. The fence is longer than any backtick run. Padding keeps an edge backtick or edge spaces. */
+function codeSpan(raw: string, inCell: boolean): string {
+  let text = raw.replace(/\r?\n/g, " ");
+  if (text === "") {
+    return "";
+  }
+  if (inCell) {
+    text = text.replace(/\|/g, "\\|");
+  }
+  const longest = Math.max(0, ...(text.match(/`+/g) ?? []).map((run) => run.length));
+  const fence = "`".repeat(longest + 1);
+  const allSpace = /^ +$/.test(text);
+  const pad = !allSpace && (text.startsWith("`") || text.endsWith("`") || (text.startsWith(" ") && text.endsWith(" ")));
+  return pad ? `${fence} ${text} ${fence}` : `${fence}${text}${fence}`;
 }
 
 /** The text of a node with no escape, for code. */
@@ -172,22 +250,13 @@ function inlineElement(el: Element, ctx: Context): string {
   const children = () => inline(el.childNodes, ctx);
   switch (el.tagName) {
     case "strong":
-    case "b": {
-      const text = children();
-      return text.trim() === "" ? "" : `**${text}**`;
-    }
+    case "b":
+      return emphasis(children(), "**");
     case "em":
-    case "i": {
-      const text = children();
-      return text.trim() === "" ? "" : `*${text}*`;
-    }
-    case "code": {
-      const text = rawText(el);
-      if (text === "") {
-        return "";
-      }
-      return text.includes("`") ? `\`\` ${text} \`\`` : `\`${text}\``;
-    }
+    case "i":
+      return emphasis(children(), "*");
+    case "code":
+      return codeSpan(rawText(el), ctx.inCell);
     case "a": {
       const href = attr(el, "href") ?? "";
       if (href.startsWith("#fnref")) {
@@ -196,18 +265,18 @@ function inlineElement(el: Element, ctx: Context): string {
       if (href.startsWith("#fn")) {
         return `[^${href.slice(3).replace(/^-/, "")}]`;
       }
-      return href === "" ? children() : `[${children()}](${href})`;
+      return href === "" ? children() : `[${children()}](${destination(href)})`;
     }
     case "img":
-      return `![${attr(el, "alt") ?? ""}](${attr(el, "src") ?? ""})`;
+      return `![${escapeText((attr(el, "alt") ?? "").replace(/\s+/g, " "))}](${destination(attr(el, "src") ?? "")})`;
     case "math": {
       const tex = texOf(el);
-      return tex === undefined ? rawText(el).trim() : `$${tex}$`;
+      return tex === undefined ? escapeText(rawText(el).trim().replace(/\s+/g, " ")) : `$${tex.replace(/\s+/g, " ")}$`;
     }
     case "svg":
       return svgAsset(el, ctx);
     case "br":
-      return "\\\n";
+      return ctx.inCell ? "<br>" : "\\\n";
     case "input":
       return "";
     default:
@@ -220,7 +289,7 @@ function blocks(nodes: readonly Node[], ctx: Context): string[] {
   const out: string[] = [];
   let run: Node[] = [];
   const flush = (): void => {
-    const text = inline(run, ctx).trim();
+    const text = blockText(run, ctx);
     if (text !== "") {
       out.push(text);
     }
@@ -250,17 +319,17 @@ function blockElement(el: Element, ctx: Context): string[] {
     return [sciengFence(el)];
   }
   if (/^h[1-6]$/.test(el.tagName)) {
-    const text = inline(el.childNodes, ctx).trim();
+    const text = inline(el.childNodes, ctx).trim().replace(/\\\n/g, " ");
     return text === "" ? [] : [`${"#".repeat(Number(el.tagName[1]))} ${text}`];
   }
   switch (el.tagName) {
     case "p": {
-      const text = inline(el.childNodes, ctx).trim();
+      const text = blockText(el.childNodes, ctx);
       return text === "" ? [] : [text];
     }
     case "ul":
     case "ol":
-      return [list(el, ctx).join("\n")];
+      return [list(el, ctx)];
     case "table":
       return [table(el, ctx)];
     case "pre":
@@ -278,12 +347,22 @@ function blockElement(el: Element, ctx: Context): string[] {
   }
 }
 
-/** The lines of a list. A nested list is indented by the width of its parent marker. */
-function list(el: Element, ctx: Context): string[] {
+/** True for a list item child that makes the item loose: a block that is not a nested list. */
+function isLooseBlock(node: Node): boolean {
+  return isElement(node) && !INLINE.has(node.tagName) && !SKIP.has(node.tagName) &&
+    node.tagName !== "ul" && node.tagName !== "ol";
+}
+
+/**
+ * A list. Each block of an item is indented by the width of the item marker. An item with a block other than a
+ * nested list is loose: its blocks and the items of the list have a blank line between them.
+ */
+function list(el: Element, ctx: Context): string {
   const ordered = el.tagName === "ol";
   const startValue = Number(attr(el, "start") ?? "1");
   let number = Number.isNaN(startValue) ? 1 : startValue;
-  const lines: string[] = [];
+  const items: string[] = [];
+  let loose = false;
   for (const item of el.childNodes) {
     if (!isElement(item) || item.tagName !== "li") {
       continue;
@@ -292,24 +371,24 @@ function list(el: Element, ctx: Context): string[] {
     number += 1;
     let task = "";
     const content: Node[] = [];
-    const nested: Element[] = [];
     for (const child of item.childNodes) {
-      if (isElement(child) && (child.tagName === "ul" || child.tagName === "ol")) {
-        nested.push(child);
-      } else if (isElement(child) && child.tagName === "input" && attr(child, "type") === "checkbox") {
+      if (isElement(child) && child.tagName === "input" && attr(child, "type") === "checkbox") {
         task = child.attrs.some((a) => a.name === "checked") ? "[x] " : "[ ] ";
       } else {
         content.push(child);
       }
     }
-    lines.push(`${marker}${task}${inline(content, ctx).trim()}`);
-    for (const sub of nested) {
-      for (const line of list(sub, ctx)) {
-        lines.push(`${" ".repeat(marker.length)}${line}`);
-      }
-    }
+    const itemLoose = content.some(isLooseBlock);
+    loose ||= itemLoose;
+    const indent = " ".repeat(marker.length);
+    const body = blocks(content, ctx)
+      .join(itemLoose ? "\n\n" : "\n")
+      .split("\n")
+      .map((line, i) => (i === 0 || line === "" ? line : `${indent}${line}`))
+      .join("\n");
+    items.push(`${marker}${task}${body}`.trimEnd());
   }
-  return lines;
+  return items.join(loose ? "\n\n" : "\n");
 }
 
 function rowsOf(el: Element): Element[] {
@@ -353,7 +432,14 @@ function table(el: Element, ctx: Context): string {
     return "";
   }
   const width = header.length;
-  const cellText = (cell: Element): string => inline(cell.childNodes, ctx).trim().replace(/\n/g, " ");
+  const cellText = (cell: Element): string => {
+    ctx.inCell = true;
+    try {
+      return inline(cell.childNodes, ctx).trim().replace(/\s*\n\s*/g, " ");
+    } finally {
+      ctx.inCell = false;
+    }
+  };
   const line = (cells: string[]): string => {
     const padded = Array.from({ length: width }, (_, i) => cells[i] ?? "");
     return `| ${padded.join(" | ")} |`;
@@ -393,7 +479,7 @@ function collectFootnotes(el: Element, ctx: Context): void {
       }
       const id = attr(child, "id") ?? "";
       if (child.tagName === "li" && id.startsWith("fn")) {
-        const text = inline(child.childNodes, ctx).trim();
+        const text = blockText(child.childNodes, ctx);
         ctx.footnotes.push(`[^${id.slice(2).replace(/^-/, "")}]: ${text}`);
       } else {
         visit(child);
@@ -409,7 +495,13 @@ function collectFootnotes(el: Element, ctx: Context): void {
  */
 export function convertHtml(html: string, options: ConvertOptions = {}): ConvertResult {
   const document = parse(html);
-  const ctx: Context = { footnotes: [], assets: [], assetPrefix: options.assetPrefix ?? "" };
+  const ctx: Context = {
+    footnotes: [],
+    assets: [],
+    assetPrefix: options.assetPrefix ?? "",
+    counter: options.counter ?? { count: 0 },
+    inCell: false,
+  };
   const out = [...blocks(document.childNodes, ctx), ...ctx.footnotes];
   const markdown = out.length === 0 ? "" : `${out.join("\n\n")}\n`;
   return { markdown, assets: ctx.assets };
