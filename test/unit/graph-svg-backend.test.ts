@@ -6,7 +6,7 @@ import { dotSourceText, dotToSvg } from "../../src/graph/dot.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 
 function request(source: string | Uint8Array, options: Record<string, unknown> = {}): WorkerJob["request"] {
-  return { type: "dot", format: "svg", source, options, settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL, browser: undefined, timeoutMs: 60000 } };
+  return { type: "dot", format: "svg", source, options, settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL, browser: undefined, timeoutMs: 60000, allowNetwork: "tex-bundles" } };
 }
 
 describe("dot to svg backend", () => {

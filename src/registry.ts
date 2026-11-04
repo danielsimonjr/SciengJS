@@ -34,6 +34,7 @@ export const DEFAULT_REGISTRY: Registry = {
   "mermaid:pdf": { backend: "mermaid/browser/chromium", moduleUrl: backendUrl("mermaid/backend-pdf") },
   "html:png": { backend: "browser/chromium", moduleUrl: backendUrl("browser/backend-png") },
   "html:pdf": { backend: "browser/chromium", moduleUrl: backendUrl("browser/backend-pdf") },
+  "html:md": { backend: "html/md", moduleUrl: backendUrl("html/backend-md") },
 };
 
 /** Builds the registry key of a pair. */
