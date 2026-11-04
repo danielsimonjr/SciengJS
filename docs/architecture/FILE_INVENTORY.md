@@ -247,4 +247,5 @@ _None._
 
 ## Warnings
 
-_None._
+- package.json entry './dist/html/index.d.ts' did not resolve to a known source file. The entry is ignored.
+- package.json entry './dist/html/index.js' did not resolve to a known source file. The entry is ignored.

@@ -37,6 +37,10 @@
       "types": "./dist/plot/index.d.ts",
       "default": "./dist/plot/index.js"
     },
+    "./html": {
+      "types": "./dist/html/index.d.ts",
+      "default": "./dist/html/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
