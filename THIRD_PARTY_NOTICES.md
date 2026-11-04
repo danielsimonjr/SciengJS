@@ -14,7 +14,7 @@ Version: each row gives the version that the engine pins.
 | math | `@mathjax/src` 4.1.3 (MathJax, with the Newcm math font and the packages it installs; see "MathJax") | Apache-2.0 for MathJax and the math font; the other packages are listed under "MathJax" | a dependency |
 | tex | The own WASM build of `tex.web` with `etex.ch` (trials T5 and T6) | The "tex" stage of the design gives the licence of each input | not yet a dependency |
 | tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
-| mesh | `occt-import-js` (OpenCascade compiled to WASM) | LGPL-2.1 | not yet a dependency |
+| mesh | `occt-import-js` 0.0.23 (OpenCascade compiled to WASM) | LGPL-2.1 | a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
 | mesh (viewer page) | `three` | MIT | not yet a dependency |
 | browser | `mermaid` 11.17.2 (the pinned build `dist/mermaid.min.js`, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copy to pages |
@@ -59,7 +59,7 @@ The Apache License 2.0 applies to the MathJax packages. The BlueOak Model Licens
 
 ### Plotly (MIT)
 
-The MIT licence applies to `plotly.js-dist-min` 4.2.0. The package is a devDependency. The engine does not bundle the build into the package and does not copy it into the assets folder. The html output of the `plot` stage is a page that loads the pinned build from the CDN URL in the engine, with a subresource integrity hash. The page makes that request when a reader opens it. The licence text is in the installed package at `node_modules/plotly.js-dist-min/LICENSE`.
+The MIT licence applies to `plotly.js-dist-min` 4.2.0. The package is a devDependency. The engine does not bundle the build into the package and does not copy it into the assets folder. The html output of the `plot` stage is a page. The page loads the pinned build from the CDN URL in the engine, with a subresource integrity hash. The page makes that request when a reader opens it. The licence text is in the installed package at `node_modules/plotly.js-dist-min/LICENSE`.
 
 ### Mermaid (MIT)
 
@@ -78,7 +78,7 @@ The file `assets/licenses/mermaid-bundle.txt` holds the licence text of each of 
 
 ### OpenCascade (LGPL-2.1)
 
-`occt-import-js` is licensed under the GNU Lesser General Public License 2.1. The WASM file stays a separate, unmodified file.
+`occt-import-js` 0.0.23 is licensed under the GNU Lesser General Public License 2.1. The WASM file stays a separate, unmodified file. The mesh stage reads STEP, IGES and BREP files through this package. The licence text is in the installed package at `node_modules/occt-import-js/LICENSE.md`.
 
 ### resvg (MPL-2.0)
 
@@ -98,7 +98,7 @@ The package detection of the `tex` stage follows the templater of the Upmath ren
 
 ### Trial T2 sample files (LGPL-2.0-or-later, LGPL-2.1 and Apache-2.0)
 
-The trial folder `trials/t2-mesh/samples/` holds three CAD test files from other projects. The engine package does not ship them. The licence texts are in `trials/t2-mesh/samples/LICENSES/`. The source, commit and SHA-256 of each file are in `trials/t2-mesh/samples/README.md`.
+The folder `test/corpus/mesh/` holds three CAD test files from other projects. The engine package does not ship them. The licence texts are in `test/corpus/mesh/LICENSES/`. The source, commit and SHA-256 of each file are in `test/corpus/mesh/README.md`.
 
 - `red_cube_blue_cylinder.step`, from CadQuery: Apache-2.0.
 - `cube-10x10mm.igs`, from occt-import-js: LGPL-2.1.

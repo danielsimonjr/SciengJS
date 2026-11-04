@@ -81,11 +81,13 @@ const browser = await import("@danielsimonjr/sciengjs/browser");
 if (typeof browser.CdpConnection !== "function" || typeof browser.renderHtmlPage !== "function") throw new Error("the browser subpath did not load");
 const plot = await import("@danielsimonjr/sciengjs/plot");
 if (typeof plot.bode !== "function" || typeof plot.rootLocus !== "function") throw new Error("the plot subpath did not load");
+const mesh = await import("@danielsimonjr/sciengjs/mesh");
+if (typeof mesh.readCad !== "function" || typeof mesh.writeGlb !== "function") throw new Error("the mesh subpath did not load");
 const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
 const md = await render({ type: "html", source: "<p>a <b>b</b></p>", format: "md" }, {});
 if (new TextDecoder().decode(md.bytes).trim() !== "a **b**") throw new Error("html to md returned the wrong markdown");
-for (const empty of ["tex", "sysml", "mesh"]) {
+for (const empty of ["tex", "sysml"]) {
   let refused = false;
   try {
     await import("@danielsimonjr/sciengjs/" + empty);

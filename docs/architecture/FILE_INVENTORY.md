@@ -102,7 +102,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/ticks.ts` | @danielsimonjr/sciengjs | src | build-entry | 76 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 43 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 46 |
 | `src/types.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
@@ -127,7 +127,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/math.node.mjs` | (root) | tests | test | 32 |
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 165 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 167 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
@@ -257,4 +257,5 @@ _None._
 
 ## Warnings
 
-_None._
+- package.json entry './dist/mesh/index.d.ts' did not resolve to a known source file. The entry is ignored.
+- package.json entry './dist/mesh/index.js' did not resolve to a known source file. The entry is ignored.
