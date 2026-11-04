@@ -157,6 +157,19 @@ const { bytes, warnings } = await render({ type: "mermaid", source, format: "svg
 
 Other Mermaid diagram types (for example flowchart and gantt) go through the browser stage. They need `SCIENG_BROWSER`. Without it they reject with `E_STAGE_MISSING`. The pinned Mermaid build ships in the package, and the browser stage serves it to the page, so no request leaves the process.
 
+## Math
+
+The `math` input renders LaTeX math through MathJax. The output draws each glyph as a path, so it needs no font. The packages `ams`, `boldsymbol`, `color` and `mhchem` are loaded. A `\require` of a loaded package has no effect. A `\require` of a different package rejects with `E_UNSUPPORTED`. A character that the math font does not hold also rejects with `E_UNSUPPORTED`. The message names the character.
+
+A `png` takes the option `scale` (a finite number above 0, default 1). The `svg` takes no option.
+
+```js
+import { render } from "@danielsimonjr/sciengjs";
+
+const svg = await render({ type: "math", source: "\\frac{a}{b}", format: "svg" });
+const png = await render({ type: "math", source: "\\ce{H2O + CO2 -> H2CO3}", format: "png", options: { scale: 2 } });
+```
+
 ## Roadmap
 
 The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives the order of the increments. Each increment adds one input type, its tests and one release. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the API, the stages, the security controls and the licence of each engine.
