@@ -22,6 +22,7 @@ describe("workerExecArgv", () => {
   test("drops a combined short flag such as -pe with the code that follows it", () => {
     expect(workerExecArgv(["-pe", "1 + 1"])).toEqual([]);
     expect(workerExecArgv(["-ie", "1 + 1", "--no-warnings"])).toEqual(["--no-warnings"]);
+    expect(workerExecArgv(["-ip", "1", "--no-warnings"])).toEqual(["--no-warnings"]);
   });
 
   test("drops the REPL and check flags, which change how the entry runs", () => {

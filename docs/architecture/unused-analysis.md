@@ -10,9 +10,9 @@
 - **Dormant files**: 14
   - **Orphaned (reachable from nothing)**: 11
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 21
+- **Potentially unused exports**: 20
   - **Unreferenced anywhere**: 2
-  - **Referenced in their own module**: 19
+  - **Referenced in their own module**: 18
   - **Not classified**: 0
 
 ## Caveats
@@ -88,7 +88,7 @@ No other file imports these names, but their own module uses them.
 - `src/raster/warnings.ts`: `CoverageTest`
 - `src/registry.ts`: `BackendEntry`
 - `src/worker/protocol.ts`: `BackendSettings`
-- `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`, `workerExecArgv`
+- `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`
 
 ## Exports not classified
 

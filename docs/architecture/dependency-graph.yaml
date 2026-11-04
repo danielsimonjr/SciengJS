@@ -2,7 +2,7 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 164
+  totalFiles: 166
   totalModules: 3
   totalExports: 326
 modules:
@@ -1678,6 +1678,16 @@ modules:
             - windowsSampleScript
           typeOnly: false
       exports: []
+    test/node/eval-render.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:child_process
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
     test/node/worker.node.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -2743,6 +2753,16 @@ modules:
             - ENGINE_VERSION
           typeOnly: false
       exports: []
+    test/unit/worker-exec-argv.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/run.ts
+          imports:
+            - workerExecArgv
+          typeOnly: false
+      exports: []
     test/unit/worker-run.test.ts:
       externalDependencies:
         - bun:test
@@ -2848,10 +2868,10 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 164
-  totalSourceFiles: 164
+  totalTypeScriptFiles: 166
+  totalSourceFiles: 166
   totalModules: 3
-  totalLinesOfCode: 17864
+  totalLinesOfCode: 17935
   totalExports: 326
   entryRoots: 42
   reachableFiles: 42
@@ -2862,7 +2882,7 @@ statistics:
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 23
   noImporterFileCount: 7
-  unusedExportsCount: 21
+  unusedExportsCount: 20
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0

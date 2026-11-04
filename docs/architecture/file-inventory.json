@@ -1,11 +1,11 @@
 {
-  "totalFiles": 164,
+  "totalFiles": 166,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 42,
     "test-only": 3,
     "orphan": 11,
-    "test": 80,
+    "test": 82,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 28,
     "src": 56,
-    "tests": 80
+    "tests": 82
   },
   "byPackage": {
-    "(root)": 122,
+    "(root)": 124,
     "@danielsimonjr/sciengjs": 42
   },
   "files": [
@@ -426,6 +426,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 73
+    },
+    {
+      "file": "test/node/eval-render.node.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 17
     },
     {
       "file": "test/node/worker.node.mjs",
@@ -839,6 +846,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 23
+    },
+    {
+      "file": "test/unit/worker-exec-argv.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 54
     },
     {
       "file": "test/unit/worker-run.test.ts",

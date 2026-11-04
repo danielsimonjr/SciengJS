@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 164
+**Total files**: 166
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 42 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 80 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 82 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 28 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **164** | |
+| **Total** | **166** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 56 |
-| `tests` | 80 |
+| `tests` | 82 |
 | `tools` | 28 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 122 |
+| `(root)` | 124 |
 | `@danielsimonjr/sciengjs` | 42 |
 
 ## All files
@@ -102,6 +102,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/browser-gates.mjs` | (root) | tests | test | 150 |
 | `test/node/browser-probe.mjs` | (root) | tests | test | 204 |
 | `test/node/browser-probe.node.mjs` | (root) | tests | test | 73 |
+| `test/node/eval-render.node.mjs` | (root) | tests | test | 17 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
 | `test/smoke/smoke.mjs` | (root) | tests | test | 153 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
@@ -161,6 +162,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/teardown.test.ts` | (root) | tests | test | 33 |
 | `test/unit/third-party-notices.test.ts` | (root) | tests | test | 21 |
 | `test/unit/version.test.ts` | (root) | tests | test | 23 |
+| `test/unit/worker-exec-argv.test.ts` | (root) | tests | test | 54 |
 | `test/unit/worker-run.test.ts` | (root) | tests | test | 97 |
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |
