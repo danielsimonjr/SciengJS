@@ -112,6 +112,13 @@ describe("readPlotFigure rejects with the key path", () => {
     expect(result.warnings.length).toBe(1);
     expect(result.warnings[0]).toContain("data[0].marker.foo");
   });
+  test("lenient gives one warning per dropped key, each naming its path", () => {
+    const result = readPlotFigure(base({ marker: { foo: 1, bar: 2 }, bogusTop: 3 }), { lenient: true });
+    expect(result.warnings.length).toBe(3);
+    expect(result.warnings.some((w) => w.includes("data[0].marker.foo"))).toBe(true);
+    expect(result.warnings.some((w) => w.includes("data[0].marker.bar"))).toBe(true);
+    expect(result.warnings.some((w) => w.includes("bogusTop"))).toBe(true);
+  });
   test("input that is not an object rejects", () => {
     expect(() => readPlotFigure("not json")).toThrow(RenderError);
   });
