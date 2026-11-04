@@ -155,7 +155,7 @@
     { "id": "plot-22", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "for (let i = end; i < p.length; i += 1) roots.push({ re: 0, im: 0 });", "replacement": "", "equivalent": null },
     { "id": "plot-23", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "const magnitudes = all.filter((m) => m > 0 && m >= ROOT_ZERO_REL * largest);", "replacement": "const magnitudes = all.filter((m) => m > 0);", "equivalent": null },
     { "id": "plot-24", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "const low = magnitudes.length > 0 ? Math.min(...magnitudes) * 10 ** -RANGE_DECADES : DEFAULT_W_LOW;", "replacement": "const low = magnitudes.length > 0 ? Math.min(...magnitudes) * 10 ** -3 : DEFAULT_W_LOW;", "equivalent": null },
-    { "id": "plot-25", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "  if (stalled) return roots;", "replacement": "  return roots;", "equivalent": null },
+    { "id": "plot-25", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "  if (bestUlps <= ROOT_RESIDUAL_ULPS) return best;", "replacement": "  return best;", "equivalent": null },
     { "id": "plot-26", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "  return polynomialRoots(tf.den).every((p) => p.re < -STABLE_TOL * Math.max(1, cabs(p)));", "replacement": "  return polynomialRoots(tf.den).every((p) => p.re <= 0);", "equivalent": null },
     { "id": "plot-27", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "const sign = finalValue < 0 ? -1 : 1;", "replacement": "const sign = 1;", "equivalent": null },
     { "id": "plot-28", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "const peakTime = peak.time < (y.length - 1) * dt ? peak.time : null;", "replacement": "const peakTime = peak.time;", "equivalent": null },
@@ -164,6 +164,7 @@
     { "id": "plot-31", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "    if (fc < fd) {\n      b = d;", "replacement": "    if (fc > fd) {\n      b = d;", "equivalent": null },
     { "id": "plot-32", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "    if (!Number.isFinite(v)) throw inputError(`${name}[${i}] is not finite", "replacement": "    if (Number.isNaN(0)) throw inputError(`${name}[${i}] is not finite", "equivalent": null },
     { "id": "plot-33", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "return 90 * (kNum - kDen) + (cNum / cDen < 0 ? -180 : 0);", "replacement": "return 90 * (kNum - kDen);", "equivalent": null },
-    { "id": "plot-34", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "const offset = Math.min(0.5, Math.max(-0.5, (0.5 * (yPrev - yNext)) / curvature));", "replacement": "const offset = 0;", "equivalent": null }
+    { "id": "plot-34", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "const offset = Math.min(0.5, Math.max(-0.5, (0.5 * (yPrev - yNext)) / curvature));", "replacement": "const offset = 0;", "equivalent": null },
+    { "id": "plot-35", "file": "src/plot/control.ts", "test": "test/unit/plot-control.test.ts", "original": "    if (ulps < bestUlps) {", "replacement": "    if (false) {", "equivalent": null }
   ]
 }

@@ -289,13 +289,20 @@ describe("root finding failure", () => {
     expect(codeOf(() => poleZero({ num: [1], den: [1, 1e200, 1] }))).toBe("E_INPUT");
   });
 
-  test("(s+1)^20 stalls above rounding error at the iteration cap and rejects with E_INPUT", () => {
-    const c = [1];
-    for (let i = 0; i < 20; i += 1) {
-      c.push(0);
-      for (let j = c.length - 1; j > 0; j -= 1) c[j]! += c[j - 1]!;
+  test("(s+1)^n for n from 2 to 20 converges: every residual is rounding error, the error grows with n", () => {
+    let previous = 0;
+    for (let n = 2; n <= 20; n += 1) {
+      const c = [1];
+      for (let i = 0; i < n; i += 1) {
+        c.push(0);
+        for (let j = c.length - 1; j > 0; j -= 1) c[j]! += c[j - 1]!;
+      }
+      const error = Math.max(...polynomialRoots(c).map((r) => Math.hypot(r.re + 1, r.im)));
+      // A root of multiplicity n moves by about (eps * C)^(1/n) under rounding; 0.5 bounds it to n = 20.
+      expect(error).toBeLessThan(0.5);
+      expect(error).toBeGreaterThan(previous / 4);
+      previous = error;
     }
-    expect(codeOf(() => polynomialRoots(c))).toBe("E_INPUT");
   });
 
   test("the triple and quadruple roots of (s+1)^3 and (s+1)^4 stall at the rounding floor and are accepted", () => {

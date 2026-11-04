@@ -229,6 +229,18 @@ function durandKerner(p: number[]): Complex[] {
     roots.push(power);
     power = cmul(power, ROOT_SEED);
   }
+  // A multiple root stalls at the rounding floor above the step tolerance, and the iterates wander there.
+  // The loop keeps the iterate with the least residual, measured in ulps of sum |a_k| |r|^k.
+  const residualUlps = (set: Complex[]): number =>
+    Math.max(
+      ...set.map((root) => {
+        const size = cabs(root);
+        const ratio = cabs(evalPoly(monic, root)) / (Number.EPSILON * absPoly(monic, size));
+        return Number.isFinite(size) && !Number.isNaN(ratio) ? ratio : Infinity;
+      }),
+    );
+  let best = roots;
+  let bestUlps = residualUlps(roots);
   for (let iter = 0; iter < ROOT_MAX_ITER; iter += 1) {
     let biggestStep = 0;
     let largest = 0;
@@ -245,16 +257,16 @@ function durandKerner(p: number[]): Complex[] {
     });
     if (!Number.isFinite(biggestStep) || !Number.isFinite(largest)) break;
     if (biggestStep <= ROOT_TOL * Math.max(1, largest)) return roots;
+    const ulps = residualUlps(roots);
+    if (ulps < bestUlps) {
+      best = roots;
+      bestUlps = ulps;
+    }
   }
-  // A multiple root stalls at the rounding floor above the step tolerance: accept the roots
-  // when every residual is rounding error only.
-  const stalled = roots.every((root) => {
-    const size = cabs(root);
-    return Number.isFinite(size) && cabs(evalPoly(monic, root)) <= ROOT_RESIDUAL_ULPS * Number.EPSILON * absPoly(monic, size);
-  });
-  if (stalled) return roots;
+  // Accept the best iterate when every residual is rounding error only.
+  if (bestUlps <= ROOT_RESIDUAL_ULPS) return best;
   throw inputError(
-    `polynomialRoots: the roots of the degree ${n} polynomial did not converge in ${ROOT_MAX_ITER} iterations; scale the coefficients`,
+    `polynomialRoots: the roots of the degree ${n} polynomial did not converge in ${ROOT_MAX_ITER} iterations: the coefficients are out of range or a root has a high multiplicity`,
   );
 }
 

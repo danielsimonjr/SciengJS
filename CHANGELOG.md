@@ -15,7 +15,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - One plot axis has 1000 ticks at most. A larger `dtick` count rejects with `E_INPUT`.
 - A tick label with more than 20 decimals uses exponent form. A log axis with too many decades shows major ticks only.
 - Text labels are not cut by the clip path of the traces. The `html` page has a title and a viewport meta element.
-- `polynomialRoots` gives an exact root at 0 for each trailing zero coefficient, and rejects with `E_INPUT` when the roots do not converge. A root at 0 does not set the frequency range of `bode` and `nyquist`.
+- `polynomialRoots` gives an exact root at 0 for each trailing zero coefficient, and rejects with `E_INPUT` when the roots do not converge. A repeated root, for example of `(s+1)^20`, is accepted when each residual is rounding error. A root at 0 does not set the frequency range of `bode` and `nyquist`.
 - `step` measures the peak and the overshoot in the direction of the final value. It gives `null` for each number of a system that is not stable, and a `null` peak time for a response with no peak. `StepNumbers.peakTime` is `number | null`. The settling time is interpolated.
 - `nyquist` refines the least distance to -1 by golden-section search.
 - The control helpers reject with `E_INPUT` instead of returning a value that is not finite.
