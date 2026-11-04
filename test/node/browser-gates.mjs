@@ -48,14 +48,17 @@ if (requireNetns) {
 // socket list would prove nothing.
 async function attributionControl() {
   const marker = `sciengjs-probe-${process.pid}-${Date.now()}`;
+  // The child holds one connected loopback socket open until the gate kills it. Its own timer (120 s) is only a
+  // backstop: a sampler slower than the child's lifetime must not turn the control into a false failure.
   // The child holds one connected loopback socket open until its timer ends. The connection must stay open:
   // ss and lsof list a connected socket with its owner, but a closed one (TIME-WAIT) has no owner.
-  const code = 'const net=require("node:net");const peers=[];const s=net.createServer((c)=>{c.on("error",()=>{});peers.push(c);});s.listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1");c.on("error",()=>{});setTimeout(()=>{c.destroy();for(const p of peers)p.destroy();s.close();},15000);});';
+  const code = 'const net=require("node:net");const peers=[];const s=net.createServer((c)=>{c.on("error",()=>{});peers.push(c);});s.listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1");c.on("error",()=>{});setTimeout(()=>{c.destroy();for(const p of peers)p.destroy();s.close();},120000);});';
   const child = spawn(process.execPath, ["-e", code, marker], { stdio: ["ignore", "ignore", "inherit"] });
   let seen = null;
   const most = { processes: 0, loopbackSockets: 0 };
   try {
-    for (let i = 0; i < 40 && seen === null && child.exitCode === null; i++) {
+    const deadline = Date.now() + 60_000;
+    while (seen === null && child.exitCode === null && Date.now() < deadline) {
       await sleep(250);
       const sample = await sampler.sample(marker);
       const loopback = sample.sockets.filter((socket) => externalSockets([socket]).length === 0);

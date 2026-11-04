@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- The browser gate `attribution-control` no longer races the process sampler. The child process stays alive until the gate stops it, and a 60 s deadline bounds the wait. Before, a slow first sample on a Windows runner let the child exit at its 15 s timer, so the gate failed with no fault in the engine.
+
 ### Added
 
 - The `html` to `md` pair renders through `render()`. The render returns the Markdown and the images in `assets`. The option `downloadImages: true` saves each image as `image-N.<ext>`. A remote image is fetched only when `allowNetwork` is `tex-bundles,images`. A data: image needs no network. The option `browser: true` reads the DOM after the page scripts run, through the browser stage.
