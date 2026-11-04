@@ -28,22 +28,26 @@ export interface ControlResult<N> {
   numbers: N;
 }
 
+/** Options for the frequency helpers: the grid from wMin to wMax, in rad/s, with points samples. */
 export interface FrequencyOptions {
   wMin?: number;
   wMax?: number;
   points?: number;
 }
 
+/** Options for the time helpers: the end time tEnd and the number of points. */
 export interface TimeOptions {
   tEnd?: number;
   points?: number;
 }
 
+/** Options for rootLocus: the largest gain kMax and the number of points. */
 export interface RootLocusOptions {
   kMax?: number;
   points?: number;
 }
 
+/** Key values of a Bode plot: crossover frequencies in rad/s, margins in degrees. A null value means none was found. */
 export interface BodeNumbers {
   gainCrossover: number | null;
   phaseCrossover: number | null;
@@ -51,6 +55,7 @@ export interface BodeNumbers {
   phaseMargin: number | null;
 }
 
+/** Key values of a step response: final value, rise and settling times, overshoot in percent, and peak time. A null value means none was found. */
 export interface StepNumbers {
   finalValue: number | null;
   riseTime: number | null;
@@ -59,20 +64,24 @@ export interface StepNumbers {
   peakTime: number;
 }
 
+/** Key values of an impulse response: the peak value and the time of the peak. */
 export interface ImpulseNumbers {
   peak: number;
   peakTime: number;
 }
 
+/** The poles and the zeros of a transfer function, as complex numbers. */
 export interface PoleZeroNumbers {
   poles: Complex[];
   zeros: Complex[];
 }
 
+/** The least distance from the Nyquist curve to the point -1. */
 export interface NyquistNumbers {
   minDistanceToMinusOne: number;
 }
 
+/** The breakaway points of the root locus, each with its gain k. */
 export interface RootLocusNumbers {
   breakawayPoints: Array<{ re: number; k: number }>;
 }
