@@ -551,7 +551,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 150
+      "loc": 153
     },
     {
       "file": "test/node/browser-probe.mjs",

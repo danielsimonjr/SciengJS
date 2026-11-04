@@ -20,6 +20,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 ### Fixed
 
 - The browser gate `attribution-control` no longer races the process sampler. The child process stays alive until the gate stops it, and a 60 s deadline bounds the wait. Before, a slow first sample on a Windows runner let the child exit at its 15 s timer, so the gate failed with no fault in the engine.
+
 ## [0.5.1] - 2026-11-04
 
 ### Fixed

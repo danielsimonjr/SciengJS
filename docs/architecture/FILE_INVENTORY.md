@@ -119,7 +119,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
-| `test/node/browser-gates.mjs` | (root) | tests | test | 150 |
+| `test/node/browser-gates.mjs` | (root) | tests | test | 153 |
 | `test/node/browser-probe.mjs` | (root) | tests | test | 204 |
 | `test/node/browser-probe.node.mjs` | (root) | tests | test | 73 |
 | `test/node/eval-render.node.mjs` | (root) | tests | test | 17 |
