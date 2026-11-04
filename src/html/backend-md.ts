@@ -2,7 +2,9 @@ import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
 import { RenderError } from "../errors.ts";
 import { browserPathOf, blockedWarnings } from "../browser/input.ts";
 import { renderHtmlPage } from "../browser/render.ts";
+import { lookup } from "node:dns/promises";
 import { convertPage } from "./md.ts";
+import { createImageFetcher } from "./fetch-image.ts";
 
 /** The options of html to md. Each key has one default, here and nowhere else. */
 const OPTION_KEYS = ["browser", "downloadImages"] as const;
@@ -37,19 +39,18 @@ export async function render(request: WorkerJob["request"]): Promise<BackendOutp
   const page = await convertPage(html, {
     downloadImages: options.downloadImages,
     allowNetwork: request.settings.allowNetwork,
-    fetchImage: options.downloadImages ? fetchRemoteImage : undefined,
+    fetchImage: options.downloadImages
+      ? createImageFetcher({
+        fetch: globalThis.fetch,
+        lookup: (host) => lookup(host, { all: true }),
+        timeoutMs: request.settings.imageTimeoutMs,
+        maxBytes: request.settings.maxImageBytes,
+      })
+      : undefined,
   });
   return {
     bytes: new TextEncoder().encode(page.markdown),
     warnings: [...warnings, ...page.warnings],
     assets: page.assets,
   };
-}
-
-/** Downloads one remote image with the network of the engine process. */
-async function fetchRemoteImage(url: string): Promise<{ bytes: Uint8Array; mime: string }> {
-  const reply = await fetch(url);
-  if (!reply.ok) throw new Error(`HTTP ${reply.status}`);
-  const mime = (reply.headers.get("content-type") ?? "").split(";")[0]!.trim().toLowerCase();
-  return { bytes: new Uint8Array(await reply.arrayBuffer()), mime: mime === "" ? "application/octet-stream" : mime };
 }

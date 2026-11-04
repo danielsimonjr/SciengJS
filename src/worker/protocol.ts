@@ -15,6 +15,10 @@ export interface BackendSettings {
   timeoutMs: number;
   /** The network rule of the configuration. The html to md stage reads it for remote images. */
   allowNetwork: NetworkPolicy;
+  /** The time limit of one remote image download, in milliseconds. */
+  imageTimeoutMs: number;
+  /** The size limit of one remote image body, in bytes. */
+  maxImageBytes: number;
 }
 
 /** What the worker receives: one render request and the backend module that serves it. */

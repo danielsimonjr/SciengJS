@@ -28,7 +28,7 @@ function request(options: Record<string, unknown> = {}, rasterFont: string | und
     format: "png",
     source: SOURCE,
     options,
-    settings: { maxMemoryMb: 2048, rasterFont, assetsUrl: ASSETS, browser: undefined, timeoutMs: 60000, allowNetwork: "tex-bundles" },
+    settings: { maxMemoryMb: 2048, rasterFont, assetsUrl: ASSETS, browser: undefined, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 },
   };
 }
 

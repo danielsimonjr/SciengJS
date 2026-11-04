@@ -39,8 +39,18 @@ describe("loadConfig defaults", () => {
       maxMemoryMb: 2048,
       allowNetwork: "tex-bundles",
       assetsUrl: new URL("../../assets/", import.meta.url).href,
+      imageTimeoutMs: 15000,
+      maxImageBytes: 10485760,
     });
     expect(cfg.browser).toBeUndefined();
+  });
+
+  test("the image download limits come from the environment and reject a bad value", async () => {
+    const cfg = await loadConfig({}, deps({ env: { SCIENG_IMAGE_TIMEOUT_MS: "250", SCIENG_MAX_IMAGE_BYTES: "4096" } }));
+    expect(cfg.imageTimeoutMs).toBe(250);
+    expect(cfg.maxImageBytes).toBe(4096);
+    const err = await rejectionOf(loadConfig({}, deps({ env: { SCIENG_MAX_IMAGE_BYTES: "-1" } })));
+    expect(err).toMatchObject({ code: "E_CONFIG" });
   });
 
   test("follows XDG_CACHE_HOME on Linux", async () => {
@@ -104,6 +114,8 @@ describe("loadConfig precedence: call option > environment > file > default", ()
       SCIENG_MAX_MEMORY_MB: "7",
       SCIENG_ALLOW_NETWORK: "tex-bundles,images",
       SCIENG_ASSETS_URL: "file:///srv/assets/",
+      SCIENG_IMAGE_TIMEOUT_MS: "8",
+      SCIENG_MAX_IMAGE_BYTES: "9",
     };
     const cfg = await loadConfig({}, deps({ env }));
     expect(cfg).toEqual({
@@ -115,6 +127,8 @@ describe("loadConfig precedence: call option > environment > file > default", ()
       maxMemoryMb: 7,
       allowNetwork: "tex-bundles,images",
       assetsUrl: "file:///srv/assets/",
+      imageTimeoutMs: 8,
+      maxImageBytes: 9,
     });
   });
 

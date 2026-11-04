@@ -12,7 +12,7 @@ function job(options: Record<string, unknown>, browser?: string): WorkerJob["req
     format: "png",
     source: "<p>x</p>",
     options,
-    settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: "file:///unused/", browser, timeoutMs: 60000, allowNetwork: "tex-bundles" },
+    settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: "file:///unused/", browser, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 },
   };
 }
 
