@@ -46,10 +46,13 @@ export async function startRefusingProxy(): Promise<RefusingProxy> {
   });
   server.on("connection", (socket: Socket) => {
     sockets.add(socket);
+    // The browser resets its connections while it closes. An unhandled error on a socket would end the process.
+    socket.on("error", () => {});
     socket.on("close", () => sockets.delete(socket));
   });
   server.on("connect", (req: IncomingMessage, socket: Socket) => {
     log.push(hostOf(req.url ?? ""));
+    socket.on("error", () => {});
     socket.end(REFUSED);
   });
   server.listen(0, "127.0.0.1");
