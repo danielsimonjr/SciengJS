@@ -4,6 +4,13 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The `plot` stage draws a chart from a JSON text with the keys `data` and `layout`, a subset of the Plotly figure format. It renders to `svg`, `png` and `html`. The `svg` and `png` outputs are built in and make no request. An unsupported key rejects with `E_INPUT` and its path. The option `lenient` skips the key and gives a warning.
+- The `html` output draws the figure with Plotly 4.2.0, the pinned build. The page loads the build from a CDN with a subresource integrity hash. The package does not ship Plotly.
+- The `./plot` subpath exports the control helpers `bode`, `step`, `impulse`, `nyquist`, `poleZero` and `rootLocus`. Each takes a transfer function `{ num, den }` and returns `{ figure, numbers }`. Each helper computes every point from the model.
+- `THIRD_PARTY_NOTICES.md` lists the Plotly build (MIT).
+
 ## [0.4.0] - 2026-11-04
 
 ### Added
