@@ -1093,9 +1093,23 @@
         "externalDependencies": [],
         "nodeDependencies": [
           {
+            "module": "http",
+            "imports": [
+              "request",
+              "IncomingMessage"
+            ]
+          },
+          {
+            "module": "https",
+            "imports": [
+              "request"
+            ]
+          },
+          {
             "module": "net",
             "imports": [
-              "isIP"
+              "isIP",
+              "LookupFunction"
             ]
           }
         ],

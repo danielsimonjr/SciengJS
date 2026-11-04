@@ -41,7 +41,6 @@ export async function render(request: WorkerJob["request"]): Promise<BackendOutp
     allowNetwork: request.settings.allowNetwork,
     fetchImage: options.downloadImages
       ? createImageFetcher({
-        fetch: globalThis.fetch,
         lookup: (host) => lookup(host, { all: true }),
         timeoutMs: request.settings.imageTimeoutMs,
         maxBytes: request.settings.maxImageBytes,

@@ -1266,6 +1266,8 @@
       "src/html/fetch-image.ts": {
         "externalDependencies": [],
         "nodeDependencies": [
+          "node:http",
+          "node:https",
           "node:net"
         ],
         "internalDependencies": [
@@ -4100,7 +4102,10 @@
         "externalDependencies": [
           "bun:test"
         ],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          "node:http",
+          "node:net"
+        ],
         "internalDependencies": [
           {
             "file": "src/html/fetch-image.ts",
@@ -5440,7 +5445,7 @@
     "totalTypeScriptFiles": 204,
     "totalSourceFiles": 204,
     "totalModules": 3,
-    "totalLinesOfCode": 23598,
+    "totalLinesOfCode": 23683,
     "totalExports": 424,
     "entryRoots": 62,
     "reachableFiles": 62,

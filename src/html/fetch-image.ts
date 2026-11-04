@@ -1,18 +1,21 @@
 /** The remote image download of html to md: manual redirects, an address check on each hop, a time limit and a size limit. */
-import { isIP } from "node:net";
+import { request as httpRequest, type IncomingMessage } from "node:http";
+import { request as httpsRequest } from "node:https";
+import { isIP, type LookupFunction } from "node:net";
 import type { FetchedImage, FetchImage } from "./images.ts";
 
 /** Resolves a host name to all of its addresses, as `dns.promises.lookup(host, { all: true })` does. */
 export type LookupAll = (host: string) => Promise<readonly { address: string; family: number }[]>;
 
-/** The inputs of one image fetcher. The engine passes the network functions; a test passes doubles. */
+/** The inputs of one image fetcher. The engine passes the DNS resolver; a test passes a double. */
 export interface ImageFetcherOptions {
-  readonly fetch: typeof fetch;
   readonly lookup: LookupAll;
   /** The time limit of one download over all its redirects, in milliseconds. */
   readonly timeoutMs: number;
   /** The size limit of the body, in bytes. */
   readonly maxBytes: number;
+  /** Allows 127/8 and ::1. Only a test against a local server sets it. The default refuses loopback. */
+  readonly allowLoopback?: boolean;
 }
 
 /** The most redirects that one download follows. */
@@ -65,8 +68,17 @@ function ipv6Hextets(addr: string): number[] | undefined {
   return groups.map((g) => parseInt(g, 16));
 }
 
-/** Checks the scheme and every address of the host. Throws when the URL must not be fetched. */
-async function checkTarget(url: URL, lookup: LookupAll): Promise<void> {
+/** True when the address may be connected to. */
+function permitted(address: string, allowLoopback: boolean): boolean {
+  if (allowLoopback && (/^127\./.test(address) || address === "::1")) return true;
+  return !isPrivateAddress(address);
+}
+
+/**
+ * Checks the scheme and the host before the request. A host name is resolved here, and again by the connection,
+ * which checks its own answer. An answer that changes between the two lookups is refused at connect time.
+ */
+async function checkTarget(url: URL, resolve: LookupAll, allowLoopback: boolean): Promise<void> {
   if (url.protocol !== "http:" && url.protocol !== "https:") {
     throw new Error(`only http and https images are fetched, not ${url.protocol}`);
   }
@@ -74,33 +86,61 @@ async function checkTarget(url: URL, lookup: LookupAll): Promise<void> {
   if (host === "localhost" || host.endsWith(".localhost")) {
     throw new Error(`the host ${host} is a private address`);
   }
-  const addresses = isIP(host) !== 0 ? [{ address: host }] : await lookup(host);
-  if (addresses.length === 0) throw new Error(`the host ${host} has no address`);
-  for (const { address } of addresses) {
-    if (isPrivateAddress(address)) throw new Error(`the host ${host} resolves to the private address ${address}`);
-  }
+  const all = isIP(host) !== 0 ? [{ address: host }] : await resolve(host);
+  const bad = all.find((a) => !permitted(a.address, allowLoopback));
+  if (bad !== undefined) throw new Error(`the host ${host} resolves to the private address ${bad.address}`);
+}
+
+/**
+ * The lookup of the connection. It resolves all addresses of the host and refuses the connection when one of them is
+ * private. The connection then uses an address that passed the check.
+ */
+function checkedLookup(resolve: LookupAll, allowLoopback: boolean): LookupFunction {
+  return (hostname, options, callback) => {
+    resolve(hostname).then(
+      (all) => {
+        if (all.length === 0) throw new Error(`the host ${hostname} has no address`);
+        const bad = all.find((a) => !permitted(a.address, allowLoopback));
+        if (bad !== undefined) throw new Error(`the host ${hostname} resolves to the private address ${bad.address}`);
+        const wanted = all.filter((a) => !options.family || a.family === options.family);
+        const usable = wanted.length > 0 ? wanted : all;
+        if (options.all) {
+          callback(null, usable.map((a) => ({ address: a.address, family: a.family })));
+        } else {
+          callback(null, usable[0]!.address, usable[0]!.family);
+        }
+      },
+    ).catch((err: unknown) => callback(err as NodeJS.ErrnoException, "", 0));
+  };
+}
+
+/** Sends one GET request on a new connection, so each connection passes the lookup check, and gives the response head. */
+function get(url: URL, lookup: LookupFunction, signal: AbortSignal): Promise<IncomingMessage> {
+  const send = url.protocol === "https:" ? httpsRequest : httpRequest;
+  return new Promise((resolve, reject) => {
+    const req = send(url, { method: "GET", lookup, signal, agent: false, headers: { accept: "image/*" } }, resolve);
+    req.on("error", reject);
+    req.end();
+  });
 }
 
 /** Reads the body as a stream and stops when it passes the size limit. */
-async function readCapped(reply: Response, maxBytes: number): Promise<Uint8Array> {
-  const declared = Number(reply.headers.get("content-length") ?? "");
+async function readCapped(reply: IncomingMessage, maxBytes: number): Promise<Uint8Array> {
+  const declared = Number(reply.headers["content-length"] ?? "");
   if (Number.isFinite(declared) && declared > maxBytes) {
-    await reply.body?.cancel();
+    reply.destroy();
     throw new Error(`the image is ${declared} bytes, over the limit of ${maxBytes}`);
   }
-  if (reply.body === null) return new Uint8Array(0);
-  const reader = reply.body.getReader();
   const parts: Uint8Array[] = [];
   let total = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
+  for await (const chunk of reply) {
+    const part = chunk as Uint8Array;
+    total += part.byteLength;
     if (total > maxBytes) {
-      await reader.cancel();
+      reply.destroy();
       throw new Error(`the image is over the limit of ${maxBytes} bytes`);
     }
-    parts.push(value);
+    parts.push(part);
   }
   const out = new Uint8Array(total);
   let at = 0;
@@ -112,33 +152,35 @@ async function readCapped(reply: Response, maxBytes: number): Promise<Uint8Array
 }
 
 /**
- * Makes the fetcher of remote images. Each hop of a redirect passes the scheme check and the address check.
- * The fetcher follows at most three redirects. The reply must be an image/* type inside the size limit.
- * The address check resolves the host before the request. The request resolves the host again, so a DNS answer
- * that changes between the two lookups is not detected.
+ * Makes the fetcher of remote images. Each hop of a redirect passes the scheme check, and its connection passes the
+ * address check: the connection uses only an address that the check accepted. The fetcher follows at most three
+ * redirects. The reply must be an image/* type inside the size limit and the time limit.
  */
 export function createImageFetcher(opts: ImageFetcherOptions): FetchImage {
+  const allowLoopback = opts.allowLoopback === true;
+  const lookup = checkedLookup(opts.lookup, allowLoopback);
   return async (raw: string): Promise<FetchedImage> => {
     const signal = AbortSignal.timeout(opts.timeoutMs);
     let url = new URL(raw);
     for (let hop = 0; ; hop += 1) {
-      await checkTarget(url, opts.lookup);
-      const reply = await opts.fetch(url.href, { redirect: "manual", signal });
-      if (REDIRECT_STATUS.has(reply.status)) {
-        await reply.body?.cancel();
-        const location = reply.headers.get("location");
-        if (location === null) throw new Error(`HTTP ${reply.status} with no location`);
+      await checkTarget(url, opts.lookup, allowLoopback);
+      const reply = await get(url, lookup, signal);
+      const status = reply.statusCode ?? 0;
+      if (REDIRECT_STATUS.has(status)) {
+        reply.destroy();
+        const location = reply.headers.location;
+        if (location === undefined) throw new Error(`HTTP ${status} with no location`);
         if (hop >= MAX_REDIRECTS) throw new Error(`more than ${MAX_REDIRECTS} redirects`);
         url = new URL(location, url);
         continue;
       }
-      if (!reply.ok) {
-        await reply.body?.cancel();
-        throw new Error(`HTTP ${reply.status}`);
+      if (status < 200 || status > 299) {
+        reply.destroy();
+        throw new Error(`HTTP ${status}`);
       }
-      const mime = (reply.headers.get("content-type") ?? "").split(";")[0]!.trim().toLowerCase();
+      const mime = (reply.headers["content-type"] ?? "").split(";")[0]!.trim().toLowerCase();
       if (!mime.startsWith("image/")) {
-        await reply.body?.cancel();
+        reply.destroy();
         throw new Error(`the reply is ${mime === "" ? "of no type" : mime}, not an image`);
       }
       return { bytes: await readCapped(reply, opts.maxBytes), mime };

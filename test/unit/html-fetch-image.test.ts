@@ -1,26 +1,52 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { createServer, type Server } from "node:http";
+import type { AddressInfo } from "node:net";
 import { createImageFetcher, isPrivateAddress, type LookupAll } from "../../src/html/fetch-image.ts";
 
-type Reply = { status?: number; headers?: Record<string, string>; body?: Uint8Array };
+type Route = (res: import("node:http").ServerResponse) => void;
 
-/** A fetch double: one reply per URL. It records each URL and each redirect mode. */
-function fakeFetch(replies: Record<string, Reply>) {
-  const calls: { url: string; redirect: string | undefined; hasSignal: boolean }[] = [];
-  const fn = async (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
-    const url = String(input);
-    calls.push({ url, redirect: init?.redirect, hasSignal: init?.signal instanceof AbortSignal });
-    const r = replies[url];
-    if (r === undefined) throw new Error(`no reply for ${url}`);
-    return new Response(r.body ?? null, { status: r.status ?? 200, headers: r.headers ?? {} });
-  };
-  return { fn: fn as typeof fetch, calls };
-}
+const routes: Record<string, Route> = {};
+let server: Server;
+let port = 0;
+const hits: string[] = [];
 
-const PUBLIC: LookupAll = async () => [{ address: "93.184.215.14", family: 4 }];
-const PNG = { "content-type": "image/png" };
+beforeAll(async () => {
+  server = createServer((req, res) => {
+    hits.push(req.url ?? "");
+    const route = routes[req.url ?? ""];
+    if (route === undefined) {
+      res.statusCode = 404;
+      res.end();
+      return;
+    }
+    route(res);
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  port = (server.address() as AddressInfo).port;
+});
 
-function fetcher(fetchFn: typeof fetch, lookup: LookupAll = PUBLIC, maxBytes = 1000) {
-  return createImageFetcher({ fetch: fetchFn, lookup, timeoutMs: 5000, maxBytes });
+afterAll(async () => {
+  server.closeAllConnections();
+  await new Promise<void>((resolve) => server.close(() => resolve()));
+});
+
+const png = (body: Uint8Array): Route => (res) => {
+  res.setHeader("content-type", "image/png");
+  res.end(body);
+};
+const redirect = (to: () => string): Route => (res) => {
+  res.statusCode = 302;
+  res.setHeader("location", to());
+  res.end();
+};
+
+/** A resolver that sends every host name to the local server. */
+const LOCAL: LookupAll = async () => [{ address: "127.0.0.1", family: 4 }];
+const url = (path: string, host = "img.test") => `http://${host}:${port}${path}`;
+
+/** A fetcher that may connect to the local server: loopback is allowed for the test only. */
+function local(maxBytes = 1000, lookup: LookupAll = LOCAL, timeoutMs = 5000) {
+  return createImageFetcher({ lookup, timeoutMs, maxBytes, allowLoopback: true });
 }
 
 describe("isPrivateAddress", () => {
@@ -34,76 +60,94 @@ describe("isPrivateAddress", () => {
 });
 
 describe("createImageFetcher", () => {
-  test("a public image downloads with manual redirects and a time limit", async () => {
-    const f = fakeFetch({ "https://x.test/a.png": { headers: PNG, body: new Uint8Array([1, 2]) } });
-    const got = await fetcher(f.fn)("https://x.test/a.png");
+  test("an image downloads from the address that the resolver gave", async () => {
+    routes["/a.png"] = png(new Uint8Array([1, 2]));
+    const got = await local()(url("/a.png"));
     expect(Array.from(got.bytes)).toEqual([1, 2]);
     expect(got.mime).toBe("image/png");
-    expect(f.calls).toEqual([{ url: "https://x.test/a.png", redirect: "manual", hasSignal: true }]);
   });
   test("an upper-case HTTP scheme is accepted", async () => {
-    const f = fakeFetch({ "http://x.test/a.png": { headers: PNG, body: new Uint8Array([1]) } });
-    expect((await fetcher(f.fn)("HTTP://x.test/a.png")).mime).toBe("image/png");
+    routes["/u.png"] = png(new Uint8Array([1]));
+    expect((await local()(url("/u.png").replace("http:", "HTTP:"))).mime).toBe("image/png");
+  });
+  test("loopback is refused by default, also through a host name", async () => {
+    routes["/d.png"] = png(new Uint8Array([1]));
+    const before = hits.length;
+    const f = createImageFetcher({ lookup: LOCAL, timeoutMs: 5000, maxBytes: 1000 });
+    await expect(f(url("/d.png"))).rejects.toThrow(/private/);
+    await expect(f(url("/d.png", "127.0.0.1"))).rejects.toThrow(/private/);
+    await expect(f(url("/d.png", "localhost"))).rejects.toThrow(/private/);
+    await expect(f(url("/d.png", "[::1]"))).rejects.toThrow(/private/);
+    expect(hits.length).toBe(before);
+  });
+  test("a host that resolves to a public address, then a private one, is refused at connect time", async () => {
+    routes["/r.png"] = png(new Uint8Array([1]));
+    let calls = 0;
+    const rebinding: LookupAll = async () => {
+      calls += 1;
+      return [{ address: calls === 1 ? "93.184.215.14" : "169.254.169.254", family: 4 }];
+    };
+    const before = hits.length;
+    await expect(local(1000, rebinding)("http://rebind.test/r.png")).rejects.toThrow(/169\.254\.169\.254/);
+    expect(calls).toBeGreaterThanOrEqual(2);
+    expect(hits.length).toBe(before);
+  });
+  test("one private address among public ones is refused", async () => {
+    const mixed: LookupAll = async () => [{ address: "93.184.215.14", family: 4 }, { address: "10.0.0.1", family: 4 }];
+    await expect(createImageFetcher({ lookup: mixed, timeoutMs: 5000, maxBytes: 10 })("http://x.test/a.png")).rejects.toThrow(/private/);
   });
   test("a redirect to 169.254.169.254 is refused", async () => {
-    const f = fakeFetch({
-      "https://x.test/a.png": { status: 302, headers: { location: "http://169.254.169.254/latest/meta-data" } },
-    });
-    const lookup: LookupAll = async (host) => [{ address: host === "x.test" ? "93.184.215.14" : host, family: 4 }];
-    await expect(fetcher(f.fn, lookup)("https://x.test/a.png")).rejects.toThrow(/private/);
-    expect(f.calls.map((c) => c.url)).toEqual(["https://x.test/a.png"]);
-  });
-  test("a host that resolves to a private address is refused before any request", async () => {
-    const f = fakeFetch({});
-    const lookup: LookupAll = async () => [{ address: "93.184.215.14", family: 4 }, { address: "10.0.0.1", family: 4 }];
-    await expect(fetcher(f.fn, lookup)("https://x.test/a.png")).rejects.toThrow(/private/);
-    expect(f.calls).toEqual([]);
-  });
-  test("localhost is refused", async () => {
-    const f = fakeFetch({});
-    await expect(fetcher(f.fn)("http://localhost/a.png")).rejects.toThrow(/private/);
-    await expect(fetcher(f.fn)("http://[::1]/a.png")).rejects.toThrow(/private/);
-    expect(f.calls).toEqual([]);
+    routes["/meta"] = redirect(() => "http://169.254.169.254/latest/meta-data");
+    await expect(local()(url("/meta"))).rejects.toThrow(/private/);
   });
   test("three redirects are followed, a fourth is refused", async () => {
-    const hop = (n: number) => `https://x.test/${n}`;
-    const replies: Record<string, Reply> = {};
-    for (let i = 0; i < 4; i += 1) replies[hop(i)] = { status: 301, headers: { location: hop(i + 1) } };
-    replies[hop(4)] = { headers: PNG, body: new Uint8Array([1]) };
-    await expect(fetcher(fakeFetch(replies).fn)(hop(0))).rejects.toThrow(/redirect/);
-    expect((await fetcher(fakeFetch(replies).fn)(hop(1))).mime).toBe("image/png");
+    for (let i = 0; i < 4; i += 1) routes[`/h${i}`] = redirect(() => url(`/h${i + 1}`));
+    routes["/h4"] = png(new Uint8Array([1]));
+    await expect(local()(url("/h0"))).rejects.toThrow(/redirect/);
+    expect((await local()(url("/h1"))).mime).toBe("image/png");
   });
   test("a redirect to a scheme that is not http or https is refused", async () => {
-    const f = fakeFetch({ "https://x.test/a": { status: 302, headers: { location: "file:///etc/passwd" } } });
-    await expect(fetcher(f.fn)("https://x.test/a")).rejects.toThrow(/http/);
+    routes["/file"] = redirect(() => "file:///etc/passwd");
+    await expect(local()(url("/file"))).rejects.toThrow(/http/);
   });
-  test("a body over the size limit is refused", async () => {
-    const f = fakeFetch({ "https://x.test/a.png": { headers: PNG, body: new Uint8Array(11) } });
-    await expect(fetcher(f.fn, PUBLIC, 10)("https://x.test/a.png")).rejects.toThrow(/limit/);
+  test("a body over the size limit is refused while it streams", async () => {
+    routes["/big"] = (res) => {
+      res.setHeader("content-type", "image/png");
+      res.write(new Uint8Array(8));
+      res.end(new Uint8Array(8));
+    };
+    await expect(local(10)(url("/big"))).rejects.toThrow(/limit/);
   });
   test("a declared length over the size limit is refused", async () => {
-    const f = fakeFetch({ "https://x.test/a.png": { headers: { ...PNG, "content-length": "99" }, body: new Uint8Array(1) } });
-    await expect(fetcher(f.fn, PUBLIC, 10)("https://x.test/a.png")).rejects.toThrow(/limit/);
+    routes["/len"] = (res) => {
+      res.setHeader("content-type", "image/png");
+      res.setHeader("content-length", "99");
+      res.end(new Uint8Array(99));
+    };
+    await expect(local(10)(url("/len"))).rejects.toThrow(/limit/);
   });
   test("a reply that is not an image is refused", async () => {
-    const f = fakeFetch({ "https://x.test/a": { headers: { "content-type": "text/html" }, body: new Uint8Array(1) } });
-    await expect(fetcher(f.fn)("https://x.test/a")).rejects.toThrow(/image/);
+    routes["/html"] = (res) => {
+      res.setHeader("content-type", "text/html");
+      res.end("<p>");
+    };
+    await expect(local()(url("/html"))).rejects.toThrow(/image/);
   });
   test("an HTTP error status is refused", async () => {
-    const f = fakeFetch({ "https://x.test/a": { status: 404 } });
-    await expect(fetcher(f.fn)("https://x.test/a")).rejects.toThrow(/404/);
+    await expect(local()(url("/missing"))).rejects.toThrow(/404/);
   });
   test("file:, ftp: and //host are refused with no request", async () => {
-    const f = fakeFetch({});
+    const before = hits.length;
     for (const u of ["file:///etc/passwd", "ftp://x.test/a.png", "//x.test/a.png"]) {
-      await expect(fetcher(f.fn)(u)).rejects.toThrow();
+      await expect(local()(u)).rejects.toThrow();
     }
-    expect(f.calls).toEqual([]);
+    expect(hits.length).toBe(before);
   });
   test("the time limit aborts a slow reply", async () => {
-    const slow = (async (_u: unknown, init?: RequestInit) =>
-      new Promise<Response>((_, reject) => init?.signal?.addEventListener("abort", () => reject(init.signal?.reason)))) as typeof fetch;
-    const f = createImageFetcher({ fetch: slow, lookup: PUBLIC, timeoutMs: 20, maxBytes: 10 });
-    await expect(f("https://x.test/a.png")).rejects.toThrow();
+    routes["/slow"] = (res) => {
+      res.setHeader("content-type", "image/png");
+      res.write(new Uint8Array(1));
+    };
+    await expect(local(1000, LOCAL, 100)(url("/slow"))).rejects.toThrow();
   });
 });
