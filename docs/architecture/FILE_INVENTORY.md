@@ -123,7 +123,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |
 | `test/integration/mermaid-browser-capture.test.ts` | (root) | tests | test | 111 |
 | `test/integration/mermaid-browser.test.ts` | (root) | tests | test | 85 |
-| `test/integration/mesh-viewer.test.ts` | (root) | tests | test | 133 |
+| `test/integration/mesh-viewer.test.ts` | (root) | tests | test | 137 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 124 |
 | `test/mutation/run-mutants.mjs` | (root) | tests | test | 250 |
 | `test/mutation/run-mutants.test.ts` | (root) | tests | test | 292 |
@@ -140,7 +140,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
 | `test/smoke/smoke.mjs` | (root) | tests | test | 193 |
-| `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
+| `test/support/assets-fixture.ts` | (root) | tests | test | 100 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/glb-reader.ts` | (root) | tests | test | 171 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
@@ -197,7 +197,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mesh-glb.test.ts` | (root) | tests | test | 111 |
 | `test/unit/mesh-large.test.ts` | (root) | tests | test | 53 |
 | `test/unit/mesh-limit.test.ts` | (root) | tests | test | 50 |
-| `test/unit/mesh-viewer.test.ts` | (root) | tests | test | 127 |
+| `test/unit/mesh-viewer.test.ts` | (root) | tests | test | 131 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
 | `test/unit/no-sandbox-flag.test.ts` | (root) | tests | test | 35 |
 | `test/unit/page-checker-io.test.ts` | (root) | tests | test | 148 |

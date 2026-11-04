@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -11,11 +11,15 @@ import { readCad, writeGlb } from "../../src/mesh/index.ts";
 import { viewerPageHtml } from "../../src/mesh/viewer.ts";
 import { checkPage } from "../support/page-checker.ts";
 import { decodePng } from "../support/png-decode.ts";
+import { makeScratch, makeThreeAssetsFolder, removeScratch } from "../support/assets-fixture.ts";
 import { readGlb } from "../support/glb-reader.ts";
 
 const browserPath = process.env.SCIENG_BROWSER ?? "";
 const haveBrowser = browserPath !== "" && existsSync(browserPath);
-const ASSETS = new URL("../../assets/", import.meta.url).href;
+// The build fills assets/, and the tests can run before the build. So the tests copy the pinned files from the installed package.
+const SCRATCH = makeScratch("sciengjs-viewer-");
+const ASSETS = makeThreeAssetsFolder(SCRATCH);
+afterAll(() => removeScratch(SCRATCH));
 const CORPUS = fileURLToPath(new URL("../corpus/mesh/", import.meta.url));
 const STEP = new Uint8Array(readFileSync(CORPUS + "red_cube_blue_cylinder.step"));
 const BREP = new Uint8Array(readFileSync(CORPUS + "cylinder1.brep"));
@@ -68,7 +72,7 @@ async function drawWith(action: string): Promise<{ rgba: Uint8Array; blocked: st
 describe.skipIf(!haveBrowser)("mesh viewer in the browser", () => {
   for (const [type, source] of [["step", STEP], ["brep", BREP]] as const) {
     test(`${type} renders to a png that is valid and not one flat colour`, async () => {
-      const result = await render({ type, source, format: "png", options: { width: 320, height: 240 } }, { browser: browserPath });
+      const result = await render({ type, source, format: "png", options: { width: 320, height: 240 } }, { browser: browserPath, assetsUrl: ASSETS });
       expect(result.mime).toBe("image/png");
       expect(result.warnings).toEqual([]);
       const png = decodePng(result.bytes);
@@ -79,7 +83,7 @@ describe.skipIf(!haveBrowser)("mesh viewer in the browser", () => {
   }
 
   test("the png of the step sample shows the red cube and the blue cylinder", async () => {
-    const result = await render({ type: "step", source: STEP, format: "png", options: {} }, { browser: browserPath });
+    const result = await render({ type: "step", source: STEP, format: "png", options: {} }, { browser: browserPath, assetsUrl: ASSETS });
     const { rgba } = decodePng(result.bytes);
     let red = 0;
     let blue = 0;

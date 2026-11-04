@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { copyFileSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -9,10 +9,14 @@ import { THREE_MAIN_URL, THREE_MODULES } from "../../src/browser/pinned.ts";
 import { viewerPageHtml } from "../../src/mesh/viewer.ts";
 import { pinnedThree } from "../../src/mesh/pinned-three.ts";
 import { ISOLATED_CONFIG_DEPS } from "../support/test-registry.ts";
+import { makeScratch, makeThreeAssetsFolder, removeScratch } from "../support/assets-fixture.ts";
 import { readGlb } from "../support/glb-reader.ts";
 
 const CORPUS = fileURLToPath(new URL("../corpus/mesh/", import.meta.url));
-const ASSETS = new URL("../../assets/", import.meta.url).href;
+// The build fills assets/, and the tests can run before the build. So the tests copy the pinned files from the installed package.
+const SCRATCH = makeScratch("sciengjs-viewer-");
+const ASSETS = makeThreeAssetsFolder(SCRATCH);
+afterAll(() => removeScratch(SCRATCH));
 const STEP = new Uint8Array(readFileSync(CORPUS + "red_cube_blue_cylinder.step"));
 const IGES = new Uint8Array(readFileSync(CORPUS + "cube-10x10mm.igs"));
 const BREP = new Uint8Array(readFileSync(CORPUS + "cylinder1.brep"));

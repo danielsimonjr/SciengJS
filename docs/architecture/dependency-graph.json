@@ -5,7 +5,7 @@
     "language": "typescript",
     "totalFiles": 223,
     "totalModules": 3,
-    "totalExports": 456
+    "totalExports": 457
   },
   "modules": {
     "tools": {
@@ -3328,6 +3328,15 @@
             "typeOnly": false
           },
           {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeScratch",
+              "makeThreeAssetsFolder",
+              "removeScratch"
+            ],
+            "typeOnly": false
+          },
+          {
             "file": "test/support/glb-reader.ts",
             "imports": [
               "readGlb"
@@ -3579,7 +3588,15 @@
           "node:path",
           "node:url"
         ],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/browser/pinned.ts",
+            "imports": [
+              "THREE_MODULES"
+            ],
+            "typeOnly": false
+          }
+        ],
         "exports": [
           "REAL_FONT_PATH",
           "REAL_WASM_PATH",
@@ -3589,6 +3606,7 @@
           "makeScratch",
           "removeScratch",
           "makeAssetsFolder",
+          "makeThreeAssetsFolder",
           "wasmImportingMissingFunction",
           "wasmWhoseStartTraps"
         ]
@@ -5355,6 +5373,15 @@
             "typeOnly": false
           },
           {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeScratch",
+              "makeThreeAssetsFolder",
+              "removeScratch"
+            ],
+            "typeOnly": false
+          },
+          {
             "file": "test/support/glb-reader.ts",
             "imports": [
               "readGlb"
@@ -6108,8 +6135,8 @@
     "totalTypeScriptFiles": 223,
     "totalSourceFiles": 223,
     "totalModules": 3,
-    "totalLinesOfCode": 25541,
-    "totalExports": 456,
+    "totalLinesOfCode": 25562,
+    "totalExports": 457,
     "entryRoots": 71,
     "reachableFiles": 71,
     "dormantFiles": 15,
@@ -6127,7 +6154,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 81,
-    "totalFunctions": 200,
+    "totalFunctions": 201,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 63,

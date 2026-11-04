@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { THREE_MODULES } from "../../src/browser/pinned.ts";
 
 /** The bundled font of the repository. Tests copy its bytes or replace them. */
 export const REAL_FONT_PATH = fileURLToPath(new URL("../../assets/fonts/LiberationSerif-Regular.ttf", import.meta.url));
@@ -52,6 +53,18 @@ export function makeAssetsFolder(root: string, name: string, files: { font?: Uin
   mkdirSync(join(folder, "fonts"), { recursive: true });
   if (files.font !== undefined) writeFileSync(join(folder, "fonts", "LiberationSerif-Regular.ttf"), files.font);
   if (files.wasm !== undefined) writeFileSync(join(folder, "index_bg.wasm"), files.wasm);
+  return pathToFileURL(folder).href + "/";
+}
+
+/**
+ * Creates a folder under root with the pinned Three.js files, copied from the installed package, and returns its URL with a trailing slash.
+ * The tests use this folder, because the build fills assets/ and the tests can run before the build.
+ */
+export function makeThreeAssetsFolder(root: string, name = "three-assets"): string {
+  const folder = join(root, name);
+  mkdirSync(folder, { recursive: true });
+  const packageDir = fileURLToPath(new URL("../../node_modules/three/", import.meta.url));
+  for (const m of THREE_MODULES) writeFileSync(join(folder, m.file), readFileSync(join(packageDir, m.path)));
   return pathToFileURL(folder).href + "/";
 }
 

@@ -579,7 +579,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 133
+      "loc": 137
     },
     {
       "file": "test/integration/page-checker.test.ts",
@@ -698,7 +698,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 87
+      "loc": 100
     },
     {
       "file": "test/support/bun-scan.ts",
@@ -1097,7 +1097,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 127
+      "loc": 131
     },
     {
       "file": "test/unit/no-bun-api.test.ts",
