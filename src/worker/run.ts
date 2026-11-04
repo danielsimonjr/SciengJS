@@ -29,9 +29,45 @@ export interface WorkerLimits {
 /** The default longest wait for a worker to stop. It is the only place where this value is set. */
 const DEFAULT_TERMINATE_WAIT_MS = 5000;
 
+/** Node flags that take their value from the next token, such as `-e <code>`. */
+const VALUE_FLAGS = new Set(["-e", "--eval", "-p", "--print", "--input-type"]);
+
+/** Node flags that change how the entry loads or runs. They take no value. */
+const MODE_FLAGS = new Set(["-i", "--interactive", "-c", "--check"]);
+
+/** A group of single-letter short flags, such as `-pe`. Only letters of the loader flags match. */
+const SHORT_GROUP = /^-[epic]{2,}$/;
+
+/**
+ * The function returns the parent's execArgv without the flags that describe input or mode.
+ * Node gives a worker the parent's execArgv by default. If you start the parent with
+ * `--input-type`, the worker can not load its entry. The other flags pass to the worker
+ * in the same order, with no change.
+ */
+export function workerExecArgv(parentArgv: readonly string[]): string[] {
+  const kept: string[] = [];
+  for (let i = 0; i < parentArgv.length; i++) {
+    const token = parentArgv[i]!;
+    if (MODE_FLAGS.has(token)) continue;
+    if (SHORT_GROUP.test(token)) {
+      if (/[ep]/.test(token)) i++;
+      continue;
+    }
+    const eq = token.indexOf("=");
+    const name = eq === -1 ? token : token.slice(0, eq);
+    if (VALUE_FLAGS.has(name)) {
+      if (eq === -1) i++;
+      continue;
+    }
+    kept.push(token);
+  }
+  return kept;
+}
+
 function createDefaultWorker(entry: URL, data: WorkerJob, maxMemoryMb: number): Worker {
   return new Worker(entry, {
     workerData: data,
+    execArgv: workerExecArgv(process.execArgv),
     resourceLimits: { maxOldGenerationSizeMb: maxMemoryMb },
   });
 }

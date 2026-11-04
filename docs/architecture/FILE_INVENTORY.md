@@ -87,7 +87,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
 | `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 41 |
-| `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 117 |
+| `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 153 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
 | `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |

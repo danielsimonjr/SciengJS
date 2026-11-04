@@ -327,7 +327,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 117
+      "loc": 153
     },
     {
       "file": "test/corpus/regenerate-dot.ts",

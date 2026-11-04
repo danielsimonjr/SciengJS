@@ -5,7 +5,7 @@
     "language": "typescript",
     "totalFiles": 164,
     "totalModules": 3,
-    "totalExports": 325
+    "totalExports": 326
   },
   "modules": {
     "tools": {
@@ -1948,6 +1948,7 @@
         "exports": [
           "WorkerExit",
           "WorkerLimits",
+          "workerExecArgv",
           "runInWorker"
         ]
       },
@@ -4187,8 +4188,8 @@
     "totalTypeScriptFiles": 164,
     "totalSourceFiles": 164,
     "totalModules": 3,
-    "totalLinesOfCode": 17828,
-    "totalExports": 325,
+    "totalLinesOfCode": 17864,
+    "totalExports": 326,
     "entryRoots": 42,
     "reachableFiles": 42,
     "dormantFiles": 14,
@@ -4198,7 +4199,7 @@
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 23,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 20,
+    "unusedExportsCount": 21,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -4206,7 +4207,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 51,
-    "totalFunctions": 149,
+    "totalFunctions": 150,
     "totalTypeGuards": 4,
     "totalEnums": 0,
     "totalConstants": 50,
