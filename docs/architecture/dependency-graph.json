@@ -3,7 +3,7 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 214,
+    "totalFiles": 215,
     "totalModules": 3,
     "totalExports": 445
   },
@@ -4972,6 +4972,54 @@
         ],
         "exports": []
       },
+      "test/unit/mesh-large.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:crypto",
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/config.ts",
+            "imports": [
+              "loadConfig"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "renderWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "ISOLATED_CONFIG_DEPS"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/glb-reader.ts",
+            "imports": [
+              "readGlb"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/mesh-limit.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -5731,10 +5779,10 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 214,
-    "totalSourceFiles": 214,
+    "totalTypeScriptFiles": 215,
+    "totalSourceFiles": 215,
     "totalModules": 3,
-    "totalLinesOfCode": 24703,
+    "totalLinesOfCode": 24756,
     "totalExports": 445,
     "entryRoots": 66,
     "reachableFiles": 66,

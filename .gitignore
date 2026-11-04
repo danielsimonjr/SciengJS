@@ -7,3 +7,6 @@ coverage/
 *.mutation-hash
 assets/index_bg.wasm
 assets/mermaid.min.js
+
+# The large STEP sample. CI downloads it; see test/corpus/mesh/large.json.
+test/corpus-large/

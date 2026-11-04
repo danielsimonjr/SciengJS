@@ -14,6 +14,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The test reader of glb files checks more. It checks the chunk order, the JSON space padding and the BIN zero padding. It checks unit normals, one material per colour, the scene and the nodes. Each accessor, buffer view and material must be used.
 - The mutation audit of the glb writer and the glb limit is in `test/mutation/mesh-glb-mutants.json`. An assertion kills all 46 non-equivalent mutants. Three mutants are equivalent.
 - The smoke test renders a BREP sample to `glb` from the installed tarball under Node. `test:node` runs a mesh test against `dist/`.
+- A test renders a STEP part of 1,793,282 bytes (`linkrods.step` of OpenCascade, LGPL-2.1) to `glb` inside the default timeout and checks its 8,772 triangles. The part is not in git. CI downloads it from the pinned URL in `test/corpus/mesh/large.json` and checks its SHA-256. Without the file, a local run skips the test and CI fails it.
 
 ### Fixed
 

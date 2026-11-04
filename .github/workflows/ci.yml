@@ -63,6 +63,16 @@ jobs:
       - name: Typecheck
         run: bun run typecheck
 
+      # The large STEP sample is not in git. The test of the sample fails in CI when the file is missing.
+      - name: Fetch the large STEP sample and check its SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          read -r url file sha < <(node -e 'const m = require("./test/corpus/mesh/large.json"); console.log([m.url, m.file, m.sha256].join(" "))')
+          mkdir -p "$(dirname "$file")"
+          curl --fail --silent --show-error --location --retry 3 "$url" --output "$file"
+          node -e 'const [f, s] = process.argv.slice(1); const h = require("crypto").createHash("sha256").update(require("fs").readFileSync(f)).digest("hex"); if (h !== s) { console.error(`${f}: SHA-256 is ${h}, want ${s}`); process.exit(1); } console.log(`${f}: OK`)' "$file" "$sha"
+
       - name: Test
         run: bun test
 
