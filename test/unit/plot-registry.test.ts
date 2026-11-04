@@ -1,9 +1,19 @@
-import { describe, expect, test } from "bun:test";
-import { existsSync } from "node:fs";
+import { afterAll, describe, expect, test } from "bun:test";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { capabilitiesWithRegistry, renderWithRegistry } from "../../src/core.ts";
 import { DEFAULT_REGISTRY } from "../../src/registry.ts";
 import { ISOLATED_CONFIG_DEPS } from "../support/test-registry.ts";
+import { makeAssetsFolder, realFiles } from "../support/assets-fixture.ts";
+
+// The PNG test reads the WASM from a scratch assets folder, as CI has no built assets/index_bg.wasm.
+const scratch = mkdtempSync(join(tmpdir(), "scieng-i7-plot-"));
+const ASSETS = makeAssetsFolder(scratch, "assets", realFiles());
+afterAll(() => {
+  rmSync(scratch, { recursive: true, force: true });
+});
 
 const FIGURE = JSON.stringify({ data: [{ type: "scatter", mode: "lines", x: [0, 1], y: [0, 1] }], layout: {} });
 
@@ -37,7 +47,7 @@ describe("the default registry of the plot stage", () => {
   test("render returns a png of a figure with the scale option", async () => {
     const result = await renderWithRegistry(
       { type: "plot", source: FIGURE, format: "png", options: { scale: 1 } },
-      {},
+      { assetsUrl: ASSETS },
       DEFAULT_REGISTRY,
       ISOLATED_CONFIG_DEPS,
     );
