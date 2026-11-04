@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The `./html` subpath converts HTML to GitHub Flavored Markdown with `htmlToMarkdown()`, through `parse5` 8.1.0.
+
 ## [0.5.1] - 2026-11-04
 
 ### Fixed
