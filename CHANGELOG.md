@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-03
+
 ### Added
 
 - Mermaid types other than class, state and sequence (for example flowchart and gantt) render through the browser stage, to svg, png and pdf. The pinned Mermaid 11.17.2 build ships in the package. The browser stage serves it to the page from the package bytes. Without a browser path these reject with `E_STAGE_MISSING`. Only a first word in the list of other Mermaid types routes to the browser stage. The router skips directives and front matter and never throws, so `lenient: true` still applies to the native types, and an unknown header rejects with `E_INPUT`.
