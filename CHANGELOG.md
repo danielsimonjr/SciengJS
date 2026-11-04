@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-04
+
 ### Added
 
 - The math stage renders LaTeX math to `svg`, `png` and `pdf`. The stage uses `@mathjax/src` 4.1.3 and writes a standalone SVG with the glyphs as paths. The SVG has no text element and no font reference. The `\ce{}` command works through the mhchem package of the build. The `png` takes the option `scale`, as the `dot` and Mermaid `png` do. The `pdf` needs a browser. Without one, it rejects with `E_STAGE_MISSING`.
