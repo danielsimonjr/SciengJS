@@ -20,18 +20,19 @@ This document provides a comprehensive dependency graph of all files, components
 6. [Entry Dependencies](#entry-dependencies)
 7. [Math Dependencies](#math-dependencies)
 8. [Mermaid Dependencies](#mermaid-dependencies)
-9. [Raster Dependencies](#raster-dependencies)
-10. [Worker Dependencies](#worker-dependencies)
-11. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-12. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-13. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-14. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-15. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-16. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-17. [Dependency Matrix](#dependency-matrix)
-18. [Circular Dependency Analysis](#circular-dependency-analysis)
-19. [Visual Dependency Graph](#visual-dependency-graph)
-20. [Summary Statistics](#summary-statistics)
+9. [Plot Dependencies](#plot-dependencies)
+10. [Raster Dependencies](#raster-dependencies)
+11. [Worker Dependencies](#worker-dependencies)
+12. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+13. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+14. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+15. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+16. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+17. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+18. [Dependency Matrix](#dependency-matrix)
+19. [Circular Dependency Analysis](#circular-dependency-analysis)
+20. [Visual Dependency Graph](#visual-dependency-graph)
+21. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -46,6 +47,7 @@ The codebase is organized into the following modules:
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
+- **plot**: 8 files
 - **raster**: 2 files
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
@@ -267,10 +269,10 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/browser/page.ts` - A page that loads the pinned Mermaid build and renders one source. The result is stored in window.__sciengDone:
+### `src/browser/page.ts` - A page that loads the pinned Plotly build with its Subresource Integrity value and draws one figure.
 
 **Exports:**
-- Functions: `scriptJson`, `svgPageHtml`, `mermaidPageHtml`
+- Functions: `scriptJson`, `scriptData`, `plotlyPageHtml`, `svgPageHtml`, `mermaidPageHtml`
 
 ---
 
@@ -278,7 +280,13 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PinnedAsset`
-- Constants: `MERMAID_VERSION`, `MERMAID_SHA256`, `MERMAID_FILE`, `MERMAID_CDN_URL`, `PINNED_ASSETS`
+- Constants:
+
+  ```text
+  MERMAID_VERSION, MERMAID_SHA256, MERMAID_FILE, MERMAID_CDN_URL, PINNED_ASSETS, PLOTLY_VERSION,
+  PLOTLY_SHA256, PLOTLY_SRI, PLOTLY_CDN_URL
+  ```
+
 
 ---
 
@@ -794,6 +802,138 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="plot-dependencies"></a>
+
+## Plot Dependencies
+
+### `src/plot/backend-html.ts` - backend-html module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../browser/page.ts` | `plotlyPageHtml` | Import |
+| `../browser/pinned.ts` | `PLOTLY_CDN_URL, PLOTLY_SRI` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./backend-svg.ts` | `readPlotOptions` | Import |
+| `./reader.ts` | `readPlotFigure` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/plot/backend-png.ts` - backend-png module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./plotter.ts` | `plotToSvg` | Import |
+| `./backend-svg.ts` | `readPlotOptions` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/plot/backend-svg.ts` - backend-svg module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./plotter.ts` | `plotToSvg` | Import |
+
+**Exports:**
+- Functions: `readPlotOptions`, `render`
+
+---
+
+### `src/plot/control.ts` - Control-system helpers: Bode, step, impulse, pole-zero, Nyquist and root locus.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces:
+
+  ```text
+  TransferFunction, Complex, ControlFigure, ControlResult, FrequencyOptions, TimeOptions,
+  RootLocusOptions, BodeNumbers, StepNumbers, ImpulseNumbers, PoleZeroNumbers, NyquistNumbers,
+  RootLocusNumbers
+  ```
+
+- Functions: `checkTransferFunction`, `polynomialRoots`, `bode`, `step`, `impulse`, `poleZero`, `nyquist`, `rootLocus`
+
+---
+
+### `src/plot/index.ts` - Package entry point for plot (re-exports 23 symbols)
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./plotter.ts` | `plotToSvg` | Re-export |
+| `./reader.ts` | `readPlotFigure` | Re-export |
+| `./ticks.ts` | `linearTicks, logTicks, paddedRange` | Re-export |
+| `./control.ts` | `bode, step, impulse, poleZero, nyquist, rootLocus, checkTransferFunction, polynomialRoots` | Re-export |
+| `./control.ts` | `TransferFunction, Complex, ControlFigure, ControlResult, BodeNumbers, StepNumbers, ImpulseNumbers, PoleZeroNumbers, NyquistNumbers, RootLocusNumbers` | Re-export (type-only) |
+
+**Exports:**
+- Re-exports:
+
+  ```text
+  plotToSvg, readPlotFigure, linearTicks, logTicks, paddedRange, bode, step, impulse, poleZero,
+  nyquist, rootLocus, checkTransferFunction, polynomialRoots, TransferFunction, Complex,
+  ControlFigure, ControlResult, BodeNumbers, StepNumbers, ImpulseNumbers, PoleZeroNumbers,
+  NyquistNumbers, RootLocusNumbers
+  ```
+
+
+---
+
+### `src/plot/plotter.ts` - Plotly figure subset to standalone SVG. Every number is formatted with a fixed
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `./reader.ts` | `readPlotFigure` | Import |
+| `./ticks.ts` | `linearTicks, logTicks, paddedRange` | Import |
+
+**Exports:**
+- Functions: `plotToSvg`
+
+---
+
+### `src/plot/reader.ts` - Table-driven reader for the Plotly JSON subset. Each allowed key is a dotted
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Functions: `readPlotFigure`
+
+---
+
+### `src/plot/ticks.ts` - ticks module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces: `LogTick`
+- Functions: `paddedRange`, `linearTicks`, `logTicks`
+
+---
+
 <a id="raster-dependencies"></a>
 
 ## Raster Dependencies
@@ -1046,13 +1186,13 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 22 files |
-| `src/worker/protocol` | 1 file | 13 files |
+| `src/errors` | 0 files | 27 files |
+| `src/worker/protocol` | 1 file | 16 files |
 | `src/mermaid/browser` | 6 files | 5 files |
 | `src/browser/render` | 6 files | 4 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
-| `src/graph/backend-png` | 6 files | 2 files |
+| `src/graph/backend-png` | 6 files | 3 files |
 | `src/core` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
 | `src/mermaid/backend-png` | 7 files | 0 files |
@@ -1060,8 +1200,11 @@ The codebase is organized into the following modules:
 | `src/config` | 3 files | 3 files |
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
+| `src/plot/plotter` | 3 files | 3 files |
 | `src/assets` | 1 file | 4 files |
 | `src/index` | 5 files | 0 files |
+| `src/plot/backend-html` | 5 files | 0 files |
+| `src/plot/backend-svg` | 3 files | 2 files |
 | `src/browser/index` | 4 files | 0 files |
 | `src/graph/backend-pdf` | 4 files | 0 files |
 | `src/math/backend-pdf` | 4 files | 0 files |
@@ -1070,6 +1213,9 @@ The codebase is organized into the following modules:
 | `src/mermaid/backend-svg` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
 | `src/mermaid/sequence` | 1 file | 3 files |
+| `src/plot/backend-png` | 4 files | 0 files |
+| `src/plot/index` | 4 files | 0 files |
+| `src/plot/reader` | 1 file | 3 files |
 | `src/raster/index` | 3 files | 1 file |
 | `src/types` | 0 files | 4 files |
 | `src/browser/backend-pdf` | 3 files | 0 files |
@@ -1079,13 +1225,7 @@ The codebase is organized into the following modules:
 | `src/math/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
 | `src/mermaid/state` | 1 file | 2 files |
-| `src/worker/run` | 2 files | 1 file |
-| `src/browser/flags` | 0 files | 2 files |
-| `src/browser/profile` | 1 file | 1 file |
-| `src/browser/proxy` | 0 files | 2 files |
-| `src/pairs` | 1 file | 1 file |
-| `src/registry` | 0 files | 2 files |
-| `src/worker/entry` | 2 files | 0 files |
+| `src/plot/ticks` | 1 file | 2 files |
 
 ---
 
@@ -1161,53 +1301,64 @@ graph TD
         N42[...1 more]
     end
 
+    subgraph Plot
+        N43[backend-html]
+        N44[backend-png]
+        N45[backend-svg]
+        N46[control]
+        N47[index]
+        N48[plotter]
+        N49[reader]
+        N50[ticks]
+    end
+
     subgraph Raster
-        N43[index]
-        N44[warnings]
+        N51[index]
+        N52[warnings]
     end
 
     subgraph Worker
-        N45[entry]
-        N46[protocol]
-        N47[run]
+        N53[entry]
+        N54[protocol]
+        N55[run]
     end
 
     subgraph Trials/t1-graph
-        N48[compare-layout.mjs]
-        N49[make-sources.mjs]
-        N50[measure.mjs]
+        N56[compare-layout.mjs]
+        N57[make-sources.mjs]
+        N58[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N51[measure.mjs]
+        N59[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N52[index.cjs]
+        N60[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N53[pinned.js]
-        N54[measure.mjs]
+        N61[pinned.js]
+        N62[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N55[dvi2svg.mjs]
-        N56[host.mjs]
-        N57[run.mjs]
-        N58[tfm.mjs]
-        N59[type1.mjs]
-        N60[vfs.mjs]
+        N63[dvi2svg.mjs]
+        N64[host.mjs]
+        N65[run.mjs]
+        N66[tfm.mjs]
+        N67[type1.mjs]
+        N68[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N61[dvisvgm-specials.mjs]
+        N69[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N46
+    N8 --> N54
     N8 --> N13
-    N9 --> N46
+    N9 --> N54
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1222,20 +1373,20 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N47
+    N2 --> N55
     N2 --> N6
     N19 --> N3
-    N19 --> N46
+    N19 --> N54
     N19 --> N35
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N46
+    N20 --> N54
     N20 --> N22
-    N20 --> N43
-    N20 --> N44
+    N20 --> N51
+    N20 --> N52
     N21 --> N3
-    N21 --> N46
+    N21 --> N54
     N21 --> N22
     N22 --> N3
     N22 --> N23
@@ -1247,30 +1398,30 @@ graph TD
     N25 --> N3
     N26 --> N3
     N26 --> N35
-    N26 --> N46
+    N26 --> N54
     N26 --> N31
     N27 --> N3
     N27 --> N20
-    N27 --> N46
+    N27 --> N54
     N27 --> N31
     N28 --> N3
-    N28 --> N46
+    N28 --> N54
     N28 --> N31
     N30 --> N31
     N31 --> N3
     N31 --> N29
-    N32 --> N46
+    N32 --> N54
     N32 --> N37
     N32 --> N35
     N32 --> N39
     N33 --> N13
     N33 --> N3
     N33 --> N20
-    N33 --> N46
+    N33 --> N54
     N33 --> N37
     N33 --> N35
     N33 --> N39
-    N34 --> N46
+    N34 --> N54
     N34 --> N37
     N34 --> N35
     N34 --> N39
@@ -1288,17 +1439,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 179 |
-| Subsystems | 14 |
-| Total Lines of Code | 18752 |
-| Total Exports | 343 |
-| Total Re-exports | 57 |
+| Total Source Files | 194 |
+| Subsystems | 15 |
+| Total Lines of Code | 21435 |
+| Total Exports | 403 |
+| Total Re-exports | 80 |
 | Total Classes | 6 |
-| Total Interfaces | 52 |
-| Total Functions | 162 |
+| Total Interfaces | 66 |
+| Total Functions | 181 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 28 |
+| Type-only Imports | 32 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

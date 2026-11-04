@@ -10,9 +10,9 @@
 - **Dormant files**: 14
   - **Orphaned (reachable from nothing)**: 11
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 26
-  - **Unreferenced anywhere**: 2
-  - **Referenced in their own module**: 24
+- **Potentially unused exports**: 34
+  - **Unreferenced anywhere**: 5
+  - **Referenced in their own module**: 29
   - **Not classified**: 0
 
 ## Caveats
@@ -64,11 +64,17 @@ No file of this repository imports these files. Do not use the list as a deletio
 No other file imports these names, and their own module does not use them.
 
 - `src/graph/backend-pdf.ts`: `render`
+- `src/plot/backend-html.ts`: `render`
+- `src/plot/backend-png.ts`: `render`
+- `src/plot/backend-svg.ts`: `render`
 - `trials/t6-etex-build/runtime/dvisvgm-specials.mjs`: `unitPerPt`
 
 ### Notes
 
 - `src/graph/backend-pdf.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/graph/backend-pdf.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
+- `src/plot/backend-html.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-html.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
+- `src/plot/backend-png.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-png.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
+- `src/plot/backend-svg.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-svg.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` `unitPerPt`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'trials/t6-etex-build/runtime/dvisvgm-specials.mjs' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'unitPerPt' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 
 ## Exports referenced in their own module
@@ -76,6 +82,7 @@ No other file imports these names, and their own module does not use them.
 No other file imports these names, but their own module uses them.
 
 - `src/browser/input.ts`: `PngOptions`
+- `src/browser/page.ts`: `scriptData`
 - `src/browser/render.ts`: `PAGE_URL`, `capturePage`
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
@@ -86,6 +93,8 @@ No other file imports these names, but their own module uses them.
 - `src/mermaid/backend-svg.ts`: `render`
 - `src/mermaid/common.ts`: `Context`, `DiagramKind`
 - `src/pairs.ts`: `PairSpec`
+- `src/plot/control.ts`: `FrequencyOptions`, `RootLocusOptions`, `TimeOptions`
+- `src/plot/ticks.ts`: `LogTick`
 - `src/raster/index.ts`: `SvgToPngOptions`
 - `src/raster/warnings.ts`: `CoverageTest`
 - `src/registry.ts`: `BackendEntry`

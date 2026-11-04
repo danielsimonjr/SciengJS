@@ -538,18 +538,22 @@
         ]
       },
       "src/browser/page.ts": {
-        "description": "A page that loads the pinned Mermaid build and renders one source. The result is stored in window.__sciengDone:",
+        "description": "A page that loads the pinned Plotly build with its Subresource Integrity value and draws one figure.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
         "workspaceDependencies": [],
         "exports": [
           "scriptJson",
+          "scriptData",
+          "plotlyPageHtml",
           "svgPageHtml",
           "mermaidPageHtml"
         ],
         "functions": [
           "scriptJson",
+          "scriptData",
+          "plotlyPageHtml",
           "svgPageHtml",
           "mermaidPageHtml"
         ]
@@ -565,7 +569,11 @@
           "MERMAID_SHA256",
           "MERMAID_FILE",
           "MERMAID_CDN_URL",
-          "PINNED_ASSETS"
+          "PINNED_ASSETS",
+          "PLOTLY_VERSION",
+          "PLOTLY_SHA256",
+          "PLOTLY_SRI",
+          "PLOTLY_CDN_URL"
         ],
         "interfaces": [
           "PinnedAsset"
@@ -575,7 +583,11 @@
           "MERMAID_SHA256",
           "MERMAID_FILE",
           "MERMAID_CDN_URL",
-          "PINNED_ASSETS"
+          "PINNED_ASSETS",
+          "PLOTLY_VERSION",
+          "PLOTLY_SHA256",
+          "PLOTLY_SRI",
+          "PLOTLY_CDN_URL"
         ]
       },
       "src/browser/profile.ts": {
@@ -2090,6 +2102,374 @@
         ]
       }
     },
+    "plot": {
+      "src/plot/backend-html.ts": {
+        "description": "backend-html module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../browser/page.ts",
+            "imports": [
+              "plotlyPageHtml"
+            ]
+          },
+          {
+            "file": "../browser/pinned.ts",
+            "imports": [
+              "PLOTLY_CDN_URL",
+              "PLOTLY_SRI"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-svg.ts",
+            "imports": [
+              "readPlotOptions"
+            ]
+          },
+          {
+            "file": "./reader.ts",
+            "imports": [
+              "readPlotFigure"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/plot/backend-png.ts": {
+        "description": "backend-png module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../graph/backend-png.ts",
+            "imports": [
+              "readScale",
+              "svgDocumentToPng"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./plotter.ts",
+            "imports": [
+              "plotToSvg"
+            ]
+          },
+          {
+            "file": "./backend-svg.ts",
+            "imports": [
+              "readPlotOptions"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/plot/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./plotter.ts",
+            "imports": [
+              "plotToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readPlotOptions",
+          "render"
+        ],
+        "functions": [
+          "readPlotOptions",
+          "render"
+        ]
+      },
+      "src/plot/control.ts": {
+        "description": "Control-system helpers: Bode, step, impulse, pole-zero, Nyquist and root locus.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "checkTransferFunction",
+          "polynomialRoots",
+          "bode",
+          "step",
+          "impulse",
+          "poleZero",
+          "nyquist",
+          "rootLocus"
+        ],
+        "interfaces": [
+          "TransferFunction",
+          "Complex",
+          "ControlFigure",
+          "ControlResult",
+          "FrequencyOptions",
+          "TimeOptions",
+          "RootLocusOptions",
+          "BodeNumbers",
+          "StepNumbers",
+          "ImpulseNumbers",
+          "PoleZeroNumbers",
+          "NyquistNumbers",
+          "RootLocusNumbers"
+        ],
+        "functions": [
+          "checkTransferFunction",
+          "polynomialRoots",
+          "bode",
+          "step",
+          "impulse",
+          "poleZero",
+          "nyquist",
+          "rootLocus"
+        ]
+      },
+      "src/plot/index.ts": {
+        "description": "Package entry point for plot (re-exports 23 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./plotter.ts",
+            "imports": [
+              "plotToSvg"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./reader.ts",
+            "imports": [
+              "readPlotFigure"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./ticks.ts",
+            "imports": [
+              "linearTicks",
+              "logTicks",
+              "paddedRange"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./control.ts",
+            "imports": [
+              "bode",
+              "step",
+              "impulse",
+              "poleZero",
+              "nyquist",
+              "rootLocus",
+              "checkTransferFunction",
+              "polynomialRoots"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./control.ts",
+            "imports": [
+              "TransferFunction",
+              "Complex",
+              "ControlFigure",
+              "ControlResult",
+              "BodeNumbers",
+              "StepNumbers",
+              "ImpulseNumbers",
+              "PoleZeroNumbers",
+              "NyquistNumbers",
+              "RootLocusNumbers"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "plotToSvg",
+          "readPlotFigure",
+          "linearTicks",
+          "logTicks",
+          "paddedRange",
+          "bode",
+          "step",
+          "impulse",
+          "poleZero",
+          "nyquist",
+          "rootLocus",
+          "checkTransferFunction",
+          "polynomialRoots",
+          "TransferFunction",
+          "Complex",
+          "ControlFigure",
+          "ControlResult",
+          "BodeNumbers",
+          "StepNumbers",
+          "ImpulseNumbers",
+          "PoleZeroNumbers",
+          "NyquistNumbers",
+          "RootLocusNumbers"
+        ],
+        "reExported": [
+          "plotToSvg",
+          "readPlotFigure",
+          "linearTicks",
+          "logTicks",
+          "paddedRange",
+          "bode",
+          "step",
+          "impulse",
+          "poleZero",
+          "nyquist",
+          "rootLocus",
+          "checkTransferFunction",
+          "polynomialRoots",
+          "TransferFunction",
+          "Complex",
+          "ControlFigure",
+          "ControlResult",
+          "BodeNumbers",
+          "StepNumbers",
+          "ImpulseNumbers",
+          "PoleZeroNumbers",
+          "NyquistNumbers",
+          "RootLocusNumbers"
+        ]
+      },
+      "src/plot/plotter.ts": {
+        "description": "Plotly figure subset to standalone SVG. Every number is formatted with a fixed",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./reader.ts",
+            "imports": [
+              "readPlotFigure"
+            ]
+          },
+          {
+            "file": "./ticks.ts",
+            "imports": [
+              "linearTicks",
+              "logTicks",
+              "paddedRange"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "plotToSvg"
+        ],
+        "functions": [
+          "plotToSvg"
+        ]
+      },
+      "src/plot/reader.ts": {
+        "description": "Table-driven reader for the Plotly JSON subset. Each allowed key is a dotted",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readPlotFigure"
+        ],
+        "functions": [
+          "readPlotFigure"
+        ]
+      },
+      "src/plot/ticks.ts": {
+        "description": "ticks module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "paddedRange",
+          "linearTicks",
+          "logTicks"
+        ],
+        "interfaces": [
+          "LogTick"
+        ],
+        "functions": [
+          "paddedRange",
+          "linearTicks",
+          "logTicks"
+        ]
+      }
+    },
     "raster": {
       "src/raster/index.ts": {
         "description": "The most megabytes of RGBA pixels that one PNG render accepts. Measured: a render holds about two",
@@ -2693,6 +3073,19 @@
         "src/mermaid/sequence-layout.ts",
         "src/mermaid/sequence.ts",
         "src/mermaid/state.ts"
+      ]
+    },
+    {
+      "name": "Plot",
+      "files": [
+        "src/plot/backend-html.ts",
+        "src/plot/backend-png.ts",
+        "src/plot/backend-svg.ts",
+        "src/plot/control.ts",
+        "src/plot/index.ts",
+        "src/plot/plotter.ts",
+        "src/plot/reader.ts",
+        "src/plot/ticks.ts"
       ]
     },
     {

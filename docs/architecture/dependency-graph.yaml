@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 179
+  totalFiles: 194
   totalModules: 3
-  totalExports: 343
+  totalExports: 403
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -537,6 +537,8 @@ modules:
       internalDependencies: []
       exports:
         - scriptJson
+        - scriptData
+        - plotlyPageHtml
         - svgPageHtml
         - mermaidPageHtml
     src/browser/pinned.ts:
@@ -550,6 +552,10 @@ modules:
         - MERMAID_CDN_URL
         - PinnedAsset
         - PINNED_ASSETS
+        - PLOTLY_VERSION
+        - PLOTLY_SHA256
+        - PLOTLY_SRI
+        - PLOTLY_CDN_URL
     src/browser/profile.ts:
       externalDependencies: []
       nodeDependencies:
@@ -1397,6 +1403,217 @@ modules:
         - PairSpec
         - PAIRS
         - findPair
+    src/plot/backend-html.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/page.ts
+          imports:
+            - plotlyPageHtml
+          typeOnly: false
+        - file: src/browser/pinned.ts
+          imports:
+            - PLOTLY_CDN_URL
+            - PLOTLY_SRI
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/plot/backend-svg.ts
+          imports:
+            - readPlotOptions
+          typeOnly: false
+        - file: src/plot/reader.ts
+          imports:
+            - readPlotFigure
+          typeOnly: false
+      exports:
+        - render
+    src/plot/backend-png.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/backend-png.ts
+          imports:
+            - readScale
+            - svgDocumentToPng
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/plot/plotter.ts
+          imports:
+            - plotToSvg
+          typeOnly: false
+        - file: src/plot/backend-svg.ts
+          imports:
+            - readPlotOptions
+          typeOnly: false
+      exports:
+        - render
+    src/plot/backend-svg.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/plot/plotter.ts
+          imports:
+            - plotToSvg
+          typeOnly: false
+      exports:
+        - readPlotOptions
+        - render
+    src/plot/control.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - TransferFunction
+        - Complex
+        - ControlFigure
+        - ControlResult
+        - FrequencyOptions
+        - TimeOptions
+        - RootLocusOptions
+        - BodeNumbers
+        - StepNumbers
+        - ImpulseNumbers
+        - PoleZeroNumbers
+        - NyquistNumbers
+        - RootLocusNumbers
+        - checkTransferFunction
+        - polynomialRoots
+        - bode
+        - step
+        - impulse
+        - poleZero
+        - nyquist
+        - rootLocus
+    src/plot/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/plot/plotter.ts
+          imports:
+            - plotToSvg
+          typeOnly: false
+        - file: src/plot/reader.ts
+          imports:
+            - readPlotFigure
+          typeOnly: false
+        - file: src/plot/ticks.ts
+          imports:
+            - linearTicks
+            - logTicks
+            - paddedRange
+          typeOnly: false
+        - file: src/plot/control.ts
+          imports:
+            - bode
+            - step
+            - impulse
+            - poleZero
+            - nyquist
+            - rootLocus
+            - checkTransferFunction
+            - polynomialRoots
+          typeOnly: false
+        - file: src/plot/control.ts
+          imports:
+            - TransferFunction
+            - Complex
+            - ControlFigure
+            - ControlResult
+            - BodeNumbers
+            - StepNumbers
+            - ImpulseNumbers
+            - PoleZeroNumbers
+            - NyquistNumbers
+            - RootLocusNumbers
+          typeOnly: true
+      exports:
+        - plotToSvg
+        - readPlotFigure
+        - linearTicks
+        - logTicks
+        - paddedRange
+        - bode
+        - step
+        - impulse
+        - poleZero
+        - nyquist
+        - rootLocus
+        - checkTransferFunction
+        - polynomialRoots
+        - TransferFunction
+        - Complex
+        - ControlFigure
+        - ControlResult
+        - BodeNumbers
+        - StepNumbers
+        - ImpulseNumbers
+        - PoleZeroNumbers
+        - NyquistNumbers
+        - RootLocusNumbers
+    src/plot/plotter.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/plot/reader.ts
+          imports:
+            - readPlotFigure
+          typeOnly: false
+        - file: src/plot/ticks.ts
+          imports:
+            - linearTicks
+            - logTicks
+            - paddedRange
+          typeOnly: false
+      exports:
+        - plotToSvg
+    src/plot/reader.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - readPlotFigure
+    src/plot/ticks.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - LogTick
+        - paddedRange
+        - linearTicks
+        - logTicks
     src/raster/index.ts:
       externalDependencies:
         - '@resvg/resvg-wasm'
@@ -2866,6 +3083,137 @@ modules:
             - warmBrowser
           typeOnly: false
       exports: []
+    test/unit/plot-control.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/plot/control.ts
+          imports:
+            - bode
+            - impulse
+            - nyquist
+            - poleZero
+            - polynomialRoots
+            - rootLocus
+            - step
+          typeOnly: false
+      exports: []
+    test/unit/plot-corpus.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/plot/plotter.ts
+          imports:
+            - plotToSvg
+          typeOnly: false
+        - file: test/support/xml-wellformed.ts
+          imports:
+            - xmlErrors
+          typeOnly: false
+      exports: []
+    test/unit/plot-html.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - capabilitiesWithRegistry
+            - renderWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: src/browser/pinned.ts
+          imports:
+            - PLOTLY_CDN_URL
+            - PLOTLY_SHA256
+            - PLOTLY_SRI
+            - PLOTLY_VERSION
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+      exports: []
+    test/unit/plot-reader.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/plot/reader.ts
+          imports:
+            - readPlotFigure
+          typeOnly: false
+      exports: []
+    test/unit/plot-registry.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - capabilitiesWithRegistry
+            - renderWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+      exports: []
+    test/unit/plot-svg.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/plot/plotter.ts
+          imports:
+            - plotToSvg
+          typeOnly: false
+      exports: []
+    test/unit/plot-ticks.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/plot/ticks.ts
+          imports:
+            - linearTicks
+            - logTicks
+            - paddedRange
+          typeOnly: false
+      exports: []
     test/unit/process-list.test.ts:
       externalDependencies:
         - bun:test
@@ -3149,33 +3497,33 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 179
-  totalSourceFiles: 179
+  totalTypeScriptFiles: 194
+  totalSourceFiles: 194
   totalModules: 3
-  totalLinesOfCode: 18752
-  totalExports: 343
-  entryRoots: 48
-  reachableFiles: 48
+  totalLinesOfCode: 21435
+  totalExports: 403
+  entryRoots: 56
+  reachableFiles: 56
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 28
+  totalTypeOnlyImports: 32
   noImporterFileCount: 7
-  unusedExportsCount: 26
+  unusedExportsCount: 34
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 52
-  totalFunctions: 162
+  totalInterfaces: 66
+  totalFunctions: 181
   totalTypeGuards: 4
   totalEnums: 0
-  totalConstants: 52
-  totalReExports: 57
+  totalConstants: 56
+  totalReExports: 80
 reachability:
   roots:
     - src/index.ts
@@ -3184,6 +3532,7 @@ reachability:
     - src/browser/index.ts
     - src/mermaid/index.ts
     - src/math/index.ts
+    - src/plot/index.ts
     - src/assets.ts
     - src/browser/backend-pdf.ts
     - src/browser/backend-png.ts
@@ -3219,6 +3568,13 @@ reachability:
     - src/mermaid/sequence.ts
     - src/mermaid/state.ts
     - src/pairs.ts
+    - src/plot/backend-html.ts
+    - src/plot/backend-png.ts
+    - src/plot/backend-svg.ts
+    - src/plot/control.ts
+    - src/plot/plotter.ts
+    - src/plot/reader.ts
+    - src/plot/ticks.ts
     - src/raster/warnings.ts
     - src/registry.ts
     - src/types.ts
@@ -3226,7 +3582,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 48
+  reachableCount: 56
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs

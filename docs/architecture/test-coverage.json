@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 62,
-    "totalTestFiles": 62,
-    "testedCount": 42,
-    "untestedCount": 20,
-    "coveragePercent": "67.7",
+    "totalSourceFiles": 70,
+    "totalTestFiles": 69,
+    "testedCount": 46,
+    "untestedCount": 24,
+    "coveragePercent": "65.7",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 62,
-      "testedActive": 42,
-      "activeUntested": 20,
+      "activeFiles": 70,
+      "testedActive": 46,
+      "activeUntested": 24,
       "excludedTotal": 0,
-      "percent": "67.7",
+      "percent": "65.7",
       "breakdown": {
-        "active_untested": 20
+        "active_untested": 24
       }
     }
   },
@@ -26,6 +26,10 @@
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
+    "src/plot/backend-html.ts",
+    "src/plot/backend-png.ts",
+    "src/plot/backend-svg.ts",
+    "src/plot/index.ts",
     "src/worker/entry.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
@@ -72,6 +76,10 @@
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
     "src/pairs.ts",
+    "src/plot/control.ts",
+    "src/plot/plotter.ts",
+    "src/plot/reader.ts",
+    "src/plot/ticks.ts",
     "src/raster/index.ts",
     "src/raster/warnings.ts",
     "src/registry.ts",
@@ -109,7 +117,8 @@
     ],
     "src/browser/pinned.ts": [
       "test/integration/mermaid-browser-capture.test.ts",
-      "test/unit/browser-pinned.test.ts"
+      "test/unit/browser-pinned.test.ts",
+      "test/unit/plot-html.test.ts"
     ],
     "src/browser/profile.ts": [
       "test/integration/browser-render.test.ts"
@@ -140,6 +149,8 @@
       "test/unit/graph-registry.test.ts",
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
+      "test/unit/plot-html.test.ts",
+      "test/unit/plot-registry.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/errors.ts": [
@@ -153,6 +164,10 @@
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
+      "test/unit/plot-control.test.ts",
+      "test/unit/plot-reader.test.ts",
+      "test/unit/plot-svg.test.ts",
+      "test/unit/plot-ticks.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
@@ -240,6 +255,23 @@
     "src/pairs.ts": [
       "test/unit/browser-pdf-pairs.test.ts"
     ],
+    "src/plot/backend-html.ts": [],
+    "src/plot/backend-png.ts": [],
+    "src/plot/backend-svg.ts": [],
+    "src/plot/control.ts": [
+      "test/unit/plot-control.test.ts"
+    ],
+    "src/plot/index.ts": [],
+    "src/plot/plotter.ts": [
+      "test/unit/plot-corpus.test.ts",
+      "test/unit/plot-svg.test.ts"
+    ],
+    "src/plot/reader.ts": [
+      "test/unit/plot-reader.test.ts"
+    ],
+    "src/plot/ticks.ts": [
+      "test/unit/plot-ticks.test.ts"
+    ],
     "src/raster/index.ts": [
       "test/unit/graph-network.test.ts",
       "test/unit/mermaid-xml.test.ts",
@@ -254,7 +286,9 @@
       "test/unit/graph-png.test.ts",
       "test/unit/graph-registry.test.ts",
       "test/unit/math-registry.test.ts",
-      "test/unit/mermaid-registry.test.ts"
+      "test/unit/mermaid-registry.test.ts",
+      "test/unit/plot-html.test.ts",
+      "test/unit/plot-registry.test.ts"
     ],
     "src/types.ts": [
       "test/integration/browser-render.test.ts",
@@ -474,6 +508,34 @@
     "test/unit/no-bun-api.test.ts": [],
     "test/unit/no-sandbox-flag.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
+    "test/unit/plot-control.test.ts": [
+      "src/errors.ts",
+      "src/plot/control.ts"
+    ],
+    "test/unit/plot-corpus.test.ts": [
+      "src/plot/plotter.ts"
+    ],
+    "test/unit/plot-html.test.ts": [
+      "src/core.ts",
+      "src/registry.ts",
+      "src/browser/pinned.ts"
+    ],
+    "test/unit/plot-reader.test.ts": [
+      "src/errors.ts",
+      "src/plot/reader.ts"
+    ],
+    "test/unit/plot-registry.test.ts": [
+      "src/core.ts",
+      "src/registry.ts"
+    ],
+    "test/unit/plot-svg.test.ts": [
+      "src/errors.ts",
+      "src/plot/plotter.ts"
+    ],
+    "test/unit/plot-ticks.test.ts": [
+      "src/errors.ts",
+      "src/plot/ticks.ts"
+    ],
     "test/unit/process-list.test.ts": [],
     "test/unit/raster-init.test.ts": [],
     "test/unit/raster-warnings.test.ts": [
@@ -547,6 +609,22 @@
     },
     {
       "file": "src/mermaid/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/plot/backend-html.ts",
+      "category": null
+    },
+    {
+      "file": "src/plot/backend-png.ts",
+      "category": null
+    },
+    {
+      "file": "src/plot/backend-svg.ts",
+      "category": null
+    },
+    {
+      "file": "src/plot/index.ts",
       "category": null
     },
     {
