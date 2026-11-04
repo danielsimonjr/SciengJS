@@ -171,7 +171,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/html-convert-escape.test.ts` | (root) | tests | test | 189 |
 | `test/unit/html-convert.test.ts` | (root) | tests | test | 153 |
 | `test/unit/html-fetch-image.test.ts` | (root) | tests | test | 153 |
-| `test/unit/html-md-render.test.ts` | (root) | tests | test | 123 |
+| `test/unit/html-md-render.test.ts` | (root) | tests | test | 124 |
 | `test/unit/math-backends.test.ts` | (root) | tests | test | 130 |
 | `test/unit/math-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/math-svg.test.ts` | (root) | tests | test | 134 |
