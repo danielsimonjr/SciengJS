@@ -522,3 +522,32 @@ describe("log axis scale details", () => {
     expect(labels.length).toBeLessThanOrEqual(12);
   });
 });
+
+describe("plotToSvg default colours", () => {
+  const two = {
+    data: [
+      { type: "scatter", mode: "lines", x: [0, 1], y: [0, 1], name: "a" },
+      { type: "scatter", mode: "lines+markers", x: [0, 1], y: [1, 0], name: "b" },
+    ],
+    layout: {},
+  };
+
+  test("traces without a colour take the Plotly default colorway in trace order", () => {
+    const { svg } = plotToSvg(two);
+    expect(count(svg, /stroke="#1f77b4"/)).toBeGreaterThan(0);
+    expect(count(svg, /stroke="#ff7f0e"/)).toBeGreaterThan(0);
+    expect(count(svg, /fill="#ff7f0e"/)).toBeGreaterThan(0);
+  });
+
+  test("the legend swatch of each trace has the colour of its trace", () => {
+    const { svg } = plotToSvg(two);
+    // one path and one legend swatch per trace colour
+    expect(count(svg, /stroke="#1f77b4"/)).toBe(2);
+  });
+
+  test("an explicit line colour still wins", () => {
+    const { svg } = plotToSvg({ data: [{ ...two.data[0], line: { color: "#123456" } }, two.data[1]], layout: {} });
+    expect(svg).toContain('stroke="#123456"');
+    expect(count(svg, /stroke="#1f77b4"/)).toBe(0);
+  });
+});

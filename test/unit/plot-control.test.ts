@@ -350,3 +350,12 @@ describe("details that the mutation audit found untested", () => {
     expect(polynomialRoots([1, 3, 2]).some((r) => r.re === 0 && r.im === 0)).toBe(false);
   });
 });
+
+describe("bode colours", () => {
+  test("magnitude and phase draw in different colours", async () => {
+    const { plotToSvg } = await import("../../src/plot/plotter.ts");
+    const { svg } = plotToSvg(bode({ num: [10], den: [1, 11, 10, 0] }).figure);
+    const strokes = [...svg.matchAll(/<path d="M[^"]*" fill="none" stroke="([^"]+)"/g)].map((m) => m[1]);
+    expect(new Set(strokes).size).toBe(2);
+  });
+});

@@ -91,7 +91,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 22 |
 | `src/plot/control.ts` | @danielsimonjr/sciengjs | src | build-entry | 938 |
 | `src/plot/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 6 |
-| `src/plot/plotter.ts` | @danielsimonjr/sciengjs | src | build-entry | 561 |
+| `src/plot/plotter.ts` | @danielsimonjr/sciengjs | src | build-entry | 563 |
 | `src/plot/reader.ts` | @danielsimonjr/sciengjs | src | build-entry | 282 |
 | `src/plot/ticks.ts` | @danielsimonjr/sciengjs | src | build-entry | 76 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
@@ -173,12 +173,12 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
 | `test/unit/no-sandbox-flag.test.ts` | (root) | tests | test | 35 |
 | `test/unit/page-checker-io.test.ts` | (root) | tests | test | 148 |
-| `test/unit/plot-control.test.ts` | (root) | tests | test | 352 |
+| `test/unit/plot-control.test.ts` | (root) | tests | test | 361 |
 | `test/unit/plot-corpus.test.ts` | (root) | tests | test | 32 |
 | `test/unit/plot-html.test.ts` | (root) | tests | test | 87 |
 | `test/unit/plot-reader.test.ts` | (root) | tests | test | 208 |
 | `test/unit/plot-registry.test.ts` | (root) | tests | test | 63 |
-| `test/unit/plot-svg.test.ts` | (root) | tests | test | 524 |
+| `test/unit/plot-svg.test.ts` | (root) | tests | test | 553 |
 | `test/unit/plot-ticks.test.ts` | (root) | tests | test | 93 |
 | `test/unit/process-list.test.ts` | (root) | tests | test | 51 |
 | `test/unit/raster-init.test.ts` | (root) | tests | test | 41 |

@@ -263,6 +263,7 @@
     ],
     "src/plot/index.ts": [],
     "src/plot/plotter.ts": [
+      "test/unit/plot-control.test.ts",
       "test/unit/plot-corpus.test.ts",
       "test/unit/plot-svg.test.ts"
     ],
@@ -510,7 +511,8 @@
     "test/unit/page-checker-io.test.ts": [],
     "test/unit/plot-control.test.ts": [
       "src/errors.ts",
-      "src/plot/control.ts"
+      "src/plot/control.ts",
+      "src/plot/plotter.ts"
     ],
     "test/unit/plot-corpus.test.ts": [
       "src/plot/plotter.ts"
