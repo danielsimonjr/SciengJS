@@ -11,8 +11,8 @@
   - **Orphaned (reachable from nothing)**: 12
   - **Test-only (only a test reaches them)**: 3
 - **Potentially unused exports**: 42
-  - **Unreferenced anywhere**: 6
-  - **Referenced in their own module**: 36
+  - **Unreferenced anywhere**: 5
+  - **Referenced in their own module**: 37
   - **Not classified**: 0
 
 ## Caveats
@@ -66,7 +66,6 @@ No file of this repository imports these files. Do not use the list as a deletio
 No other file imports these names, and their own module does not use them.
 
 - `src/graph/backend-pdf.ts`: `render`
-- `src/mesh/backend-glb.ts`: `render`
 - `src/plot/backend-html.ts`: `render`
 - `src/plot/backend-png.ts`: `render`
 - `src/plot/backend-svg.ts`: `render`
@@ -75,7 +74,6 @@ No other file imports these names, and their own module does not use them.
 ### Notes
 
 - `src/graph/backend-pdf.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/graph/backend-pdf.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
-- `src/mesh/backend-glb.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/mesh/backend-glb.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/plot/backend-html.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-html.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/plot/backend-png.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-png.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/plot/backend-svg.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-svg.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
@@ -100,6 +98,7 @@ No other file imports these names, but their own module uses them.
 - `src/mermaid/backend-png.ts`: `render`
 - `src/mermaid/backend-svg.ts`: `render`
 - `src/mermaid/common.ts`: `Context`, `DiagramKind`
+- `src/mesh/backend-glb.ts`: `GlbDeps`
 - `src/pairs.ts`: `PairSpec`
 - `src/plot/control.ts`: `FrequencyOptions`, `RootLocusOptions`, `TimeOptions`
 - `src/plot/ticks.ts`: `LogTick`

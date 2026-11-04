@@ -69,9 +69,12 @@ try {
   copyFileSync(join(installedAssets, "fonts", "LiberationSerif-Regular.ttf"), join(noWasmFolder, "fonts", "LiberationSerif-Regular.ttf"));
   const noWasmUrl = pathToFileURL(noWasmFolder).href + "/";
 
+  // The mesh check reads a BREP sample of the corpus. The tarball does not hold the corpus, so the sample goes into the app folder.
+  copyFileSync(join(repo, "test", "corpus", "mesh", "cylinder1.brep"), join(app, "cylinder1.brep"));
   writeFileSync(
     join(app, "check.mjs"),
-    `import { capabilities, render, RenderError } from "@danielsimonjr/sciengjs";
+    `import { readFileSync } from "node:fs";
+import { capabilities, render, RenderError } from "@danielsimonjr/sciengjs";
 import * as graph from "@danielsimonjr/sciengjs/graph";
 import * as raster from "@danielsimonjr/sciengjs/raster";
 import * as mermaid from "@danielsimonjr/sciengjs/mermaid";
@@ -83,6 +86,10 @@ const plot = await import("@danielsimonjr/sciengjs/plot");
 if (typeof plot.bode !== "function" || typeof plot.rootLocus !== "function") throw new Error("the plot subpath did not load");
 const mesh = await import("@danielsimonjr/sciengjs/mesh");
 if (typeof mesh.readCad !== "function" || typeof mesh.writeGlb !== "function") throw new Error("the mesh subpath did not load");
+const brep = new Uint8Array(readFileSync(new URL("./cylinder1.brep", import.meta.url)));
+const glb = await render({ type: "brep", source: brep, format: "glb" }, {});
+const glbView = new DataView(glb.bytes.buffer, glb.bytes.byteOffset, glb.bytes.byteLength);
+if (glb.mime !== "model/gltf-binary" || glbView.getUint32(0, true) !== 0x46546c67 || glbView.getUint32(8, true) !== glb.bytes.byteLength) throw new Error("brep to glb returned no glTF binary");
 const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
 const md = await render({ type: "html", source: "<p>a <b>b</b></p>", format: "md" }, {});
@@ -157,7 +164,7 @@ try {
   mathPdfCode = err.code;
 }
 if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode);
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes");
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

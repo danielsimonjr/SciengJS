@@ -8,6 +8,12 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 - The `./mesh` subpath reads STEP, IGES and BREP files through `occt-import-js` 0.0.23 (exact pin). The pairs `step`, `iges` and `brep` to `glb` render through `render()`. The option `linearUnit` takes `millimeter` (default) or `meter` for STEP and IGES. BREP takes no option. Each colour of a face becomes one material. Faces without a colour use a default grey material. The WASM module loads once per process.
 - The package exports `readCad()` and `writeGlb()` from `./mesh`.
+- A `glb` render rejects with `E_LIMIT` when its peak memory estimate is over `maxMemoryMb`. The estimate is the bytes of the positions, the normals and the indices, times four copies. Geometry over 4 GiB also rejects with `E_LIMIT`.
+- `writeGlb()` leaves out a mesh without triangles, so the file holds no unused accessor. Input with no triangle at all rejects with `E_INPUT`.
+- The material colours are linear, as glTF requires. `occt-import-js` already converts the sRGB colours of a STEP file to linear values, so the writer does no conversion. A test checks the linear values of the coloured STEP sample.
+- The test reader of glb files checks more. It checks the chunk order, the JSON space padding and the BIN zero padding. It checks unit normals, one material per colour, the scene and the nodes. Each accessor, buffer view and material must be used.
+- The mutation audit of the glb writer and the glb limit is in `test/mutation/mesh-glb-mutants.json`. An assertion kills all 46 non-equivalent mutants. Three mutants are equivalent.
+- The smoke test renders a BREP sample to `glb` from the installed tarball under Node. `test:node` runs a mesh test against `dist/`.
 
 ## [0.6.0] - 2026-11-04
 

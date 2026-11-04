@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 211
+**Total files**: 214
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 66 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 12 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 102 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 105 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 28 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **211** | |
+| **Total** | **214** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 81 |
-| `tests` | 102 |
+| `tests` | 105 |
 | `tools` | 28 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 144 |
+| `(root)` | 147 |
 | `@danielsimonjr/sciengjs` | 67 |
 
 ## All files
@@ -91,8 +91,8 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mermaid/sequence-layout.ts` | @danielsimonjr/sciengjs | src | build-entry | 324 |
 | `src/mermaid/sequence.ts` | @danielsimonjr/sciengjs | src | build-entry | 275 |
 | `src/mermaid/state.ts` | @danielsimonjr/sciengjs | src | build-entry | 176 |
-| `src/mesh/backend-glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 48 |
-| `src/mesh/glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 176 |
+| `src/mesh/backend-glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 89 |
+| `src/mesh/glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 185 |
 | `src/mesh/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 5 |
 | `src/mesh/occt-import-js.d.ts` | @danielsimonjr/sciengjs | src | orphan | 9 |
 | `src/mesh/read.ts` | @danielsimonjr/sciengjs | src | build-entry | 107 |
@@ -130,12 +130,13 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/eval-render.node.mjs` | (root) | tests | test | 17 |
 | `test/node/fixtures/render-under-node-test.fixture.mjs` | (root) | tests | test | 10 |
 | `test/node/math.node.mjs` | (root) | tests | test | 32 |
+| `test/node/mesh.node.mjs` | (root) | tests | test | 27 |
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 167 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 174 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
-| `test/support/glb-reader.ts` | (root) | tests | test | 127 |
+| `test/support/glb-reader.ts` | (root) | tests | test | 171 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
 | `test/support/page-checker.ts` | (root) | tests | test | 386 |
 | `test/support/png-decode.ts` | (root) | tests | test | 105 |
@@ -158,6 +159,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/config-assets.test.ts` | (root) | tests | test | 111 |
 | `test/unit/config.test.ts` | (root) | tests | test | 267 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 69 |
+| `test/unit/glb-writer.test.ts` | (root) | tests | test | 246 |
 | `test/unit/graph-corpus.test.ts` | (root) | tests | test | 47 |
 | `test/unit/graph-dot.test.ts` | (root) | tests | test | 79 |
 | `test/unit/graph-image.test.ts` | (root) | tests | test | 203 |
@@ -186,7 +188,8 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mermaid-sequence.test.ts` | (root) | tests | test | 467 |
 | `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
 | `test/unit/mermaid-xml.test.ts` | (root) | tests | test | 190 |
-| `test/unit/mesh-glb.test.ts` | (root) | tests | test | 94 |
+| `test/unit/mesh-glb.test.ts` | (root) | tests | test | 111 |
+| `test/unit/mesh-limit.test.ts` | (root) | tests | test | 50 |
 | `test/unit/no-bun-api.test.ts` | (root) | tests | test | 39 |
 | `test/unit/no-sandbox-flag.test.ts` | (root) | tests | test | 35 |
 | `test/unit/page-checker-io.test.ts` | (root) | tests | test | 148 |

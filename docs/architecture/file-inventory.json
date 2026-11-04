@@ -1,11 +1,11 @@
 {
-  "totalFiles": 211,
+  "totalFiles": 214,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 66,
     "test-only": 3,
     "orphan": 12,
-    "test": 102,
+    "test": 105,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 28,
     "src": 81,
-    "tests": 102
+    "tests": 105
   },
   "byPackage": {
-    "(root)": 144,
+    "(root)": 147,
     "@danielsimonjr/sciengjs": 67
   },
   "files": [
@@ -355,14 +355,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 48
+      "loc": 89
     },
     {
       "file": "src/mesh/glb.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 176
+      "loc": 185
     },
     {
       "file": "src/mesh/index.ts",
@@ -624,6 +624,13 @@
       "loc": 32
     },
     {
+      "file": "test/node/mesh.node.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 27
+    },
+    {
       "file": "test/node/worker-execargv.node.mjs",
       "package": "(root)",
       "area": "tests",
@@ -642,7 +649,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 167
+      "loc": 174
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -663,7 +670,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 127
+      "loc": 171
     },
     {
       "file": "test/support/network-guard.ts",
@@ -818,6 +825,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 69
+    },
+    {
+      "file": "test/unit/glb-writer.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 246
     },
     {
       "file": "test/unit/graph-corpus.test.ts",
@@ -1020,7 +1034,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 94
+      "loc": 111
+    },
+    {
+      "file": "test/unit/mesh-limit.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 50
     },
     {
       "file": "test/unit/no-bun-api.test.ts",

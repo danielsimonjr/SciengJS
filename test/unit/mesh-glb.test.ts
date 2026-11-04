@@ -52,6 +52,23 @@ describe("the glb output of the samples", () => {
     for (const colour of colours) expect(materialColours.has(colour)).toBe(true);
   });
 
+  test("the material colours are the linear values of the sRGB COLOUR_RGB values of the STEP file", async () => {
+    // The STEP file gives the colours in sRGB. glTF baseColorFactor is linear. The reader already converts.
+    const linear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+    const expected = [
+      [0.8666666746, 0.3215686381, 0.1568627506],
+      [0.2313725501, 0.380392164, 0.7058823705],
+    ].map((rgb) => rgb.map(linear));
+    const doc = readGlb((await renderGlb("step", STEP)).bytes);
+    const actual = doc.materials.map((m) => m.baseColorFactor);
+    expect(actual.length).toBe(2);
+    for (const want of expected) {
+      const hit = actual.find((got) => want.every((v, k) => Math.abs(v - got[k]!) < 1e-4));
+      expect(hit).toBeDefined();
+      expect(hit![3]).toBe(1);
+    }
+  });
+
   test("the IGES sample gives a valid glb", async () => {
     const doc = readGlb((await renderGlb("iges", IGES)).bytes);
     expect(doc.primitives.length).toBeGreaterThanOrEqual(1);

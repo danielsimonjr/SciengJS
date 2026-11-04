@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 211
+  totalFiles: 214
   totalModules: 3
-  totalExports: 442
+  totalExports: 445
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1522,15 +1522,23 @@ modules:
           imports:
             - readCad
             - CadFormat
+            - CadMesh
             - LinearUnit
           typeOnly: false
       exports:
+        - GLB_COPIES
+        - estimateGlbBytes
         - readMeshOptions
+        - GlbDeps
         - render
     src/mesh/glb.ts:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
         - file: src/mesh/read.ts
           imports:
             - CadFace
@@ -2287,6 +2295,16 @@ modules:
         - node:url
       internalDependencies: []
       exports: []
+    test/node/mesh.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:fs
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
     test/node/worker-execargv.node.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -2717,6 +2735,30 @@ modules:
             - isRenderError
             - RenderError
             - RENDER_ERROR_CODES
+          typeOnly: false
+      exports: []
+    test/unit/glb-writer.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/glb.ts
+          imports:
+            - writeGlb
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - CadFace
+            - CadMesh
+          typeOnly: true
+        - file: test/support/glb-reader.ts
+          imports:
+            - readGlb
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+            - returned
           typeOnly: false
       exports: []
     test/unit/graph-corpus.test.ts:
@@ -3352,6 +3394,31 @@ modules:
             - readGlb
           typeOnly: false
       exports: []
+    test/unit/mesh-limit.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - estimateGlbBytes
+            - GLB_COPIES
+            - render
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - CadMesh
+          typeOnly: true
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+            - resolved
+          typeOnly: false
+      exports: []
     test/unit/no-bun-api.test.ts:
       externalDependencies:
         - bun:test
@@ -3818,11 +3885,11 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 211
-  totalSourceFiles: 211
+  totalTypeScriptFiles: 214
+  totalSourceFiles: 214
   totalModules: 3
-  totalLinesOfCode: 24261
-  totalExports: 442
+  totalLinesOfCode: 24702
+  totalExports: 445
   entryRoots: 66
   reachableFiles: 66
   dormantFiles: 15
@@ -3830,7 +3897,7 @@ statistics:
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 42
+  totalTypeOnlyImports: 45
   noImporterFileCount: 8
   unusedExportsCount: 42
   circularDepsTruncated: false
@@ -3839,11 +3906,11 @@ statistics:
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 78
-  totalFunctions: 195
+  totalInterfaces: 79
+  totalFunctions: 196
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 57
+  totalConstants: 58
   totalReExports: 88
 reachability:
   roots:
