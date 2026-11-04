@@ -29,6 +29,10 @@
       "types": "./dist/mermaid/index.d.ts",
       "default": "./dist/mermaid/index.js"
     },
+    "./math": {
+      "types": "./dist/math/index.d.ts",
+      "default": "./dist/math/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

@@ -79,7 +79,7 @@ if (typeof graph.dotToSvg !== "function" || typeof raster.svgToPng !== "function
 if (typeof mermaid.renderMermaidSvg !== "function" || typeof mermaid.layoutSequence !== "function") throw new Error("the mermaid subpath did not load");
 const browser = await import("@danielsimonjr/sciengjs/browser");
 if (typeof browser.CdpConnection !== "function" || typeof browser.renderHtmlPage !== "function") throw new Error("the browser subpath did not load");
-for (const empty of ["math", "tex", "plot", "sysml", "mesh", "html"]) {
+for (const empty of ["tex", "plot", "sysml", "mesh", "html"]) {
   let refused = false;
   try {
     await import("@danielsimonjr/sciengjs/" + empty);
@@ -135,15 +135,21 @@ for (const [label, req] of [["dot to pdf", { type: "dot", source: "digraph G { a
   if (pdfCode !== "E_STAGE_MISSING") throw new Error(label + " with no browser must reject with E_STAGE_MISSING, got " + pdfCode);
 }
 
-let code = "none";
+const mathSource = "\\\\frac{a+b}{c-d} + \\\\ce{H2O}";
+const mathSvg = await render({ type: "math", source: mathSource, format: "svg" }, {});
+const mathSvgText = new TextDecoder().decode(mathSvg.bytes);
+if (!mathSvgText.startsWith("<svg") || /<text[\\s>]|font-family/i.test(mathSvgText)) throw new Error("math to svg returned no standalone svg without a font reference");
+const mathPng = await render({ type: "math", source: mathSource, format: "png" }, {});
+if (mathPng.bytes[0] !== 0x89 || mathPng.bytes[1] !== 0x50 || mathPng.bytes[2] !== 0x4e || mathPng.bytes[3] !== 0x47) throw new Error("math to png returned no PNG");
+let mathPdfCode = "none";
 try {
-  await render({ type: "math", source: "x", format: "svg" }, {});
+  await render({ type: "math", source: mathSource, format: "pdf" }, {});
 } catch (err) {
   if (!(err instanceof RenderError)) throw err;
-  code = err.code;
+  mathPdfCode = err.code;
 }
-if (code !== "E_UNSUPPORTED") throw new Error("expected E_UNSUPPORTED for a pair with no backend, got " + code);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg rejected with " + code);
+if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode);
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);
