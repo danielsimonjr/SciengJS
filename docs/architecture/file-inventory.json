@@ -341,7 +341,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 926
+      "loc": 938
     },
     {
       "file": "src/plot/index.ts",
@@ -929,7 +929,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 344
+      "loc": 352
     },
     {
       "file": "test/unit/plot-corpus.test.ts",
