@@ -1837,6 +1837,7 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "workerExecArgv",
           "runInWorker"
         ],
         "interfaces": [
@@ -1844,6 +1845,7 @@
           "WorkerLimits"
         ],
         "functions": [
+          "workerExecArgv",
           "runInWorker"
         ]
       }

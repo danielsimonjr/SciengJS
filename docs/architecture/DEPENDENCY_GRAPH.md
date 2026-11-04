@@ -732,7 +732,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `WorkerExit`, `WorkerLimits`
-- Functions: `runInWorker`
+- Functions: `workerExecArgv`, `runInWorker`
 
 ---
 
@@ -1135,14 +1135,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 164 |
+| Total Source Files | 166 |
 | Subsystems | 13 |
-| Total Lines of Code | 17828 |
-| Total Exports | 325 |
+| Total Lines of Code | 17935 |
+| Total Exports | 326 |
 | Total Re-exports | 55 |
 | Total Classes | 6 |
 | Total Interfaces | 51 |
-| Total Functions | 149 |
+| Total Functions | 150 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
 | Type-only Imports | 23 |

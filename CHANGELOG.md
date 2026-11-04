@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- A render from `node --input-type=module -e` rejected with `E_INTERNAL`: the render worker inherited `--input-type` from the parent and could not load its entry. The worker now gets the parent's execArgv without the input and mode flags (`--input-type`, `-e`/`--eval`, `-p`/`--print`, `-i`, `-c`). Other flags, such as `--conditions` and `--enable-source-maps`, still pass to the worker.
+
 ## [0.3.0] - 2026-11-03
 
 ### Added

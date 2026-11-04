@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 164
+  totalFiles: 166
   totalModules: 3
-  totalExports: 325
+  totalExports: 326
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1354,6 +1354,7 @@ modules:
       exports:
         - WorkerExit
         - WorkerLimits
+        - workerExecArgv
         - runInWorker
     trials/t1-graph/compare-layout.mjs:
       externalDependencies: []
@@ -1676,6 +1677,16 @@ modules:
             - rendererCount
             - windowsSampleScript
           typeOnly: false
+      exports: []
+    test/node/eval-render.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:child_process
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
       exports: []
     test/node/worker.node.mjs:
       externalDependencies: []
@@ -2742,6 +2753,16 @@ modules:
             - ENGINE_VERSION
           typeOnly: false
       exports: []
+    test/unit/worker-exec-argv.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/run.ts
+          imports:
+            - workerExecArgv
+          typeOnly: false
+      exports: []
     test/unit/worker-run.test.ts:
       externalDependencies:
         - bun:test
@@ -2847,11 +2868,11 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 164
-  totalSourceFiles: 164
+  totalTypeScriptFiles: 166
+  totalSourceFiles: 166
   totalModules: 3
-  totalLinesOfCode: 17828
-  totalExports: 325
+  totalLinesOfCode: 17935
+  totalExports: 326
   entryRoots: 42
   reachableFiles: 42
   dormantFiles: 14
@@ -2869,7 +2890,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 6
   totalInterfaces: 51
-  totalFunctions: 149
+  totalFunctions: 150
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 50

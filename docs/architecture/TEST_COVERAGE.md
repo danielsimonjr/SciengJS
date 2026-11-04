@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 56 |
-| Total Test Files | 58 |
+| Total Test Files | 59 |
 | Source Files with Tests | 37 |
 | Source Files without Tests | 19 |
 | Coverage (raw, direct-import) | **66.1%** |
@@ -104,7 +104,7 @@ The following 19 source files are not directly imported by any test file:
 | `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mermaid-route-lenient.test.ts`, `render.test.ts` |
 | `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
 | `worker/protocol.ts` | `browser-stage.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts` |
-| `worker/run.ts` | `worker-run.test.ts` |
+| `worker/run.ts` | `worker-exec-argv.test.ts`, `worker-run.test.ts` |
 | `runtime/tfm.mjs` | `type1.test.mjs` |
 | `runtime/type1.mjs` | `type1.test.mjs` |
 | `runtime/dvisvgm-specials.mjs` | `dvisvgm-specials.test.mjs` |
@@ -166,6 +166,7 @@ The following 19 source files are not directly imported by any test file:
 | `unit/teardown.test.ts` | 0 files |
 | `unit/third-party-notices.test.ts` | 0 files |
 | `unit/version.test.ts` | 1 files |
+| `unit/worker-exec-argv.test.ts` | 1 files |
 | `unit/worker-run.test.ts` | 3 files |
 | `test/tangle.test.mjs` | 0 files |
 | `test/trip-gate.test.mjs` | 0 files |

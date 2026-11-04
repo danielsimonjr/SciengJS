@@ -144,7 +144,8 @@
     ],
     "trials": [],
     "worker": [
-      "runInWorker"
+      "runInWorker",
+      "workerExecArgv"
     ]
   }
 }

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 56,
-    "totalTestFiles": 58,
+    "totalTestFiles": 59,
     "testedCount": 37,
     "untestedCount": 19,
     "coveragePercent": "66.1",
@@ -249,6 +249,7 @@
       "test/unit/graph-svg-backend.test.ts"
     ],
     "src/worker/run.ts": [
+      "test/unit/worker-exec-argv.test.ts",
       "test/unit/worker-run.test.ts"
     ],
     "trials/t1-graph/compare-layout.mjs": [],
@@ -453,6 +454,9 @@
     "test/unit/third-party-notices.test.ts": [],
     "test/unit/version.test.ts": [
       "src/version.ts"
+    ],
+    "test/unit/worker-exec-argv.test.ts": [
+      "src/worker/run.ts"
     ],
     "test/unit/worker-run.test.ts": [
       "src/worker/run.ts",
