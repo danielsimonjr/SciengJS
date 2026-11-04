@@ -12,6 +12,8 @@ interface Scale {
   log: boolean;
   lo: number;
   hi: number;
+  /** True when the explicit range runs high to low, so the high end is at the left or bottom. */
+  reversed: boolean;
 }
 
 /** One tick: its value in data units, its label and whether it is a major tick. */
@@ -120,7 +122,8 @@ function axisId(letter: "x" | "y", n: number): string {
 /** Returns the fraction of a scale that a data value covers, from 0 at lo to 1 at hi. */
 function frac(scale: Scale, value: number): number {
   const units = scale.log ? Math.log10(value) : value;
-  return (units - scale.lo) / (scale.hi - scale.lo);
+  const t = (units - scale.lo) / (scale.hi - scale.lo);
+  return scale.reversed ? 1 - t : t;
 }
 
 function text(x: number, y: number, content: string, style: Style, anchor: string, extra = ""): string {
@@ -155,9 +158,9 @@ function scaleOf(cfg: Rec, extent: [number, number] | undefined): Scale {
   if (Array.isArray(cfg.range)) {
     const [a, b] = cfg.range as number[];
     if (a === b) fail("an axis range needs two different ends");
-    return { log, lo: Math.min(a!, b!), hi: Math.max(a!, b!) };
+    return { log, lo: Math.min(a!, b!), hi: Math.max(a!, b!), reversed: a! > b! };
   }
-  if (extent === undefined) return { log, lo: 0, hi: 1 };
+  if (extent === undefined) return { log, lo: 0, hi: 1, reversed: false };
   if (log) {
     let a = Math.log10(extent[0]);
     let b = Math.log10(extent[1]);
@@ -166,7 +169,7 @@ function scaleOf(cfg: Rec, extent: [number, number] | undefined): Scale {
       b += 0.5;
     }
     const [lo, hi] = paddedRange(a, b);
-    return { log, lo, hi };
+    return { log, lo, hi, reversed: false };
   }
   let [min, max] = extent;
   if (min === max) {
@@ -174,7 +177,7 @@ function scaleOf(cfg: Rec, extent: [number, number] | undefined): Scale {
     max += 1;
   }
   const [lo, hi] = paddedRange(min, max);
-  return { log, lo, hi };
+  return { log, lo, hi, reversed: false };
 }
 
 /** Returns the ticks of one axis with their labels. */

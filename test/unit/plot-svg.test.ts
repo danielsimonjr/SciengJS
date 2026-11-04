@@ -354,3 +354,51 @@ describe("plotToSvg input rejections", () => {
     expect(result.svg).toContain("<svg");
   });
 });
+
+/** The x and y attributes of the first text element with the given content. */
+function placed(svg: string, label: string): { x: number; y: number } {
+  const match = new RegExp(`<text x="([-0-9.]+)" y="([-0-9.]+)"[^>]*>${label}</text>`).exec(svg);
+  if (match === null) throw new Error(`no text ${label}`);
+  return { x: Number(match[1]), y: Number(match[2]) };
+}
+
+describe("plotToSvg reversed ranges", () => {
+  test("a reversed linear x range puts its high end at the left", () => {
+    const { svg } = plotToSvg(scatter({}, { xaxis: { range: [30, 20] } }));
+    expect(placed(svg, "30").x).toBeLessThan(placed(svg, "20").x);
+  });
+
+  test("a reversed linear y range puts its high end at the bottom", () => {
+    const { svg } = plotToSvg(scatter({}, { yaxis: { range: [60, 50] } }));
+    expect(placed(svg, "60").y).toBeGreaterThan(placed(svg, "50").y);
+  });
+
+  test("a reversed log x range puts its high decade at the left", () => {
+    const { svg } = plotToSvg(scatter({ x: [10, 100, 1000], y: [0, 1, 4] }, { xaxis: { type: "log", range: [4, 2] } }));
+    expect(placed(svg, "10000").x).toBeLessThan(placed(svg, "100").x);
+  });
+});
+
+describe("plotToSvg grid numbering", () => {
+  test("subplot 1 is the top-left cell and the numbering runs left to right, then down", () => {
+    const data = [
+      { type: "scatter", mode: "lines", x: [0, 1], y: [0, 1] },
+      { type: "scatter", mode: "lines", x: [0, 1], y: [0, 1], xaxis: "x2", yaxis: "y2" },
+      { type: "scatter", mode: "lines", x: [0, 1], y: [0, 1], xaxis: "x3", yaxis: "y3" },
+    ];
+    const layout = {
+      grid: { rows: 2, columns: 2, pattern: "independent" },
+      xaxis: { range: [1000, 1001] },
+      xaxis2: { range: [7000, 7001] },
+      xaxis3: { range: [8000, 8001] },
+    };
+    const { svg } = plotToSvg({ data, layout });
+    const first = placed(svg, "1000\.0");
+    const second = placed(svg, "7000\.0");
+    const third = placed(svg, "8000\.0");
+    expect(second.x).toBeGreaterThan(first.x);
+    expect(second.y).toBeCloseTo(first.y, 0);
+    expect(third.x).toBeCloseTo(first.x, 0);
+    expect(third.y).toBeGreaterThan(first.y);
+  });
+});
