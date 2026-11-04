@@ -2636,10 +2636,18 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../config.ts",
+            "imports": [
+              "NetworkPolicy"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "../types.ts",
             "imports": [
               "InputType",
               "OutputFormat",
+              "RenderAsset",
               "RenderOptions"
             ],
             "typeOnly": true
