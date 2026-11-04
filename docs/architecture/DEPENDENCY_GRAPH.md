@@ -851,7 +851,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/plot/control.ts` - Control-system helpers: Bode, step, impulse, pole-zero, Nyquist and root locus.
+### `src/plot/control.ts` - Key values of a step response: final value, rise and settling times, overshoot in percent, and peak time.
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -902,7 +902,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../errors.ts` | `RenderError` | Import |
 | `./reader.ts` | `readPlotFigure` | Import |
-| `./ticks.ts` | `linearTicks, logTicks, paddedRange` | Import |
+| `./ticks.ts` | `MAX_TICKS, linearTicks, logTicks, paddedRange` | Import |
 
 **Exports:**
 - Functions: `plotToSvg`
@@ -931,6 +931,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `LogTick`
 - Functions: `paddedRange`, `linearTicks`, `logTicks`
+- Constants: `MAX_TICKS`
 
 ---
 
@@ -1441,8 +1442,8 @@ graph TD
 |----------|-------|
 | Total Source Files | 194 |
 | Subsystems | 15 |
-| Total Lines of Code | 21444 |
-| Total Exports | 403 |
+| Total Lines of Code | 22046 |
+| Total Exports | 404 |
 | Total Re-exports | 80 |
 | Total Classes | 6 |
 | Total Interfaces | 66 |

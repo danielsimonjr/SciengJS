@@ -2228,7 +2228,7 @@
         ]
       },
       "src/plot/control.ts": {
-        "description": "Control-system helpers: Bode, step, impulse, pole-zero, Nyquist and root locus.",
+        "description": "Key values of a step response: final value, rise and settling times, overshoot in percent, and peak time.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -2408,6 +2408,7 @@
           {
             "file": "./ticks.ts",
             "imports": [
+              "MAX_TICKS",
               "linearTicks",
               "logTicks",
               "paddedRange"
@@ -2456,6 +2457,7 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "MAX_TICKS",
           "paddedRange",
           "linearTicks",
           "logTicks"
@@ -2467,6 +2469,9 @@
           "paddedRange",
           "linearTicks",
           "logTicks"
+        ],
+        "constants": [
+          "MAX_TICKS"
         ]
       }
     },

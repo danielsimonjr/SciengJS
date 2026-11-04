@@ -137,6 +137,7 @@
       "ControlFigure",
       "ControlResult",
       "ImpulseNumbers",
+      "MAX_TICKS",
       "NyquistNumbers",
       "PoleZeroNumbers",
       "RootLocusNumbers",

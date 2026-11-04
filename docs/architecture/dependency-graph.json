@@ -5,7 +5,7 @@
     "language": "typescript",
     "totalFiles": 194,
     "totalModules": 3,
-    "totalExports": 403
+    "totalExports": 404
   },
   "modules": {
     "tools": {
@@ -2274,6 +2274,7 @@
           {
             "file": "src/plot/ticks.ts",
             "imports": [
+              "MAX_TICKS",
               "linearTicks",
               "logTicks",
               "paddedRange"
@@ -2315,6 +2316,7 @@
         ],
         "exports": [
           "LogTick",
+          "MAX_TICKS",
           "paddedRange",
           "linearTicks",
           "logTicks"
@@ -4529,6 +4531,7 @@
           "bun:test"
         ],
         "nodeDependencies": [
+          "node:child_process",
           "node:fs",
           "node:url"
         ],
@@ -4625,6 +4628,8 @@
         ],
         "nodeDependencies": [
           "node:fs",
+          "node:os",
+          "node:path",
           "node:url"
         ],
         "internalDependencies": [
@@ -4647,6 +4652,14 @@
             "file": "test/support/test-registry.ts",
             "imports": [
               "ISOLATED_CONFIG_DEPS"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "realFiles"
             ],
             "typeOnly": false
           }
@@ -5142,8 +5155,8 @@
     "totalTypeScriptFiles": 194,
     "totalSourceFiles": 194,
     "totalModules": 3,
-    "totalLinesOfCode": 21444,
-    "totalExports": 403,
+    "totalLinesOfCode": 22046,
+    "totalExports": 404,
     "entryRoots": 56,
     "reachableFiles": 56,
     "dormantFiles": 14,
@@ -5164,7 +5177,7 @@
     "totalFunctions": 181,
     "totalTypeGuards": 4,
     "totalEnums": 0,
-    "totalConstants": 56,
+    "totalConstants": 57,
     "totalReExports": 80
   },
   "reachability": {
