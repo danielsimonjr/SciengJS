@@ -98,6 +98,14 @@ async function listProcesses(platform) {
   return parsePs(stdout);
 }
 
+/**
+ * The lsof arguments that list the internet sockets of the pids. One -i selects TCP and UDP. With -a, lsof ANDs
+ * every selection, so two -i options (-iTCP -iUDP) select no socket.
+ */
+export function lsofArgs(pids) {
+  return ["-nP", "-i", "-a", "-p", pids.join(","), "-F", "pn"];
+}
+
 async function listSockets(platform, pids) {
   if (platform === "win32") {
     // A pid with no socket makes Get-NetTCPConnection write an error, so the call is wrapped: no socket is an empty result.
@@ -110,7 +118,7 @@ async function listSockets(platform, pids) {
     return parseSs(stdout).filter((socket) => pids.includes(socket.pid));
   }
   try {
-    const { stdout } = await run("lsof", ["-nP", "-iTCP", "-iUDP", "-a", "-p", pids.join(","), "-F", "pn"], { maxBuffer: MAX_BUFFER });
+    const { stdout } = await run("lsof", lsofArgs(pids), { maxBuffer: MAX_BUFFER });
     return parseLsof(stdout);
   } catch (err) {
     // lsof exits with 1 when it finds no file that matches.

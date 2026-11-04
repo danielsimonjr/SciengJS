@@ -418,14 +418,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 196
+      "loc": 204
     },
     {
       "file": "test/node/browser-probe.node.mjs",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 67
+      "loc": 73
     },
     {
       "file": "test/node/worker.node.mjs",

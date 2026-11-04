@@ -4,7 +4,7 @@ metadata:
   language: typescript
   totalFiles: 164
   totalModules: 3
-  totalExports: 324
+  totalExports: 325
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1651,6 +1651,7 @@ modules:
         - externalSockets
         - noSandboxAmong
         - rendererCount
+        - lsofArgs
         - windowsSampleScript
         - parseWindowsSample
         - createSampler
@@ -1664,6 +1665,7 @@ modules:
         - file: test/node/browser-probe.mjs
           imports:
             - externalSockets
+            - lsofArgs
             - noSandboxAmong
             - parseCim
             - parseLsof
@@ -2848,8 +2850,8 @@ statistics:
   totalTypeScriptFiles: 164
   totalSourceFiles: 164
   totalModules: 3
-  totalLinesOfCode: 17814
-  totalExports: 324
+  totalLinesOfCode: 17828
+  totalExports: 325
   entryRoots: 42
   reachableFiles: 42
   dormantFiles: 14
@@ -2867,7 +2869,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 6
   totalInterfaces: 51
-  totalFunctions: 148
+  totalFunctions: 149
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 50

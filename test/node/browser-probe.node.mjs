@@ -1,7 +1,7 @@
 // Unit tests of the browser probes. They run under Node 22 with node:test, not under bun test.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { externalSockets, noSandboxAmong, parseCim, parseLsof, parseNetTcp, parsePs, parseSs, parseWindowsSample, rendererCount, windowsSampleScript } from "./browser-probe.mjs";
+import { externalSockets, lsofArgs, noSandboxAmong, parseCim, parseLsof, parseNetTcp, parsePs, parseSs, parseWindowsSample, rendererCount, windowsSampleScript } from "./browser-probe.mjs";
 
 const NO_SANDBOX = ["no", "sandbox"].join("-");
 
@@ -58,10 +58,16 @@ test("real ss -H -tanp lines of a CI runner: a closed (TIME-WAIT) socket has no 
 });
 
 test("Windows sample: the script quotes the profile, and the JSON gives the tree and its sockets", () => {
-  assert.ok(windowsSampleScript("C:\T\it's", "END").includes("Contains('C:\T\it''s')"));
-  const json = JSON.stringify({ p: [{ ProcessId: 5, CommandLine: "chrome.exe --user-data-dir=C:\T\prof" }, { ProcessId: 6, CommandLine: "other" }], s: { OwningProcess: 5, RemoteAddress: "127.0.0.1" } });
-  const sample = parseWindowsSample(json, "C:\T\prof");
+  assert.ok(windowsSampleScript("C:\\T\\it's", "END").includes("Contains('C:\\T\\it''s')"));
+  const json = JSON.stringify({ p: [{ ProcessId: 5, CommandLine: "chrome.exe --user-data-dir=C:\\T\\prof" }, { ProcessId: 6, CommandLine: "other" }], s: { OwningProcess: 5, RemoteAddress: "127.0.0.1" } });
+  const sample = parseWindowsSample(json, "C:\\T\\prof");
   assert.deepEqual(sample.processes.map((p) => p.pid), [5]);
   assert.deepEqual(sample.sockets, [{ pid: 5, host: "127.0.0.1" }]);
   assert.deepEqual(parseWindowsSample(JSON.stringify({ p: [], s: [] }), "x"), { processes: [], sockets: [] });
+});
+
+test("lsof arguments: one -i option, because -a ANDs two -i options into no socket", () => {
+  const args = lsofArgs([7, 8]);
+  assert.deepEqual(args.filter((a) => a.startsWith("-i")), ["-i"]);
+  assert.deepEqual(args.slice(args.indexOf("-p"), args.indexOf("-p") + 2), ["-p", "7,8"]);
 });
