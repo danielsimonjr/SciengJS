@@ -4,7 +4,7 @@ metadata:
   language: typescript
   totalFiles: 166
   totalModules: 3
-  totalExports: 326
+  totalExports: 327
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1355,6 +1355,7 @@ modules:
         - WorkerExit
         - WorkerLimits
         - workerExecArgv
+        - constructWorker
         - runInWorker
     trials/t1-graph/compare-layout.mjs:
       externalDependencies: []
@@ -2756,10 +2757,12 @@ modules:
     test/unit/worker-exec-argv.test.ts:
       externalDependencies:
         - bun:test
-      nodeDependencies: []
+      nodeDependencies:
+        - node:worker_threads
       internalDependencies:
         - file: src/worker/run.ts
           imports:
+            - constructWorker
             - workerExecArgv
           typeOnly: false
       exports: []
@@ -2871,8 +2874,8 @@ statistics:
   totalTypeScriptFiles: 166
   totalSourceFiles: 166
   totalModules: 3
-  totalLinesOfCode: 17935
-  totalExports: 326
+  totalLinesOfCode: 18025
+  totalExports: 327
   entryRoots: 42
   reachableFiles: 42
   dormantFiles: 14
@@ -2890,7 +2893,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 6
   totalInterfaces: 51
-  totalFunctions: 150
+  totalFunctions: 151
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 50

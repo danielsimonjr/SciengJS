@@ -87,7 +87,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
 | `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 41 |
-| `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 153 |
+| `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 182 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
 | `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |
@@ -162,7 +162,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/teardown.test.ts` | (root) | tests | test | 33 |
 | `test/unit/third-party-notices.test.ts` | (root) | tests | test | 21 |
 | `test/unit/version.test.ts` | (root) | tests | test | 23 |
-| `test/unit/worker-exec-argv.test.ts` | (root) | tests | test | 54 |
+| `test/unit/worker-exec-argv.test.ts` | (root) | tests | test | 115 |
 | `test/unit/worker-run.test.ts` | (root) | tests | test | 97 |
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |

@@ -720,7 +720,7 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
-| `worker_threads` | `Worker` |
+| `worker_threads` | `Worker, WorkerOptions` |
 | `path` | `extname` |
 | `url` | `fileURLToPath` |
 
@@ -732,7 +732,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `WorkerExit`, `WorkerLimits`
-- Functions: `workerExecArgv`, `runInWorker`
+- Functions: `workerExecArgv`, `constructWorker`, `runInWorker`
 
 ---
 
@@ -1137,12 +1137,12 @@ graph TD
 |----------|-------|
 | Total Source Files | 166 |
 | Subsystems | 13 |
-| Total Lines of Code | 17935 |
-| Total Exports | 326 |
+| Total Lines of Code | 18025 |
+| Total Exports | 327 |
 | Total Re-exports | 55 |
 | Total Classes | 6 |
 | Total Interfaces | 51 |
-| Total Functions | 150 |
+| Total Functions | 151 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
 | Type-only Imports | 23 |
