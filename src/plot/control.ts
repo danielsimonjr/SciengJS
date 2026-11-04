@@ -55,13 +55,18 @@ export interface BodeNumbers {
   phaseMargin: number | null;
 }
 
-/** Key values of a step response: final value, rise and settling times, overshoot in percent, and peak time. A null value means none was found. */
+/**
+ * Key values of a step response: final value, rise and settling times, overshoot in percent, and peak time.
+ * The peak and the overshoot are measured in the direction of the final value. A system with a pole on or
+ * right of the imaginary axis has no final value, so every number is null. A response with no peak before
+ * the end of the time grid has a null peak time and an overshoot of 0.
+ */
 export interface StepNumbers {
   finalValue: number | null;
   riseTime: number | null;
   settlingTime: number | null;
   overshoot: number | null;
-  peakTime: number;
+  peakTime: number | null;
 }
 
 /** Key values of an impulse response: the peak value and the time of the peak. */
@@ -120,6 +125,8 @@ const EXPM_TERMS = 20;
 const REAL_AXIS_TOL = 1e-6;
 // The frequency range ignores a root smaller than this fraction of the largest root: it is a pole or zero at 0.
 const ROOT_ZERO_REL = 1e-9;
+// A pole counts as stable when its real part is below minus this size, relative to the pole.
+const STABLE_TOL = 1e-9;
 
 function inputError(message: string): RenderError {
   return new RenderError("E_INPUT", message);
@@ -538,9 +545,15 @@ function firstAtOrAbove(ratio: number[], level: number, dt: number): number | nu
 }
 
 function stepNumbers(y: number[], dt: number, finalValue: number | null): StepNumbers {
-  const peak = refinedPeak(y, dt);
-  if (finalValue === null || finalValue === 0) {
-    return { finalValue, riseTime: null, settlingTime: null, overshoot: null, peakTime: peak.time };
+  if (finalValue === null) {
+    return { finalValue, riseTime: null, settlingTime: null, overshoot: null, peakTime: null };
+  }
+  // The peak is the extreme in the direction of the final value; it counts only before the last sample.
+  const sign = finalValue < 0 ? -1 : 1;
+  const peak = refinedPeak(y.map((v) => sign * v), dt);
+  const peakTime = peak.time < (y.length - 1) * dt ? peak.time : null;
+  if (finalValue === 0) {
+    return { finalValue, riseTime: null, settlingTime: null, overshoot: null, peakTime };
   }
   const ratio = y.map((v) => v / finalValue);
   const low = firstAtOrAbove(ratio, RISE_LOW, dt);
@@ -556,12 +569,17 @@ function stepNumbers(y: number[], dt: number, finalValue: number | null): StepNu
     finalValue,
     riseTime: low === null || high === null ? null : high - low,
     settlingTime,
-    overshoot: Math.max(0, ((peak.value - finalValue) / Math.abs(finalValue)) * 100),
-    peakTime: peak.time,
+    overshoot: Math.max(0, ((peak.value - Math.abs(finalValue)) / Math.abs(finalValue)) * 100),
+    peakTime,
   };
 }
 
-/** Step response by exact zero-order-hold simulation. finalValue is the DC gain, null when den(0) = 0. */
+/** True when every pole lies strictly left of the imaginary axis, beyond a tolerance relative to its size. */
+function isStable(tf: TransferFunction): boolean {
+  return polynomialRoots(tf.den).every((p) => p.re < -STABLE_TOL * Math.max(1, cabs(p)));
+}
+
+/** Step response by exact zero-order-hold simulation. finalValue is the DC gain, null for a system that is not stable. */
 export function step(input: unknown, options: TimeOptions = {}): ControlResult<StepNumbers> {
   const tf = checkTransferFunction(input);
   const tEnd = timeHorizon(tf, options);
@@ -582,7 +600,7 @@ export function step(input: unknown, options: TimeOptions = {}): ControlResult<S
     }
   }
   const dc = evalPoly(tf.den, { re: 0, im: 0 });
-  const finalValue = dc.re === 0 ? null : evalPoly(tf.num, { re: 0, im: 0 }).re / dc.re;
+  const finalValue = dc.re === 0 || !isStable(tf) ? null : evalPoly(tf.num, { re: 0, im: 0 }).re / dc.re;
   const t = y.map((_unused, k) => k * dt);
   return {
     figure: timeFigure(t, y, "Step response", "y(t)"),

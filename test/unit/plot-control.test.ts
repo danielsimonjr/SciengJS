@@ -219,3 +219,35 @@ describe("poles and zeros at the origin", () => {
     expect(poleZero({ num: [1], den: [1, 0, 0] }).numbers.poles).toEqual([{ re: 0, im: 0 }, { re: 0, im: 0 }]);
   });
 });
+
+describe("step numbers follow the sign of the final value and the stability", () => {
+  test("-4/(s^2+2s+4): overshoot and peak time match the closed form of the positive system", () => {
+    // zeta = 0.5, wn = 2: overshoot = exp(-pi zeta / sqrt(1 - zeta^2)) = 16.303 %, Tp = pi / sqrt(3).
+    const { numbers } = step({ num: [-4], den: [1, 2, 4] }, { tEnd: 10, points: 5000 });
+    expect(numbers.finalValue).toBeCloseTo(-1, 12);
+    expect(numbers.overshoot!).toBeCloseTo(100 * Math.exp(-Math.PI / Math.sqrt(3)), 3);
+    expect(numbers.peakTime!).toBeCloseTo(Math.PI / Math.sqrt(3), 3);
+  });
+
+  test("-2/(s^2+3s+2) is monotone toward -1: overshoot 0 and no peak time", () => {
+    const { numbers } = step({ num: [-2], den: [1, 3, 2] });
+    expect(numbers.finalValue).toBeCloseTo(-1, 12);
+    expect(numbers.overshoot).toBe(0);
+    expect(numbers.peakTime).toBeNull();
+    expect(numbers.riseTime).not.toBeNull();
+  });
+
+  test("1/(s+1) is monotone: no peak time instead of tEnd", () => {
+    const { numbers } = step({ num: [1], den: [1, 1] });
+    expect(numbers.peakTime).toBeNull();
+    expect(numbers.overshoot).toBe(0);
+  });
+
+  for (const [name, den] of [["1/(s-1), unstable", [1, -1]], ["1/(s^2+1), marginally stable", [1, 0, 1]]] as const) {
+    test(`${name}: no final value and no derived numbers`, () => {
+      const { numbers, figure } = step({ num: [1], den: [...den] });
+      expect(numbers).toEqual({ finalValue: null, riseTime: null, settlingTime: null, overshoot: null, peakTime: null });
+      expect((figure.data[0]!.y as number[]).length).toBeGreaterThan(0);
+    });
+  }
+});
