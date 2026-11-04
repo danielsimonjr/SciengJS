@@ -4,6 +4,11 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The `./mesh` subpath reads STEP, IGES and BREP files through `occt-import-js` 0.0.23 (exact pin). The pairs `step`, `iges` and `brep` to `glb` render through `render()`. The option `linearUnit` takes `millimeter` (default) or `meter` for STEP and IGES. BREP takes no option. Each colour of a face becomes one material. Faces without a colour use a default grey material. The WASM module loads once per process.
+- The package exports `readCad()` and `writeGlb()` from `./mesh`.
+
 ## [0.6.0] - 2026-11-04
 
 ### Added

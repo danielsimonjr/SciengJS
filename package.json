@@ -41,6 +41,10 @@
       "types": "./dist/html/index.d.ts",
       "default": "./dist/html/index.js"
     },
+    "./mesh": {
+      "types": "./dist/mesh/index.d.ts",
+      "default": "./dist/mesh/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -90,6 +94,7 @@
     "@mathjax/src": "4.1.3",
     "@resvg/resvg-wasm": "2.6.2",
     "@viz-js/viz": "3.31.0",
+    "occt-import-js": "0.0.23",
     "parse5": "8.1.0"
   }
 }

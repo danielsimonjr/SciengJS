@@ -35,6 +35,9 @@ export const DEFAULT_REGISTRY: Registry = {
   "html:png": { backend: "browser/chromium", moduleUrl: backendUrl("browser/backend-png") },
   "html:pdf": { backend: "browser/chromium", moduleUrl: backendUrl("browser/backend-pdf") },
   "html:md": { backend: "html/md", moduleUrl: backendUrl("html/backend-md") },
+  "step:glb": { backend: "mesh/occt+glb", moduleUrl: backendUrl("mesh/backend-glb") },
+  "iges:glb": { backend: "mesh/occt+glb", moduleUrl: backendUrl("mesh/backend-glb") },
+  "brep:glb": { backend: "mesh/occt+glb", moduleUrl: backendUrl("mesh/backend-glb") },
 };
 
 /** Builds the registry key of a pair. */
