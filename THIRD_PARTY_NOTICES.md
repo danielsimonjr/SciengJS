@@ -42,6 +42,7 @@ The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to t
 | `speech-rule-engine` | 5.0.0-rc.4 | Apache-2.0 |
 | `@xmldom/xmldom` | 0.9.12 | MIT |
 | `wicked-good-xpath` | 1.3.0 | MIT |
+| `commander` | 14.0.3 (installed under `speech-rule-engine`) | MIT |
 | `balanced-match` | 4.0.4 | MIT |
 | `brace-expansion` | 5.0.12 | MIT |
 | `@isaacs/nonrecursive-glob-match` | 1.0.3 | BlueOak-1.0.0 |
@@ -50,9 +51,10 @@ The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to t
 | `minipass` | 7.1.3 | BlueOak-1.0.0 |
 | `package-json-from-dist` | 1.0.1 | BlueOak-1.0.0 |
 | `path-scurry` | 3.0.0 | BlueOak-1.0.0 |
+| `lru-cache` | 11.5.3 | BlueOak-1.0.0 |
 | `rimraf` | 6.1.4 | BlueOak-1.0.0 |
 
-The Apache License 2.0 applies to the MathJax packages. The BlueOak Model License 1.0.0 applies to the glob packages. The MIT licence applies to the other packages. Each package keeps its own licence text in its installed folder.
+The Apache License 2.0 applies to the MathJax packages. The BlueOak Model License 1.0.0 applies to the glob packages. The MIT licence applies to the other packages. Each package keeps its own licence text in its installed folder. The `dist/` folder holds the compiled code of this package only. It holds no code of the packages in the table: npm installs them as dependencies.
 
 ### Mermaid (MIT)
 
