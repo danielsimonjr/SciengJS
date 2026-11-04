@@ -13,6 +13,7 @@
         "@types/bun": "^1.4.4",
         "@types/node": "^22",
         "mermaid": "11.17.2",
+        "plotly.js-dist-min": "4.2.0",
         "typescript": "^7.0.2",
       },
     },
@@ -285,6 +286,8 @@
     "path-data-parser": ["path-data-parser@0.1.0", "", {}, "sha512-NOnmBpt5Y2RWbuv0LMzsayp3lVylAHLPUTut412ZA3l+C4uw4ZVkQbjShYCQ8TCpUMdPapr4YjUqLYD6v68j+w=="],
 
     "path-scurry": ["path-scurry@3.0.0", "", { "dependencies": { "lru-cache": "^11.0.0", "minipass": "^7.1.2" } }, "sha512-1pTbQqH1wIwMi/eleQ5leFTTCkzFsPcgXNjwOA8YGGW/W4/kHT3dssE7Z6NH+zuqNLOzOB0uaD61yl7cAcVhgg=="],
+
+    "plotly.js-dist-min": ["plotly.js-dist-min@4.2.0", "", {}, "sha512-nxwhTxrRtQAWcZLBplb7xi73o0P2z/zjNuh1RKO4ssmPK7Kh30bQcObnAJhekBogI2rqUMbM0JJZC0TrG5Tq5Q=="],
 
     "points-on-curve": ["points-on-curve@0.2.0", "", {}, "sha512-0mYKnYYe9ZcqMCWhUjItv/oHjvgEsfKvnUTg8sAtnHr3GVy7rGkXCb6d5cSyqrWqL4k81b9CPg3urd+T7aop3A=="],
 

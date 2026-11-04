@@ -2,9 +2,31 @@ const PAGE_STYLE = "html,body{margin:0;background:#fff}";
 
 /** Writes a value as a JavaScript literal that cannot end a script element or break a line. */
 export function scriptJson(text: string): string {
-  return JSON.stringify(text).replace(
-    /[<>&\u2028\u2029]/g,
-    (ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"),
+  return escapeScriptText(JSON.stringify(text));
+}
+
+/** Writes a JSON value as a JavaScript object literal that cannot end a script element. */
+export function scriptData(value: unknown): string {
+  return escapeScriptText(JSON.stringify(value));
+}
+
+/** Escapes the characters that could end a script element or break a line in JavaScript source. */
+function escapeScriptText(text: string): string {
+  return text.replace(/[<>&\u2028\u2029]/g, (ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"));
+}
+
+/**
+ * A page that loads the pinned Plotly build with its Subresource Integrity value and draws one figure.
+ * The figure object comes from the engine after the reader accepts it.
+ */
+export function plotlyPageHtml(figure: unknown, cdnUrl: string, sri: string): string {
+  return (
+    `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${PAGE_STYLE}</style></head><body>` +
+    '<div id="sciengjs-diagram"></div>' +
+    `<script src="${cdnUrl}" integrity="${sri}" crossorigin="anonymous"></script>` +
+    `<script>(function () { const fig = ${scriptData(figure)}; ` +
+    'Plotly.newPlot(document.getElementById("sciengjs-diagram"), fig.data, fig.layout, { responsive: false }); })();</script>' +
+    "</body></html>"
   );
 }
 
