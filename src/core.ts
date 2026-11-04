@@ -77,6 +77,7 @@ export async function renderWithRegistry(
           assetsUrl: cfg.assetsUrl,
           browser: cfg.browser,
           timeoutMs: cfg.timeoutMs,
+          allowNetwork: cfg.allowNetwork,
         },
       },
     },
@@ -88,6 +89,7 @@ export async function renderWithRegistry(
     mime: MIME[req.format],
     backend: out.backend ?? entry.backend,
     warnings: out.warnings ?? [],
+    ...(out.assets !== undefined && out.assets.length > 0 ? { assets: out.assets } : {}),
   };
 }
 

@@ -1,4 +1,5 @@
-import type { InputType, OutputFormat, RenderOptions } from "../types.ts";
+import type { NetworkPolicy } from "../config.ts";
+import type { InputType, OutputFormat, RenderAsset, RenderOptions } from "../types.ts";
 
 /** The configuration values that a backend reads. */
 export interface BackendSettings {
@@ -12,6 +13,8 @@ export interface BackendSettings {
   browser: string | undefined;
   /** The time limit of one render, in milliseconds. A browser backend cleans up inside this limit. */
   timeoutMs: number;
+  /** The network rule of the configuration. The html to md stage reads it for remote images. */
+  allowNetwork: NetworkPolicy;
 }
 
 /** What the worker receives: one render request and the backend module that serves it. */
@@ -33,9 +36,11 @@ export interface BackendOutput {
   warnings?: string[];
   /** The backend name of this output, when it differs from the registry entry (a route chosen per source). */
   backend?: string;
+  /** Extra files of the render, for example the images of an html to md render. */
+  assets?: RenderAsset[];
 }
 
 /** The one message that a worker sends back. */
 export type WorkerMessage =
-  | { ok: true; bytes: Uint8Array; warnings: string[]; backend?: string }
+  | { ok: true; bytes: Uint8Array; warnings: string[]; backend?: string; assets?: RenderAsset[] }
   | { ok: false; code: string; message: string; line?: number; column?: number };

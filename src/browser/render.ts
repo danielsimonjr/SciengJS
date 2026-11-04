@@ -25,7 +25,7 @@ const HELD_READ_CODES = new Set(["EBUSY", "EPERM", "ENOENT"]);
 const IS_WINDOWS = process.platform === "win32";
 
 /** The output of the browser stage for a page. The svg format returns the SVG that the page reports. */
-export type HtmlFormat = "png" | "pdf" | "svg";
+export type HtmlFormat = "png" | "pdf" | "svg" | "dom";
 
 /** A pinned file that the client fulfils for one exact URL, with its bytes read before the browser starts. */
 export interface PinnedBytes {
@@ -54,7 +54,8 @@ interface HtmlPageBase {
 export type HtmlPageRequest =
   | (HtmlPageBase & { format: "png"; width: number; height: number; scale: number })
   | (HtmlPageBase & { format: "pdf" })
-  | (HtmlPageBase & { format: "svg"; awaitDone: true });
+  | (HtmlPageBase & { format: "svg"; awaitDone: true })
+  | (HtmlPageBase & { format: "dom" });
 
 /** The bytes that the browser drew, and the requests that it asked for and the client refused. */
 export interface HtmlPageResult {
@@ -317,6 +318,12 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
   } else if (req.format === "png") {
     const data = (await cdp.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false }, s)) as { data: string };
     bytes = Buffer.from(data.data, "base64");
+  } else if (req.format === "dom") {
+    // The DOM after the page scripts run. The converter of html to md reads it.
+    const reply = (await cdp.send("Runtime.evaluate", { expression: "document.documentElement.outerHTML", returnByValue: true }, s)) as {
+      result?: { value?: unknown };
+    };
+    bytes = new TextEncoder().encode(typeof reply.result?.value === "string" ? reply.result.value : "");
   } else {
     throw new RenderError("E_INTERNAL", "the page format is not drawn by this stage");
   }
@@ -355,7 +362,7 @@ async function diagramBox(cdp: CdpConnection, s: string): Promise<DiagramBox | u
 
 /** Draws the diagram of a page that reports done: a png clipped to the diagram box. */
 async function drawDiagram(cdp: CdpConnection, s: string, req: HtmlPageRequest): Promise<Uint8Array> {
-  if (req.format === "svg") throw new RenderError("E_INTERNAL", "an svg is not drawn from a box");
+  if (req.format === "svg" || req.format === "dom") throw new RenderError("E_INTERNAL", "an svg or dom is not drawn from a box");
   const box = await diagramBox(cdp, s);
   if (box === undefined) throw new RenderError("E_INPUT", "the diagram has no drawable size");
   if (req.format === "pdf") {

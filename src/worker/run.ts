@@ -160,7 +160,7 @@ export function runInWorker(job: WorkerJob, limits: WorkerLimits): Promise<Backe
     worker.once("message", (msg: WorkerMessage) => {
       settle(() => {
         if (msg.ok) {
-          resolve({ bytes: msg.bytes, warnings: msg.warnings, backend: msg.backend });
+          resolve({ bytes: msg.bytes, warnings: msg.warnings, backend: msg.backend, assets: msg.assets });
         } else {
           const code = msg.code as RenderError["code"];
           reject(new RenderError(code, msg.message, { line: msg.line, column: msg.column }));

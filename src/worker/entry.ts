@@ -13,7 +13,7 @@ async function run(job: WorkerJob): Promise<WorkerMessage> {
       throw new RenderError("E_INTERNAL", `backend module ${job.moduleUrl} exports no render function`);
     }
     const out = await mod.render(job.request);
-    return { ok: true, bytes: out.bytes, warnings: out.warnings ?? [], backend: out.backend };
+    return { ok: true, bytes: out.bytes, warnings: out.warnings ?? [], backend: out.backend, assets: out.assets };
   } catch (err) {
     if (isRenderError(err)) {
       return { ok: false, code: err.code, message: err.message, line: err.line, column: err.column };
