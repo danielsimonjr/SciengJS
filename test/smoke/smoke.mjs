@@ -79,7 +79,9 @@ if (typeof graph.dotToSvg !== "function" || typeof raster.svgToPng !== "function
 if (typeof mermaid.renderMermaidSvg !== "function" || typeof mermaid.layoutSequence !== "function") throw new Error("the mermaid subpath did not load");
 const browser = await import("@danielsimonjr/sciengjs/browser");
 if (typeof browser.CdpConnection !== "function" || typeof browser.renderHtmlPage !== "function") throw new Error("the browser subpath did not load");
-for (const empty of ["tex", "plot", "sysml", "mesh", "html"]) {
+const plot = await import("@danielsimonjr/sciengjs/plot");
+if (typeof plot.bode !== "function" || typeof plot.rootLocus !== "function") throw new Error("the plot subpath did not load");
+for (const empty of ["tex", "sysml", "mesh", "html"]) {
   let refused = false;
   try {
     await import("@danielsimonjr/sciengjs/" + empty);
