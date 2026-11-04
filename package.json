@@ -29,6 +29,10 @@
       "types": "./dist/mermaid/index.d.ts",
       "default": "./dist/mermaid/index.js"
     },
+    "./math": {
+      "types": "./dist/math/index.d.ts",
+      "default": "./dist/math/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -44,7 +48,7 @@
     "test": "bun test",
     "smoke": "node test/smoke/smoke.mjs",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "test:node": "node --test test/node/worker.node.mjs test/node/eval-render.node.mjs test/node/worker-execargv.node.mjs"
+    "test:node": "node --test test/node/worker.node.mjs test/node/eval-render.node.mjs test/node/worker-execargv.node.mjs test/node/math.node.mjs"
   },
   "keywords": [
     "graphviz",
@@ -74,6 +78,7 @@
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "@mathjax/src": "4.1.3",
     "@resvg/resvg-wasm": "2.6.2",
     "@viz-js/viz": "3.31.0"
   }

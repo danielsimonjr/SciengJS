@@ -1095,6 +1095,427 @@
         ]
       }
     },
+    "math": {
+      "src/math/backend-pdf.ts": {
+        "description": "backend-pdf module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/math/backend-png.ts": {
+        "description": "backend-png module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../graph/backend-png.ts",
+            "imports": [
+              "readScale",
+              "svgDocumentToPng"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/math/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/math/font-ranges.ts": {
+        "description": "Static imports of every dynamic font range of MathJax-Newcm, the default math font. Each import",
+        "externalDependencies": [
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/PUA.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/accents-b-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/accents.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/arabic.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/arrows.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/braille-d.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/braille.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/calligraphic.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/cherokee.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic-ss.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/devanagari.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/double-struck.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/fraktur.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/greek-ss.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/greek.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/hebrew.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-b.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-bi.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/marrows.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/math.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-ex.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-l.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/mshapes.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics-ss.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-b.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-bi.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-ex.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-r.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/script.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/shapes.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols-b-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/variants.js",
+            "imports": []
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "loadFontRanges",
+          "MHCHEM_ALIASES",
+          "defineMhchemVariant"
+        ],
+        "functions": [
+          "loadFontRanges",
+          "defineMhchemVariant"
+        ],
+        "constants": [
+          "MHCHEM_ALIASES"
+        ]
+      },
+      "src/math/index.ts": {
+        "description": "Package entry point for math (re-exports 2 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "MathOptions"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "mathToSvg",
+          "MathOptions"
+        ],
+        "reExported": [
+          "mathToSvg",
+          "MathOptions"
+        ]
+      },
+      "src/math/tex.ts": {
+        "description": "Removes each `\\require{...}` command from the source and returns the rest. The build loads every",
+        "externalDependencies": [
+          {
+            "package": "@mathjax/src/js/adaptors/liteAdaptor.js",
+            "imports": [
+              "liteAdaptor"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/handlers/html.js",
+            "imports": [
+              "RegisterHTMLHandler"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/mathjax.js",
+            "imports": [
+              "mathjax"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/input/tex.js",
+            "imports": [
+              "TeX"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/output/svg.js",
+            "imports": [
+              "SVG"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/base/BaseConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/ams/AmsConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/boldsymbol/BoldsymbolConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/color/ColorConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/mhchem/MhchemConfiguration.js",
+            "imports": []
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./font-ranges.ts",
+            "imports": [
+              "defineMhchemVariant",
+              "loadFontRanges"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "MATH_PACKAGES",
+          "stripRequires",
+          "rejectFontFallback",
+          "exToPx",
+          "standaloneSvg",
+          "mathToSvg"
+        ],
+        "interfaces": [
+          "MathOptions"
+        ],
+        "functions": [
+          "stripRequires",
+          "rejectFontFallback",
+          "exToPx",
+          "standaloneSvg",
+          "mathToSvg"
+        ],
+        "constants": [
+          "MATH_PACKAGES"
+        ]
+      }
+    },
     "mermaid": {
       "src/mermaid/backend-pdf.ts": {
         "description": "Renders one Mermaid source to pdf in the browser stage. A native diagram is laid out first, then its SVG is",
@@ -2245,6 +2666,17 @@
       "name": "Entry",
       "files": [
         "src/index.ts"
+      ]
+    },
+    {
+      "name": "Math",
+      "files": [
+        "src/math/backend-pdf.ts",
+        "src/math/backend-png.ts",
+        "src/math/backend-svg.ts",
+        "src/math/font-ranges.ts",
+        "src/math/index.ts",
+        "src/math/tex.ts"
       ]
     },
     {

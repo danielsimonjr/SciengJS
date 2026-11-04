@@ -4,6 +4,20 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The math stage renders LaTeX math to `svg`, `png` and `pdf`. The stage uses `@mathjax/src` 4.1.3 and writes a standalone SVG with the glyphs as paths. The SVG has no text element and no font reference. The `\ce{}` command works through the mhchem package of the build. The `png` takes the option `scale`, as the `dot` and Mermaid `png` do. The `pdf` needs a browser. Without one, it rejects with `E_STAGE_MISSING`.
+- The `./math` subpath exports `mathToSvg`.
+- The math stage rejects a TeX package that the build does not hold with `E_UNSUPPORTED`, and a TeX input error with `E_INPUT`. A `\require` of a held package has no effect.
+- The math stage rejects a character that the math font does not hold with `E_UNSUPPORTED`, and names the character and its code point. Such a character no longer becomes system-font text.
+- The mhchem arrows `<-`, `<->`, `<=>`, `<=>>`, `<<=>`, `<-->` and the labelled arrows such as `->[x]` draw as paths. Each one uses a standard arrow glyph of the bundled math font.
+- A Node test renders math from the built package to `svg` and `png`. The README shows a math example.
+
+### Fixed
+
+- A `<`, `&` or `"` in the TeX source made the math SVG invalid XML, and the `png` rejected with `E_INPUT`. The math stage now writes the SVG with the XML serializer, which escapes the attribute values.
+- The third-party notices list `commander` 14.0.3 (MIT) and `lru-cache` 11.5.3 (BlueOak-1.0.0), which `@mathjax/src` installs.
+
 ## [0.3.2] - 2026-11-03
 
 ### Fixed

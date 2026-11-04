@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 168
+  totalFiles: 179
   totalModules: 3
-  totalExports: 327
+  totalExports: 343
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -883,6 +883,166 @@ modules:
         - Capability
         - render
         - capabilities
+    src/math/backend-pdf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawSvgToPdf
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/math/tex.ts
+          imports:
+            - mathToSvg
+          typeOnly: false
+      exports:
+        - render
+    src/math/backend-png.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/backend-png.ts
+          imports:
+            - readScale
+            - svgDocumentToPng
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/math/tex.ts
+          imports:
+            - mathToSvg
+          typeOnly: false
+      exports:
+        - render
+    src/math/backend-svg.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/math/tex.ts
+          imports:
+            - mathToSvg
+          typeOnly: false
+      exports:
+        - render
+    src/math/font-ranges.ts:
+      externalDependencies:
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/PUA.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/accents-b-i.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/accents.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/arabic.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/arrows.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/braille-d.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/braille.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/calligraphic.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/cherokee.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic-ss.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/devanagari.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/double-struck.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/fraktur.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/greek-ss.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/greek.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/hebrew.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-b.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-bi.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-i.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/latin.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/marrows.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/math.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-ex.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-l.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/mshapes.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics-ss.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-b.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-bi.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-ex.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-i.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-r.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/script.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/shapes.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols-b-i.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols.js'
+        - '@mathjax/mathjax-newcm-font/js/svg/dynamic/variants.js'
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - loadFontRanges
+        - MHCHEM_ALIASES
+        - defineMhchemVariant
+    src/math/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/math/tex.ts
+          imports:
+            - mathToSvg
+          typeOnly: false
+        - file: src/math/tex.ts
+          imports:
+            - MathOptions
+          typeOnly: true
+      exports:
+        - mathToSvg
+        - MathOptions
+    src/math/tex.ts:
+      externalDependencies:
+        - '@mathjax/src/js/adaptors/liteAdaptor.js'
+        - '@mathjax/src/js/handlers/html.js'
+        - '@mathjax/src/js/input/tex.js'
+        - '@mathjax/src/js/input/tex/ams/AmsConfiguration.js'
+        - '@mathjax/src/js/input/tex/base/BaseConfiguration.js'
+        - '@mathjax/src/js/input/tex/boldsymbol/BoldsymbolConfiguration.js'
+        - '@mathjax/src/js/input/tex/color/ColorConfiguration.js'
+        - '@mathjax/src/js/input/tex/mhchem/MhchemConfiguration.js'
+        - '@mathjax/src/js/mathjax.js'
+        - '@mathjax/src/js/output/svg.js'
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/math/font-ranges.ts
+          imports:
+            - defineMhchemVariant
+            - loadFontRanges
+          typeOnly: false
+      exports:
+        - MATH_PACKAGES
+        - MathOptions
+        - stripRequires
+        - rejectFontFallback
+        - exToPx
+        - standaloneSvg
+        - mathToSvg
     src/mermaid/backend-pdf.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1696,6 +1856,15 @@ modules:
         - node:test
       internalDependencies: []
       exports: []
+    test/node/math.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
     test/node/worker-execargv.node.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -1887,6 +2056,12 @@ modules:
         - TEST_REGISTRY
         - ISOLATED_CONFIG_DEPS
         - renderIsolated
+    test/support/xml-wellformed.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - xmlErrors
     test/unit/assets.test.ts:
       externalDependencies:
         - bun:test
@@ -2297,6 +2472,92 @@ modules:
           imports:
             - WorkerJob
           typeOnly: true
+      exports: []
+    test/unit/math-backends.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: test/support/test-registry.ts
+          imports:
+            - renderIsolated
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/png-decode.ts
+          imports:
+            - countDarkPixels
+            - decodePng
+          typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - realFiles
+          typeOnly: false
+        - file: src/math/backend-svg.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/math/backend-png.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/math/backend-pdf.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/math/index.ts
+          imports:
+            - mathToSvg
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+      exports: []
+    test/unit/math-registry.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - capabilitiesWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+      exports: []
+    test/unit/math-svg.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/math/tex.ts
+          imports:
+            - mathToSvg
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/xml-wellformed.ts
+          imports:
+            - xmlErrors
+          typeOnly: false
       exports: []
     test/unit/mermaid-browser-route.test.ts:
       externalDependencies:
@@ -2888,33 +3149,33 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 168
-  totalSourceFiles: 168
+  totalTypeScriptFiles: 179
+  totalSourceFiles: 179
   totalModules: 3
-  totalLinesOfCode: 18069
-  totalExports: 327
-  entryRoots: 42
-  reachableFiles: 42
+  totalLinesOfCode: 18752
+  totalExports: 343
+  entryRoots: 48
+  reachableFiles: 48
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 23
+  totalTypeOnlyImports: 28
   noImporterFileCount: 7
-  unusedExportsCount: 20
+  unusedExportsCount: 26
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 51
-  totalFunctions: 151
+  totalInterfaces: 52
+  totalFunctions: 162
   totalTypeGuards: 4
   totalEnums: 0
-  totalConstants: 50
-  totalReExports: 55
+  totalConstants: 52
+  totalReExports: 57
 reachability:
   roots:
     - src/index.ts
@@ -2922,6 +3183,7 @@ reachability:
     - src/raster/index.ts
     - src/browser/index.ts
     - src/mermaid/index.ts
+    - src/math/index.ts
     - src/assets.ts
     - src/browser/backend-pdf.ts
     - src/browser/backend-png.ts
@@ -2941,6 +3203,11 @@ reachability:
     - src/graph/backend-svg.ts
     - src/graph/dot.ts
     - src/graph/image.ts
+    - src/math/backend-pdf.ts
+    - src/math/backend-png.ts
+    - src/math/backend-svg.ts
+    - src/math/font-ranges.ts
+    - src/math/tex.ts
     - src/mermaid/backend-pdf.ts
     - src/mermaid/backend-png.ts
     - src/mermaid/backend-svg.ts
@@ -2959,7 +3226,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 42
+  reachableCount: 48
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs

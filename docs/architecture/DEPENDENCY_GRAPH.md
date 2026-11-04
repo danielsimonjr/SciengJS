@@ -18,19 +18,20 @@ This document provides a comprehensive dependency graph of all files, components
 4. [Browser Dependencies](#browser-dependencies)
 5. [Graph Dependencies](#graph-dependencies)
 6. [Entry Dependencies](#entry-dependencies)
-7. [Mermaid Dependencies](#mermaid-dependencies)
-8. [Raster Dependencies](#raster-dependencies)
-9. [Worker Dependencies](#worker-dependencies)
-10. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-11. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-12. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-13. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-14. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-15. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-16. [Dependency Matrix](#dependency-matrix)
-17. [Circular Dependency Analysis](#circular-dependency-analysis)
-18. [Visual Dependency Graph](#visual-dependency-graph)
-19. [Summary Statistics](#summary-statistics)
+7. [Math Dependencies](#math-dependencies)
+8. [Mermaid Dependencies](#mermaid-dependencies)
+9. [Raster Dependencies](#raster-dependencies)
+10. [Worker Dependencies](#worker-dependencies)
+11. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+12. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+13. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+14. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+15. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+16. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+17. [Dependency Matrix](#dependency-matrix)
+18. [Circular Dependency Analysis](#circular-dependency-analysis)
+19. [Visual Dependency Graph](#visual-dependency-graph)
+20. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -43,6 +44,7 @@ The codebase is organized into the following modules:
 - **browser**: 11 files
 - **graph**: 6 files
 - **entry**: 1 file
+- **math**: 6 files
 - **mermaid**: 11 files
 - **raster**: 2 files
 - **worker**: 3 files
@@ -460,6 +462,148 @@ The codebase is organized into the following modules:
   RenderAsset, Capability
   ```
 
+
+---
+
+<a id="math-dependencies"></a>
+
+## Math Dependencies
+
+### `src/math/backend-pdf.ts` - backend-pdf module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../mermaid/browser.ts` | `drawSvgToPdf` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./tex.ts` | `mathToSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/math/backend-png.ts` - backend-png module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./tex.ts` | `mathToSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/math/backend-svg.ts` - backend-svg module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./tex.ts` | `mathToSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/math/font-ranges.ts` - Static imports of every dynamic font range of MathJax-Newcm, the default math font. Each import
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/PUA.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/accents-b-i.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/accents.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/arabic.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/arrows.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/braille-d.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/braille.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/calligraphic.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/cherokee.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic-ss.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/devanagari.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/double-struck.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/fraktur.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/greek-ss.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/greek.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/hebrew.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-b.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-bi.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-i.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/latin.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/marrows.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/math.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-ex.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-l.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/mshapes.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics-ss.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-b.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-bi.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-ex.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-i.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-r.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/script.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/shapes.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols-b-i.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols.js` | `` |
+| `@mathjax/mathjax-newcm-font/js/svg/dynamic/variants.js` | `` |
+
+**Exports:**
+- Functions: `loadFontRanges`, `defineMhchemVariant`
+- Constants: `MHCHEM_ALIASES`
+
+---
+
+### `src/math/index.ts` - Package entry point for math (re-exports 2 symbols)
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./tex.ts` | `mathToSvg` | Re-export |
+| `./tex.ts` | `MathOptions` | Re-export (type-only) |
+
+**Exports:**
+- Re-exports: `mathToSvg`, `MathOptions`
+
+---
+
+### `src/math/tex.ts` - Removes each `\require{...}` command from the source and returns the rest. The build loads every
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@mathjax/src/js/adaptors/liteAdaptor.js` | `liteAdaptor` |
+| `@mathjax/src/js/handlers/html.js` | `RegisterHTMLHandler` |
+| `@mathjax/src/js/mathjax.js` | `mathjax` |
+| `@mathjax/src/js/input/tex.js` | `TeX` |
+| `@mathjax/src/js/output/svg.js` | `SVG` |
+| `@mathjax/src/js/input/tex/base/BaseConfiguration.js` | `` |
+| `@mathjax/src/js/input/tex/ams/AmsConfiguration.js` | `` |
+| `@mathjax/src/js/input/tex/boldsymbol/BoldsymbolConfiguration.js` | `` |
+| `@mathjax/src/js/input/tex/color/ColorConfiguration.js` | `` |
+| `@mathjax/src/js/input/tex/mhchem/MhchemConfiguration.js` | `` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `./font-ranges.ts` | `defineMhchemVariant, loadFontRanges` | Import |
+
+**Exports:**
+- Interfaces: `MathOptions`
+- Functions: `stripRequires`, `rejectFontFallback`, `exToPx`, `standaloneSvg`, `mathToSvg`
+- Constants: `MATH_PACKAGES`
 
 ---
 
@@ -902,23 +1046,26 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 18 files |
-| `src/worker/protocol` | 1 file | 10 files |
+| `src/errors` | 0 files | 22 files |
+| `src/worker/protocol` | 1 file | 13 files |
+| `src/mermaid/browser` | 6 files | 5 files |
 | `src/browser/render` | 6 files | 4 files |
-| `src/mermaid/browser` | 6 files | 4 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
+| `src/graph/backend-png` | 6 files | 2 files |
 | `src/core` | 6 files | 1 file |
-| `src/graph/backend-png` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
 | `src/mermaid/backend-png` | 7 files | 0 files |
 | `src/browser/input` | 1 file | 5 files |
 | `src/config` | 3 files | 3 files |
+| `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/assets` | 1 file | 4 files |
 | `src/index` | 5 files | 0 files |
 | `src/browser/index` | 4 files | 0 files |
 | `src/graph/backend-pdf` | 4 files | 0 files |
+| `src/math/backend-pdf` | 4 files | 0 files |
+| `src/math/backend-png` | 4 files | 0 files |
 | `src/mermaid/backend-pdf` | 4 files | 0 files |
 | `src/mermaid/backend-svg` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
@@ -929,6 +1076,7 @@ The codebase is organized into the following modules:
 | `src/browser/backend-png` | 3 files | 0 files |
 | `src/browser/cdp` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
+| `src/math/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
 | `src/mermaid/state` | 1 file | 2 files |
 | `src/worker/run` | 2 files | 1 file |
@@ -938,10 +1086,6 @@ The codebase is organized into the following modules:
 | `src/pairs` | 1 file | 1 file |
 | `src/registry` | 0 files | 2 files |
 | `src/worker/entry` | 2 files | 0 files |
-| `trials/t5-tex-build/runtime/dvi2svg.mjs` | 2 files | 0 files |
-| `src/browser/page` | 0 files | 1 file |
-| `src/browser/pinned` | 0 files | 1 file |
-| `src/graph/image` | 0 files | 1 file |
 
 ---
 
@@ -994,67 +1138,76 @@ graph TD
         N25[index]
     end
 
-    subgraph Mermaid
+    subgraph Math
         N26[backend-pdf]
         N27[backend-png]
         N28[backend-svg]
-        N29[browser]
-        N30[class]
-        N31[common]
-        N32[index]
-        N33[render]
-        N34[sequence-layout]
-        N35[sequence]
-        N36[...1 more]
+        N29[font-ranges]
+        N30[index]
+        N31[tex]
+    end
+
+    subgraph Mermaid
+        N32[backend-pdf]
+        N33[backend-png]
+        N34[backend-svg]
+        N35[browser]
+        N36[class]
+        N37[common]
+        N38[index]
+        N39[render]
+        N40[sequence-layout]
+        N41[sequence]
+        N42[...1 more]
     end
 
     subgraph Raster
-        N37[index]
-        N38[warnings]
+        N43[index]
+        N44[warnings]
     end
 
     subgraph Worker
-        N39[entry]
-        N40[protocol]
-        N41[run]
+        N45[entry]
+        N46[protocol]
+        N47[run]
     end
 
     subgraph Trials/t1-graph
-        N42[compare-layout.mjs]
-        N43[make-sources.mjs]
-        N44[measure.mjs]
+        N48[compare-layout.mjs]
+        N49[make-sources.mjs]
+        N50[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N45[measure.mjs]
+        N51[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N46[index.cjs]
+        N52[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N47[pinned.js]
-        N48[measure.mjs]
+        N53[pinned.js]
+        N54[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N49[dvi2svg.mjs]
-        N50[host.mjs]
-        N51[run.mjs]
-        N52[tfm.mjs]
-        N53[type1.mjs]
-        N54[vfs.mjs]
+        N55[dvi2svg.mjs]
+        N56[host.mjs]
+        N57[run.mjs]
+        N58[tfm.mjs]
+        N59[type1.mjs]
+        N60[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N55[dvisvgm-specials.mjs]
+        N61[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N40
+    N8 --> N46
     N8 --> N13
-    N9 --> N40
+    N9 --> N46
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1069,20 +1222,20 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N41
+    N2 --> N47
     N2 --> N6
     N19 --> N3
-    N19 --> N40
-    N19 --> N29
+    N19 --> N46
+    N19 --> N35
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N40
+    N20 --> N46
     N20 --> N22
-    N20 --> N37
-    N20 --> N38
+    N20 --> N43
+    N20 --> N44
     N21 --> N3
-    N21 --> N40
+    N21 --> N46
     N21 --> N22
     N22 --> N3
     N22 --> N23
@@ -1092,40 +1245,40 @@ graph TD
     N25 --> N1
     N25 --> N6
     N25 --> N3
-    N26 --> N40
+    N26 --> N3
+    N26 --> N35
+    N26 --> N46
     N26 --> N31
-    N26 --> N29
-    N26 --> N33
-    N27 --> N13
     N27 --> N3
     N27 --> N20
-    N27 --> N40
+    N27 --> N46
     N27 --> N31
-    N27 --> N29
-    N27 --> N33
-    N28 --> N40
+    N28 --> N3
+    N28 --> N46
     N28 --> N31
-    N28 --> N29
-    N28 --> N33
-    N29 --> N13
-    N29 --> N15
-    N29 --> N3
-    N29 --> N14
-    N29 --> N0
     N30 --> N31
     N31 --> N3
-    N32 --> N31
-    N32 --> N30
+    N31 --> N29
+    N32 --> N46
+    N32 --> N37
     N32 --> N35
-    N32 --> N34
-    N32 --> N33
-    N33 --> N22
-    N33 --> N30
-    N33 --> N31
+    N32 --> N39
+    N33 --> N13
+    N33 --> N3
+    N33 --> N20
+    N33 --> N46
+    N33 --> N37
     N33 --> N35
-    N33 --> N34
-    N34 --> N31
+    N33 --> N39
+    N34 --> N46
+    N34 --> N37
     N34 --> N35
+    N34 --> N39
+    N35 --> N13
+    N35 --> N15
+    N35 --> N3
+    N35 --> N14
+    N35 --> N0
 ```
 
 ---
@@ -1135,17 +1288,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 168 |
-| Subsystems | 13 |
-| Total Lines of Code | 18069 |
-| Total Exports | 327 |
-| Total Re-exports | 55 |
+| Total Source Files | 179 |
+| Subsystems | 14 |
+| Total Lines of Code | 18752 |
+| Total Exports | 343 |
+| Total Re-exports | 57 |
 | Total Classes | 6 |
-| Total Interfaces | 51 |
-| Total Functions | 151 |
+| Total Interfaces | 52 |
+| Total Functions | 162 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 23 |
+| Type-only Imports | 28 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

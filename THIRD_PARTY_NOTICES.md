@@ -11,7 +11,7 @@ Version: each row gives the version that the engine pins.
 | Stage | Engine | Licence | Status |
 |---|---|---|---|
 | graph | `@viz-js/viz` 3.31.0 (Graphviz 16.1.0 compiled to WASM) | Wrapper: MIT. Graphviz: EPL-2.0 | a dependency |
-| math | `@mathjax/src` | Apache-2.0 | not yet a dependency |
+| math | `@mathjax/src` 4.1.3 (MathJax, with the Newcm math font and the packages it installs; see "MathJax") | Apache-2.0 for MathJax and the math font; the other packages are listed under "MathJax" | a dependency |
 | tex | The own WASM build of `tex.web` with `etex.ch` (trials T5 and T6) | The "tex" stage of the design gives the licence of each input | not yet a dependency |
 | tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
 | mesh | `occt-import-js` (OpenCascade compiled to WASM) | LGPL-2.1 | not yet a dependency |
@@ -28,6 +28,33 @@ Version: each row gives the version that the engine pins.
 ### Graphviz (EPL-2.0)
 
 The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to the wrapper `@viz-js/viz`. The package does not ship a Graphviz licence file. The licence text of Graphviz is in `assets/licenses/EPL-2.0.txt`. The MIT licence text of the wrapper is in `assets/licenses/MIT-viz-js.txt`, copied from the tag `release-viz-3.31.0` of the source repository https://github.com/mdaines/viz-js. The npm package does not ship this file.
+
+### MathJax (Apache-2.0, with other licences for transitive packages)
+
+`@mathjax/src` 4.1.3 and `@mathjax/mathjax-newcm-font` 4.1.3 are under the Apache License 2.0. The math stage bundles the font ranges into the package. The package installs the packages in the table below. The engine loads `@mathjax/src` only, so the other packages are not in the render path. The table gives each installed package, its version and its licence, from its `package.json`.
+
+| Package | Version | Licence |
+|---|---|---|
+| `@mathjax/src` | 4.1.3 | Apache-2.0 |
+| `@mathjax/mathjax-newcm-font` | 4.1.3 | Apache-2.0 |
+| `mhchemparser` | 4.2.1 | Apache-2.0 |
+| `mj-context-menu` | 1.0.0 | Apache-2.0 |
+| `speech-rule-engine` | 5.0.0-rc.4 | Apache-2.0 |
+| `@xmldom/xmldom` | 0.9.12 | MIT |
+| `wicked-good-xpath` | 1.3.0 | MIT |
+| `commander` | 14.0.3 (installed under `speech-rule-engine`) | MIT |
+| `balanced-match` | 4.0.4 | MIT |
+| `brace-expansion` | 5.0.12 | MIT |
+| `@isaacs/nonrecursive-glob-match` | 1.0.3 | BlueOak-1.0.0 |
+| `glob` | 14.0.3 | BlueOak-1.0.0 |
+| `minimatch` | 11.0.4 | BlueOak-1.0.0 |
+| `minipass` | 7.1.3 | BlueOak-1.0.0 |
+| `package-json-from-dist` | 1.0.1 | BlueOak-1.0.0 |
+| `path-scurry` | 3.0.0 | BlueOak-1.0.0 |
+| `lru-cache` | 11.5.3 | BlueOak-1.0.0 |
+| `rimraf` | 6.1.4 | BlueOak-1.0.0 |
+
+The Apache License 2.0 applies to the MathJax packages. The BlueOak Model License 1.0.0 applies to the glob packages. The MIT licence applies to the other packages. Each package keeps its own licence text in its installed folder. The `dist/` folder holds the compiled code of this package only. It holds no code of the packages in the table: npm installs them as dependencies.
 
 ### Mermaid (MIT)
 
