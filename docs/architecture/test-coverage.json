@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 80,
-    "totalTestFiles": 76,
+    "totalTestFiles": 77,
     "testedCount": 53,
     "untestedCount": 27,
     "coveragePercent": "66.3",
@@ -150,6 +150,7 @@
       "test/unit/graph-svg-backend.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
+      "test/unit/mesh-large.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
     ],
@@ -161,6 +162,7 @@
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
       "test/unit/mesh-glb.test.ts",
+      "test/unit/mesh-large.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts",
       "test/unit/render.test.ts"
@@ -332,6 +334,7 @@
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
       "test/unit/mesh-glb.test.ts",
+      "test/unit/mesh-large.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts"
     ],
@@ -579,6 +582,11 @@
       "src/core.ts",
       "src/registry.ts",
       "src/mesh/read.ts"
+    ],
+    "test/unit/mesh-large.test.ts": [
+      "src/config.ts",
+      "src/core.ts",
+      "src/registry.ts"
     ],
     "test/unit/mesh-limit.test.ts": [
       "src/mesh/backend-glb.ts",

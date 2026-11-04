@@ -1,11 +1,11 @@
 {
-  "totalFiles": 214,
+  "totalFiles": 215,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 66,
     "test-only": 3,
     "orphan": 12,
-    "test": 105,
+    "test": 106,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 28,
     "src": 81,
-    "tests": 105
+    "tests": 106
   },
   "byPackage": {
-    "(root)": 147,
+    "(root)": 148,
     "@danielsimonjr/sciengjs": 67
   },
   "files": [
@@ -1035,6 +1035,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 111
+    },
+    {
+      "file": "test/unit/mesh-large.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 53
     },
     {
       "file": "test/unit/mesh-limit.test.ts",

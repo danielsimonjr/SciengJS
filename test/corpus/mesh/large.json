@@ -1,0 +1,9 @@
+{
+  "file": "test/corpus-large/linkrods.step",
+  "url": "https://raw.githubusercontent.com/Open-Cascade-SAS/OCCT/7fd59977dfb3a75f75670474b59dfc0f3f5f90ba/data/step/linkrods.step",
+  "source": "https://github.com/Open-Cascade-SAS/OCCT/blob/7fd59977dfb3a75f75670474b59dfc0f3f5f90ba/data/step/linkrods.step",
+  "licence": "LGPL-2.1 (repository licence; licence text in test/corpus/mesh/LICENSES)",
+  "sha256": "3674e4b01ee0e983c81ed170f0574cda201ad08e0f7b46e05e4f4613400fd5f7",
+  "bytes": 1793282,
+  "triangles": 8772
+}
