@@ -1,14 +1,38 @@
 /** The HTML to Markdown converter: parse5 parses the document, and the walk emits GitHub Flavored Markdown. */
-import { parse, type DefaultTreeAdapterMap } from "parse5";
+import { parse, serializeOuter, type DefaultTreeAdapterMap } from "parse5";
 
 type Element = DefaultTreeAdapterMap["element"];
 type Text = DefaultTreeAdapterMap["textNode"];
 type Node = DefaultTreeAdapterMap["node"];
 
-/** The state of one conversion: the footnote definitions, in document order. */
+/** A file that the conversion writes next to the Markdown. */
+export interface Asset {
+  readonly name: string;
+  readonly data: Uint8Array;
+  readonly mediaType: string;
+}
+
+/** The options of one conversion. */
+export interface ConvertOptions {
+  /** The path prefix of each asset link, for example `assets/`. The default is empty. */
+  readonly assetPrefix?: string;
+}
+
+/** The result of one conversion: the Markdown and the assets that it links. */
+export interface ConvertResult {
+  readonly markdown: string;
+  readonly assets: Asset[];
+}
+
+/** The state of one conversion: the footnote definitions, the assets and the link prefix. */
 interface Context {
   readonly footnotes: string[];
+  readonly assets: Asset[];
+  readonly assetPrefix: string;
 }
+
+/** The block type of a scieng page block when the page does not name it. */
+const RAW_HTML = "raw-html";
 
 /** Elements that the walk drops with their content. */
 const SKIP = new Set(["script", "style", "head", "template", "title", "noscript", "meta", "link"]);
@@ -16,7 +40,7 @@ const SKIP = new Set(["script", "style", "head", "template", "title", "noscript"
 /** Elements that flow inside a paragraph. Any other element starts a block. */
 const INLINE = new Set([
   "a", "abbr", "b", "br", "cite", "code", "del", "em", "i", "img", "input", "ins", "kbd",
-  "mark", "q", "s", "small", "span", "strong", "sub", "sup", "time", "u",
+  "mark", "q", "s", "small", "span", "strong", "sub", "sup", "time", "u", "math", "svg",
 ]);
 
 /** Markdown characters that a text node escapes. */
@@ -36,6 +60,84 @@ function attr(el: Element, name: string): string | undefined {
 
 function hasClass(el: Element, name: string): boolean {
   return (attr(el, "class") ?? "").split(/\s+/).includes(name);
+}
+
+/** The element descendants of a node, in document order. */
+function descendants(node: Node): Element[] {
+  const out: Element[] = [];
+  if ("childNodes" in node) {
+    for (const child of node.childNodes) {
+      if (isElement(child)) {
+        out.push(child, ...descendants(child));
+      }
+    }
+  }
+  return out;
+}
+
+/** A fenced block. The fence is longer than any backtick run in the content. */
+function fenced(content: string, language: string): string {
+  const longest = Math.max(0, ...(content.match(/`+/g) ?? []).map((run) => run.length));
+  const fence = "`".repeat(Math.max(3, longest + 1));
+  return `${fence}${language}\n${content}\n${fence}`;
+}
+
+/** The block type of a scieng block, from its markup, when the page does not name the type. */
+function inferBlockType(el: Element): string {
+  for (const inner of descendants(el)) {
+    if (inner.tagName === "pre" && hasClass(inner, "mermaid")) {
+      return "mermaid";
+    }
+    const id = attr(inner, "id") ?? "";
+    if (inner.tagName === "div" && /^dot-\d+$/.test(id)) {
+      return "dot";
+    }
+    if (hasClass(inner, "latex-block")) {
+      return "latex";
+    }
+    if (inner.tagName === "div" && (/^plotly-\d+$/.test(id) || hasClass(inner, "plotly-static"))) {
+      return "plotly";
+    }
+    if (hasClass(inner, "wavedrom-block")) {
+      return "wavedrom";
+    }
+  }
+  return RAW_HTML;
+}
+
+/** True for a scieng page block: a div with the source attribute. */
+function isSciengBlock(el: Element): boolean {
+  return el.tagName === "div" && attr(el, "data-scieng-source") !== undefined;
+}
+
+/** The fenced block of a scieng block. Its markup is not read. The fence language is the block type. */
+function sciengFence(el: Element): string {
+  const type = attr(el, "data-scieng-type") ?? inferBlockType(el);
+  const language = type === RAW_HTML ? "html" : type;
+  return fenced(attr(el, "data-scieng-source") ?? "", language);
+}
+
+/** The TeX of a math element, from its annotation of type application/x-tex. */
+function texOf(el: Element): string | undefined {
+  const annotation = descendants(el).find(
+    (d) => d.tagName === "annotation" && attr(d, "encoding") === "application/x-tex",
+  );
+  return annotation === undefined ? undefined : rawText(annotation).trim();
+}
+
+function isDisplayMath(node: Node): node is Element {
+  return isElement(node) && node.tagName === "math" && attr(node, "display") === "block";
+}
+
+/** Adds the xmlns attribute to a serialized svg when it has none. */
+function svgAsset(el: Element, ctx: Context): string {
+  let markup = serializeOuter(el);
+  if (attr(el, "xmlns") === undefined) {
+    markup = markup.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  const name = `image-${ctx.assets.length + 1}.svg`;
+  ctx.assets.push({ name, data: new TextEncoder().encode(markup), mediaType: "image/svg+xml" });
+  return `![](${ctx.assetPrefix}${name})`;
 }
 
 function escapeText(value: string): string {
@@ -98,6 +200,12 @@ function inlineElement(el: Element, ctx: Context): string {
     }
     case "img":
       return `![${attr(el, "alt") ?? ""}](${attr(el, "src") ?? ""})`;
+    case "math": {
+      const tex = texOf(el);
+      return tex === undefined ? rawText(el).trim() : `$${tex}$`;
+    }
+    case "svg":
+      return svgAsset(el, ctx);
     case "br":
       return "\\\n";
     case "input":
@@ -119,7 +227,11 @@ function blocks(nodes: readonly Node[], ctx: Context): string[] {
     run = [];
   };
   for (const node of nodes) {
-    if (isText(node) || (isElement(node) && INLINE.has(node.tagName))) {
+    if (isDisplayMath(node)) {
+      flush();
+      const tex = texOf(node);
+      out.push(tex === undefined ? rawText(node).trim() : `$$${tex}$$`);
+    } else if (isText(node) || (isElement(node) && INLINE.has(node.tagName))) {
       run.push(node);
     } else if (isElement(node)) {
       flush();
@@ -133,6 +245,9 @@ function blocks(nodes: readonly Node[], ctx: Context): string[] {
 function blockElement(el: Element, ctx: Context): string[] {
   if (SKIP.has(el.tagName)) {
     return [];
+  }
+  if (isSciengBlock(el)) {
+    return [sciengFence(el)];
   }
   if (/^h[1-6]$/.test(el.tagName)) {
     const text = inline(el.childNodes, ctx).trim();
@@ -258,9 +373,7 @@ function codeBlock(pre: Element): string {
   if (content.endsWith("\n")) {
     content = content.slice(0, -1);
   }
-  const longest = Math.max(0, ...(content.match(/`+/g) ?? []).map((run) => run.length));
-  const fence = "`".repeat(Math.max(3, longest + 1));
-  return `${fence}${language}\n${content}\n${fence}`;
+  return fenced(content, language);
 }
 
 function quote(el: Element, ctx: Context): string {
@@ -290,10 +403,19 @@ function collectFootnotes(el: Element, ctx: Context): void {
   visit(el);
 }
 
-/** Converts an HTML document to GitHub Flavored Markdown. The output ends with one newline, or is empty. */
-export function htmlToMarkdown(html: string): string {
+/**
+ * Converts an HTML document to GitHub Flavored Markdown and its assets.
+ * The Markdown ends with one newline, or is empty.
+ */
+export function convertHtml(html: string, options: ConvertOptions = {}): ConvertResult {
   const document = parse(html);
-  const ctx: Context = { footnotes: [] };
+  const ctx: Context = { footnotes: [], assets: [], assetPrefix: options.assetPrefix ?? "" };
   const out = [...blocks(document.childNodes, ctx), ...ctx.footnotes];
-  return out.length === 0 ? "" : `${out.join("\n\n")}\n`;
+  const markdown = out.length === 0 ? "" : `${out.join("\n\n")}\n`;
+  return { markdown, assets: ctx.assets };
+}
+
+/** Converts an HTML document to GitHub Flavored Markdown. The assets are dropped. */
+export function htmlToMarkdown(html: string, options: ConvertOptions = {}): string {
+  return convertHtml(html, options).markdown;
 }
