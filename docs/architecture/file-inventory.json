@@ -1,11 +1,11 @@
 {
-  "totalFiles": 201,
+  "totalFiles": 204,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 61,
+    "build-entry": 62,
     "test-only": 3,
     "orphan": 11,
-    "test": 98,
+    "test": 100,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 75,
-    "tests": 98
+    "src": 76,
+    "tests": 100
   },
   "byPackage": {
-    "(root)": 140,
-    "@danielsimonjr/sciengjs": 61
+    "(root)": 142,
+    "@danielsimonjr/sciengjs": 62
   },
   "files": [
     {
@@ -124,14 +124,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 225
+      "loc": 239
     },
     {
       "file": "src/core.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 113
+      "loc": 115
     },
     {
       "file": "src/errors.ts",
@@ -187,14 +187,21 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 55
+      "loc": 56
     },
     {
       "file": "src/html/convert.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 421
+      "loc": 513
+    },
+    {
+      "file": "src/html/fetch-image.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 147
     },
     {
       "file": "src/html/images.ts",
@@ -215,7 +222,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 82
+      "loc": 89
     },
     {
       "file": "src/index.ts",
@@ -453,7 +460,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 46
+      "loc": 50
     },
     {
       "file": "src/worker/run.ts",
@@ -761,7 +768,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 253
+      "loc": 267
     },
     {
       "file": "test/unit/errors.test.ts",
@@ -827,11 +834,25 @@
       "loc": 54
     },
     {
+      "file": "test/unit/html-convert-escape.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 189
+    },
+    {
       "file": "test/unit/html-convert.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
       "loc": 153
+    },
+    {
+      "file": "test/unit/html-fetch-image.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 109
     },
     {
       "file": "test/unit/html-md-render.test.ts",

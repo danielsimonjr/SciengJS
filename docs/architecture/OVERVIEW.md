@@ -50,9 +50,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 201 | repo-tools map |
-| totalLinesOfCode | 23019 | repo-tools map |
-| totalExports | 418 | repo-tools map |
-| totalTypeOnlyImports | 37 | repo-tools map |
+| totalSourceFiles | 204 | repo-tools map |
+| totalLinesOfCode | 23598 | repo-tools map |
+| totalExports | 424 | repo-tools map |
+| totalTypeOnlyImports | 39 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 61 | repo-tools map |
+| entryRoots | 62 | repo-tools map |

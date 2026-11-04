@@ -80,9 +80,12 @@
     "html": [
       "convertHtml",
       "convertPage",
+      "createImageFetcher",
       "decodeDataUrl",
       "extensionForMime",
       "htmlToMarkdown",
+      "isDropped",
+      "isPrivateAddress",
       "render"
     ],
     "math": [
