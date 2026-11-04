@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 171,
+    "totalFiles": 177,
     "totalModules": 3,
-    "totalExports": 335
+    "totalExports": 342
   },
   "modules": {
     "tools": {
@@ -1275,6 +1275,114 @@
           "capabilities"
         ]
       },
+      "src/math/backend-pdf.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/math/tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
+      "src/math/backend-png.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/graph/backend-png.ts",
+            "imports": [
+              "readScale",
+              "svgDocumentToPng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/math/tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
+      "src/math/backend-svg.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/math/tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
       "src/math/font-ranges.ts": {
         "externalDependencies": [
           "@mathjax/mathjax-newcm-font/js/svg/dynamic/PUA.js",
@@ -1322,7 +1430,32 @@
         "internalDependencies": [],
         "exports": [
           "loadFontRanges",
+          "MHCHEM_ALIASES",
           "defineMhchemVariant"
+        ]
+      },
+      "src/math/index.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/math/tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/math/tex.ts",
+            "imports": [
+              "MathOptions"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "mathToSvg",
+          "MathOptions"
         ]
       },
       "src/math/tex.ts": {
@@ -1359,7 +1492,8 @@
         "exports": [
           "MATH_PACKAGES",
           "MathOptions",
-          "checkRequires",
+          "stripRequires",
+          "rejectFontFallback",
           "exToPx",
           "standaloneSvg",
           "mathToSvg"
@@ -3405,6 +3539,118 @@
         ],
         "exports": []
       },
+      "test/unit/math-backends.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "renderIsolated"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/rejections.ts",
+            "imports": [
+              "rejectionOf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/png-decode.ts",
+            "imports": [
+              "countDarkPixels",
+              "decodePng"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/assets-fixture.ts",
+            "imports": [
+              "makeAssetsFolder",
+              "realFiles"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/math/backend-svg.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/math/backend-png.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/math/backend-pdf.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/math/index.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/math-registry.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/core.ts",
+            "imports": [
+              "capabilitiesWithRegistry"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/test-registry.ts",
+            "imports": [
+              "ISOLATED_CONFIG_DEPS"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/math-svg.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -4351,21 +4597,21 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 171,
-    "totalSourceFiles": 171,
+    "totalTypeScriptFiles": 177,
+    "totalSourceFiles": 177,
     "totalModules": 3,
-    "totalLinesOfCode": 18342,
-    "totalExports": 335,
-    "entryRoots": 44,
-    "reachableFiles": 44,
+    "totalLinesOfCode": 18675,
+    "totalExports": 342,
+    "entryRoots": 48,
+    "reachableFiles": 48,
     "dormantFiles": 14,
     "orphanedFiles": 11,
     "testOnlyFiles": 3,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 23,
+    "totalTypeOnlyImports": 28,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 25,
+    "unusedExportsCount": 26,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -4373,11 +4619,11 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 52,
-    "totalFunctions": 157,
+    "totalFunctions": 161,
     "totalTypeGuards": 4,
     "totalEnums": 0,
-    "totalConstants": 51,
-    "totalReExports": 55
+    "totalConstants": 52,
+    "totalReExports": 57
   },
   "reachability": {
     "roots": [
@@ -4386,6 +4632,7 @@
       "src/raster/index.ts",
       "src/browser/index.ts",
       "src/mermaid/index.ts",
+      "src/math/index.ts",
       "src/assets.ts",
       "src/browser/backend-pdf.ts",
       "src/browser/backend-png.ts",
@@ -4405,6 +4652,9 @@
       "src/graph/backend-svg.ts",
       "src/graph/dot.ts",
       "src/graph/image.ts",
+      "src/math/backend-pdf.ts",
+      "src/math/backend-png.ts",
+      "src/math/backend-svg.ts",
       "src/math/font-ranges.ts",
       "src/math/tex.ts",
       "src/mermaid/backend-pdf.ts",
@@ -4426,7 +4676,7 @@
       "src/worker/protocol.ts",
       "src/worker/run.ts"
     ],
-    "reachableCount": 44,
+    "reachableCount": 48,
     "dormantCount": 14,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",
@@ -4447,8 +4697,5 @@
       "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
     ]
   },
-  "warnings": [
-    "package.json entry './dist/math/index.d.ts' did not resolve to a known source file. The entry is ignored.",
-    "package.json entry './dist/math/index.js' did not resolve to a known source file. The entry is ignored."
-  ]
+  "warnings": []
 }

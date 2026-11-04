@@ -73,12 +73,16 @@
     ],
     "math": [
       "MATH_PACKAGES",
-      "checkRequires",
+      "MHCHEM_ALIASES",
+      "MathOptions",
       "defineMhchemVariant",
       "exToPx",
       "loadFontRanges",
       "mathToSvg",
-      "standaloneSvg"
+      "rejectFontFallback",
+      "render",
+      "standaloneSvg",
+      "stripRequires"
     ],
     "mermaid": [
       "ActivateEvent",

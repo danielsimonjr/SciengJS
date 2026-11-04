@@ -1096,6 +1096,121 @@
       }
     },
     "math": {
+      "src/math/backend-pdf.ts": {
+        "description": "backend-pdf module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/math/backend-png.ts": {
+        "description": "backend-png module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../graph/backend-png.ts",
+            "imports": [
+              "readScale",
+              "svgDocumentToPng"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/math/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/math/font-ranges.ts": {
         "description": "Static imports of every dynamic font range of MathJax-Newcm, the default math font. Each import",
         "externalDependencies": [
@@ -1265,15 +1380,50 @@
         "workspaceDependencies": [],
         "exports": [
           "loadFontRanges",
+          "MHCHEM_ALIASES",
           "defineMhchemVariant"
         ],
         "functions": [
           "loadFontRanges",
           "defineMhchemVariant"
+        ],
+        "constants": [
+          "MHCHEM_ALIASES"
+        ]
+      },
+      "src/math/index.ts": {
+        "description": "Package entry point for math (re-exports 2 symbols)",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./tex.ts",
+            "imports": [
+              "MathOptions"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "mathToSvg",
+          "MathOptions"
+        ],
+        "reExported": [
+          "mathToSvg",
+          "MathOptions"
         ]
       },
       "src/math/tex.ts": {
-        "description": "Rejects a `\\require` of a package that this build does not hold. MathJax never fetches a package,",
+        "description": "Removes each `\\require{...}` command from the source and returns the rest. The build loads every",
         "externalDependencies": [
           {
             "package": "@mathjax/src/js/adaptors/liteAdaptor.js",
@@ -1345,7 +1495,8 @@
         "workspaceDependencies": [],
         "exports": [
           "MATH_PACKAGES",
-          "checkRequires",
+          "stripRequires",
+          "rejectFontFallback",
           "exToPx",
           "standaloneSvg",
           "mathToSvg"
@@ -1354,7 +1505,8 @@
           "MathOptions"
         ],
         "functions": [
-          "checkRequires",
+          "stripRequires",
+          "rejectFontFallback",
           "exToPx",
           "standaloneSvg",
           "mathToSvg"
@@ -2519,7 +2671,11 @@
     {
       "name": "Math",
       "files": [
+        "src/math/backend-pdf.ts",
+        "src/math/backend-png.ts",
+        "src/math/backend-svg.ts",
         "src/math/font-ranges.ts",
+        "src/math/index.ts",
         "src/math/tex.ts"
       ]
     },

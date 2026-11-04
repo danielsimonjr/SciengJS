@@ -1,11 +1,11 @@
 {
-  "totalFiles": 171,
+  "totalFiles": 177,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 44,
+    "build-entry": 48,
     "test-only": 3,
     "orphan": 11,
-    "test": 85,
+    "test": 87,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 58,
-    "tests": 85
+    "src": 62,
+    "tests": 87
   },
   "byPackage": {
-    "(root)": 127,
-    "@danielsimonjr/sciengjs": 44
+    "(root)": 129,
+    "@danielsimonjr/sciengjs": 48
   },
   "files": [
     {
@@ -190,18 +190,46 @@
       "loc": 28
     },
     {
+      "file": "src/math/backend-pdf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 15
+    },
+    {
+      "file": "src/math/backend-png.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 16
+    },
+    {
+      "file": "src/math/backend-svg.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 13
+    },
+    {
       "file": "src/math/font-ranges.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 84
+      "loc": 108
+    },
+    {
+      "file": "src/math/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 3
     },
     {
       "file": "src/math/tex.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 102
+      "loc": 144
     },
     {
       "file": "src/mermaid/backend-pdf.ts",
@@ -694,11 +722,25 @@
       "loc": 54
     },
     {
+      "file": "test/unit/math-backends.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 130
+    },
+    {
+      "file": "test/unit/math-registry.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 34
+    },
+    {
       "file": "test/unit/math-svg.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 78
+      "loc": 134
     },
     {
       "file": "test/unit/mermaid-browser-route.test.ts",
@@ -1220,8 +1262,5 @@
     }
   ],
   "skippedLinks": [],
-  "warnings": [
-    "package.json entry './dist/math/index.d.ts' did not resolve to a known source file. The entry is ignored.",
-    "package.json entry './dist/math/index.js' did not resolve to a known source file. The entry is ignored."
-  ]
+  "warnings": []
 }

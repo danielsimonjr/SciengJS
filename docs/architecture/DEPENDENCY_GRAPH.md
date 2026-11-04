@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **browser**: 11 files
 - **graph**: 6 files
 - **entry**: 1 file
-- **math**: 2 files
+- **math**: 6 files
 - **mermaid**: 11 files
 - **raster**: 2 files
 - **worker**: 3 files
@@ -469,6 +469,50 @@ The codebase is organized into the following modules:
 
 ## Math Dependencies
 
+### `src/math/backend-pdf.ts` - backend-pdf module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../mermaid/browser.ts` | `drawSvgToPdf` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./tex.ts` | `mathToSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/math/backend-png.ts` - backend-png module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./tex.ts` | `mathToSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/math/backend-svg.ts` - backend-svg module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./tex.ts` | `mathToSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
 ### `src/math/font-ranges.ts` - Static imports of every dynamic font range of MathJax-Newcm, the default math font. Each import
 
 **External Dependencies:**
@@ -517,10 +561,24 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `loadFontRanges`, `defineMhchemVariant`
+- Constants: `MHCHEM_ALIASES`
 
 ---
 
-### `src/math/tex.ts` - Rejects a `\require` of a package that this build does not hold. MathJax never fetches a package,
+### `src/math/index.ts` - Package entry point for math (re-exports 2 symbols)
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./tex.ts` | `mathToSvg` | Re-export |
+| `./tex.ts` | `MathOptions` | Re-export (type-only) |
+
+**Exports:**
+- Re-exports: `mathToSvg`, `MathOptions`
+
+---
+
+### `src/math/tex.ts` - Removes each `\require{...}` command from the source and returns the rest. The build loads every
 
 **External Dependencies:**
 | Package | Import |
@@ -544,7 +602,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `MathOptions`
-- Functions: `checkRequires`, `exToPx`, `standaloneSvg`, `mathToSvg`
+- Functions: `stripRequires`, `rejectFontFallback`, `exToPx`, `standaloneSvg`, `mathToSvg`
 - Constants: `MATH_PACKAGES`
 
 ---
@@ -988,23 +1046,26 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 19 files |
-| `src/worker/protocol` | 1 file | 10 files |
+| `src/errors` | 0 files | 22 files |
+| `src/worker/protocol` | 1 file | 13 files |
+| `src/mermaid/browser` | 6 files | 5 files |
 | `src/browser/render` | 6 files | 4 files |
-| `src/mermaid/browser` | 6 files | 4 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
+| `src/graph/backend-png` | 6 files | 2 files |
 | `src/core` | 6 files | 1 file |
-| `src/graph/backend-png` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
 | `src/mermaid/backend-png` | 7 files | 0 files |
 | `src/browser/input` | 1 file | 5 files |
 | `src/config` | 3 files | 3 files |
+| `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/assets` | 1 file | 4 files |
 | `src/index` | 5 files | 0 files |
 | `src/browser/index` | 4 files | 0 files |
 | `src/graph/backend-pdf` | 4 files | 0 files |
+| `src/math/backend-pdf` | 4 files | 0 files |
+| `src/math/backend-png` | 4 files | 0 files |
 | `src/mermaid/backend-pdf` | 4 files | 0 files |
 | `src/mermaid/backend-svg` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
@@ -1015,19 +1076,16 @@ The codebase is organized into the following modules:
 | `src/browser/backend-png` | 3 files | 0 files |
 | `src/browser/cdp` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
+| `src/math/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
 | `src/mermaid/state` | 1 file | 2 files |
 | `src/worker/run` | 2 files | 1 file |
 | `src/browser/flags` | 0 files | 2 files |
 | `src/browser/profile` | 1 file | 1 file |
 | `src/browser/proxy` | 0 files | 2 files |
-| `src/math/tex` | 2 files | 0 files |
 | `src/pairs` | 1 file | 1 file |
 | `src/registry` | 0 files | 2 files |
 | `src/worker/entry` | 2 files | 0 files |
-| `trials/t5-tex-build/runtime/dvi2svg.mjs` | 2 files | 0 files |
-| `src/browser/page` | 0 files | 1 file |
-| `src/browser/pinned` | 0 files | 1 file |
 
 ---
 
@@ -1081,71 +1139,75 @@ graph TD
     end
 
     subgraph Math
-        N26[font-ranges]
-        N27[tex]
+        N26[backend-pdf]
+        N27[backend-png]
+        N28[backend-svg]
+        N29[font-ranges]
+        N30[index]
+        N31[tex]
     end
 
     subgraph Mermaid
-        N28[backend-pdf]
-        N29[backend-png]
-        N30[backend-svg]
-        N31[browser]
-        N32[class]
-        N33[common]
-        N34[index]
-        N35[render]
-        N36[sequence-layout]
-        N37[sequence]
-        N38[...1 more]
+        N32[backend-pdf]
+        N33[backend-png]
+        N34[backend-svg]
+        N35[browser]
+        N36[class]
+        N37[common]
+        N38[index]
+        N39[render]
+        N40[sequence-layout]
+        N41[sequence]
+        N42[...1 more]
     end
 
     subgraph Raster
-        N39[index]
-        N40[warnings]
+        N43[index]
+        N44[warnings]
     end
 
     subgraph Worker
-        N41[entry]
-        N42[protocol]
-        N43[run]
+        N45[entry]
+        N46[protocol]
+        N47[run]
     end
 
     subgraph Trials/t1-graph
-        N44[compare-layout.mjs]
-        N45[make-sources.mjs]
-        N46[measure.mjs]
-    end
-
-    subgraph Trials/t2-mesh
-        N47[measure.mjs]
-    end
-
-    subgraph Trials/t3-tex
-        N48[index.cjs]
-    end
-
-    subgraph Trials/t4-browser
-        N49[pinned.js]
+        N48[compare-layout.mjs]
+        N49[make-sources.mjs]
         N50[measure.mjs]
     end
 
+    subgraph Trials/t2-mesh
+        N51[measure.mjs]
+    end
+
+    subgraph Trials/t3-tex
+        N52[index.cjs]
+    end
+
+    subgraph Trials/t4-browser
+        N53[pinned.js]
+        N54[measure.mjs]
+    end
+
     subgraph Trials/t5-tex-build
-        N51[dvi2svg.mjs]
-        N52[host.mjs]
-        N53[run.mjs]
-        N54[tfm.mjs]
-        N55[type1.mjs]
-        N56[vfs.mjs]
+        N55[dvi2svg.mjs]
+        N56[host.mjs]
+        N57[run.mjs]
+        N58[tfm.mjs]
+        N59[type1.mjs]
+        N60[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N57[dvisvgm-specials.mjs]
+        N61[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N42
+    N8 --> N46
     N8 --> N13
-    N9 --> N42
+    N9 --> N46
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1160,20 +1222,20 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N43
+    N2 --> N47
     N2 --> N6
     N19 --> N3
-    N19 --> N42
-    N19 --> N31
+    N19 --> N46
+    N19 --> N35
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N42
+    N20 --> N46
     N20 --> N22
-    N20 --> N39
-    N20 --> N40
+    N20 --> N43
+    N20 --> N44
     N21 --> N3
-    N21 --> N42
+    N21 --> N46
     N21 --> N22
     N22 --> N3
     N22 --> N23
@@ -1183,40 +1245,40 @@ graph TD
     N25 --> N1
     N25 --> N6
     N25 --> N3
+    N26 --> N3
+    N26 --> N35
+    N26 --> N46
+    N26 --> N31
     N27 --> N3
-    N27 --> N26
-    N28 --> N42
-    N28 --> N33
+    N27 --> N20
+    N27 --> N46
+    N27 --> N31
+    N28 --> N3
+    N28 --> N46
     N28 --> N31
-    N28 --> N35
-    N29 --> N13
-    N29 --> N3
-    N29 --> N20
-    N29 --> N42
-    N29 --> N33
-    N29 --> N31
-    N29 --> N35
-    N30 --> N42
-    N30 --> N33
     N30 --> N31
-    N30 --> N35
-    N31 --> N13
-    N31 --> N15
     N31 --> N3
-    N31 --> N14
-    N31 --> N0
-    N32 --> N33
+    N31 --> N29
+    N32 --> N46
+    N32 --> N37
+    N32 --> N35
+    N32 --> N39
+    N33 --> N13
     N33 --> N3
-    N34 --> N33
-    N34 --> N32
+    N33 --> N20
+    N33 --> N46
+    N33 --> N37
+    N33 --> N35
+    N33 --> N39
+    N34 --> N46
     N34 --> N37
-    N34 --> N36
     N34 --> N35
-    N35 --> N22
-    N35 --> N32
-    N35 --> N33
-    N35 --> N37
-    N35 --> N36
+    N34 --> N39
+    N35 --> N13
+    N35 --> N15
+    N35 --> N3
+    N35 --> N14
+    N35 --> N0
 ```
 
 ---
@@ -1226,17 +1288,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 171 |
+| Total Source Files | 177 |
 | Subsystems | 14 |
-| Total Lines of Code | 18342 |
-| Total Exports | 335 |
-| Total Re-exports | 55 |
+| Total Lines of Code | 18675 |
+| Total Exports | 342 |
+| Total Re-exports | 57 |
 | Total Classes | 6 |
 | Total Interfaces | 52 |
-| Total Functions | 157 |
+| Total Functions | 161 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 23 |
+| Type-only Imports | 28 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |
