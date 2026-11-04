@@ -89,7 +89,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/backend-html.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/plot/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/plot/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 22 |
-| `src/plot/control.ts` | @danielsimonjr/sciengjs | src | build-entry | 793 |
+| `src/plot/control.ts` | @danielsimonjr/sciengjs | src | build-entry | 802 |
 | `src/plot/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 6 |
 | `src/plot/plotter.ts` | @danielsimonjr/sciengjs | src | build-entry | 528 |
 | `src/plot/reader.ts` | @danielsimonjr/sciengjs | src | build-entry | 251 |

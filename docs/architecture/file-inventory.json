@@ -341,7 +341,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 793
+      "loc": 802
     },
     {
       "file": "src/plot/index.ts",
