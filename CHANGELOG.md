@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix `E_INTERNAL` render rejections under `node --test` and `node --input-type=module -e`. The render worker gets no `execArgv` key when no flag is removed. When a flag is removed, the worker gets the filtered `execArgv` list. If the Worker constructor throws `ERR_WORKER_INVALID_EXEC_ARGV`, the code constructs the worker again with an empty `execArgv`.
+
 ## [0.3.1] - 2026-11-03
 
 ### Fixed

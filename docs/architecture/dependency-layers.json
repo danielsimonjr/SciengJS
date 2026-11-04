@@ -1802,7 +1802,8 @@
           {
             "module": "worker_threads",
             "imports": [
-              "Worker"
+              "Worker",
+              "WorkerOptions"
             ]
           },
           {
@@ -1838,6 +1839,7 @@
         "workspaceDependencies": [],
         "exports": [
           "workerExecArgv",
+          "constructWorker",
           "runInWorker"
         ],
         "interfaces": [
@@ -1846,6 +1848,7 @@
         ],
         "functions": [
           "workerExecArgv",
+          "constructWorker",
           "runInWorker"
         ]
       }

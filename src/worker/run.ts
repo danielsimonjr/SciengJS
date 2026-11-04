@@ -1,4 +1,4 @@
-import { Worker } from "node:worker_threads";
+import { Worker, type WorkerOptions } from "node:worker_threads";
 import { extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { RenderError } from "../errors.ts";
@@ -64,12 +64,42 @@ export function workerExecArgv(parentArgv: readonly string[]): string[] {
   return kept;
 }
 
+/** The error code that Node throws when a worker rejects the execArgv it receives. */
+const INVALID_EXEC_ARGV = "ERR_WORKER_INVALID_EXEC_ARGV";
+
+/**
+ * Creates a worker with the parent flags that a worker can take. The parent execArgv can hold flags
+ * that a worker rejects, such as the expanded defaults of `node --test` and `--stack-trace-limit`.
+ * Rules:
+ * 1. When workerExecArgv removes no flag, the worker gets no execArgv key. Node then inherits the parent flags.
+ * 2. When it removes a flag, the worker gets the filtered list.
+ * 3. When the constructor throws `ERR_WORKER_INVALID_EXEC_ARGV`, the worker is constructed again with an empty list.
+ * The empty list drops every parent flag, also `--conditions`, `--import` and `--require`. The built worker entry needs none of them.
+ * Other errors pass through. `ctor` receives the options and returns the worker. Tests pass a double.
+ */
+export function constructWorker(
+  ctor: (options: WorkerOptions) => Worker,
+  base: WorkerOptions,
+  parentArgv: readonly string[],
+): Worker {
+  const kept = workerExecArgv(parentArgv);
+  const removedAny = kept.length !== parentArgv.length;
+  try {
+    return ctor(removedAny ? { ...base, execArgv: kept } : { ...base });
+  } catch (err) {
+    if ((err as { code?: unknown } | null)?.code === INVALID_EXEC_ARGV) {
+      return ctor({ ...base, execArgv: [] });
+    }
+    throw err;
+  }
+}
+
 function createDefaultWorker(entry: URL, data: WorkerJob, maxMemoryMb: number): Worker {
-  return new Worker(entry, {
-    workerData: data,
-    execArgv: workerExecArgv(process.execArgv),
-    resourceLimits: { maxOldGenerationSizeMb: maxMemoryMb },
-  });
+  return constructWorker(
+    (options) => new Worker(entry, options),
+    { workerData: data, resourceLimits: { maxOldGenerationSizeMb: maxMemoryMb } },
+    process.execArgv,
+  );
 }
 
 /** Terminates the worker. It rejects when terminate throws, rejects or does not resolve within the wait. */

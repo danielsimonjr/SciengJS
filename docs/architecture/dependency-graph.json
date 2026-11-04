@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 166,
+    "totalFiles": 168,
     "totalModules": 3,
-    "totalExports": 326
+    "totalExports": 327
   },
   "modules": {
     "tools": {
@@ -1949,6 +1949,7 @@
           "WorkerExit",
           "WorkerLimits",
           "workerExecArgv",
+          "constructWorker",
           "runInWorker"
         ]
       },
@@ -2398,6 +2399,27 @@
         "exports": []
       },
       "test/node/eval-render.node.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:child_process",
+          "node:path",
+          "node:test",
+          "node:url"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/node/fixtures/render-under-node-test.fixture.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [],
+        "exports": []
+      },
+      "test/node/worker-execargv.node.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
           "node:assert/strict",
@@ -4038,11 +4060,14 @@
         "externalDependencies": [
           "bun:test"
         ],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          "node:worker_threads"
+        ],
         "internalDependencies": [
           {
             "file": "src/worker/run.ts",
             "imports": [
+              "constructWorker",
               "workerExecArgv"
             ],
             "typeOnly": false
@@ -4213,11 +4238,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 166,
-    "totalSourceFiles": 166,
+    "totalTypeScriptFiles": 168,
+    "totalSourceFiles": 168,
     "totalModules": 3,
-    "totalLinesOfCode": 17935,
-    "totalExports": 326,
+    "totalLinesOfCode": 18069,
+    "totalExports": 327,
     "entryRoots": 42,
     "reachableFiles": 42,
     "dormantFiles": 14,
@@ -4235,7 +4260,7 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 51,
-    "totalFunctions": 150,
+    "totalFunctions": 151,
     "totalTypeGuards": 4,
     "totalEnums": 0,
     "totalConstants": 50,

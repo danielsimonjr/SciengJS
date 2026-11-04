@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 166
+  totalFiles: 168
   totalModules: 3
-  totalExports: 326
+  totalExports: 327
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1355,6 +1355,7 @@ modules:
         - WorkerExit
         - WorkerLimits
         - workerExecArgv
+        - constructWorker
         - runInWorker
     trials/t1-graph/compare-layout.mjs:
       externalDependencies: []
@@ -1679,6 +1680,23 @@ modules:
           typeOnly: false
       exports: []
     test/node/eval-render.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:child_process
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
+    test/node/fixtures/render-under-node-test.fixture.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:test
+      internalDependencies: []
+      exports: []
+    test/node/worker-execargv.node.mjs:
       externalDependencies: []
       nodeDependencies:
         - node:assert/strict
@@ -2756,10 +2774,12 @@ modules:
     test/unit/worker-exec-argv.test.ts:
       externalDependencies:
         - bun:test
-      nodeDependencies: []
+      nodeDependencies:
+        - node:worker_threads
       internalDependencies:
         - file: src/worker/run.ts
           imports:
+            - constructWorker
             - workerExecArgv
           typeOnly: false
       exports: []
@@ -2868,11 +2888,11 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 166
-  totalSourceFiles: 166
+  totalTypeScriptFiles: 168
+  totalSourceFiles: 168
   totalModules: 3
-  totalLinesOfCode: 17935
-  totalExports: 326
+  totalLinesOfCode: 18069
+  totalExports: 327
   entryRoots: 42
   reachableFiles: 42
   dormantFiles: 14
@@ -2890,7 +2910,7 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 6
   totalInterfaces: 51
-  totalFunctions: 150
+  totalFunctions: 151
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 50

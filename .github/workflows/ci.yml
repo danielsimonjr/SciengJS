@@ -107,7 +107,7 @@ jobs:
         run: node test/smoke/smoke.mjs
 
       - name: Worker path of the built package under Node 22 (heap and time limits, render from node -e)
-        run: node --test test/node/worker.node.mjs test/node/eval-render.node.mjs
+        run: node --test test/node/worker.node.mjs test/node/eval-render.node.mjs test/node/worker-execargv.node.mjs
 
   # The browser gates: the process tree of each render, the sandbox flag, the large screenshot, and on Linux
   # a render in a network namespace with only loopback plus a negative control. Each system runs Bun and Node 22.
