@@ -551,7 +551,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 150
+      "loc": 153
     },
     {
       "file": "test/node/browser-probe.mjs",
@@ -607,7 +607,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 161
+      "loc": 165
     },
     {
       "file": "test/support/assets-fixture.ts",
