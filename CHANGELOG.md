@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- A plot trace with no colour takes the default Plotly colorway entry of its trace index. Before, every such trace and its legend swatch used one blue, so the magnitude and the phase of `bode()` had the same colour.
+
 ## [0.5.0] - 2026-11-04
 
 ### Added

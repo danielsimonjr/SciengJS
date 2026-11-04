@@ -3104,6 +3104,10 @@ modules:
             - rootLocus
             - step
           typeOnly: false
+        - file: src/plot/plotter.ts
+          imports:
+            - '*'
+          typeOnly: false
       exports: []
     test/unit/plot-corpus.test.ts:
       externalDependencies:
@@ -3510,7 +3514,7 @@ statistics:
   totalTypeScriptFiles: 194
   totalSourceFiles: 194
   totalModules: 3
-  totalLinesOfCode: 22066
+  totalLinesOfCode: 22106
   totalExports: 404
   entryRoots: 56
   reachableFiles: 56

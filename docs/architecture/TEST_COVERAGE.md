@@ -115,7 +115,7 @@ The following 24 source files are not directly imported by any test file:
 | `mermaid/state.ts` | `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
 | `src/pairs.ts` | `browser-pdf-pairs.test.ts` |
 | `plot/control.ts` | `plot-control.test.ts` |
-| `plot/plotter.ts` | `plot-corpus.test.ts`, `plot-svg.test.ts` |
+| `plot/plotter.ts` | `plot-control.test.ts`, `plot-corpus.test.ts`, `plot-svg.test.ts` |
 | `plot/reader.ts` | `plot-reader.test.ts` |
 | `plot/ticks.ts` | `plot-ticks.test.ts` |
 | `raster/index.ts` | `graph-network.test.ts`, `mermaid-xml.test.ts`, `raster.test.ts` |
@@ -179,7 +179,7 @@ The following 24 source files are not directly imported by any test file:
 | `unit/no-bun-api.test.ts` | 0 files |
 | `unit/no-sandbox-flag.test.ts` | 0 files |
 | `unit/page-checker-io.test.ts` | 0 files |
-| `unit/plot-control.test.ts` | 2 files |
+| `unit/plot-control.test.ts` | 3 files |
 | `unit/plot-corpus.test.ts` | 1 files |
 | `unit/plot-html.test.ts` | 3 files |
 | `unit/plot-reader.test.ts` | 2 files |

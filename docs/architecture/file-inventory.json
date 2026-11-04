@@ -355,7 +355,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 561
+      "loc": 563
     },
     {
       "file": "src/plot/reader.ts",
@@ -929,7 +929,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 352
+      "loc": 361
     },
     {
       "file": "test/unit/plot-corpus.test.ts",
@@ -964,7 +964,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 524
+      "loc": 553
     },
     {
       "file": "test/unit/plot-ticks.test.ts",
