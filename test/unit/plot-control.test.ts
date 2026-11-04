@@ -184,3 +184,38 @@ describe("gap closures", () => {
     expect(numbers.settlingTime).not.toBeNull();
   });
 });
+
+describe("poles and zeros at the origin", () => {
+  // 10/(s(s+1)(s+5)): the pole at 0 must not set the low end of the range.
+  const INTEGRATOR = { num: [10], den: [1, 6, 5, 0] };
+
+  test("polynomialRoots returns an exact zero root for each trailing zero coefficient", () => {
+    const roots = polynomialRoots([1, 6, 5, 0]);
+    expect(roots.filter((r) => r.re === 0 && r.im === 0)).toHaveLength(1);
+    const others = roots.filter((r) => !(r.re === 0 && r.im === 0)).map((r) => r.re).sort((a, b) => a - b);
+    expect(others[0]).toBeCloseTo(-5, 9);
+    expect(others[1]).toBeCloseTo(-1, 9);
+    expect(polynomialRoots([1, 0, 0])).toEqual([{ re: 0, im: 0 }, { re: 0, im: 0 }]);
+  });
+
+  test("bode of 10/(s(s+1)(s+5)) spans two decades beyond the nonzero roots, not 1e-28", () => {
+    const { figure } = bode(INTEGRATOR);
+    const w = figure.data[0]!.x as number[];
+    const mag = figure.data[0]!.y as number[];
+    expect(w[0]).toBeCloseTo(1e-2, 12);
+    expect(w[w.length - 1]).toBeCloseTo(500, 9);
+    // Low-frequency asymptote: |G| = 2/w, so 20 log10(200) = 46.02 dB at w = 0.01, far from the 300 dB clamp.
+    expect(Math.max(...mag)).toBeLessThan(50);
+    expect(mag[0]).toBeCloseTo(20 * Math.log10(10 / (0.01 * Math.hypot(1, 0.01) * Math.hypot(5, 0.01))), 6);
+  });
+
+  test("bode of 1/s^2 uses the default range, as no root is nonzero", () => {
+    const w = bode({ num: [1], den: [1, 0, 0] }).figure.data[0]!.x as number[];
+    expect(w[0]).toBeCloseTo(0.01, 12);
+    expect(w[w.length - 1]).toBeCloseTo(100, 9);
+  });
+
+  test("poleZero shows the poles of 1/s^2 at exactly 0", () => {
+    expect(poleZero({ num: [1], den: [1, 0, 0] }).numbers.poles).toEqual([{ re: 0, im: 0 }, { re: 0, im: 0 }]);
+  });
+});

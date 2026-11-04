@@ -118,6 +118,8 @@ const EXPM_NORM_TARGET = 0.5;
 const EXPM_TERMS = 20;
 // A root counts as real when its imaginary part is below this relative size.
 const REAL_AXIS_TOL = 1e-6;
+// The frequency range ignores a root smaller than this fraction of the largest root: it is a pole or zero at 0.
+const ROOT_ZERO_REL = 1e-9;
 
 function inputError(message: string): RenderError {
   return new RenderError("E_INPUT", message);
@@ -186,9 +188,19 @@ function evalPoly(p: number[], s: Complex): Complex {
   return acc;
 }
 
-/** The roots of a polynomial with descending coefficients, by Durand-Kerner iteration. */
+/** The roots of a polynomial with descending coefficients. Each trailing zero coefficient gives an exact root at 0; Durand-Kerner finds the others. */
 export function polynomialRoots(coeffs: number[]): Complex[] {
   const p = trimLeading(coeffs);
+  let end = p.length;
+  while (end > 1 && p[end - 1] === 0) end -= 1;
+  const roots: Complex[] = [];
+  for (let i = end; i < p.length; i += 1) roots.push({ re: 0, im: 0 });
+  if (end > 1) roots.push(...durandKerner(p.slice(0, end)));
+  return roots;
+}
+
+/** The roots of a polynomial with a nonzero constant term, by Durand-Kerner iteration. */
+function durandKerner(p: number[]): Complex[] {
   const n = p.length - 1;
   if (n < 1) return [];
   const lead = p[0] ?? 1;
@@ -296,9 +308,9 @@ function unwrappedPhaseDeg(tf: TransferFunction, w: number[]): number[] {
 }
 
 function frequencyRange(tf: TransferFunction, options: FrequencyOptions): [number, number] {
-  const magnitudes = [...polynomialRoots(tf.num), ...polynomialRoots(tf.den)]
-    .map(cabs)
-    .filter((m) => m > 0);
+  const all = [...polynomialRoots(tf.num), ...polynomialRoots(tf.den)].map(cabs);
+  const largest = all.length > 0 ? Math.max(...all) : 0;
+  const magnitudes = all.filter((m) => m > 0 && m >= ROOT_ZERO_REL * largest);
   const low = magnitudes.length > 0 ? Math.min(...magnitudes) * 10 ** -RANGE_DECADES : DEFAULT_W_LOW;
   const high = magnitudes.length > 0 ? Math.max(...magnitudes) * 10 ** RANGE_DECADES : DEFAULT_W_HIGH;
   const wMin = positiveOption(options.wMin, "wMin") ?? low;
