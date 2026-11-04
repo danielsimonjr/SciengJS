@@ -4,6 +4,23 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The `plot` stage draws a chart from a JSON text with the keys `data` and `layout`, a subset of the Plotly figure format. It renders to `svg`, `png` and `html`. The `svg` and `png` outputs are built in and make no request. An unsupported key rejects with `E_INPUT` and its path. The option `lenient` skips the key and gives a warning.
+- The `html` output draws the figure with Plotly 4.2.0, the pinned build. The page loads the build from a CDN with a subresource integrity hash. The package does not ship Plotly.
+- The `./plot` subpath exports the control helpers `bode`, `step`, `impulse`, `nyquist`, `poleZero` and `rootLocus`. Each takes a transfer function `{ num, den }` and returns `{ figure, numbers }`. Each helper computes every point from the model.
+- `THIRD_PARTY_NOTICES.md` lists the Plotly build (MIT).
+- The plot reader rejects a top-level key other than `data` and `layout`. It rejects the axis names `xaxis1`, `xaxis0` and `xaxis01`, and an axis key outside the grid.
+- The plot reader accepts a `tickformat` of `.Nf` only, with N from 0 to 20. It rejects a `dtick`, `width` or `height` of zero or less. The plotter errors name the full key path.
+- One plot axis has 1000 ticks at most. A larger `dtick` count rejects with `E_INPUT`.
+- A tick label with more than 20 decimals uses exponent form. A log axis with too many decades shows major ticks only.
+- Text labels are not cut by the clip path of the traces. The `html` page has a title and a viewport meta element.
+- `polynomialRoots` gives an exact root at 0 for each trailing zero coefficient, and rejects with `E_INPUT` when the roots do not converge. A repeated root, for example of `(s+1)^20`, is accepted when each residual is rounding error. A root at 0 does not set the frequency range of `bode` and `nyquist`.
+- `step` measures the peak and the overshoot in the direction of the final value. It gives `null` for each number of a system that is not stable, and a `null` peak time for a response with no peak. `StepNumbers.peakTime` is `number | null`. The settling time is interpolated.
+- `nyquist` refines the least distance to -1 by golden-section search.
+- The control helpers reject with `E_INPUT` instead of returning a value that is not finite.
+- The corpus files keep their bytes on every system (`test/corpus/** -text`).
+
 ## [0.4.0] - 2026-11-04
 
 ### Added

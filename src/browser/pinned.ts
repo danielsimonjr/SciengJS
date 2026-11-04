@@ -18,3 +18,12 @@ export interface PinnedAsset {
 export const PINNED_ASSETS: readonly PinnedAsset[] = [
   { url: MERMAID_CDN_URL, file: MERMAID_FILE, mime: "application/javascript" },
 ];
+
+/** The pinned Plotly version. It equals the exact devDependency plotly.js-dist-min of the repository. */
+export const PLOTLY_VERSION = "4.2.0";
+/** The SHA-256 of the pinned Plotly build, in hex. */
+export const PLOTLY_SHA256 = "fde93964a7511bfa54c5745c49b5d0e41715cbde0cc5ebeae3f9a02de0396cae";
+/** The Subresource Integrity value of the pinned Plotly build. The browser refuses other bytes. */
+export const PLOTLY_SRI = "sha256-/ek5ZKdRG/pUxXRcSbXQ5BcVy94Mxevq4/mgLeA5bK4=";
+/** The address that a plot page names for the pinned Plotly build. */
+export const PLOTLY_CDN_URL = `https://cdn.jsdelivr.net/npm/plotly.js-dist-min@${PLOTLY_VERSION}/plotly.min.js`;

@@ -7,14 +7,23 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 26,
-    "unreferencedAnywhereCount": 2,
-    "referencedInModuleCount": 24,
+    "unusedExportCount": 34,
+    "unreferencedAnywhereCount": 5,
+    "referencedInModuleCount": 29,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 7
   },
   "unreferencedAnywhere": {
     "src/graph/backend-pdf.ts": [
+      "render"
+    ],
+    "src/plot/backend-html.ts": [
+      "render"
+    ],
+    "src/plot/backend-png.ts": [
+      "render"
+    ],
+    "src/plot/backend-svg.ts": [
       "render"
     ],
     "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": [
@@ -25,6 +34,15 @@
     "src/graph/backend-pdf.ts": {
       "render": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/graph/backend-pdf.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
     },
+    "src/plot/backend-html.ts": {
+      "render": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-html.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
+    },
+    "src/plot/backend-png.ts": {
+      "render": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-png.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
+    },
+    "src/plot/backend-svg.ts": {
+      "render": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-svg.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
+    },
     "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": {
       "unitPerPt": "Checked for a dynamic import() call with a LITERAL string specifier resolving to 'trials/t6-etex-build/runtime/dvisvgm-specials.mjs' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'unitPerPt' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting."
     }
@@ -32,6 +50,9 @@
   "referencedInModule": {
     "src/browser/input.ts": [
       "PngOptions"
+    ],
+    "src/browser/page.ts": [
+      "scriptData"
     ],
     "src/browser/render.ts": [
       "PAGE_URL",
@@ -69,6 +90,14 @@
     ],
     "src/pairs.ts": [
       "PairSpec"
+    ],
+    "src/plot/control.ts": [
+      "FrequencyOptions",
+      "RootLocusOptions",
+      "TimeOptions"
+    ],
+    "src/plot/ticks.ts": [
+      "LogTick"
     ],
     "src/raster/index.ts": [
       "SvgToPngOptions"

@@ -1,11 +1,11 @@
 {
-  "totalFiles": 179,
+  "totalFiles": 194,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 48,
+    "build-entry": 56,
     "test-only": 3,
     "orphan": 11,
-    "test": 89,
+    "test": 96,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 62,
-    "tests": 89
+    "src": 70,
+    "tests": 96
   },
   "byPackage": {
-    "(root)": 131,
-    "@danielsimonjr/sciengjs": 48
+    "(root)": 138,
+    "@danielsimonjr/sciengjs": 56
   },
   "files": [
     {
@@ -89,14 +89,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 41
+      "loc": 70
     },
     {
       "file": "src/browser/pinned.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 20
+      "loc": 29
     },
     {
       "file": "src/browser/profile.ts",
@@ -316,6 +316,62 @@
       "loc": 57
     },
     {
+      "file": "src/plot/backend-html.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 14
+    },
+    {
+      "file": "src/plot/backend-png.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 13
+    },
+    {
+      "file": "src/plot/backend-svg.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 22
+    },
+    {
+      "file": "src/plot/control.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 938
+    },
+    {
+      "file": "src/plot/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 6
+    },
+    {
+      "file": "src/plot/plotter.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 561
+    },
+    {
+      "file": "src/plot/reader.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 282
+    },
+    {
+      "file": "src/plot/ticks.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 76
+    },
+    {
       "file": "src/raster/index.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -334,7 +390,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 39
+      "loc": 42
     },
     {
       "file": "src/types.ts",
@@ -509,7 +565,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 159
+      "loc": 161
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -867,6 +923,55 @@
       "area": "tests",
       "disposition": "test",
       "loc": 148
+    },
+    {
+      "file": "test/unit/plot-control.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 352
+    },
+    {
+      "file": "test/unit/plot-corpus.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 32
+    },
+    {
+      "file": "test/unit/plot-html.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 87
+    },
+    {
+      "file": "test/unit/plot-reader.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 208
+    },
+    {
+      "file": "test/unit/plot-registry.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 63
+    },
+    {
+      "file": "test/unit/plot-svg.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 524
+    },
+    {
+      "file": "test/unit/plot-ticks.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 93
     },
     {
       "file": "test/unit/process-list.test.ts",

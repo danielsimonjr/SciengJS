@@ -170,6 +170,107 @@ const svg = await render({ type: "math", source: "\\frac{a}{b}", format: "svg" }
 const png = await render({ type: "math", source: "\\ce{H2O + CO2 -> H2CO3}", format: "png", options: { scale: 2 } });
 ```
 
+## Plots
+
+The `plot` input draws a chart from JSON. The source is a JSON text with the keys `data` and `layout`. The output formats are `svg`, `png` and `html`. The `svg` and `png` outputs make no network request.
+
+```js
+import { render } from "@danielsimonjr/sciengjs";
+
+const source = JSON.stringify({
+  data: [{ type: "scatter", mode: "lines+markers", x: [0, 1, 2], y: [0, 1, 4], name: "y = x^2" }],
+  layout: { title: { text: "Square" } },
+});
+const { bytes } = await render({ type: "plot", source, format: "svg" }, {});
+```
+
+The engine reads a subset of the Plotly figure format. The subset holds `scatter` traces, page and grid layout keys, `line` and `rect` shapes, and linear or log axes. A key outside the subset rejects with `E_INPUT` and the key path. Set `lenient` to `true` to skip such a key and get a warning. The `html` output is a page that draws the figure with Plotly 4.2.0, the pinned build. The page loads that build from a CDN, with a subresource integrity hash. The package does not ship Plotly. The full subset is in the [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md), section PLOT.
+
+The reader applies these rules:
+
+- A figure has the top-level keys `data` and `layout` only.
+- The first axis of each letter is `xaxis` or `yaxis`. The other axes are `xaxis2`, `xaxis3` and up, with no leading zero. Plotly also accepts `xaxis1` for the first axis. This reader rejects `xaxis1`, so that each axis has one name.
+- An axis key must name an axis of a subplot in `layout.grid`.
+- `tickformat` is `.Nf` only, with N from 0 to 20. N sets the fixed decimals of the tick labels.
+- `dtick`, `width` and `height` must be above zero.
+- One axis has 1000 ticks at most. A `dtick` that gives more ticks rejects with `E_INPUT` and the key path, for example `layout.xaxis.dtick`.
+
+A tick label that needs more than 20 decimals uses exponent form, for example `1e-300`. A log axis that spans too many decades for minor ticks shows major ticks only.
+
+### Control helpers
+
+The `./plot` subpath has six helpers. Each helper takes a transfer function `{ num, den }` with the coefficients of the numerator and the denominator, highest power first. Each helper returns `{ figure, numbers }`. The `figure` is a plot figure. Pass it to `render` as JSON text to draw it. The `numbers` hold the key values that the analysis derives from the same model.
+
+Frequencies are in rad/s. Margins and phases are in degrees. Overshoot is in percent.
+
+`bode` returns the crossover frequencies and the margins:
+
+```js
+import { bode } from "@danielsimonjr/sciengjs/plot";
+
+const { figure, numbers } = bode({ num: [10], den: [1, 1, 0] });
+// numbers.gainCrossover is about 3.08, numbers.phaseMargin is about 17.96
+```
+
+`step` returns the final value, the rise time, the settling time, the overshoot and the peak time:
+
+```js
+import { step } from "@danielsimonjr/sciengjs/plot";
+
+const { figure, numbers } = step({ num: [1], den: [1, 0.6, 1] });
+// numbers.overshoot is about 37.2, numbers.riseTime is about 1.32
+```
+
+The step helper measures the peak and the overshoot in the direction of the final value, so a negative DC gain gives a correct overshoot. A response with no peak before the end of the time grid has a `peakTime` of `null` and an `overshoot` of 0. A system with a pole on or right of the imaginary axis has no final value: each number is `null`. The rise and settling times are interpolated between samples.
+
+The helpers reject with `E_INPUT` when the roots of the model do not converge, or when a computed value is not finite. A pole or a zero at 0 is exact and does not set the frequency range.
+
+`impulse` returns the peak value and its time:
+
+```js
+import { impulse } from "@danielsimonjr/sciengjs/plot";
+
+const { figure, numbers } = impulse({ num: [1], den: [1, 1] });
+// numbers.peak is 1, numbers.peakTime is 0
+```
+
+`nyquist` returns the least distance from the curve to the point -1:
+
+```js
+import { nyquist } from "@danielsimonjr/sciengjs/plot";
+
+const { figure, numbers } = nyquist({ num: [10], den: [1, 1, 0] });
+// numbers.minDistanceToMinusOne is about 0.299
+```
+
+`poleZero` returns the poles and the zeros:
+
+```js
+import { poleZero } from "@danielsimonjr/sciengjs/plot";
+
+const { figure, numbers } = poleZero({ num: [1, 3], den: [1, 2, 5] });
+// the poles are -1 + 2j and -1 - 2j, the zero is -3
+```
+
+`rootLocus` returns the breakaway points and the gain at each point:
+
+```js
+import { rootLocus } from "@danielsimonjr/sciengjs/plot";
+
+const { figure, numbers } = rootLocus({ num: [1], den: [1, 3, 2] });
+// numbers.breakawayPoints[0] is { re: -1.5, k: 0.25 }
+```
+
+To draw a helper figure, pass it to `render`:
+
+```js
+import { render } from "@danielsimonjr/sciengjs";
+import { bode } from "@danielsimonjr/sciengjs/plot";
+
+const { figure } = bode({ num: [10], den: [1, 1, 0] });
+const { bytes } = await render({ type: "plot", source: JSON.stringify(figure), format: "html" }, {});
+```
+
 ## Roadmap
 
 The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives the order of the increments. Each increment adds one input type, its tests and one release. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the API, the stages, the security controls and the licence of each engine.
@@ -180,7 +281,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: released in 0.3.0 |
 | LaTeX math | math (MathJax) | svg, png and pdf are built; pdf needs the browser stage |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
-| Plots | plot | planned |
+| Plots | plot | svg, png and html are built, not yet released; pdf is not planned |
 | SysML v2 | sysml | planned |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | trial build passes |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: planned |

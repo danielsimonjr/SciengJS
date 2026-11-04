@@ -1,0 +1,2 @@
+{ "data": [ { "type": "scatter", "mode": "lines", "x": [0, 1, 2, 3, 4, 5], "y": [0, 0.8, 1.4, 1.9, 2.2, 2.4], "line": { "color": "#1f77b4", "width": 2 } } ],
+  "layout": { "title": { "text": "Charge curve" }, "xaxis": { "title": { "text": "time (s)" } }, "yaxis": { "title": { "text": "charge (V)" } } } }

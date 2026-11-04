@@ -21,6 +21,7 @@ Version: each row gives the version that the engine pins.
 | raster | `@resvg/resvg-wasm` 2.6.2 | MPL-2.0 | a dependency |
 | raster | Liberation Serif Regular 2.1.5 (font, in `assets/fonts/`) | SIL Open Font License 1.1 | bundled |
 | html | `parse5` | MIT | not yet a dependency |
+| plot (html output) | `plotly.js-dist-min` 4.2.0 (the pinned Plotly build, loaded by the html page from a CDN with a subresource integrity hash) | MIT | a devDependency. The package does not ship the build. The html page loads it from the CDN |
 | browser | Chromium or Google Chrome | Installed by the user. The engine does not ship it | not a package dependency |
 
 ## Notices
@@ -55,6 +56,10 @@ The Eclipse Public License 2.0 applies to Graphviz. The MIT licence applies to t
 | `rimraf` | 6.1.4 | BlueOak-1.0.0 |
 
 The Apache License 2.0 applies to the MathJax packages. The BlueOak Model License 1.0.0 applies to the glob packages. The MIT licence applies to the other packages. Each package keeps its own licence text in its installed folder. The `dist/` folder holds the compiled code of this package only. It holds no code of the packages in the table: npm installs them as dependencies.
+
+### Plotly (MIT)
+
+The MIT licence applies to `plotly.js-dist-min` 4.2.0. The package is a devDependency. The engine does not bundle the build into the package and does not copy it into the assets folder. The html output of the `plot` stage is a page that loads the pinned build from the CDN URL in the engine, with a subresource integrity hash. The page makes that request when a reader opens it. The licence text is in the installed package at `node_modules/plotly.js-dist-min/LICENSE`.
 
 ### Mermaid (MIT)
 
