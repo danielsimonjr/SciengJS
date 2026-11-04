@@ -46,7 +46,7 @@ if (requireNetns) {
 async function attributionControl() {
   const marker = `sciengjs-probe-${process.pid}-${Date.now()}`;
   const code = 'const net=require("node:net");const s=net.createServer((c)=>{c.on("error",()=>{});c.end();}).listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1",()=>{c.on("error",()=>{});setTimeout(()=>{c.destroy();s.close();},8000);});});';
-  const child = spawn(process.execPath, ["-e", code, marker], { stdio: "ignore" });
+  const child = spawn(process.execPath, ["-e", code, marker], { stdio: ["ignore", "ignore", "inherit"] });
   let seen = null;
   try {
     for (let i = 0; i < 30 && seen === null; i++) {
@@ -58,7 +58,7 @@ async function attributionControl() {
   } finally {
     child.kill();
   }
-  gate("attribution-control", seen !== null, seen ?? { processes: 0, loopbackSockets: 0 });
+  gate("attribution-control", seen !== null, seen ?? { processes: 0, loopbackSockets: 0, marker, childPid: child.pid, childExit: child.exitCode, childSignal: child.signalCode });
 }
 
 const NETWORK_PAGE = `<!DOCTYPE html><html><body><p id="drawing">x</p>
