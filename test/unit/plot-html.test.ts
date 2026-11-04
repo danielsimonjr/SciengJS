@@ -68,3 +68,20 @@ describe("plot to html", () => {
     expect(JSON.parse(match![1]!).layout.title.text).toBe(hostile);
   });
 });
+
+describe("the head of the plot page", () => {
+  test("the page title is the figure title, escaped", async () => {
+    const html = await renderHtml(figureWith("a < b & c"));
+    expect(html).toContain("<title>a &lt; b &amp; c</title>");
+  });
+
+  test("a figure with no title gives the page title plot", async () => {
+    const html = await renderHtml(JSON.stringify({ data: [], layout: {} }));
+    expect(html).toContain("<title>plot</title>");
+  });
+
+  test("the page has a viewport meta element", async () => {
+    const html = await renderHtml(figureWith("t"));
+    expect(html).toContain('<meta name="viewport" content="width=device-width, initial-scale=1">');
+  });
+});

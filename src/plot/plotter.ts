@@ -285,6 +285,7 @@ function traceSvg(trace: Trace, ctx: Context): string {
   const lineCfg = rec(raw.line);
   const markerCfg = rec(raw.marker);
   const parts: string[] = [];
+  const labelParts: string[] = [];
 
   if (modes.includes("lines") && points.length > 0) {
     const d = points.map((p, j) => `${j === 0 ? "M" : "L"}${fmt(p[0], 2)} ${fmt(p[1], 2)}`).join(" ");
@@ -306,10 +307,11 @@ function traceSvg(trace: Trace, ctx: Context): string {
     const radius = num(markerCfg.size, 6) / 2;
     points.forEach((p, j) => {
       const label = labels[j];
-      if (label !== undefined) parts.push(labelSvg(p[0], p[1], label, position, radius, ctx.style));
+      if (label !== undefined) labelParts.push(labelSvg(p[0], p[1], label, position, radius, ctx.style));
     });
   }
-  return `<g clip-path="url(#clip${panel.index})">${parts.join("")}</g>`;
+  // Text labels sit outside the clip group: a label next to a point at the edge stays whole.
+  return `<g clip-path="url(#clip${panel.index})">${parts.join("")}</g>${labelParts.join("")}`;
 }
 
 /** Returns the SVG of one shape. A shape reference picks the subplot it sits in. */

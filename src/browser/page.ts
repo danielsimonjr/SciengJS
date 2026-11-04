@@ -15,13 +15,20 @@ function escapeScriptText(text: string): string {
   return text.replace(/[<>&\u2028\u2029]/g, (ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"));
 }
 
+/** Escapes text for an HTML element body. */
+function escapeHtmlText(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 /**
  * A page that loads the pinned Plotly build with its Subresource Integrity value and draws one figure.
- * The figure object comes from the engine after the reader accepts it.
+ * The figure object comes from the engine after the reader accepts it. The page title is the title argument.
  */
-export function plotlyPageHtml(figure: unknown, cdnUrl: string, sri: string): string {
+export function plotlyPageHtml(figure: unknown, cdnUrl: string, sri: string, title = "plot"): string {
   return (
-    `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${PAGE_STYLE}</style></head><body>` +
+    '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+    `<title>${escapeHtmlText(title)}</title><style>${PAGE_STYLE}</style></head><body>` +
     '<div id="sciengjs-diagram"></div>' +
     `<script src="${cdnUrl}" integrity="${sri}" crossorigin="anonymous"></script>` +
     `<script>(function () { const fig = ${scriptData(figure)}; ` +

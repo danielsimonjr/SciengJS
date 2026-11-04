@@ -491,3 +491,13 @@ describe("plotter errors name the full key path", () => {
     expect(renderError(() => plotToSvg(scatter({}, { grid: { rows: 1, columns: 40 } })))?.message).toContain("layout.grid");
   });
 });
+
+describe("text labels and the clip path", () => {
+  test("a text label at the edge of the plot area is outside the clip group, so it is not cut", () => {
+    const { svg } = plotToSvg(scatter({ mode: "markers+text", x: [0, 3], y: [0, 9], text: ["low", "high"], textposition: "top center" }));
+    const clipped = [...svg.matchAll(/<g clip-path="[^"]*">(.*?)<\/g>/g)].map((m) => m[1]).join("");
+    expect(clipped).not.toContain(">high<");
+    expect(texts(svg)).toContain("high");
+    expect(clipped).toContain("<circle");
+  });
+});
