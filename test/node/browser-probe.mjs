@@ -1,6 +1,6 @@
 // Probes of the browser process tree: its sockets and its command lines. Node 22 and Bun both run this file.
 // It uses only node: modules and no Bun API. The parsers take text, so a test can feed them fixed input.
-import { execFile } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
@@ -117,6 +117,71 @@ async function listSockets(platform, pids) {
     if (err.code === 1) return [];
     throw err;
   }
+}
+
+/** Builds the one-line PowerShell script of one Windows sample: the tree processes, then their TCP sockets, as one JSON object. */
+export function windowsSampleScript(profile, end) {
+  const literal = `'${profile.replace(/'/g, "''")}'`;
+  return [
+    `$p = @(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine.Contains(${literal}) } | Select-Object ProcessId,CommandLine)`,
+    "$s = @()",
+    "if ($p.Count -gt 0) { try { $s = @(Get-NetTCPConnection -OwningProcess $p.ProcessId -ErrorAction Stop | Select-Object OwningProcess,RemoteAddress) } catch { } }",
+    "ConvertTo-Json -Compress -Depth 3 -InputObject @{ p = $p; s = $s }",
+    `'${end}'`,
+  ].join("; ");
+}
+
+/** Parses the JSON object of one Windows sample ({ p: Win32_Process rows, s: TCP rows }). */
+export function parseWindowsSample(json, profile) {
+  const { p, s } = JSON.parse(json);
+  const processes = parseCim(JSON.stringify(p ?? [])).filter((proc) => proc.command.includes(profile));
+  return { processes, sockets: parseNetTcp(JSON.stringify(s ?? [])) };
+}
+
+const END = "@@sciengjs-sample-end@@";
+
+/**
+ * A sampler that keeps one PowerShell session open on Windows. A new PowerShell for each sample takes about one
+ * second, so a render of a few seconds gets only one to three samples. One session gives a sample in about 0.25 s.
+ * On the other systems, sample() is sampleTree(). Call close() when the sampling stops.
+ */
+export function createSampler(platform = process.platform) {
+  if (platform !== "win32") return { sample: (profile) => sampleTree(profile, platform), close: async () => {} };
+  const shell = spawn("powershell", ["-NoProfile", "-NonInteractive", "-Command", "-"], { stdio: ["pipe", "pipe", "inherit"] });
+  shell.stdout.setEncoding("utf8");
+  let buffer = "";
+  const waiting = [];
+  shell.stdout.on("data", (chunk) => {
+    buffer += chunk;
+    for (let cut = buffer.indexOf(END); cut >= 0; cut = buffer.indexOf(END)) {
+      const text = buffer.slice(0, cut);
+      buffer = buffer.slice(cut + END.length);
+      waiting.shift()?.resolve(text);
+    }
+  });
+  const closed = new Promise((resolve) => shell.on("exit", resolve));
+  shell.on("exit", (code) => {
+    for (const w of waiting.splice(0)) w.reject(new Error(`the sampler PowerShell exited with ${code}`));
+  });
+  return {
+    sample(profile) {
+      return new Promise((resolve, reject) => {
+        const parse = (text) => {
+          try {
+            resolve(parseWindowsSample(text, profile));
+          } catch (err) {
+            reject(err);
+          }
+        };
+        waiting.push({ resolve: parse, reject });
+        shell.stdin.write(`${windowsSampleScript(profile, END)}\n`);
+      });
+    },
+    async close() {
+      shell.stdin.end();
+      await closed;
+    },
+  };
 }
 
 /**

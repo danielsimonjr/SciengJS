@@ -10,7 +10,7 @@ import { existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { externalSockets, noSandboxAmong, rendererCount, sampleTree } from "./browser-probe.mjs";
+import { createSampler, externalSockets, noSandboxAmong, rendererCount } from "./browser-probe.mjs";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const runtime = typeof globalThis.Bun !== "undefined" ? `bun ${globalThis.Bun.version}` : `node ${process.version}`;
@@ -19,6 +19,9 @@ const requireNetns = process.env.GATE_REQUIRE_NETNS === "1";
 const distDir = process.env.SCIENG_DIST ?? join(ROOT, "dist");
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const failures = [];
+// The least number of tree samples that must land during the large render. Override with GATE_MIN_LARGE_SAMPLES.
+const minLargeSamples = Number(process.env.GATE_MIN_LARGE_SAMPLES ?? "5");
+const sampler = createSampler();
 
 function gate(name, ok, detail) {
   console.log(`GATE ${name} ${ok ? "PASS" : "FAIL"} ${JSON.stringify({ runtime, platform: process.platform, ...detail })}`);
@@ -45,23 +48,25 @@ if (requireNetns) {
 // socket list would prove nothing.
 async function attributionControl() {
   const marker = `sciengjs-probe-${process.pid}-${Date.now()}`;
-  // The child keeps itself alive with a timer at the top level, so it lives on even when the connect fails.
-  const code = 'const net=require("node:net");const s=net.createServer((c)=>{c.on("error",()=>{});c.end();});s.listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1");c.on("error",()=>{});setTimeout(()=>{c.destroy();s.close();},8000);});';
+  // The child holds one connected loopback socket open until its timer ends. The connection must stay open:
+  // ss and lsof list a connected socket with its owner, but a closed one (TIME-WAIT) has no owner.
+  const code = 'const net=require("node:net");const peers=[];const s=net.createServer((c)=>{c.on("error",()=>{});peers.push(c);});s.listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1");c.on("error",()=>{});setTimeout(()=>{c.destroy();for(const p of peers)p.destroy();s.close();},15000);});';
   const child = spawn(process.execPath, ["-e", code, marker], { stdio: ["ignore", "ignore", "inherit"] });
   let seen = null;
+  const most = { processes: 0, loopbackSockets: 0 };
   try {
-    for (let i = 0; i < 30 && seen === null; i++) {
-      await sleep(300);
-      const sample = await sampleTree(marker);
+    for (let i = 0; i < 40 && seen === null && child.exitCode === null; i++) {
+      await sleep(250);
+      const sample = await sampler.sample(marker);
       const loopback = sample.sockets.filter((socket) => externalSockets([socket]).length === 0);
-      if (i % 5 === 0) { const r = spawnSync("sh", ["-c", `ps -axww -o pid=,args= | grep ${marker}; (ss -H -tanp 2>&1 || lsof -nP -iTCP -a -p ${child.pid} 2>&1) | head -20`], { encoding: "utf8" }); console.log(`DIAG i=${i} procs=${sample.processes.length} socks=${JSON.stringify(sample.sockets)}
-${r.stdout}${r.stderr}`); }
+      most.processes = Math.max(most.processes, sample.processes.length);
+      most.loopbackSockets = Math.max(most.loopbackSockets, loopback.length);
       if (sample.processes.length > 0 && loopback.length > 0) seen = { processes: sample.processes.length, loopbackSockets: loopback.length };
     }
   } finally {
     child.kill();
   }
-  gate("attribution-control", seen !== null, seen ?? { processes: 0, loopbackSockets: 0, marker, childPid: child.pid, childExit: child.exitCode, childSignal: child.signalCode });
+  gate("attribution-control", seen !== null, seen ?? { ...most, marker, childPid: child.pid, childExit: child.exitCode, childSignal: child.signalCode });
 }
 
 const NETWORK_PAGE = `<!DOCTYPE html><html><body><p id="drawing">x</p>
@@ -91,8 +96,8 @@ async function renderSampled(name, req) {
   const onProfile = (profile) => {
     loop = (async () => {
       while (!finished) {
-        samples.push(await sampleTree(profile));
-        await sleep(200);
+        samples.push(await sampler.sample(profile));
+        await sleep(100);
       }
     })();
   };
@@ -109,7 +114,7 @@ async function renderSampled(name, req) {
   const sandboxOff = samples.flatMap((s) => noSandboxAmong(s.processes));
   const renderers = Math.max(0, ...samples.map((s) => rendererCount(s.processes)));
   const detail = { samples: samples.length, processesSeen: processes.length, renderers, loopbackSockets: loopback, external: external.map((s) => s.host), sandboxOff: sandboxOff.length };
-  gate(`tree-${name}`, samples.length > 0 && (name !== "large-png" || processes.length > 0) && external.length === 0 && sandboxOff.length === 0, detail);
+  gate(`tree-${name}`, samples.length > 0 && (name !== "large-png" || (processes.length > 0 && samples.length >= minLargeSamples)) && external.length === 0 && sandboxOff.length === 0, detail);
   return { result, renderers };
 }
 
@@ -137,6 +142,7 @@ if (requireNetns) {
   gate("negative-control", dom.includes('data-image="failed"') && dom.includes('data-script="failed"'), { status: run.status, image: /data-image="(\w+)"/.exec(dom)?.[1] ?? "none", script: /data-script="(\w+)"/.exec(dom)?.[1] ?? "none" });
 }
 
+await sampler.close();
 if (failures.length > 0) {
   console.error(`browser gates failed: ${failures.join(", ")}`);
   process.exit(1);

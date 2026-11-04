@@ -1,7 +1,7 @@
 // Unit tests of the browser probes. They run under Node 22 with node:test, not under bun test.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { externalSockets, noSandboxAmong, parseCim, parseLsof, parseNetTcp, parsePs, parseSs, rendererCount } from "./browser-probe.mjs";
+import { externalSockets, noSandboxAmong, parseCim, parseLsof, parseNetTcp, parsePs, parseSs, parseWindowsSample, rendererCount, windowsSampleScript } from "./browser-probe.mjs";
 
 const NO_SANDBOX = ["no", "sandbox"].join("-");
 
@@ -43,4 +43,25 @@ test("process lists: ps and CIM rows parse, and the sandbox flag and renderers a
   const cim = parseCim(JSON.stringify([{ ProcessId: 200, CommandLine: `chrome.exe --${NO_SANDBOX}` }, { ProcessId: 201, CommandLine: null }]));
   assert.deepEqual(cim.map((p) => p.pid), [200, 201]);
   assert.deepEqual(noSandboxAmong(cim).map((p) => p.pid), [200]);
+});
+
+test("real ss -H -tanp lines of a CI runner: a closed (TIME-WAIT) socket has no owner, a listener and a connection do", () => {
+  const input = [
+    'LISTEN    0      511    127.0.0.1:44367   0.0.0.0:*     users:(("node",pid=2214,fd=21))',
+    "TIME-WAIT 0      0      127.0.0.1:44367 127.0.0.1:47802",
+    'ESTAB     0      0      127.0.0.1:47810 127.0.0.1:44367 users:(("node",pid=2214,fd=22))',
+  ].join("\n");
+  const out = parseSs(input);
+  assert.equal(out.length, 2, "the TIME-WAIT line has no owner and gives no socket");
+  assert.deepEqual(out[0], { pid: 2214, host: "0.0.0.0" });
+  assert.deepEqual(out[1], { pid: 2214, host: "127.0.0.1" });
+});
+
+test("Windows sample: the script quotes the profile, and the JSON gives the tree and its sockets", () => {
+  assert.ok(windowsSampleScript("C:\T\it's", "END").includes("Contains('C:\T\it''s')"));
+  const json = JSON.stringify({ p: [{ ProcessId: 5, CommandLine: "chrome.exe --user-data-dir=C:\T\prof" }, { ProcessId: 6, CommandLine: "other" }], s: { OwningProcess: 5, RemoteAddress: "127.0.0.1" } });
+  const sample = parseWindowsSample(json, "C:\T\prof");
+  assert.deepEqual(sample.processes.map((p) => p.pid), [5]);
+  assert.deepEqual(sample.sockets, [{ pid: 5, host: "127.0.0.1" }]);
+  assert.deepEqual(parseWindowsSample(JSON.stringify({ p: [], s: [] }), "x"), { processes: [], sockets: [] });
 });
