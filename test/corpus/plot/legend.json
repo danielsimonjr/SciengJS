@@ -1,0 +1,5 @@
+{ "data": [
+    { "type": "scatter", "mode": "lines", "x": [0, 1, 2, 3], "y": [0, 1, 2, 3], "name": "linear", "line": { "color": "#1f77b4", "dash": "solid" } },
+    { "type": "scatter", "mode": "lines", "x": [0, 1, 2, 3], "y": [0, 1, 4, 9], "name": "quadratic", "line": { "color": "#ff7f0e", "dash": "dash" } },
+    { "type": "scatter", "mode": "markers", "x": [0, 1, 2, 3], "y": [0, 1, 8, 27], "name": "cubic", "marker": { "symbol": "triangle-up", "color": "#2ca02c", "size": 9 } } ],
+  "layout": { "title": { "text": "Legend" }, "showlegend": true } }

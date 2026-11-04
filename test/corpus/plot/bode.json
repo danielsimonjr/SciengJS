@@ -1,0 +1,4 @@
+{ "data": [
+    { "type": "scatter", "mode": "lines", "x": [0.1, 1, 10, 100, 1000], "y": [1, 0.99, 0.7, 0.1, 0.01], "name": "gain", "line": { "color": "#1f77b4" } },
+    { "type": "scatter", "mode": "lines+markers", "x": [0.1, 1, 10, 100, 1000], "y": [0.5, 0.9, 1.4, 2.0, 2.6], "name": "stability", "line": { "color": "#ff7f0e" }, "marker": { "size": 6, "color": "#ff7f0e" } } ],
+  "layout": { "title": { "text": "Bode magnitude, log-log" }, "xaxis": { "type": "log", "title": { "text": "frequency (rad/s)" } }, "yaxis": { "type": "log", "title": { "text": "magnitude" } } } }

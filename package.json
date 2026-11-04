@@ -33,6 +33,10 @@
       "types": "./dist/math/index.d.ts",
       "default": "./dist/math/index.js"
     },
+    "./plot": {
+      "types": "./dist/plot/index.d.ts",
+      "default": "./dist/plot/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

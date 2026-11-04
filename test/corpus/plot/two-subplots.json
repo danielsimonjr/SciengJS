@@ -1,0 +1,6 @@
+{ "data": [
+    { "type": "scatter", "mode": "lines", "x": [0, 1, 2, 3, 4], "y": [0, 1, 0, -1, 0], "xaxis": "x", "yaxis": "y", "line": { "color": "#1f77b4" } },
+    { "type": "scatter", "mode": "markers", "x": [0, 1, 2, 3, 4], "y": [1, 0.5, 0.25, 0.12, 0.06], "xaxis": "x2", "yaxis": "y2", "marker": { "color": "#d62728" } } ],
+  "layout": { "title": { "text": "Two subplots" }, "grid": { "rows": 1, "columns": 2, "pattern": "independent" },
+    "xaxis": { "title": { "text": "x" } }, "yaxis": { "title": { "text": "sine" } },
+    "xaxis2": { "title": { "text": "x" } }, "yaxis2": { "title": { "text": "decay" } }, "showlegend": false } }

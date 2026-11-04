@@ -100,8 +100,9 @@ function validateValue(value: unknown, spec: string, path: string): void {
       }
       return;
     case "numberArray":
-      if (!Array.isArray(value) || !value.every(isNumber)) {
-        throw inputError(`${path} must be an array of numbers`);
+      if (!Array.isArray(value)) throw inputError(`${path} must be an array of numbers`);
+      for (let index = 0; index < value.length; index += 1) {
+        if (!isNumber(value[index])) throw inputError(`${path}[${index}] must be a finite number`);
       }
       return;
     case "stringOrStringArray":

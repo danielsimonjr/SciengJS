@@ -27,6 +27,18 @@ describe("linearTicks", () => {
   test("single point 5 expands by 1 each side", () => {
     expect(linearTicks(5, 5)).toEqual([4, 4.5, 5, 5.5, 6]);
   });
+  test("span 7 divides by four, not five, so step 2 covers 0..7", () => {
+    expect(linearTicks(0, 7)).toEqual([0, 2, 4, 6]);
+  });
+  test("span 6.4 has a raw step of 1.6, which takes the nice 2 step", () => {
+    expect(linearTicks(0, 6.4)).toEqual([0, 2, 4, 6]);
+  });
+  test("span 14 has a raw step of 3.5, which takes the nice 5 step", () => {
+    expect(linearTicks(0, 14)).toEqual([0, 5, 10]);
+  });
+  test("span 28 has a raw step of 7, which takes the nice 10 step", () => {
+    expect(linearTicks(0, 28)).toEqual([0, 10, 20]);
+  });
   test("reversed range rejects with E_INPUT", () => {
     expect(() => linearTicks(3, 1)).toThrow(RenderError);
   });
