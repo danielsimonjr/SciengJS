@@ -76,6 +76,10 @@ The file mermaid.min.js also holds the code of the runtime dependencies of `merm
 
 The file `assets/licenses/mermaid-bundle.txt` holds the licence text of each of the 79 packages, with its name and version. The script `scripts/mermaid-licenses.mjs` writes that file from the installed `mermaid` package. Run the script again after a change of the pinned Mermaid version.
 
+### Three.js (MIT)
+
+The MIT licence applies to `three` 0.187.0. The package is a devDependency. The build copies six files of the package into the assets folder: three.module.js, three.core.js, three.OrbitControls.js, three.GLTFLoader.js, three.BufferGeometryUtils.js and three.SkeletonUtils.js. Those copies are generated at build time and are not committed. The html output of the mesh stage is a page. The page loads the six pinned files from the CDN URLs in the engine, with a subresource integrity hash for each file. The browser stage fulfils the same URLs from the copies in the assets folder, so a png render makes no network request. The licence text is in `assets/licenses/MIT-three.txt`.
+
 ### OpenCascade (LGPL-2.1)
 
 `occt-import-js` 0.0.23 is licensed under the GNU Lesser General Public License 2.1. The WASM file stays a separate, unmodified file. The mesh stage reads STEP, IGES and BREP files through this package. The licence text is in the installed package at `node_modules/occt-import-js/LICENSE.md`.

@@ -48,6 +48,12 @@ interface HtmlPageBase {
    * that reports ok false rejects with E_INPUT. A png or pdf then draws the diagram in the element sciengjs-diagram.
    */
   awaitDone?: boolean;
+  /**
+   * The page sets window.__sciengDone, as with awaitDone, but the capture is a plain screenshot of the viewport and
+   * the report holds no svg. A viewer page of WebGL uses it. A page that reports ok false rejects with E_INTERNAL
+   * when internal is true, else with E_INPUT.
+   */
+  awaitReady?: boolean;
 }
 
 /** One page to draw. A png has a size and a device scale. A pdf has neither. An svg needs awaitDone. */
@@ -230,7 +236,11 @@ class Interceptor {
           {
             requestId: paused.requestId,
             responseCode: 200,
-            responseHeaders: [{ name: "Content-Type", value: asset.mime }],
+            // A module script and a script with integrity are cross-origin requests, so the reply allows any origin.
+            responseHeaders: [
+              { name: "Content-Type", value: asset.mime },
+              { name: "Access-Control-Allow-Origin", value: "*" },
+            ],
             body: Buffer.from(asset.bytes).toString("base64"),
           },
           sessionId,
@@ -303,6 +313,10 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
   }
 
   let bytes: Uint8Array;
+  if (req.awaitReady === true) {
+    const done = await awaitDoneReport(cdp, s);
+    if (!done.ok) throw new RenderError(done.internal === true ? "E_INTERNAL" : "E_INPUT", done.message);
+  }
   if (req.awaitDone === true) {
     const done = await awaitDoneReport(cdp, s);
     // A page that cannot run the pinned build is a fault of the engine, not of the source.

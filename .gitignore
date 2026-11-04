@@ -7,6 +7,12 @@ coverage/
 *.mutation-hash
 assets/index_bg.wasm
 assets/mermaid.min.js
+assets/three.module.js
+assets/three.core.js
+assets/three.OrbitControls.js
+assets/three.GLTFLoader.js
+assets/three.BufferGeometryUtils.js
+assets/three.SkeletonUtils.js
 
 # The large STEP sample. CI downloads it; see test/corpus/mesh/large.json.
 test/corpus-large/

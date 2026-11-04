@@ -1,7 +1,7 @@
 /**
  * A PNG decoder for the tests. It is a second reader of the PNG bytes that the engine writes: it checks the
- * signature and the chunks, inflates the image data and reverses the scanline filters. It reads 8-bit RGBA
- * images without interlace only, which is the format that the raster stage writes. Test support only.
+ * signature and the chunks, inflates the image data and reverses the scanline filters. It reads 8-bit RGBA and RGB
+ * images without interlace only. The raster stage writes RGBA. The browser writes RGB. Test support only.
  */
 import { inflateSync } from "node:zlib";
 
@@ -32,6 +32,7 @@ export function decodePng(bytes: Uint8Array): DecodedPng {
   let offset = 8;
   let width = -1;
   let height = -1;
+  let channels = 4;
   const idat: Uint8Array[] = [];
   let ended = false;
   while (offset < bytes.byteLength) {
@@ -44,9 +45,10 @@ export function decodePng(bytes: Uint8Array): DecodedPng {
       const depth = data[8];
       const colorType = data[9];
       const interlace = data[12];
-      if (depth !== 8 || colorType !== 6 || interlace !== 0) {
+      if (depth !== 8 || (colorType !== 6 && colorType !== 2) || interlace !== 0) {
         throw new Error(`unsupported PNG: depth ${depth}, colour type ${colorType}, interlace ${interlace}`);
       }
+      channels = colorType === 6 ? 4 : 3;
     } else if (type === "IDAT") {
       idat.push(data);
     } else if (type === "IEND") {
@@ -63,16 +65,16 @@ export function decodePng(bytes: Uint8Array): DecodedPng {
     at += part.byteLength;
   }
   const raw = inflateSync(joined);
-  const stride = width * 4;
+  const stride = width * channels;
   if (raw.byteLength !== height * (stride + 1)) throw new Error("PNG image data has the wrong length");
-  const rgba = new Uint8Array(height * stride);
+  const pixels = new Uint8Array(height * stride);
   for (let y = 0; y < height; y += 1) {
     const filter = raw[y * (stride + 1)]!;
     for (let x = 0; x < stride; x += 1) {
       const rawByte = raw[y * (stride + 1) + 1 + x]!;
-      const left = x >= 4 ? rgba[y * stride + x - 4]! : 0;
-      const up = y > 0 ? rgba[(y - 1) * stride + x]! : 0;
-      const upLeft = y > 0 && x >= 4 ? rgba[(y - 1) * stride + x - 4]! : 0;
+      const left = x >= channels ? pixels[y * stride + x - channels]! : 0;
+      const up = y > 0 ? pixels[(y - 1) * stride + x]! : 0;
+      const upLeft = y > 0 && x >= channels ? pixels[(y - 1) * stride + x - channels]! : 0;
       let value: number;
       if (filter === 0) value = rawByte;
       else if (filter === 1) value = rawByte + left;
@@ -80,8 +82,15 @@ export function decodePng(bytes: Uint8Array): DecodedPng {
       else if (filter === 3) value = rawByte + ((left + up) >> 1);
       else if (filter === 4) value = rawByte + paeth(left, up, upLeft);
       else throw new Error(`unknown PNG filter ${filter}`);
-      rgba[y * stride + x] = value & 0xff;
+      pixels[y * stride + x] = value & 0xff;
     }
+  }
+  if (channels === 4) return { width, height, rgba: pixels };
+  // A colour type 2 image has no alpha channel. Every pixel is opaque.
+  const rgba = new Uint8Array(width * height * 4);
+  for (let i = 0; i < width * height; i += 1) {
+    rgba.set(pixels.subarray(i * 3, i * 3 + 3), i * 4);
+    rgba[i * 4 + 3] = 255;
   }
   return { width, height, rgba };
 }

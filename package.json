@@ -88,6 +88,7 @@
     "@types/node": "^22",
     "mermaid": "11.17.2",
     "plotly.js-dist-min": "4.2.0",
+    "three": "0.187.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {
