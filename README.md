@@ -10,7 +10,7 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.5.1 holds five input types: **Graphviz DOT**, **Mermaid** (every diagram type), **LaTeX math** (to SVG, PNG and PDF), **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG and PDF). The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
+Release 0.6.0 holds five input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
 
 | Input | Output | Engine |
 |---|---|---|
@@ -281,10 +281,10 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: released in 0.3.0 |
 | LaTeX math | math (MathJax) | svg, png and pdf are built; pdf needs the browser stage |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
-| Plots | plot | svg, png and html are built, not yet released; pdf is not planned |
+| Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml | planned |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | trial build passes |
-| HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: built, not yet released |
+| HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent
 

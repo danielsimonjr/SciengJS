@@ -4,9 +4,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
-### Fixed
-
-- The browser gate `attribution-control` no longer races the process sampler. The child process stays alive until the gate stops it, and a 60 s deadline bounds the wait. Before, a slow first sample on a Windows runner let the child exit at its 15 s timer, so the gate failed with no fault in the engine.
+## [0.6.0] - 2026-11-04
 
 ### Added
 
@@ -19,6 +17,9 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 - The `./html` subpath converts HTML to GitHub Flavored Markdown with `htmlToMarkdown()`, through `parse5` 8.1.0. A `data-scieng-source` block becomes a fenced block of its exact source. MathML TeX becomes `$…$` or `$$…$$`. `convertHtml()` also returns the inline SVG assets, linked as `image-N.svg`, with the `assetPrefix` option.
 
+### Fixed
+
+- The browser gate `attribution-control` no longer races the process sampler. The child process stays alive until the gate stops it, and a 60 s deadline bounds the wait. Before, a slow first sample on a Windows runner let the child exit at its 15 s timer, so the gate failed with no fault in the engine.
 ## [0.5.1] - 2026-11-04
 
 ### Fixed

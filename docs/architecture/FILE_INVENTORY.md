@@ -127,7 +127,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/math.node.mjs` | (root) | tests | test | 32 |
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 161 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 165 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
