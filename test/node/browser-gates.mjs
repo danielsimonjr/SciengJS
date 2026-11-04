@@ -54,6 +54,8 @@ async function attributionControl() {
       await sleep(300);
       const sample = await sampleTree(marker);
       const loopback = sample.sockets.filter((socket) => externalSockets([socket]).length === 0);
+      if (i % 5 === 0) { const r = spawnSync("sh", ["-c", `ps -axww -o pid=,args= | grep ${marker}; (ss -H -tanp 2>&1 || lsof -nP -iTCP -a -p ${child.pid} 2>&1) | head -20`], { encoding: "utf8" }); console.log(`DIAG i=${i} procs=${sample.processes.length} socks=${JSON.stringify(sample.sockets)}
+${r.stdout}${r.stderr}`); }
       if (sample.processes.length > 0 && loopback.length > 0) seen = { processes: sample.processes.length, loopbackSockets: loopback.length };
     }
   } finally {
