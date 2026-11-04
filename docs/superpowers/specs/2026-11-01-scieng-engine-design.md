@@ -192,6 +192,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - STEP, IGES and BREP go through `occt-import-js` (`ReadStepFile`, `ReadIgesFile`, `ReadBrepFile`). The result is a list of meshes in the form that Three.js loads.
 - A CAD document goes through `manifold-3d` for the solid operations.
 - Outputs: a glTF binary (`glb`), an STL file, an HTML viewer page, and a PNG of the page through the browser stage.
+- A `glb` render estimates its peak memory after the read: the bytes of the positions, the normals and the indices, times four copies. An estimate over `maxMemoryMb` megabytes rejects with `E_LIMIT`. Geometry over 4 GiB also rejects with `E_LIMIT`, because the `glb` header holds the file length in 32 bits.
 - The viewer page loads Three.js and its orbit controls add-on. The page has section planes and an exploded view. The page embeds the `glb`. In a normal browser, the page requests only the pinned Three.js modules. Under the browser stage, the client fulfils those modules from the engine package.
 
 ### raster
