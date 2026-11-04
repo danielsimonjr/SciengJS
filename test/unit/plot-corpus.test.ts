@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { plotToSvg } from "../../src/plot/plotter.ts";
@@ -17,4 +18,15 @@ describe("plot corpus", () => {
       expect(xmlErrors(svg)).toEqual([]);
     });
   }
+});
+
+describe("the line endings of the corpus", () => {
+  test("git keeps the corpus files byte for byte, so a CRLF checkout keeps the byte-exact compare", () => {
+    const root = fileURLToPath(new URL("../../", import.meta.url));
+    const file = "test/corpus/plot/line.expected.svg";
+    const run = spawnSync("git", ["check-attr", "text", "--", file], { cwd: root, encoding: "utf8" });
+    expect(run.status).toBe(0);
+    expect(run.stdout).toBe(`${file}: text: unset
+`);
+  });
 });

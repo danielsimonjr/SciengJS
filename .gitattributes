@@ -2,3 +2,5 @@
 src/version.ts text eol=lf
 # The engine assets ship byte for byte as Git stores them, on every system.
 assets/** -text
+# The corpus files are compared byte for byte, so git keeps them as stored on every system.
+test/corpus/** -text
