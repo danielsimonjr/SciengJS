@@ -16,7 +16,7 @@ Version: each row gives the version that the engine pins.
 | tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
 | mesh | `occt-import-js` 0.0.23 (OpenCascade compiled to WASM) | LGPL-2.1 | a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
-| mesh (viewer page) | `three` | MIT | not yet a dependency |
+| mesh (viewer page) | `three` 0.187.0 (six pinned module files, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copies to pages |
 | browser | `mermaid` 11.17.2 (the pinned build `dist/mermaid.min.js`, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copy to pages |
 | raster | `@resvg/resvg-wasm` 2.6.2 | MPL-2.0 | a dependency |
 | raster | Liberation Serif Regular 2.1.5 (font, in `assets/fonts/`) | SIL Open Font License 1.1 | bundled |
