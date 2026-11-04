@@ -10,7 +10,7 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.2.0 holds two input types: **Graphviz DOT** and **Mermaid** (class, state and sequence diagrams).
+Release 0.3.0 holds three input types: **Graphviz DOT**, **Mermaid** (every diagram type) and **HTML** (to PNG and PDF). The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
 
 | Input | Output | Engine |
 |---|---|---|
@@ -18,8 +18,11 @@ Release 0.2.0 holds two input types: **Graphviz DOT** and **Mermaid** (class, st
 | DOT | PNG | Graphviz, then resvg compiled to WASM (`@resvg/resvg-wasm`), with a bundled font |
 | Mermaid (class, state, sequence) | SVG | The engine's own parsers and layouts. Class and state diagrams go through Graphviz. |
 | Mermaid (class, state, sequence) | PNG | The same SVG, then resvg compiled to WASM (`@resvg/resvg-wasm`), with a bundled font |
+| Mermaid (all other types) | SVG, PNG, PDF | The pinned Mermaid 11.17.2 build in the browser stage. The engine serves the build from the package. |
+| DOT, Mermaid | PDF | The SVG, printed by the browser stage |
+| HTML | PNG, PDF | The browser stage |
 
-- **No network.** The DOT and Mermaid paths make no network request.
+- **No network.** The DOT and Mermaid paths make no network request. The browser stage starts Chrome or Chromium from `SCIENG_BROWSER` with a new profile. Its flags stop every connection out of the host. The client refuses every request except the page and the pinned Mermaid build. CI checks the browser process tree on Linux, macOS and Windows.
 - **Unsafe attributes are removed.** The engine removes each `image` and `stylesheet` attribute before the layout and gives a warning for each one. A DOT file cannot make the engine or a browser fetch a file or a URL. A `URL` attribute stays as a link in the SVG.
 - **The same text on every machine.** PNG text uses the bundled Liberation Serif font, not the fonts of the host. The engine gives a warning when the drawing asks for bold, italic or a character that the font does not have.
 - **Limits.** Each render has a time limit, a source size limit and a heap limit. A PNG has a pixel limit of 1024 MB.
@@ -161,13 +164,13 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Input type | Stage | Status |
 |---|---|---|
 | DOT | graph, raster | released in 0.1.0 |
-| Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: planned |
+| Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: released in 0.3.0 |
 | LaTeX math | math (MathJax) | planned |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
 | Plots | plot | planned |
 | SysML v2 | sysml | planned |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | trial build passes |
-| HTML to PNG, PDF and Markdown | html, browser | planned |
+| HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: planned |
 
 ## Use from an agent
 
