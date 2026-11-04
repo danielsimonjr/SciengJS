@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 161
+**Total files**: 164
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 42 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 77 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 80 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 28 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **161** | |
+| **Total** | **164** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 56 |
-| `tests` | 77 |
+| `tests` | 80 |
 | `tools` | 28 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 119 |
+| `(root)` | 122 |
 | `@danielsimonjr/sciengjs` | 42 |
 
 ## All files
@@ -56,7 +56,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/browser/page.ts` | @danielsimonjr/sciengjs | src | build-entry | 41 |
 | `src/browser/pinned.ts` | @danielsimonjr/sciengjs | src | build-entry | 20 |
 | `src/browser/profile.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
-| `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 74 |
+| `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 77 |
 | `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 509 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 225 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 111 |
@@ -99,6 +99,9 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
+| `test/node/browser-gates.mjs` | (root) | tests | test | 150 |
+| `test/node/browser-probe.mjs` | (root) | tests | test | 204 |
+| `test/node/browser-probe.node.mjs` | (root) | tests | test | 73 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
 | `test/smoke/smoke.mjs` | (root) | tests | test | 153 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 87 |
