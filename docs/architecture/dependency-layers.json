@@ -996,6 +996,53 @@
       }
     },
     "html": {
+      "src/html/backend-md.ts": {
+        "description": "backend-md module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../browser/input.ts",
+            "imports": [
+              "browserPathOf",
+              "blockedWarnings"
+            ]
+          },
+          {
+            "file": "../browser/render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ]
+          },
+          {
+            "file": "./md.ts",
+            "imports": [
+              "convertPage"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/html/convert.ts": {
         "description": "Converts an HTML document to GitHub Flavored Markdown and its assets.",
         "externalDependencies": [
@@ -1025,6 +1072,24 @@
           "htmlToMarkdown"
         ]
       },
+      "src/html/images.ts": {
+        "description": "images module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "decodeDataUrl",
+          "extensionForMime"
+        ],
+        "interfaces": [
+          "FetchedImage"
+        ],
+        "functions": [
+          "decodeDataUrl",
+          "extensionForMime"
+        ]
+      },
       "src/html/index.ts": {
         "description": "Package entry point for html (re-exports 1 symbols)",
         "externalDependencies": [],
@@ -1044,6 +1109,61 @@
         ],
         "reExported": [
           "htmlToMarkdown"
+        ]
+      },
+      "src/html/md.ts": {
+        "description": "Converts one page to Markdown. An image that is a data: URL becomes an asset without a network call. A remote",
+        "externalDependencies": [
+          {
+            "package": "parse5",
+            "imports": [
+              "parse",
+              "serialize",
+              "DefaultTreeAdapterMap"
+            ]
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./convert.ts",
+            "imports": [
+              "convertHtml"
+            ]
+          },
+          {
+            "file": "./images.ts",
+            "imports": [
+              "decodeDataUrl",
+              "extensionForMime",
+              "FetchImage"
+            ]
+          },
+          {
+            "file": "../config.ts",
+            "imports": [
+              "NetworkPolicy"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../types.ts",
+            "imports": [
+              "RenderAsset"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "convertPage"
+        ],
+        "interfaces": [
+          "PageOptions",
+          "PageResult"
+        ],
+        "functions": [
+          "convertPage"
         ]
       }
     },
@@ -3110,8 +3230,11 @@
     {
       "name": "Html",
       "files": [
+        "src/html/backend-md.ts",
         "src/html/convert.ts",
-        "src/html/index.ts"
+        "src/html/images.ts",
+        "src/html/index.ts",
+        "src/html/md.ts"
       ]
     },
     {

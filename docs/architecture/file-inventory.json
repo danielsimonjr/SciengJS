@@ -1,11 +1,11 @@
 {
-  "totalFiles": 197,
+  "totalFiles": 201,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 58,
+    "build-entry": 61,
     "test-only": 3,
     "orphan": 11,
-    "test": 97,
+    "test": 98,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 72,
-    "tests": 97
+    "src": 75,
+    "tests": 98
   },
   "byPackage": {
-    "(root)": 139,
-    "@danielsimonjr/sciengjs": 58
+    "(root)": 140,
+    "@danielsimonjr/sciengjs": 61
   },
   "files": [
     {
@@ -183,6 +183,13 @@
       "loc": 3
     },
     {
+      "file": "src/html/backend-md.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 55
+    },
+    {
       "file": "src/html/convert.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -190,11 +197,25 @@
       "loc": 421
     },
     {
+      "file": "src/html/images.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 62
+    },
+    {
       "file": "src/html/index.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
       "loc": 2
+    },
+    {
+      "file": "src/html/md.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 82
     },
     {
       "file": "src/index.ts",
@@ -811,6 +832,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 153
+    },
+    {
+      "file": "test/unit/html-md-render.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 123
     },
     {
       "file": "test/unit/math-backends.test.ts",

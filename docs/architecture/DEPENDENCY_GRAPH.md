@@ -45,7 +45,7 @@ The codebase is organized into the following modules:
 - **root**: 8 files
 - **browser**: 11 files
 - **graph**: 6 files
-- **html**: 2 files
+- **html**: 5 files
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
@@ -449,6 +449,22 @@ The codebase is organized into the following modules:
 
 ## Html Dependencies
 
+### `src/html/backend-md.ts` - backend-md module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `../errors.ts` | `RenderError` | Import |
+| `../browser/input.ts` | `browserPathOf, blockedWarnings` | Import |
+| `../browser/render.ts` | `renderHtmlPage` | Import |
+| `./md.ts` | `convertPage` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
 ### `src/html/convert.ts` - Converts an HTML document to GitHub Flavored Markdown and its assets.
 
 **External Dependencies:**
@@ -462,6 +478,15 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/html/images.ts` - images module
+
+**Exports:**
+- Interfaces: `FetchedImage`
+- Types: `FetchImage`
+- Functions: `decodeDataUrl`, `extensionForMime`
+
+---
+
 ### `src/html/index.ts` - Package entry point for html (re-exports 1 symbols)
 
 **Internal Dependencies:**
@@ -471,6 +496,27 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Re-exports: `htmlToMarkdown`
+
+---
+
+### `src/html/md.ts` - Converts one page to Markdown. An image that is a data: URL becomes an asset without a network call. A remote
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `parse5` | `parse, serialize, DefaultTreeAdapterMap` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./convert.ts` | `convertHtml` | Import |
+| `./images.ts` | `decodeDataUrl, extensionForMime, FetchImage` | Import |
+| `../config.ts` | `NetworkPolicy` | Import (type-only) |
+| `../types.ts` | `RenderAsset` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `PageOptions`, `PageResult`
+- Functions: `convertPage`
 
 ---
 
@@ -1219,25 +1265,28 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 27 files |
-| `src/worker/protocol` | 2 files | 16 files |
+| `src/errors` | 0 files | 28 files |
+| `src/worker/protocol` | 2 files | 17 files |
+| `src/browser/render` | 6 files | 5 files |
 | `src/mermaid/browser` | 6 files | 5 files |
-| `src/browser/render` | 6 files | 4 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
 | `src/graph/backend-png` | 6 files | 3 files |
-| `src/config` | 3 files | 4 files |
+| `src/config` | 3 files | 5 files |
+| `src/browser/input` | 1 file | 6 files |
 | `src/core` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
 | `src/mermaid/backend-png` | 7 files | 0 files |
-| `src/browser/input` | 1 file | 5 files |
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/assets` | 1 file | 4 files |
+| `src/html/backend-md` | 5 files | 0 files |
+| `src/html/md` | 4 files | 1 file |
 | `src/index` | 5 files | 0 files |
 | `src/plot/backend-html` | 5 files | 0 files |
 | `src/plot/backend-svg` | 3 files | 2 files |
+| `src/types` | 0 files | 5 files |
 | `src/browser/index` | 4 files | 0 files |
 | `src/graph/backend-pdf` | 4 files | 0 files |
 | `src/math/backend-pdf` | 4 files | 0 files |
@@ -1250,15 +1299,12 @@ The codebase is organized into the following modules:
 | `src/plot/index` | 4 files | 0 files |
 | `src/plot/reader` | 1 file | 3 files |
 | `src/raster/index` | 3 files | 1 file |
-| `src/types` | 0 files | 4 files |
 | `src/browser/backend-pdf` | 3 files | 0 files |
 | `src/browser/backend-png` | 3 files | 0 files |
 | `src/browser/cdp` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
 | `src/math/backend-svg` | 3 files | 0 files |
 | `src/mermaid/class` | 1 file | 2 files |
-| `src/mermaid/state` | 1 file | 2 files |
-| `src/plot/ticks` | 1 file | 2 files |
 
 ---
 
@@ -1308,95 +1354,98 @@ graph TD
     end
 
     subgraph Html
-        N25[convert]
-        N26[index]
+        N25[backend-md]
+        N26[convert]
+        N27[images]
+        N28[index]
+        N29[md]
     end
 
     subgraph Entry
-        N27[index]
+        N30[index]
     end
 
     subgraph Math
-        N28[backend-pdf]
-        N29[backend-png]
-        N30[backend-svg]
-        N31[font-ranges]
-        N32[index]
-        N33[tex]
+        N31[backend-pdf]
+        N32[backend-png]
+        N33[backend-svg]
+        N34[font-ranges]
+        N35[index]
+        N36[tex]
     end
 
     subgraph Mermaid
-        N34[backend-pdf]
-        N35[backend-png]
-        N36[backend-svg]
-        N37[browser]
-        N38[class]
-        N39[common]
-        N40[index]
-        N41[render]
-        N42[sequence-layout]
-        N43[sequence]
-        N44[...1 more]
+        N37[backend-pdf]
+        N38[backend-png]
+        N39[backend-svg]
+        N40[browser]
+        N41[class]
+        N42[common]
+        N43[index]
+        N44[render]
+        N45[sequence-layout]
+        N46[sequence]
+        N47[...1 more]
     end
 
     subgraph Plot
-        N45[backend-html]
-        N46[backend-png]
-        N47[backend-svg]
-        N48[control]
-        N49[index]
-        N50[plotter]
-        N51[reader]
-        N52[ticks]
+        N48[backend-html]
+        N49[backend-png]
+        N50[backend-svg]
+        N51[control]
+        N52[index]
+        N53[plotter]
+        N54[reader]
+        N55[ticks]
     end
 
     subgraph Raster
-        N53[index]
-        N54[warnings]
+        N56[index]
+        N57[warnings]
     end
 
     subgraph Worker
-        N55[entry]
-        N56[protocol]
-        N57[run]
+        N58[entry]
+        N59[protocol]
+        N60[run]
     end
 
     subgraph Trials/t1-graph
-        N58[compare-layout.mjs]
-        N59[make-sources.mjs]
-        N60[measure.mjs]
+        N61[compare-layout.mjs]
+        N62[make-sources.mjs]
+        N63[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N61[measure.mjs]
-    end
-
-    subgraph Trials/t3-tex
-        N62[index.cjs]
-    end
-
-    subgraph Trials/t4-browser
-        N63[pinned.js]
         N64[measure.mjs]
     end
 
+    subgraph Trials/t3-tex
+        N65[index.cjs]
+    end
+
+    subgraph Trials/t4-browser
+        N66[pinned.js]
+        N67[measure.mjs]
+    end
+
     subgraph Trials/t5-tex-build
-        N65[dvi2svg.mjs]
-        N66[host.mjs]
-        N67[run.mjs]
-        N68[tfm.mjs]
-        N69[type1.mjs]
-        N70[vfs.mjs]
+        N68[dvi2svg.mjs]
+        N69[host.mjs]
+        N70[run.mjs]
+        N71[tfm.mjs]
+        N72[type1.mjs]
+        N73[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N71[dvisvgm-specials.mjs]
+        N74[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N56
+    N8 --> N59
     N8 --> N13
-    N9 --> N56
+    N9 --> N59
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1411,63 +1460,63 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N57
+    N2 --> N60
     N2 --> N6
     N19 --> N3
-    N19 --> N56
-    N19 --> N37
+    N19 --> N59
+    N19 --> N40
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N56
+    N20 --> N59
     N20 --> N22
-    N20 --> N53
-    N20 --> N54
+    N20 --> N56
+    N20 --> N57
     N21 --> N3
-    N21 --> N56
+    N21 --> N59
     N21 --> N22
     N22 --> N3
     N22 --> N23
     N24 --> N22
-    N26 --> N25
-    N27 --> N2
-    N27 --> N5
-    N27 --> N1
-    N27 --> N6
-    N27 --> N3
-    N28 --> N3
-    N28 --> N37
-    N28 --> N56
-    N28 --> N33
-    N29 --> N3
-    N29 --> N20
-    N29 --> N56
-    N29 --> N33
+    N25 --> N59
+    N25 --> N3
+    N25 --> N13
+    N25 --> N29
+    N28 --> N26
+    N29 --> N26
+    N29 --> N27
+    N29 --> N1
+    N29 --> N6
+    N30 --> N2
+    N30 --> N5
+    N30 --> N1
+    N30 --> N6
     N30 --> N3
-    N30 --> N56
-    N30 --> N33
-    N32 --> N33
+    N31 --> N3
+    N31 --> N40
+    N31 --> N59
+    N31 --> N36
+    N32 --> N3
+    N32 --> N20
+    N32 --> N59
+    N32 --> N36
     N33 --> N3
-    N33 --> N31
-    N34 --> N56
-    N34 --> N39
-    N34 --> N37
-    N34 --> N41
-    N35 --> N13
-    N35 --> N3
-    N35 --> N20
-    N35 --> N56
-    N35 --> N39
-    N35 --> N37
-    N35 --> N41
-    N36 --> N56
-    N36 --> N39
-    N36 --> N37
-    N36 --> N41
-    N37 --> N13
-    N37 --> N15
-    N37 --> N3
-    N37 --> N14
+    N33 --> N59
+    N33 --> N36
+    N35 --> N36
+    N36 --> N3
+    N36 --> N34
+    N37 --> N59
+    N37 --> N42
+    N37 --> N40
+    N37 --> N44
+    N38 --> N13
+    N38 --> N3
+    N38 --> N20
+    N38 --> N59
+    N38 --> N42
+    N38 --> N40
+    N38 --> N44
 ```
 
 ---
@@ -1477,17 +1526,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 197 |
+| Total Source Files | 201 |
 | Subsystems | 16 |
-| Total Lines of Code | 22697 |
-| Total Exports | 410 |
+| Total Lines of Code | 23019 |
+| Total Exports | 418 |
 | Total Re-exports | 81 |
 | Total Classes | 6 |
-| Total Interfaces | 69 |
-| Total Functions | 183 |
+| Total Interfaces | 72 |
+| Total Functions | 187 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 33 |
+| Type-only Imports | 37 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |
