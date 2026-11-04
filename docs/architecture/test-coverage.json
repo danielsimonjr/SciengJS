@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 72,
-    "totalTestFiles": 70,
-    "testedCount": 47,
-    "untestedCount": 25,
+    "totalSourceFiles": 75,
+    "totalTestFiles": 71,
+    "testedCount": 49,
+    "untestedCount": 26,
     "coveragePercent": "65.3",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 72,
-      "testedActive": 47,
-      "activeUntested": 25,
+      "activeFiles": 75,
+      "testedActive": 49,
+      "activeUntested": 26,
       "excludedTotal": 0,
       "percent": "65.3",
       "breakdown": {
-        "active_untested": 25
+        "active_untested": 26
       }
     }
   },
@@ -21,6 +21,7 @@
     "src/browser/index.ts",
     "src/graph/backend-pdf.ts",
     "src/graph/index.ts",
+    "src/html/backend-md.ts",
     "src/html/index.ts",
     "src/math/font-ranges.ts",
     "src/mermaid/backend-pdf.ts",
@@ -64,6 +65,8 @@
     "src/graph/dot.ts",
     "src/graph/image.ts",
     "src/html/convert.ts",
+    "src/html/images.ts",
+    "src/html/md.ts",
     "src/index.ts",
     "src/math/backend-pdf.ts",
     "src/math/backend-png.ts",
@@ -140,6 +143,7 @@
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
       "test/unit/graph-svg-backend.test.ts",
+      "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts",
       "test/unit/worker-run.test.ts"
@@ -163,6 +167,7 @@
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
       "test/unit/graph-png.test.ts",
+      "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
@@ -194,14 +199,22 @@
       "test/unit/graph-image.test.ts"
     ],
     "src/graph/index.ts": [],
+    "src/html/backend-md.ts": [],
     "src/html/convert.ts": [
       "test/unit/html-convert.test.ts"
     ],
+    "src/html/images.ts": [
+      "test/unit/html-md-render.test.ts"
+    ],
     "src/html/index.ts": [],
+    "src/html/md.ts": [
+      "test/unit/html-md-render.test.ts"
+    ],
     "src/index.ts": [
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-route-lenient.test.ts"
     ],
     "src/math/backend-pdf.ts": [
@@ -301,6 +314,7 @@
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts"
     ],
@@ -447,6 +461,14 @@
     ],
     "test/unit/html-convert.test.ts": [
       "src/html/convert.ts"
+    ],
+    "test/unit/html-md-render.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts",
+      "src/html/md.ts",
+      "src/html/images.ts"
     ],
     "test/unit/math-backends.test.ts": [
       "src/math/backend-svg.ts",
@@ -600,6 +622,10 @@
     },
     {
       "file": "src/graph/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/html/backend-md.ts",
       "category": null
     },
     {

@@ -79,7 +79,11 @@
     ],
     "html": [
       "convertHtml",
-      "htmlToMarkdown"
+      "convertPage",
+      "decodeDataUrl",
+      "extensionForMime",
+      "htmlToMarkdown",
+      "render"
     ],
     "math": [
       "MATH_PACKAGES",

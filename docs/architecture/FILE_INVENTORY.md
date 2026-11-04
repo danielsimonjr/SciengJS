@@ -8,37 +8,37 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 197
+**Total files**: 201
 
 ## Disposition counts
 
 | Disposition | Count | Meaning |
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
-| `build-entry` | 58 | A `src`-area file that is an entry root. |
+| `build-entry` | 61 | A `src`-area file that is an entry root. |
 | `test-only` | 3 | A `src`-area file that only a test reaches. |
 | `orphan` | 11 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 97 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 98 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 28 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **197** | |
+| **Total** | **201** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 72 |
-| `tests` | 97 |
+| `src` | 75 |
+| `tests` | 98 |
 | `tools` | 28 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 139 |
-| `@danielsimonjr/sciengjs` | 58 |
+| `(root)` | 140 |
+| `@danielsimonjr/sciengjs` | 61 |
 
 ## All files
 
@@ -67,8 +67,11 @@ This report lists each source file that the map census finds, with a disposition
 | `src/graph/dot.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/graph/image.ts` | @danielsimonjr/sciengjs | src | build-entry | 330 |
 | `src/graph/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 3 |
+| `src/html/backend-md.ts` | @danielsimonjr/sciengjs | src | build-entry | 55 |
 | `src/html/convert.ts` | @danielsimonjr/sciengjs | src | build-entry | 421 |
+| `src/html/images.ts` | @danielsimonjr/sciengjs | src | build-entry | 62 |
 | `src/html/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
+| `src/html/md.ts` | @danielsimonjr/sciengjs | src | build-entry | 82 |
 | `src/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 28 |
 | `src/math/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 15 |
 | `src/math/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 16 |
@@ -157,6 +160,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/graph-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/graph-svg-backend.test.ts` | (root) | tests | test | 54 |
 | `test/unit/html-convert.test.ts` | (root) | tests | test | 153 |
+| `test/unit/html-md-render.test.ts` | (root) | tests | test | 123 |
 | `test/unit/math-backends.test.ts` | (root) | tests | test | 130 |
 | `test/unit/math-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/math-svg.test.ts` | (root) | tests | test | 134 |

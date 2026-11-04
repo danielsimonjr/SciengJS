@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 197
+  totalFiles: 201
   totalModules: 3
-  totalExports: 410
+  totalExports: 418
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -824,6 +824,34 @@ modules:
       exports:
         - dotToSvg
         - DotSvgResult
+    src/html/backend-md.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/browser/input.ts
+          imports:
+            - browserPathOf
+            - blockedWarnings
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - renderHtmlPage
+          typeOnly: false
+        - file: src/html/md.ts
+          imports:
+            - convertPage
+          typeOnly: false
+      exports:
+        - render
     src/html/convert.ts:
       externalDependencies:
         - parse5
@@ -835,6 +863,15 @@ modules:
         - ConvertResult
         - convertHtml
         - htmlToMarkdown
+    src/html/images.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - FetchedImage
+        - FetchImage
+        - decodeDataUrl
+        - extensionForMime
     src/html/index.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -845,6 +882,33 @@ modules:
           typeOnly: false
       exports:
         - htmlToMarkdown
+    src/html/md.ts:
+      externalDependencies:
+        - parse5
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/html/convert.ts
+          imports:
+            - convertHtml
+          typeOnly: false
+        - file: src/html/images.ts
+          imports:
+            - decodeDataUrl
+            - extensionForMime
+            - FetchImage
+          typeOnly: false
+        - file: src/config.ts
+          imports:
+            - NetworkPolicy
+          typeOnly: true
+        - file: src/types.ts
+          imports:
+            - RenderAsset
+          typeOnly: true
+      exports:
+        - PageOptions
+        - PageResult
+        - convertPage
     src/index.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2731,6 +2795,27 @@ modules:
             - htmlToMarkdown
           typeOnly: false
       exports: []
+    test/unit/html-md-render.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - capabilities
+            - render
+            - SciengConfig
+          typeOnly: false
+        - file: src/html/md.ts
+          imports:
+            - convertPage
+          typeOnly: false
+        - file: src/html/images.ts
+          imports:
+            - FetchImage
+          typeOnly: true
+      exports: []
     test/unit/math-backends.test.ts:
       externalDependencies:
         - bun:test
@@ -3550,29 +3635,29 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 197
-  totalSourceFiles: 197
+  totalTypeScriptFiles: 201
+  totalSourceFiles: 201
   totalModules: 3
-  totalLinesOfCode: 22697
-  totalExports: 410
-  entryRoots: 58
-  reachableFiles: 58
+  totalLinesOfCode: 23019
+  totalExports: 418
+  entryRoots: 61
+  reachableFiles: 61
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 33
+  totalTypeOnlyImports: 37
   noImporterFileCount: 7
-  unusedExportsCount: 37
+  unusedExportsCount: 41
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 69
-  totalFunctions: 183
+  totalInterfaces: 72
+  totalFunctions: 187
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 57
@@ -3606,7 +3691,10 @@ reachability:
     - src/graph/backend-svg.ts
     - src/graph/dot.ts
     - src/graph/image.ts
+    - src/html/backend-md.ts
     - src/html/convert.ts
+    - src/html/images.ts
+    - src/html/md.ts
     - src/math/backend-pdf.ts
     - src/math/backend-png.ts
     - src/math/backend-svg.ts
@@ -3637,7 +3725,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 58
+  reachableCount: 61
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs
