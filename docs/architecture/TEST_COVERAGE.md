@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 76 |
-| Total Test Files | 73 |
-| Source Files with Tests | 50 |
-| Source Files without Tests | 26 |
-| Coverage (raw, direct-import) | **65.8%** |
+| Total Source Files | 80 |
+| Total Test Files | 74 |
+| Source Files with Tests | 51 |
+| Source Files without Tests | 29 |
+| Coverage (raw, direct-import) | **63.7%** |
 ---
 
 ## Source Files Not Imported By A Test
 
-The following 26 source files are not directly imported by any test file:
+The following 29 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -43,6 +43,12 @@ The following 26 source files are not directly imported by any test file:
 - `src/mermaid/backend-png.ts`
 - `src/mermaid/backend-svg.ts`
 - `src/mermaid/index.ts`
+
+### mesh/
+
+- `src/mesh/backend-glb.ts`
+- `src/mesh/glb.ts`
+- `src/mesh/index.ts`
 
 ### plot/
 
@@ -99,7 +105,7 @@ The following 26 source files are not directly imported by any test file:
 | `browser/proxy.ts` | `browser-proxy.test.ts` |
 | `browser/render.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts` |
 | `src/config.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `graph-svg-backend.test.ts`, `html-md-render.test.ts`, `mermaid-route-lenient.test.ts`, `render.test.ts`, `worker-run.test.ts` |
-| `src/core.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `render.test.ts` |
+| `src/core.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-glb.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `render.test.ts` |
 | `src/errors.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `config-assets.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `html-md-render.test.ts`, `mermaid-class.test.ts`, `mermaid-common.test.ts`, `mermaid-route-lenient.test.ts`, `plot-control.test.ts`, `plot-reader.test.ts`, `plot-svg.test.ts`, `plot-ticks.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `graph/backend-png.ts` | `graph-png.test.ts` |
 | `graph/backend-svg.ts` | `graph-svg-backend.test.ts` |
@@ -122,6 +128,7 @@ The following 26 source files are not directly imported by any test file:
 | `mermaid/sequence-layout.ts` | `mermaid-sequence.test.ts`, `mermaid-xml.test.ts` |
 | `mermaid/sequence.ts` | `mermaid-sequence.test.ts`, `mermaid-xml.test.ts` |
 | `mermaid/state.ts` | `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
+| `mesh/read.ts` | `mesh-glb.test.ts` |
 | `src/pairs.ts` | `browser-pdf-pairs.test.ts` |
 | `plot/control.ts` | `plot-control.test.ts` |
 | `plot/plotter.ts` | `plot-control.test.ts`, `plot-corpus.test.ts`, `plot-svg.test.ts` |
@@ -129,7 +136,7 @@ The following 26 source files are not directly imported by any test file:
 | `plot/ticks.ts` | `plot-ticks.test.ts` |
 | `raster/index.ts` | `graph-network.test.ts`, `mermaid-xml.test.ts`, `raster.test.ts` |
 | `raster/warnings.ts` | `raster-warnings.test.ts` |
-| `src/registry.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts` |
+| `src/registry.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-glb.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts` |
 | `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `html-md-render.test.ts`, `mermaid-route-lenient.test.ts`, `render.test.ts` |
 | `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
 | `worker/protocol.ts` | `browser-stage.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `math-backends.test.ts` |
@@ -189,6 +196,7 @@ The following 26 source files are not directly imported by any test file:
 | `unit/mermaid-sequence.test.ts` | 3 files |
 | `unit/mermaid-state.test.ts` | 3 files |
 | `unit/mermaid-xml.test.ts` | 8 files |
+| `unit/mesh-glb.test.ts` | 3 files |
 | `unit/no-bun-api.test.ts` | 0 files |
 | `unit/no-sandbox-flag.test.ts` | 0 files |
 | `unit/page-checker-io.test.ts` | 0 files |

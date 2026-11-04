@@ -1,11 +1,11 @@
 {
-  "totalFiles": 204,
+  "totalFiles": 211,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 62,
+    "build-entry": 66,
     "test-only": 3,
-    "orphan": 11,
-    "test": 100,
+    "orphan": 12,
+    "test": 102,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 76,
-    "tests": 100
+    "src": 81,
+    "tests": 102
   },
   "byPackage": {
-    "(root)": 142,
-    "@danielsimonjr/sciengjs": 62
+    "(root)": 144,
+    "@danielsimonjr/sciengjs": 67
   },
   "files": [
     {
@@ -351,6 +351,41 @@
       "loc": 176
     },
     {
+      "file": "src/mesh/backend-glb.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 48
+    },
+    {
+      "file": "src/mesh/glb.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 176
+    },
+    {
+      "file": "src/mesh/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 5
+    },
+    {
+      "file": "src/mesh/occt-import-js.d.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "orphan",
+      "loc": 9
+    },
+    {
+      "file": "src/mesh/read.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 107
+    },
+    {
       "file": "src/pairs.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -622,6 +657,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 62
+    },
+    {
+      "file": "test/support/glb-reader.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 127
     },
     {
       "file": "test/support/network-guard.ts",
@@ -972,6 +1014,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 190
+    },
+    {
+      "file": "test/unit/mesh-glb.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 94
     },
     {
       "file": "test/unit/no-bun-api.test.ts",
@@ -1451,8 +1500,5 @@
     }
   ],
   "skippedLinks": [],
-  "warnings": [
-    "package.json entry './dist/mesh/index.d.ts' did not resolve to a known source file. The entry is ignored.",
-    "package.json entry './dist/mesh/index.js' did not resolve to a known source file. The entry is ignored."
-  ]
+  "warnings": []
 }

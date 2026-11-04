@@ -6,12 +6,12 @@
 
 ## Summary
 
-- **Files with no in-repo importer**: 7
-- **Dormant files**: 14
-  - **Orphaned (reachable from nothing)**: 11
+- **Files with no in-repo importer**: 8
+- **Dormant files**: 15
+  - **Orphaned (reachable from nothing)**: 12
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 41
-  - **Unreferenced anywhere**: 5
+- **Potentially unused exports**: 42
+  - **Unreferenced anywhere**: 6
   - **Referenced in their own module**: 36
   - **Not classified**: 0
 
@@ -27,6 +27,7 @@
 
 Source files that no root and no test reaches. Verify each one before you delete it.
 
+- `src/mesh/occt-import-js.d.ts`
 - `trials/t1-graph/compare-layout.mjs`
 - `trials/t1-graph/make-sources.mjs`
 - `trials/t1-graph/measure.mjs`
@@ -51,6 +52,7 @@ Source files that only a test reaches. They ship nothing, but a test uses them.
 
 No file of this repository imports these files. Do not use the list as a deletion list.
 
+- `src/mesh/occt-import-js.d.ts`
 - `trials/t1-graph/compare-layout.mjs`
 - `trials/t1-graph/make-sources.mjs`
 - `trials/t1-graph/measure.mjs`
@@ -64,6 +66,7 @@ No file of this repository imports these files. Do not use the list as a deletio
 No other file imports these names, and their own module does not use them.
 
 - `src/graph/backend-pdf.ts`: `render`
+- `src/mesh/backend-glb.ts`: `render`
 - `src/plot/backend-html.ts`: `render`
 - `src/plot/backend-png.ts`: `render`
 - `src/plot/backend-svg.ts`: `render`
@@ -72,6 +75,7 @@ No other file imports these names, and their own module does not use them.
 ### Notes
 
 - `src/graph/backend-pdf.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/graph/backend-pdf.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
+- `src/mesh/backend-glb.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/mesh/backend-glb.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/plot/backend-html.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-html.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/plot/backend-png.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-png.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/plot/backend-svg.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-svg.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.

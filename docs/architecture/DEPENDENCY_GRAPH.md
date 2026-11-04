@@ -21,19 +21,20 @@ This document provides a comprehensive dependency graph of all files, components
 7. [Entry Dependencies](#entry-dependencies)
 8. [Math Dependencies](#math-dependencies)
 9. [Mermaid Dependencies](#mermaid-dependencies)
-10. [Plot Dependencies](#plot-dependencies)
-11. [Raster Dependencies](#raster-dependencies)
-12. [Worker Dependencies](#worker-dependencies)
-13. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-14. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-15. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-16. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-17. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-18. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-19. [Dependency Matrix](#dependency-matrix)
-20. [Circular Dependency Analysis](#circular-dependency-analysis)
-21. [Visual Dependency Graph](#visual-dependency-graph)
-22. [Summary Statistics](#summary-statistics)
+10. [Mesh Dependencies](#mesh-dependencies)
+11. [Plot Dependencies](#plot-dependencies)
+12. [Raster Dependencies](#raster-dependencies)
+13. [Worker Dependencies](#worker-dependencies)
+14. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+15. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+16. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+17. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+18. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+19. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+20. [Dependency Matrix](#dependency-matrix)
+21. [Circular Dependency Analysis](#circular-dependency-analysis)
+22. [Visual Dependency Graph](#visual-dependency-graph)
+23. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -49,6 +50,7 @@ The codebase is organized into the following modules:
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
+- **mesh**: 5 files
 - **plot**: 8 files
 - **raster**: 2 files
 - **worker**: 3 files
@@ -906,6 +908,73 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="mesh-dependencies"></a>
+
+## Mesh Dependencies
+
+### `src/mesh/backend-glb.ts` - Checks the options of a glb render. STEP and IGES take linearUnit. BREP takes no option.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./glb.ts` | `writeGlb` | Import |
+| `./read.ts` | `readCad, CadFormat, LinearUnit` | Import |
+
+**Exports:**
+- Functions: `readMeshOptions`, `render`
+
+---
+
+### `src/mesh/glb.ts` - Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./read.ts` | `CadFace, CadMesh` | Import (type-only) |
+
+**Exports:**
+- Functions: `writeGlb`
+
+---
+
+### `src/mesh/index.ts` - Package entry point for mesh (re-exports 7 symbols)
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./read.ts` | `readCad` | Re-export |
+| `./read.ts` | `CadFormat, CadFace, CadMesh, LinearUnit` | Re-export (type-only) |
+| `./glb.ts` | `writeGlb` | Re-export |
+| `./backend-glb.ts` | `readMeshOptions` | Re-export |
+
+**Exports:**
+- Re-exports: `readCad`, `CadFormat`, `CadFace`, `CadMesh`, `LinearUnit`, `writeGlb`, `readMeshOptions`
+
+---
+
+### `src/mesh/occt-import-js.d.ts` - The package occt-import-js 0.0.23 ships no type declarations. This file declares its factory.
+
+**Exports:**
+- Default: `default`
+
+---
+
+### `src/mesh/read.ts` - Reads a STEP, IGES or BREP file to meshes. The linear unit applies to STEP and IGES only.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces: `CadFace`, `CadMesh`
+- Types: `CadFormat`, `LinearUnit`
+- Functions: `readCad`
+
+---
+
 <a id="plot-dependencies"></a>
 
 ## Plot Dependencies
@@ -1292,8 +1361,8 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 28 files |
-| `src/worker/protocol` | 2 files | 17 files |
+| `src/errors` | 0 files | 30 files |
+| `src/worker/protocol` | 2 files | 18 files |
 | `src/browser/render` | 6 files | 5 files |
 | `src/mermaid/browser` | 6 files | 5 files |
 | `src/mermaid/common` | 1 file | 9 files |
@@ -1311,6 +1380,7 @@ The codebase is organized into the following modules:
 | `src/assets` | 1 file | 4 files |
 | `src/html/md` | 4 files | 1 file |
 | `src/index` | 5 files | 0 files |
+| `src/mesh/backend-glb` | 4 files | 1 file |
 | `src/plot/backend-html` | 5 files | 0 files |
 | `src/plot/backend-svg` | 3 files | 2 files |
 | `src/types` | 0 files | 5 files |
@@ -1322,6 +1392,7 @@ The codebase is organized into the following modules:
 | `src/mermaid/backend-svg` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
 | `src/mermaid/sequence` | 1 file | 3 files |
+| `src/mesh/read` | 1 file | 3 files |
 | `src/plot/backend-png` | 4 files | 0 files |
 | `src/plot/index` | 4 files | 0 files |
 | `src/plot/reader` | 1 file | 3 files |
@@ -1330,8 +1401,6 @@ The codebase is organized into the following modules:
 | `src/browser/backend-png` | 3 files | 0 files |
 | `src/browser/cdp` | 1 file | 2 files |
 | `src/graph/backend-svg` | 3 files | 0 files |
-| `src/math/backend-svg` | 3 files | 0 files |
-| `src/mermaid/class` | 1 file | 2 files |
 
 ---
 
@@ -1416,64 +1485,72 @@ graph TD
         N48[...1 more]
     end
 
+    subgraph Mesh
+        N49[backend-glb]
+        N50[glb]
+        N51[index]
+        N52[occt-import-js.d]
+        N53[read]
+    end
+
     subgraph Plot
-        N49[backend-html]
-        N50[backend-png]
-        N51[backend-svg]
-        N52[control]
-        N53[index]
-        N54[plotter]
-        N55[reader]
-        N56[ticks]
+        N54[backend-html]
+        N55[backend-png]
+        N56[backend-svg]
+        N57[control]
+        N58[index]
+        N59[plotter]
+        N60[reader]
+        N61[ticks]
     end
 
     subgraph Raster
-        N57[index]
-        N58[warnings]
+        N62[index]
+        N63[warnings]
     end
 
     subgraph Worker
-        N59[entry]
-        N60[protocol]
-        N61[run]
+        N64[entry]
+        N65[protocol]
+        N66[run]
     end
 
     subgraph Trials/t1-graph
-        N62[compare-layout.mjs]
-        N63[make-sources.mjs]
-        N64[measure.mjs]
+        N67[compare-layout.mjs]
+        N68[make-sources.mjs]
+        N69[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N65[measure.mjs]
+        N70[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N66[index.cjs]
+        N71[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N67[pinned.js]
-        N68[measure.mjs]
+        N72[pinned.js]
+        N73[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N69[dvi2svg.mjs]
-        N70[host.mjs]
-        N71[run.mjs]
-        N72[tfm.mjs]
-        N73[type1.mjs]
-        N74[vfs.mjs]
+        N74[dvi2svg.mjs]
+        N75[host.mjs]
+        N76[run.mjs]
+        N77[tfm.mjs]
+        N78[type1.mjs]
+        N79[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N75[dvisvgm-specials.mjs]
+        N80[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N60
+    N8 --> N65
     N8 --> N13
-    N9 --> N60
+    N9 --> N65
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1488,25 +1565,25 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N61
+    N2 --> N66
     N2 --> N6
     N19 --> N3
-    N19 --> N60
+    N19 --> N65
     N19 --> N41
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N60
+    N20 --> N65
     N20 --> N22
-    N20 --> N57
-    N20 --> N58
+    N20 --> N62
+    N20 --> N63
     N21 --> N3
-    N21 --> N60
+    N21 --> N65
     N21 --> N22
     N22 --> N3
     N22 --> N23
     N24 --> N22
-    N25 --> N60
+    N25 --> N65
     N25 --> N3
     N25 --> N13
     N25 --> N30
@@ -1524,26 +1601,26 @@ graph TD
     N31 --> N3
     N32 --> N3
     N32 --> N41
-    N32 --> N60
+    N32 --> N65
     N32 --> N37
     N33 --> N3
     N33 --> N20
-    N33 --> N60
+    N33 --> N65
     N33 --> N37
     N34 --> N3
-    N34 --> N60
+    N34 --> N65
     N34 --> N37
     N36 --> N37
     N37 --> N3
     N37 --> N35
-    N38 --> N60
+    N38 --> N65
     N38 --> N43
     N38 --> N41
     N38 --> N45
     N39 --> N13
     N39 --> N3
     N39 --> N20
-    N39 --> N60
+    N39 --> N65
     N39 --> N43
 ```
 
@@ -1554,17 +1631,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 204 |
-| Subsystems | 16 |
-| Total Lines of Code | 23695 |
-| Total Exports | 424 |
-| Total Re-exports | 81 |
+| Total Source Files | 211 |
+| Subsystems | 17 |
+| Total Lines of Code | 24261 |
+| Total Exports | 442 |
+| Total Re-exports | 88 |
 | Total Classes | 6 |
-| Total Interfaces | 74 |
-| Total Functions | 190 |
+| Total Interfaces | 78 |
+| Total Functions | 195 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 39 |
+| Type-only Imports | 42 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |
