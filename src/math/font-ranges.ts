@@ -60,25 +60,49 @@ export function loadFontRanges(font: object): void {
 /** The part of a MathJax font instance that the mhchem variant needs. */
 interface VariantFont {
   variant: Record<string, { chars: Record<number, unknown> }>;
+  delimiters: Record<number, { c?: number } | undefined>;
   createVariant: (name: string, inherit: string) => void;
   defineChars: (name: string, chars: Record<number, unknown>) => void;
 }
 
-/** The mhchem arrow glyph. The TeX mhchem extension names it with the variant -mhchem. */
-const MHCHEM_ARROW = 0xe429;
-/** The long right arrow. Its glyph in the normal variant is the arrow that MathJax draws for \longrightarrow. */
-const LONG_RIGHT_ARROW = 0x27f6;
+/**
+ * The private-use arrow code points of the TeX mhchem extension, each with the standard arrow that
+ * the bundled font holds. The mhchem font extension, which owns the private-use glyphs, is not installed.
+ */
+export const MHCHEM_ALIASES: ReadonlyArray<readonly [pua: number, real: number]> = [
+  [0xe408, 0x21cc], // \mhchemlongrightleftharpoons (<=>) -> right over left harpoons
+  [0xe409, 0x21cc], // \mhchemlongRightleftharpoons (<=>>) -> right over left harpoons
+  [0xe40a, 0x21cb], // \mhchemlongLeftrightharpoons (<<=>) -> left over right harpoons
+  [0xe428, 0x27f5], // \mhchemlongleftarrow (<-) -> long left arrow
+  [0xe429, 0x27f6], // \mhchemlongrightarrow (->) -> long right arrow
+  [0xe42a, 0x27f7], // \mhchemlongleftrightarrow (<->) -> long left right arrow
+  [0xe42b, 0x21c6], // \mhchemlongleftrightarrows (<-->) -> left arrow over right arrow
+  [0xe42c, 0x2190], // \mhchemleftarrow -> left arrow
+  [0xe42d, 0x2192], // \mhchemrightarrow -> right arrow
+  [0xe42e, 0x2194], // \mhchemleftrightarrow -> left right arrow
+];
 
 /**
- * Adds the variant -mhchem to a font instance. The mhchem font extension, which owns this variant,
- * is not installed, so the arrow glyph is the long right arrow of the normal variant.
+ * Adds the variant -mhchem to a font instance and gives each mhchem arrow code point the glyph of its
+ * standard arrow. The alias goes into the -mhchem variant (plain arrows) and the normal variant
+ * (labelled arrows such as `->[x]`, which MathJax draws in the normal variant). The stretchy delimiter
+ * data of the standard arrow also goes to the code point, so a labelled arrow stretches.
  */
 export function defineMhchemVariant(font: object): void {
   const f = font as VariantFont;
   f.createVariant("-mhchem", "normal");
-  const arrow = f.variant["normal"]!.chars[LONG_RIGHT_ARROW];
-  if (arrow === undefined) {
-    throw new Error("the normal variant holds no long right arrow glyph");
+  const chars: Record<number, unknown> = {};
+  for (const [pua, real] of MHCHEM_ALIASES) {
+    const glyph = f.variant["normal"]!.chars[real];
+    if (glyph === undefined) {
+      throw new Error(`the normal variant holds no glyph for U+${real.toString(16).toUpperCase()}`);
+    }
+    chars[pua] = glyph;
+    const delimiter = f.delimiters[real];
+    if (delimiter !== undefined && f.delimiters[pua] === undefined) {
+      f.delimiters[pua] = { ...delimiter, c: delimiter.c ?? real };
+    }
   }
-  f.defineChars("-mhchem", { [MHCHEM_ARROW]: arrow });
+  f.defineChars("normal", chars);
+  f.defineChars("-mhchem", chars);
 }

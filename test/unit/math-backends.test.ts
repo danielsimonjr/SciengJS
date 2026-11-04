@@ -77,6 +77,14 @@ describe("math to png through the registry", () => {
     expect(countDarkPixels(decodePng(result.bytes))).toBeGreaterThan(0);
   });
 
+  for (const source of ["a<b", "a\\&b", "\\ce{A <=> B}", "\\ce{A <-> B}"]) {
+    test(`renders ${source} to a PNG: the svg is well-formed xml for resvg`, async () => {
+      const result = await renderIsolated({ type: "math", source, format: "png" }, { ...NONE, assetsUrl: ASSETS });
+      expect([...result.bytes.slice(0, 8)]).toEqual(PNG_SIGNATURE);
+      expect(countDarkPixels(decodePng(result.bytes))).toBeGreaterThan(0);
+    });
+  }
+
   test("the backend rejects an option other than scale", async () => {
     const err = await rejectionOf(renderPng(job("png", { width: 10 })));
     expect(err.code).toBe("E_INPUT");

@@ -27,10 +27,12 @@ export interface MathOptions {
 const REQUIRE = /\\require\s*\{([^}]*)\}/g;
 
 /**
- * Rejects a `\require` of a package that this build does not hold. MathJax never fetches a package,
- * so the check runs before the render and names the package. A package listed as held passes.
+ * Removes each `\require{...}` command from the source and returns the rest. The build loads every
+ * held package before the render and holds no require package, so a `\require` of held packages is a
+ * no-op. A `\require` of a package that this build does not hold rejects with E_UNSUPPORTED and names
+ * the package. MathJax never fetches a package.
  */
-export function checkRequires(source: string): void {
+export function stripRequires(source: string): string {
   for (const match of source.matchAll(REQUIRE)) {
     for (const raw of match[1]!.split(",")) {
       const name = raw.trim();
@@ -39,6 +41,40 @@ export function checkRequires(source: string): void {
       }
     }
   }
+  return source.replace(REQUIRE, "");
+}
+
+/** The five named XML entities, by name. */
+const XML_ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" };
+
+/** Decodes the numeric and the five named XML entities of a text. */
+function decodeXml(text: string): string {
+  return text.replace(
+    /&(?:#x([0-9A-Fa-f]+)|#(\d+)|(amp|lt|gt|quot|apos));/g,
+    (whole: string, hex?: string, dec?: string, name?: string) => {
+      if (hex !== undefined) return String.fromCodePoint(parseInt(hex, 16));
+      if (dec !== undefined) return String.fromCodePoint(parseInt(dec, 10));
+      return XML_ENTITIES[name!] ?? whole;
+    },
+  );
+}
+
+/**
+ * Rejects an SVG that draws a character as system-font text. MathJax writes a `<text>` element with a
+ * `font-family` when the math font holds no glyph for a character. Such output depends on the fonts of
+ * the viewer, and the PNG stage has no font. The error names each such character and its code point.
+ */
+export function rejectFontFallback(svg: string): void {
+  if (!svg.includes("<text") && !svg.includes("font-family")) return;
+  const chars = new Set<string>();
+  for (const match of svg.matchAll(/<text\b[^>]*>([^<]*)<\/text>/g)) {
+    for (const ch of decodeXml(match[1]!)) chars.add(ch);
+  }
+  if (chars.size === 0) {
+    throw new RenderError("E_UNSUPPORTED", "the math svg uses a system font");
+  }
+  const names = [...chars].map((ch) => `${ch} (U+${ch.codePointAt(0)!.toString(16).toUpperCase().padStart(4, "0")})`);
+  throw new RenderError("E_UNSUPPORTED", `the math font holds no glyph for ${names.join(", ")}`);
 }
 
 /** Converts a MathJax size string such as "2.5ex" to pixels, rounded to 3 decimals. */
@@ -77,9 +113,13 @@ export function standaloneSvg(container: string): string {
   return head + element.slice(open[0].length - 1);
 }
 
-/** Renders LaTeX math to a standalone SVG with the glyphs as paths. Rejects with E_INPUT or E_UNSUPPORTED. */
+/**
+ * Renders LaTeX math to a standalone SVG with the glyphs as paths. The XML serializer escapes `<`, `>`,
+ * `&` and `"` in the attribute values, so the TeX source in the data-latex attributes keeps the SVG
+ * well-formed. Rejects with E_INPUT or E_UNSUPPORTED.
+ */
 export async function mathToSvg(source: string, options: MathOptions): Promise<string> {
-  checkRequires(source);
+  const tex = stripRequires(source);
   const adaptor = liteAdaptor();
   RegisterHTMLHandler(adaptor);
   let inputError: string | undefined;
@@ -94,9 +134,11 @@ export async function mathToSvg(source: string, options: MathOptions): Promise<s
   loadFontRanges(output.font);
   defineMhchemVariant(output.font);
   const doc = mathjax.document("", { InputJax: input, OutputJax: output });
-  const node = doc.convert(source, { display: options.display });
+  const node = doc.convert(tex,{ display: options.display });
   if (inputError !== undefined) {
     throw new RenderError("E_INPUT", `TeX input error: ${inputError}`);
   }
-  return standaloneSvg(adaptor.outerHTML(node));
+  const svg = standaloneSvg(adaptor.serializeXML(node));
+  rejectFontFallback(svg);
+  return svg;
 }
