@@ -259,6 +259,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
   - Math with a MathML `annotation` of type `application/x-tex` becomes `$…$` or `$$…$$`. Other rendered math keeps its text.
   - An inline SVG becomes an asset file and an image link.
   - An image keeps its URL. The option `downloadImages: true` saves each image as an asset. The download follows the network rules of the configuration.
+  - A remote download uses http or https only. The engine follows a maximum of three redirects. Each hop must resolve to public addresses only: the engine refuses loopback, private, link-local and unspecified addresses. The reply must have an `image/*` type. The download must be in the limits `imageTimeoutMs` and `maxImageBytes`. A refused image keeps its URL and gives a warning.
 
 ## Configuration
 
@@ -274,6 +275,8 @@ One loader reads the configuration. Each key has one default, in the loader. An 
 | `maxSourceBytes` | `SCIENG_MAX_SOURCE_BYTES` | 10485760 | the size limit of one source |
 | `maxMemoryMb` | `SCIENG_MAX_MEMORY_MB` | 2048 | the heap limit of the worker of one render |
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` | the network uses that are allowed: `none`, `tex-bundles`, or `tex-bundles,images` |
+| `imageTimeoutMs` | `SCIENG_IMAGE_TIMEOUT_MS` | 15000 | the time limit of one remote image download, for all its redirects |
+| `maxImageBytes` | `SCIENG_MAX_IMAGE_BYTES` | 10485760 | the size limit of the body of one remote image |
 | `rasterFont` | `SCIENG_RASTER_FONT` | none (the bundled font of the raster stage) | the path of a TrueType or OpenType font for the raster stage |
 | `assetsUrl` | `SCIENG_ASSETS_URL` | the `assets/` folder of the package, resolved from `dist/config.js` | the `file:` URL of the folder that holds `fonts/` and the resvg WASM file `index_bg.wasm`. The build copies the WASM file into that folder. A value without a trailing slash gets a trailing slash. A value that is not a `file:` URL rejects with `E_CONFIG`. A `file:` URL with a host other than `localhost` rejects with `E_CONFIG`. On Windows, such a URL names a network share. A value with a query or a fragment rejects with `E_CONFIG`. A value with an encoded slash or backslash in its path rejects with `E_CONFIG`. A value that the operating system cannot open as a folder path rejects the render with `E_CONFIG`. A missing or unusable file under the folder rejects the render with `E_STAGE_MISSING`. |
 
