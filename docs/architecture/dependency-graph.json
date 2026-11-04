@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 161,
+    "totalFiles": 164,
     "totalModules": 3,
-    "totalExports": 308
+    "totalExports": 324
   },
   "modules": {
     "tools": {
@@ -2319,6 +2319,81 @@
           "render"
         ]
       },
+      "test/node/browser-gates.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/node/browser-probe.mjs",
+            "imports": [
+              "createSampler",
+              "externalSockets",
+              "noSandboxAmong",
+              "rendererCount"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/node/browser-probe.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:util"
+        ],
+        "internalDependencies": [],
+        "exports": [
+          "NO_SANDBOX",
+          "hostOf",
+          "isLoopback",
+          "isExternal",
+          "parseSs",
+          "parseLsof",
+          "parseNetTcp",
+          "parsePs",
+          "parseCim",
+          "externalSockets",
+          "noSandboxAmong",
+          "rendererCount",
+          "windowsSampleScript",
+          "parseWindowsSample",
+          "createSampler",
+          "sampleTree"
+        ]
+      },
+      "test/node/browser-probe.node.mjs": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:assert/strict",
+          "node:test"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/node/browser-probe.mjs",
+            "imports": [
+              "externalSockets",
+              "noSandboxAmong",
+              "parseCim",
+              "parseLsof",
+              "parseNetTcp",
+              "parsePs",
+              "parseSs",
+              "parseWindowsSample",
+              "rendererCount",
+              "windowsSampleScript"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/node/worker.node.mjs": {
         "externalDependencies": [],
         "nodeDependencies": [
@@ -4107,11 +4182,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 161,
-    "totalSourceFiles": 161,
+    "totalTypeScriptFiles": 164,
+    "totalSourceFiles": 164,
     "totalModules": 3,
-    "totalLinesOfCode": 17398,
-    "totalExports": 308,
+    "totalLinesOfCode": 17814,
+    "totalExports": 324,
     "entryRoots": 42,
     "reachableFiles": 42,
     "dormantFiles": 14,
@@ -4129,10 +4204,10 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
     "totalInterfaces": 51,
-    "totalFunctions": 133,
-    "totalTypeGuards": 2,
+    "totalFunctions": 148,
+    "totalTypeGuards": 4,
     "totalEnums": 0,
-    "totalConstants": 49,
+    "totalConstants": 50,
     "totalReExports": 55
   },
   "reachability": {

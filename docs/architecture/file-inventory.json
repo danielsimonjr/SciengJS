@@ -1,11 +1,11 @@
 {
-  "totalFiles": 161,
+  "totalFiles": 164,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 42,
     "test-only": 3,
     "orphan": 11,
-    "test": 77,
+    "test": 80,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 28,
     "src": 56,
-    "tests": 77
+    "tests": 80
   },
   "byPackage": {
-    "(root)": 119,
+    "(root)": 122,
     "@danielsimonjr/sciengjs": 42
   },
   "files": [
@@ -110,7 +110,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 74
+      "loc": 77
     },
     {
       "file": "src/browser/render.ts",
@@ -405,6 +405,27 @@
       "area": "tests",
       "disposition": "test",
       "loc": 4
+    },
+    {
+      "file": "test/node/browser-gates.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 150
+    },
+    {
+      "file": "test/node/browser-probe.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 196
+    },
+    {
+      "file": "test/node/browser-probe.node.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 67
     },
     {
       "file": "test/node/worker.node.mjs",

@@ -20,7 +20,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Changed
 
-- The browser gates run in CI on each system under Bun and under Node 22 (`test/node/browser-gates.mjs`). They sample the browser process tree during each render, check that no socket leaves the host and that no process carries the sandbox-off flag, and check a 4000 by 3000 screenshot. On Linux the gates run in a network namespace with only loopback, with a negative control. A positive control holds one loopback connection open, so the socket sampler must find it on each system. On Windows one PowerShell session takes all the samples, so at least 5 samples land during the large render.
+- The browser gates run in CI on each system under Bun and under Node 22 (`test/node/browser-gates.mjs`). They sample the browser process tree during each render. They check that no socket leaves the host and that no process carries the sandbox-off flag. They also check a 4000 by 3000 screenshot. On Linux the gates run in a network namespace with only loopback, with a negative control. A positive control holds one loopback connection open, so the socket sampler must find it on each system. On Windows one PowerShell session takes all the samples, so at least 5 samples land during the large render.
 - The refusing proxy of the browser stage handles socket errors. A reset from the browser no longer ends the process.
 - The smoke test imports the `./browser` subpath. It no longer checks that the subpath is absent.
 - The test page checker starts the browser with the forced flags of the browser stage and a refusing proxy. A test fails when a file in `src/` or `test/` names the flag that turns the sandbox off.
