@@ -4,7 +4,7 @@
 
 # @danielsimonjr/sciengjs - Dependency Graph
 
-**Version**: 0.3.2
+**Version**: 0.4.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -1306,4 +1306,4 @@ graph TD
 
 ---
 
-*Version*: 0.3.2
+*Version*: 0.4.0
