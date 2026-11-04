@@ -297,6 +297,7 @@ describe("root finding failure", () => {
         c.push(0);
         for (let j = c.length - 1; j > 0; j -= 1) c[j]! += c[j - 1]!;
       }
+      expect(codeOf(() => polynomialRoots(c))).toBeUndefined();
       const error = Math.max(...polynomialRoots(c).map((r) => Math.hypot(r.re + 1, r.im)));
       // A root of multiplicity n moves by about (eps * C)^(1/n) under rounding; 0.5 bounds it to n = 20.
       expect(error).toBeLessThan(0.5);
