@@ -251,3 +251,56 @@ describe("step numbers follow the sign of the final value and the stability", ()
     });
   }
 });
+
+describe("refined numbers", () => {
+  test("nyquist minimum distance to -1 matches a dense scan to 1e-6", () => {
+    const tf = { num: [10], den: [1, 6, 11, 6] };
+    const coarse = nyquist(tf, { points: 50 }).numbers.minDistanceToMinusOne;
+    // Dense scan of |G(jw) + 1| over the default range 1e-2 .. 3e2 rad/s.
+    let dense = Infinity;
+    const count = 400000;
+    for (let i = 0; i < count; i += 1) {
+      const w = 10 ** (-2 + (Math.log10(300) + 2) * (i / (count - 1)));
+      const re = 6 - 6 * w * w;
+      const im = 11 * w - w ** 3;
+      const d = re * re + im * im;
+      dense = Math.min(dense, Math.hypot((10 * re) / d + 1, (-10 * im) / d));
+    }
+    expect(Math.abs(coarse - dense)).toBeLessThan(1e-6);
+  });
+
+  test("step of 1/(s+1): rise and settling times match the closed form far inside one time step", () => {
+    const dt = 10 / 1000;
+    const { numbers } = step({ num: [1], den: [1, 1] }, { tEnd: 10, points: 1000 });
+    expect(Math.abs(numbers.riseTime! - Math.log(9))).toBeLessThan(dt / 100);
+    expect(Math.abs(numbers.settlingTime! - Math.log(50))).toBeLessThan(dt / 100);
+  });
+});
+
+describe("root finding failure", () => {
+  for (const coeffs of [[1e-300, 1, 1e300], [1, 1e200, 1], [1, ...new Array<number>(39).fill(0), 1e300]]) {
+    test(`polynomialRoots of a degree ${coeffs.length - 1} polynomial with extreme coefficients rejects with E_INPUT, not NaN`, () => {
+      expect(codeOf(() => polynomialRoots(coeffs))).toBe("E_INPUT");
+    });
+  }
+
+  test("a helper over an extreme model rejects with E_INPUT, not NaN numbers", () => {
+    expect(codeOf(() => bode({ num: [1], den: [1e-300, 1, 1e300] }))).toBe("E_INPUT");
+    expect(codeOf(() => poleZero({ num: [1], den: [1, 1e200, 1] }))).toBe("E_INPUT");
+  });
+
+  test("(s+1)^20 stalls above rounding error at the iteration cap and rejects with E_INPUT", () => {
+    const c = [1];
+    for (let i = 0; i < 20; i += 1) {
+      c.push(0);
+      for (let j = c.length - 1; j > 0; j -= 1) c[j]! += c[j - 1]!;
+    }
+    expect(codeOf(() => polynomialRoots(c))).toBe("E_INPUT");
+  });
+
+  test("the triple and quadruple roots of (s+1)^3 and (s+1)^4 stall at the rounding floor and are accepted", () => {
+    for (const r of polynomialRoots([1, 3, 3, 1])) expect(Math.hypot(r.re + 1, r.im)).toBeLessThan(1e-4);
+    for (const r of polynomialRoots([1, 4, 6, 4, 1])) expect(Math.hypot(r.re + 1, r.im)).toBeLessThan(1e-3);
+    expect(step({ num: [1], den: [1, 3, 3, 1] }).numbers.finalValue).toBeCloseTo(1, 12);
+  });
+});

@@ -111,9 +111,13 @@ const HORIZON_TIME_CONSTANTS = 10;
 // Durand-Kerner stops when the largest correction falls below this relative size.
 const ROOT_TOL = 1e-11;
 const ROOT_MAX_ITER = 1000;
+// A root is also accepted when its residual is below this many ulps of the rounding scale.
+const ROOT_RESIDUAL_ULPS = 64;
 const ROOT_SEED: Complex = { re: 0.4, im: 0.9 };
 // Bisection steps on a log-frequency bracket; 80 halvings reach double precision.
 const BISECT_STEPS = 80;
+// Golden-section steps for the least Nyquist distance; each step keeps 0.618 of the bracket.
+const GOLDEN_STEPS = 100;
 // Settling band of the step response, as a fraction of the final value.
 const SETTLE_BAND = 0.02;
 const RISE_LOW = 0.1;
@@ -186,6 +190,13 @@ function cabs(a: Complex): number {
   return Math.hypot(a.re, a.im);
 }
 
+/** The sum of |c_k| x^k: the rounding scale of evalPoly at a point of size x. */
+function absPoly(p: number[], x: number): number {
+  let acc = 0;
+  for (const c of p) acc = acc * x + Math.abs(c);
+  return acc;
+}
+
 function evalPoly(p: number[], s: Complex): Complex {
   let acc: Complex = { re: 0, im: 0 };
   for (const c of p) {
@@ -195,7 +206,7 @@ function evalPoly(p: number[], s: Complex): Complex {
   return acc;
 }
 
-/** The roots of a polynomial with descending coefficients. Each trailing zero coefficient gives an exact root at 0; Durand-Kerner finds the others. */
+/** The roots of a polynomial with descending coefficients. Each trailing zero coefficient gives an exact root at 0; Durand-Kerner finds the others. No convergence rejects with E_INPUT. */
 export function polynomialRoots(coeffs: number[]): Complex[] {
   const p = trimLeading(coeffs);
   let end = p.length;
@@ -206,7 +217,7 @@ export function polynomialRoots(coeffs: number[]): Complex[] {
   return roots;
 }
 
-/** The roots of a polynomial with a nonzero constant term, by Durand-Kerner iteration. */
+/** The roots of a polynomial with a nonzero constant term, by Durand-Kerner iteration. No convergence rejects with E_INPUT. */
 function durandKerner(p: number[]): Complex[] {
   const n = p.length - 1;
   if (n < 1) return [];
@@ -232,9 +243,37 @@ function durandKerner(p: number[]): Complex[] {
       largest = Math.max(largest, cabs(r));
       return csub(r, step);
     });
-    if (biggestStep <= ROOT_TOL * Math.max(1, largest)) break;
+    if (!Number.isFinite(biggestStep) || !Number.isFinite(largest)) break;
+    if (biggestStep <= ROOT_TOL * Math.max(1, largest)) return roots;
   }
-  return roots;
+  // A multiple root stalls at the rounding floor above the step tolerance: accept the roots
+  // when every residual is rounding error only.
+  const stalled = roots.every((root) => {
+    const size = cabs(root);
+    return Number.isFinite(size) && cabs(evalPoly(monic, root)) <= ROOT_RESIDUAL_ULPS * Number.EPSILON * absPoly(monic, size);
+  });
+  if (stalled) return roots;
+  throw inputError(
+    `polynomialRoots: the roots of the degree ${n} polynomial did not converge in ${ROOT_MAX_ITER} iterations; scale the coefficients`,
+  );
+}
+
+/** Rejects with E_INPUT when a computed value is not finite, so that no NaN leaves a helper. */
+function checkFinite(values: number[], name: string): number[] {
+  values.forEach((v, i) => {
+    if (!Number.isFinite(v)) throw inputError(`${name}[${i}] is not finite: the model is outside the numeric range`);
+  });
+  return values;
+}
+
+/** Rejects with E_INPUT when a derived number is NaN or infinite; null stays null. */
+function checkNumbers<N extends object>(numbers: N, helper: string): N {
+  for (const [key, value] of Object.entries(numbers)) {
+    if (typeof value === "number" && !Number.isFinite(value)) {
+      throw inputError(`${helper}: ${key} is not finite: the model is outside the numeric range`);
+    }
+  }
+  return numbers;
 }
 
 function positiveOption(value: unknown, name: string): number | undefined {
@@ -383,8 +422,8 @@ export function bode(input: unknown, options: FrequencyOptions = {}): ControlRes
   const [wMin, wMax] = frequencyRange(tf, options);
   const points = countOption(options.points, "points", DEFAULT_FREQUENCY_POINTS);
   const w = logSpace(wMin, wMax, points);
-  const magDb = w.map((x) => magnitudeDb(tf, x));
-  const phase = unwrappedPhaseDeg(tf, w);
+  const magDb = checkFinite(w.map((x) => magnitudeDb(tf, x)), "bode magnitude");
+  const phase = checkFinite(unwrappedPhaseDeg(tf, w), "bode phase");
 
   const gain = findCrossing(w, magDb, 0, (x) => magnitudeDb(tf, x));
   const phaseHit = findCrossing(w, phase, -180, (x, ref) => continuousPhaseDeg(tf, x, ref));
@@ -396,7 +435,7 @@ export function bode(input: unknown, options: FrequencyOptions = {}): ControlRes
 
   return {
     figure: bodeFigure(w, magDb, phase),
-    numbers: { gainCrossover, phaseCrossover, gainMargin, phaseMargin },
+    numbers: checkNumbers({ gainCrossover, phaseCrossover, gainMargin, phaseMargin }, "bode"),
   };
 }
 
@@ -563,8 +602,19 @@ function stepNumbers(y: number[], dt: number, finalValue: number | null): StepNu
   y.forEach((v, i) => {
     if (Math.abs(v - finalValue) > band) lastOutside = i;
   });
+  // Linear interpolation of the error |y - finalValue| across the band, between the last sample outside and the next.
   let settlingTime: number | null = 0;
-  if (lastOutside >= 0) settlingTime = lastOutside + 1 < y.length ? (lastOutside + 1) * dt : null;
+  if (lastOutside >= 0) {
+    const outside = y[lastOutside];
+    const inside = y[lastOutside + 1];
+    if (outside === undefined || inside === undefined) {
+      settlingTime = null;
+    } else {
+      const eOut = Math.abs(outside - finalValue);
+      const eIn = Math.abs(inside - finalValue);
+      settlingTime = (lastOutside + (eOut - band) / (eOut - eIn)) * dt;
+    }
+  }
   return {
     finalValue,
     riseTime: low === null || high === null ? null : high - low,
@@ -603,8 +653,8 @@ export function step(input: unknown, options: TimeOptions = {}): ControlResult<S
   const finalValue = dc.re === 0 || !isStable(tf) ? null : evalPoly(tf.num, { re: 0, im: 0 }).re / dc.re;
   const t = y.map((_unused, k) => k * dt);
   return {
-    figure: timeFigure(t, y, "Step response", "y(t)"),
-    numbers: stepNumbers(y, dt, finalValue),
+    figure: timeFigure(t, checkFinite(y, "step y"), "Step response", "y(t)"),
+    numbers: checkNumbers(stepNumbers(y, dt, finalValue), "step"),
   };
 }
 
@@ -630,8 +680,8 @@ export function impulse(input: unknown, options: TimeOptions = {}): ControlResul
   const peak = refinedPeak(y, dt);
   const t = y.map((_unused, k) => k * dt);
   return {
-    figure: timeFigure(t, y, "Impulse response", "y(t)"),
-    numbers: { peak: peak.value, peakTime: peak.time },
+    figure: timeFigure(t, checkFinite(y, "impulse y"), "Impulse response", "y(t)"),
+    numbers: checkNumbers({ peak: peak.value, peakTime: peak.time }, "impulse"),
   };
 }
 
@@ -674,22 +724,66 @@ export function poleZero(input: unknown): ControlResult<PoleZeroNumbers> {
   };
 }
 
+/** Minimum of f on [lo, hi] by golden-section search. f must be unimodal on the interval. */
+function goldenMin(f: (x: number) => number, lo: number, hi: number, steps: number): { x: number; value: number } {
+  const ratio = (Math.sqrt(5) - 1) / 2;
+  let a = lo;
+  let b = hi;
+  if (!(b > a)) return { x: a, value: f(a) };
+  let c = b - ratio * (b - a);
+  let d = a + ratio * (b - a);
+  let fc = f(c);
+  let fd = f(d);
+  for (let k = 0; k < steps; k += 1) {
+    if (fc < fd) {
+      b = d;
+      d = c;
+      fd = fc;
+      c = b - ratio * (b - a);
+      fc = f(c);
+    } else {
+      a = c;
+      c = d;
+      fc = fd;
+      d = a + ratio * (b - a);
+      fd = f(d);
+    }
+  }
+  return fc < fd ? { x: c, value: fc } : { x: d, value: fd };
+}
+
 /** Nyquist plot of G(j omega) for negative and positive frequencies, with the critical point -1. */
 export function nyquist(input: unknown, options: FrequencyOptions = {}): ControlResult<NyquistNumbers> {
   const tf = checkTransferFunction(input);
   const [wMin, wMax] = frequencyRange(tf, options);
   const points = countOption(options.points, "points", DEFAULT_FREQUENCY_POINTS);
-  const positive = logSpace(wMin, wMax, points).map((x) => response(tf, x));
+  const grid = logSpace(wMin, wMax, points);
+  const positive = grid.map((x) => response(tf, x));
   // A real-coefficient model gives G(-j omega) = conj(G(j omega)).
   const negative = positive
     .slice()
     .reverse()
     .map((c) => ({ re: c.re, im: -c.im }));
   const path = [...negative, ...positive];
-  let minDistance = Infinity;
-  for (const c of path) {
-    minDistance = Math.min(minDistance, Math.hypot(c.re + 1, c.im));
-  }
+  // The negative half mirrors the positive half, so the distances repeat: scan the positive half,
+  // then refine the least sample by golden-section search in log frequency between its neighbours.
+  const distanceAt = (u: number) => {
+    const c = response(tf, 10 ** u);
+    return Math.hypot(c.re + 1, c.im);
+  };
+  let best = 0;
+  const distances = positive.map((c) => Math.hypot(c.re + 1, c.im));
+  distances.forEach((d, i) => {
+    if (d < (distances[best] ?? Infinity)) best = i;
+  });
+  const refined = goldenMin(
+    distanceAt,
+    Math.log10(grid[Math.max(0, best - 1)] ?? wMin),
+    Math.log10(grid[Math.min(grid.length - 1, best + 1)] ?? wMax),
+    GOLDEN_STEPS,
+  );
+  const minDistance = Math.min(distances[best] ?? Infinity, refined.value);
+  checkFinite(path.flatMap((c) => [c.re, c.im]), "nyquist G(j omega)");
   return {
     figure: {
       data: [
@@ -702,7 +796,7 @@ export function nyquist(input: unknown, options: FrequencyOptions = {}): Control
         yaxis: { title: { text: "Im G" } },
       },
     },
-    numbers: { minDistanceToMinusOne: minDistance },
+    numbers: checkNumbers({ minDistanceToMinusOne: minDistance }, "nyquist"),
   };
 }
 
