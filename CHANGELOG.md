@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-04
+
 ### Added
 
 - The `plot` stage draws a chart from a JSON text with the keys `data` and `layout`, a subset of the Plotly figure format. It renders to `svg`, `png` and `html`. The `svg` and `png` outputs are built in and make no request. An unsupported key rejects with `E_INPUT` and its path. The option `lenient` skips the key and gives a warning.
