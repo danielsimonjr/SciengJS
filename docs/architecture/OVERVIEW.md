@@ -20,6 +20,7 @@ Status: the graph, raster and Mermaid stages exist. The package renders DOT to S
 | `src/core.ts` | The render and capability logic, with an injectable registry. |
 | `src/config.ts` | The configuration loader. |
 | `src/assets.ts` | The asset folder: the check of `assetsUrl`, the bundled font path, and the reads of the font and the WASM file. |
+| `src/types.ts` | The input types, the output formats and the request and result types. |
 | `src/version.ts` | The engine version. The build writes it. Do not edit it by hand. |
 | `src/errors.ts` | `RenderError`, its eight codes and `isRenderError`. |
 | `src/registry.ts` | The stage registry: a map from `type:format` to a backend module. |
@@ -28,6 +29,11 @@ Status: the graph, raster and Mermaid stages exist. The package renders DOT to S
 | `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner and the two backends (SVG and PNG). |
 | `src/raster/` | The raster stage: SVG to PNG through resvg, and the font check. |
 | `src/mermaid/` | The Mermaid stage: the header and option reader, the parsers of the class, state and sequence diagrams, the DOT builders, the sequence layout and the SVG render. |
+| `src/math/` | The math stage: LaTeX math to SVG through MathJax, and the SVG, PNG and PDF backends. |
+| `src/plot/` | The plot stage: the reader of the Plotly JSON subset, the tick algorithm, the control plots, and the SVG, PNG and HTML backends. |
+| `src/browser/` | The browser stage: the Chrome DevTools Protocol client, the browser flags and profile, the page render, and the PNG and PDF backends. |
+| `src/html/` | The html stage: HTML to Markdown through parse5, the image download, and the md backend. |
+| `src/mesh/` | The mesh stage: the STEP, IGES and BREP reader through occt-import-js, the glTF binary writer, and the glb backend with its output limit. |
 | `assets/` | The files that ship in the package: the bundled raster font, the resvg WASM file `index_bg.wasm` and the licence texts. |
 | `scripts/` | `prepare-build.mjs`, which the build runs. The script writes `src/version.ts` and copies `index_bg.wasm` into `assets/`. |
 | `test/unit/` | Unit tests of each module. |
@@ -50,9 +56,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 211 | repo-tools map |
-| totalLinesOfCode | 24261 | repo-tools map |
-| totalExports | 442 | repo-tools map |
-| totalTypeOnlyImports | 42 | repo-tools map |
+| totalSourceFiles | 214 | repo-tools map |
+| totalLinesOfCode | 24702 | repo-tools map |
+| totalExports | 445 | repo-tools map |
+| totalTypeOnlyImports | 45 | repo-tools map |
 | totalModules | 3 | repo-tools map |
 | entryRoots | 66 | repo-tools map |

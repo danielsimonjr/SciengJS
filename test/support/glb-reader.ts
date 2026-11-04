@@ -1,6 +1,6 @@
 // An independent glTF 2.0 binary reader for the tests. It shares no code with src/mesh/glb.ts.
-// It checks the container, the JSON chunk, the BIN chunk, the accessor bounds and the index ranges,
-// and it returns the decoded geometry and materials.
+// It checks the container, the chunk order and padding, the scene graph, the accessor bounds, the index
+// ranges, the normals and the materials, and it returns the decoded geometry and materials.
 
 const MAGIC = 0x46546c67; // "glTF"
 const CHUNK_JSON = 0x4e4f534a; // "JSON"
@@ -64,9 +64,14 @@ export function readGlb(bytes: Uint8Array): GlbDocument {
     const start = offset + 8;
     if (start + length > bytes.byteLength) throw new Error("a chunk runs past the end of the file");
     const body = bytes.subarray(start, start + length);
+    if (offset === 12 && type !== CHUNK_JSON) throw new Error("the first chunk is not JSON");
     if (type === CHUNK_JSON) {
       if (json !== undefined) throw new Error("two JSON chunks");
-      json = JSON.parse(new TextDecoder().decode(body));
+      let end = body.byteLength;
+      while (end > 0 && body[end - 1] === 0x20) end--;
+      if (body.byteLength - end > 3) throw new Error("the JSON chunk has more than 3 padding bytes");
+      if (end === 0 || body[end - 1] !== 0x7d) throw new Error("the JSON chunk does not end with } and space padding");
+      json = JSON.parse(new TextDecoder().decode(body.subarray(0, end)));
     } else if (type === CHUNK_BIN) {
       if (bin !== undefined) throw new Error("two BIN chunks");
       bin = body;
@@ -80,13 +85,40 @@ export function readGlb(bytes: Uint8Array): GlbDocument {
   if (bin === undefined) throw new Error("the BIN chunk is missing");
   const buffer = json.buffers?.[0];
   if (!buffer || buffer.byteLength > bin.byteLength) throw new Error("buffer 0 is missing or larger than the BIN chunk");
+  if (!(buffer.byteLength >= 1)) throw new Error("buffer 0 has no bytes");
+  if (bin.byteLength - buffer.byteLength > 3) throw new Error("the BIN chunk has more than 3 padding bytes");
+  for (let i = buffer.byteLength; i < bin.byteLength; i++) {
+    if (bin[i] !== 0) throw new Error("a BIN padding byte is not zero");
+  }
+  for (const v of json.bufferViews ?? []) {
+    if (v.buffer !== 0 || (v.byteOffset ?? 0) + v.byteLength > buffer.byteLength) throw new Error("a buffer view runs past buffer 0");
+  }
+
+  // The scene graph: a valid default scene, valid nodes, and every mesh used by a node.
+  const nodes = json.nodes ?? [];
+  const meshes = json.meshes ?? [];
+  const scene = json.scenes?.[json.scene];
+  if (!Number.isInteger(json.scene) || !scene) throw new Error("the default scene is missing");
+  for (const n of scene.nodes ?? []) {
+    if (!Number.isInteger(n) || n < 0 || n >= nodes.length) throw new Error(`the scene names node ${n} that does not exist`);
+  }
+  const usedMeshes = new Set<number>();
+  for (const node of nodes) {
+    if (!Number.isInteger(node.mesh) || node.mesh < 0 || node.mesh >= meshes.length) throw new Error("a node names a mesh that does not exist");
+    usedMeshes.add(node.mesh);
+  }
+  if (usedMeshes.size !== meshes.length) throw new Error("a mesh is not used by a node");
 
   const materials = (json.materials ?? []).map((m: any) => ({
     baseColorFactor: m.pbrMetallicRoughness?.baseColorFactor as number[],
     name: m.name as string | undefined,
   }));
+  const colours = new Set(materials.map((m: { baseColorFactor: number[] }) => JSON.stringify(m.baseColorFactor)));
+  if (colours.size !== materials.length) throw new Error("two materials have the same colour");
+  const usedAccessors = new Set<number>();
+  const usedMaterials = new Set<number>();
   const primitives: GlbPrimitive[] = [];
-  for (const mesh of json.meshes ?? []) {
+  for (const mesh of meshes) {
     for (const prim of mesh.primitives ?? []) {
       if (prim.mode !== 4) throw new Error("a primitive is not TRIANGLES");
       const position = readAccessor(json, bin, prim.attributes.POSITION, COMPONENT_FLOAT32, "VEC3");
@@ -111,6 +143,11 @@ export function readGlb(bytes: Uint8Array): GlbDocument {
         const n = readAccessor(json, bin, prim.attributes.NORMAL, COMPONENT_FLOAT32, "VEC3");
         if (n.accessor.count !== vertexCount) throw new Error("NORMAL count differs from POSITION count");
         normals = n.values;
+        for (let i = 0; i < vertexCount; i++) {
+          const length = Math.hypot(normals![i * 3]!, normals![i * 3 + 1]!, normals![i * 3 + 2]!);
+          if (Math.abs(length - 1) > 1e-3) throw new Error(`normal ${i} is not unit length`);
+        }
+        usedAccessors.add(prim.attributes.NORMAL);
       }
       const index = readAccessor(json, bin, prim.indices, COMPONENT_UINT32, "SCALAR");
       if (index.values.length % 3 !== 0) throw new Error("the index count is not a multiple of 3");
@@ -120,8 +157,15 @@ export function readGlb(bytes: Uint8Array): GlbDocument {
       if (prim.material !== undefined && (prim.material < 0 || prim.material >= materials.length)) {
         throw new Error("a primitive names a material that does not exist");
       }
+      usedAccessors.add(prim.attributes.POSITION);
+      usedAccessors.add(prim.indices);
+      if (prim.material !== undefined) usedMaterials.add(prim.material);
       primitives.push({ positions: position.values, normals, indices: index.values, material: prim.material });
     }
   }
+  if (usedAccessors.size !== (json.accessors ?? []).length) throw new Error("an accessor is not used by a primitive");
+  const usedViews = new Set((json.accessors ?? []).map((a: { bufferView: number }) => a.bufferView));
+  if (usedViews.size !== (json.bufferViews ?? []).length) throw new Error("a buffer view is not used by an accessor");
+  if (usedMaterials.size !== materials.length) throw new Error("a material is not used by a primitive");
   return { json, primitives, materials };
 }

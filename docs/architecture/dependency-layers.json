@@ -2342,7 +2342,7 @@
     },
     "mesh": {
       "src/mesh/backend-glb.ts": {
-        "description": "Checks the options of a glb render. STEP and IGES take linearUnit. BREP takes no option.",
+        "description": "The number of copies of the geometry that a glb render holds at its peak: the typed arrays of the",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -2371,18 +2371,28 @@
             "imports": [
               "readCad",
               "CadFormat",
+              "CadMesh",
               "LinearUnit"
             ]
           }
         ],
         "workspaceDependencies": [],
         "exports": [
+          "GLB_COPIES",
+          "estimateGlbBytes",
           "readMeshOptions",
           "render"
         ],
+        "interfaces": [
+          "GlbDeps"
+        ],
         "functions": [
+          "estimateGlbBytes",
           "readMeshOptions",
           "render"
+        ],
+        "constants": [
+          "GLB_COPIES"
         ]
       },
       "src/mesh/glb.ts": {
@@ -2390,6 +2400,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
           {
             "file": "./read.ts",
             "imports": [

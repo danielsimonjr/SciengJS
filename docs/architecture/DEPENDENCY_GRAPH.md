@@ -912,7 +912,7 @@ The codebase is organized into the following modules:
 
 ## Mesh Dependencies
 
-### `src/mesh/backend-glb.ts` - Checks the options of a glb render. STEP and IGES take linearUnit. BREP takes no option.
+### `src/mesh/backend-glb.ts` - The number of copies of the geometry that a glb render holds at its peak: the typed arrays of the
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -920,10 +920,12 @@ The codebase is organized into the following modules:
 | `../errors.ts` | `RenderError` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
 | `./glb.ts` | `writeGlb` | Import |
-| `./read.ts` | `readCad, CadFormat, LinearUnit` | Import |
+| `./read.ts` | `readCad, CadFormat, CadMesh, LinearUnit` | Import |
 
 **Exports:**
-- Functions: `readMeshOptions`, `render`
+- Interfaces: `GlbDeps`
+- Functions: `estimateGlbBytes`, `readMeshOptions`, `render`
+- Constants: `GLB_COPIES`
 
 ---
 
@@ -932,6 +934,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
 | `./read.ts` | `CadFace, CadMesh` | Import (type-only) |
 
 **Exports:**
@@ -1361,7 +1364,7 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 30 files |
+| `src/errors` | 0 files | 31 files |
 | `src/worker/protocol` | 2 files | 18 files |
 | `src/browser/render` | 6 files | 5 files |
 | `src/mermaid/browser` | 6 files | 5 files |
@@ -1392,6 +1395,7 @@ The codebase is organized into the following modules:
 | `src/mermaid/backend-svg` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
 | `src/mermaid/sequence` | 1 file | 3 files |
+| `src/mesh/glb` | 2 files | 2 files |
 | `src/mesh/read` | 1 file | 3 files |
 | `src/plot/backend-png` | 4 files | 0 files |
 | `src/plot/index` | 4 files | 0 files |
@@ -1400,7 +1404,6 @@ The codebase is organized into the following modules:
 | `src/browser/backend-pdf` | 3 files | 0 files |
 | `src/browser/backend-png` | 3 files | 0 files |
 | `src/browser/cdp` | 1 file | 2 files |
-| `src/graph/backend-svg` | 3 files | 0 files |
 
 ---
 
@@ -1631,17 +1634,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 211 |
+| Total Source Files | 214 |
 | Subsystems | 17 |
-| Total Lines of Code | 24261 |
-| Total Exports | 442 |
+| Total Lines of Code | 24702 |
+| Total Exports | 445 |
 | Total Re-exports | 88 |
 | Total Classes | 6 |
-| Total Interfaces | 78 |
-| Total Functions | 195 |
+| Total Interfaces | 79 |
+| Total Functions | 196 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 42 |
+| Type-only Imports | 45 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

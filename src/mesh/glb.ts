@@ -1,3 +1,4 @@
+import { RenderError } from "../errors.ts";
 import type { CadFace, CadMesh } from "./read.ts";
 
 const MAGIC = 0x46546c67; // "glTF"
@@ -62,6 +63,8 @@ function pad4(bytes: Uint8Array, fill: number): Uint8Array {
  * Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped
  * by face colour, and each colour is one primitive with one material. Faces without a colour use a
  * default grey material. The positions and the normals are shared by the primitives of one mesh.
+ * A mesh without triangles is left out. Input with no triangle at all rejects with E_INPUT, because a
+ * glTF buffer cannot have zero bytes.
  */
 export function writeGlb(meshes: CadMesh[]): Uint8Array {
   const materials: Material[] = [];
@@ -86,6 +89,9 @@ export function writeGlb(meshes: CadMesh[]): Uint8Array {
   const nodes: unknown[] = [];
 
   for (const mesh of meshes) {
+    // A mesh with no triangle gets no accessor, so that the file holds no unused accessor.
+    const groups = triangleGroups(mesh);
+    if (groups.size === 0) continue;
     const positions = Float32Array.from(mesh.positions);
     const vertexCount = positions.length / 3;
     const min = [Infinity, Infinity, Infinity];
@@ -104,7 +110,7 @@ export function writeGlb(meshes: CadMesh[]): Uint8Array {
     }
 
     const primitives: unknown[] = [];
-    for (const [key, triangles] of triangleGroups(mesh)) {
+    for (const [key, triangles] of groups) {
       const indices = new Uint32Array(triangles.length * 3);
       triangles.forEach((t, n) => {
         indices[n * 3] = mesh.indices[t * 3]!;
@@ -114,9 +120,12 @@ export function writeGlb(meshes: CadMesh[]): Uint8Array {
       const indexAccessor = addAccessor({ bytes: bytesOf(indices), componentType: COMPONENT_UINT32, type: "SCALAR", count: indices.length });
       primitives.push({ attributes, indices: indexAccessor, material: materialOf(key), mode: MODE_TRIANGLES });
     }
-    if (primitives.length === 0) continue;
     nodes.push({ mesh: gltfMeshes.length, name: mesh.name });
     gltfMeshes.push({ name: mesh.name, primitives });
+  }
+
+  if (gltfMeshes.length === 0) {
+    throw new RenderError("E_INPUT", "the meshes hold no triangles");
   }
 
   // Lay out the buffer: one buffer view per accessor, each on a four-byte boundary.

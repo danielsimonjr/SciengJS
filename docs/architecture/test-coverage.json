@@ -1,19 +1,19 @@
 {
   "metadata": {
     "totalSourceFiles": 80,
-    "totalTestFiles": 74,
-    "testedCount": 51,
-    "untestedCount": 29,
-    "coveragePercent": "63.7",
+    "totalTestFiles": 76,
+    "testedCount": 53,
+    "untestedCount": 27,
+    "coveragePercent": "66.3",
     "effectiveCoverage": {
       "policyLoaded": false,
       "activeFiles": 80,
-      "testedActive": 51,
-      "activeUntested": 29,
+      "testedActive": 53,
+      "activeUntested": 27,
       "excludedTotal": 0,
-      "percent": "63.7",
+      "percent": "66.3",
       "breakdown": {
-        "active_untested": 29
+        "active_untested": 27
       }
     }
   },
@@ -28,8 +28,6 @@
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
-    "src/mesh/backend-glb.ts",
-    "src/mesh/glb.ts",
     "src/mesh/index.ts",
     "src/plot/backend-html.ts",
     "src/plot/backend-png.ts",
@@ -84,6 +82,8 @@
     "src/mermaid/sequence-layout.ts",
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
+    "src/mesh/backend-glb.ts",
+    "src/mesh/glb.ts",
     "src/mesh/read.ts",
     "src/pairs.ts",
     "src/plot/control.ts",
@@ -283,11 +283,17 @@
       "test/unit/mermaid-state.test.ts",
       "test/unit/mermaid-xml.test.ts"
     ],
-    "src/mesh/backend-glb.ts": [],
-    "src/mesh/glb.ts": [],
+    "src/mesh/backend-glb.ts": [
+      "test/unit/mesh-limit.test.ts"
+    ],
+    "src/mesh/glb.ts": [
+      "test/unit/glb-writer.test.ts"
+    ],
     "src/mesh/index.ts": [],
     "src/mesh/read.ts": [
-      "test/unit/mesh-glb.test.ts"
+      "test/unit/glb-writer.test.ts",
+      "test/unit/mesh-glb.test.ts",
+      "test/unit/mesh-limit.test.ts"
     ],
     "src/pairs.ts": [
       "test/unit/browser-pdf-pairs.test.ts"
@@ -346,7 +352,8 @@
       "test/unit/browser-stage.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-svg-backend.test.ts",
-      "test/unit/math-backends.test.ts"
+      "test/unit/math-backends.test.ts",
+      "test/unit/mesh-limit.test.ts"
     ],
     "src/worker/run.ts": [
       "test/unit/worker-exec-argv.test.ts",
@@ -445,6 +452,10 @@
     ],
     "test/unit/errors.test.ts": [
       "src/errors.ts"
+    ],
+    "test/unit/glb-writer.test.ts": [
+      "src/mesh/glb.ts",
+      "src/mesh/read.ts"
     ],
     "test/unit/graph-corpus.test.ts": [
       "src/graph/dot.ts"
@@ -569,6 +580,11 @@
       "src/registry.ts",
       "src/mesh/read.ts"
     ],
+    "test/unit/mesh-limit.test.ts": [
+      "src/mesh/backend-glb.ts",
+      "src/mesh/read.ts",
+      "src/worker/protocol.ts"
+    ],
     "test/unit/no-bun-api.test.ts": [],
     "test/unit/no-sandbox-flag.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
@@ -682,14 +698,6 @@
     },
     {
       "file": "src/mermaid/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/mesh/backend-glb.ts",
-      "category": null
-    },
-    {
-      "file": "src/mesh/glb.ts",
       "category": null
     },
     {
