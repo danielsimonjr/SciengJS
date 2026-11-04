@@ -10,9 +10,9 @@
 - **Dormant files**: 15
   - **Orphaned (reachable from nothing)**: 12
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 42
+- **Potentially unused exports**: 43
   - **Unreferenced anywhere**: 5
-  - **Referenced in their own module**: 37
+  - **Referenced in their own module**: 38
   - **Not classified**: 0
 
 ## Caveats
@@ -99,6 +99,7 @@ No other file imports these names, but their own module uses them.
 - `src/mermaid/backend-svg.ts`: `render`
 - `src/mermaid/common.ts`: `Context`, `DiagramKind`
 - `src/mesh/backend-glb.ts`: `GlbDeps`
+- `src/mesh/viewer.ts`: `ViewerOptions`
 - `src/pairs.ts`: `PairSpec`
 - `src/plot/control.ts`: `FrequencyOptions`, `RootLocusOptions`, `TimeOptions`
 - `src/plot/ticks.ts`: `LogTick`

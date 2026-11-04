@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 80,
-    "totalTestFiles": 77,
-    "testedCount": 53,
-    "untestedCount": 27,
-    "coveragePercent": "66.3",
+    "totalSourceFiles": 85,
+    "totalTestFiles": 80,
+    "testedCount": 56,
+    "untestedCount": 29,
+    "coveragePercent": "65.9",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 80,
-      "testedActive": 53,
-      "activeUntested": 27,
+      "activeFiles": 85,
+      "testedActive": 56,
+      "activeUntested": 29,
       "excludedTotal": 0,
-      "percent": "66.3",
+      "percent": "65.9",
       "breakdown": {
-        "active_untested": 27
+        "active_untested": 29
       }
     }
   },
@@ -28,7 +28,9 @@
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
-    "src/mesh/index.ts",
+    "src/mesh/backend-html.ts",
+    "src/mesh/backend-png.ts",
+    "src/mesh/viewer-script.ts",
     "src/plot/backend-html.ts",
     "src/plot/backend-png.ts",
     "src/plot/backend-svg.ts",
@@ -84,7 +86,10 @@
     "src/mermaid/state.ts",
     "src/mesh/backend-glb.ts",
     "src/mesh/glb.ts",
+    "src/mesh/index.ts",
+    "src/mesh/pinned-three.ts",
     "src/mesh/read.ts",
+    "src/mesh/viewer.ts",
     "src/pairs.ts",
     "src/plot/control.ts",
     "src/plot/plotter.ts",
@@ -127,8 +132,11 @@
     ],
     "src/browser/pinned.ts": [
       "test/integration/mermaid-browser-capture.test.ts",
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/browser-pinned.test.ts",
-      "test/unit/plot-html.test.ts"
+      "test/unit/mesh-viewer.test.ts",
+      "test/unit/plot-html.test.ts",
+      "test/unit/three-pinned.test.ts"
     ],
     "src/browser/profile.ts": [
       "test/integration/browser-render.test.ts"
@@ -138,12 +146,14 @@
     ],
     "src/browser/render.ts": [
       "test/integration/browser-render.test.ts",
-      "test/integration/mermaid-browser-capture.test.ts"
+      "test/integration/mermaid-browser-capture.test.ts",
+      "test/integration/mesh-viewer.test.ts"
     ],
     "src/config.ts": [
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
@@ -163,6 +173,7 @@
       "test/unit/mermaid-registry.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-large.test.ts",
+      "test/unit/mesh-viewer.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts",
       "test/unit/render.test.ts"
@@ -171,6 +182,7 @@
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
@@ -228,6 +240,7 @@
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-route-lenient.test.ts"
     ],
@@ -286,16 +299,32 @@
       "test/unit/mermaid-xml.test.ts"
     ],
     "src/mesh/backend-glb.ts": [
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/mesh-limit.test.ts"
     ],
+    "src/mesh/backend-html.ts": [],
+    "src/mesh/backend-png.ts": [],
     "src/mesh/glb.ts": [
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/glb-writer.test.ts"
     ],
-    "src/mesh/index.ts": [],
+    "src/mesh/index.ts": [
+      "test/integration/mesh-viewer.test.ts"
+    ],
+    "src/mesh/pinned-three.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/mesh-viewer.test.ts"
+    ],
     "src/mesh/read.ts": [
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/glb-writer.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-limit.test.ts"
+    ],
+    "src/mesh/viewer-script.ts": [],
+    "src/mesh/viewer.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/mesh-viewer.test.ts"
     ],
     "src/pairs.ts": [
       "test/unit/browser-pdf-pairs.test.ts"
@@ -335,6 +364,7 @@
       "test/unit/mermaid-registry.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-large.test.ts",
+      "test/unit/mesh-viewer.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts"
     ],
@@ -342,6 +372,7 @@
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
+      "test/integration/mesh-viewer.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts"
@@ -407,6 +438,20 @@
       "src/errors.ts",
       "src/config.ts",
       "src/types.ts"
+    ],
+    "test/integration/mesh-viewer.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts",
+      "src/browser/render.ts",
+      "src/browser/pinned.ts",
+      "src/mesh/pinned-three.ts",
+      "src/mesh/index.ts",
+      "src/mesh/read.ts",
+      "src/mesh/glb.ts",
+      "src/mesh/backend-glb.ts",
+      "src/mesh/viewer.ts"
     ],
     "test/integration/page-checker.test.ts": [],
     "test/mutation/run-mutants.test.ts": [],
@@ -593,6 +638,13 @@
       "src/mesh/read.ts",
       "src/worker/protocol.ts"
     ],
+    "test/unit/mesh-viewer.test.ts": [
+      "src/core.ts",
+      "src/registry.ts",
+      "src/browser/pinned.ts",
+      "src/mesh/viewer.ts",
+      "src/mesh/pinned-three.ts"
+    ],
     "test/unit/no-bun-api.test.ts": [],
     "test/unit/no-sandbox-flag.test.ts": [],
     "test/unit/page-checker-io.test.ts": [],
@@ -644,6 +696,9 @@
     "test/unit/svg-compare.test.ts": [],
     "test/unit/teardown.test.ts": [],
     "test/unit/third-party-notices.test.ts": [],
+    "test/unit/three-pinned.test.ts": [
+      "src/browser/pinned.ts"
+    ],
     "test/unit/version.test.ts": [
       "src/version.ts"
     ],
@@ -709,7 +764,15 @@
       "category": null
     },
     {
-      "file": "src/mesh/index.ts",
+      "file": "src/mesh/backend-html.ts",
+      "category": null
+    },
+    {
+      "file": "src/mesh/backend-png.ts",
+      "category": null
+    },
+    {
+      "file": "src/mesh/viewer-script.ts",
       "category": null
     },
     {

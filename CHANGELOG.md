@@ -14,6 +14,12 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The test reader of glb files checks more. It checks the chunk order, the JSON space padding and the BIN zero padding. It checks unit normals, one material per colour, the scene and the nodes. Each accessor, buffer view and material must be used.
 - The mutation audit of the glb writer and the glb limit is in `test/mutation/mesh-glb-mutants.json`. An assertion kills all 46 non-equivalent mutants. Three mutants are equivalent.
 - The smoke test renders a BREP sample to `glb` from the installed tarball under Node. `test:node` runs a mesh test against `dist/`.
+- The pairs `step`, `iges` and `brep` to `html` render a viewer page. The page embeds the `glb` as base64 text. It loads Three.js 0.187.0 (exact pin, MIT) from six pinned CDN URLs, each with a subresource integrity value in an import map and in a modulepreload link. The page has orbit controls, section planes on the three axes and an exploded view. A normal browser requests only the pinned modules.
+- The pairs `step`, `iges` and `brep` to `png` render the viewer page in the browser stage. The client fulfils the pinned Three.js URLs from the assets folder, so no request leaves the process. The options are `width`, `height`, `scale` and `linearUnit`. The png page has no control panel.
+- The build copies six Three.js files into `assets/`. `THIRD_PARTY_NOTICES.md` names Three.js. The licence text is in `assets/licenses/MIT-three.txt`. The module `three.module.js` needs `three.core.js` by relative path, so six files are pinned, not five.
+- The browser stage option `awaitReady` waits for `window.__sciengDone` and then takes a plain screenshot. The client now answers a pinned URL with an `Access-Control-Allow-Origin` header, because a module script is a cross-origin request.
+- The page checker of the tests fulfils pinned URLs from memory with the option `pinned`. The PNG reader of the tests also reads RGB images.
+- The smoke test checks that the tarball ships the six Three.js files and renders a BREP sample to `html`. `test:node` renders the same sample to `html` against `dist/`.
 - A test renders a STEP part of 1,793,282 bytes (`linkrods.step` of OpenCascade, LGPL-2.1) to `glb` inside the default timeout and checks its 8,772 triangles. The part is not in git. CI downloads it from the pinned URL in `test/corpus/mesh/large.json` and checks its SHA-256. Without the file, a local run skips the test and CI fails it.
 
 ### Fixed

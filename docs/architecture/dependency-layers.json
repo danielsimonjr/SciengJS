@@ -559,7 +559,7 @@
         ]
       },
       "src/browser/pinned.ts": {
-        "description": "pinned module",
+        "description": "The modules that the viewer page loads. The GLTFLoader imports the two utility modules by relative path, and",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
@@ -573,10 +573,15 @@
           "PLOTLY_VERSION",
           "PLOTLY_SHA256",
           "PLOTLY_SRI",
-          "PLOTLY_CDN_URL"
+          "PLOTLY_CDN_URL",
+          "THREE_VERSION",
+          "THREE_CDN_BASE",
+          "THREE_MODULES",
+          "THREE_MAIN_URL"
         ],
         "interfaces": [
-          "PinnedAsset"
+          "PinnedAsset",
+          "ThreeModule"
         ],
         "constants": [
           "MERMAID_VERSION",
@@ -587,7 +592,11 @@
           "PLOTLY_VERSION",
           "PLOTLY_SHA256",
           "PLOTLY_SRI",
-          "PLOTLY_CDN_URL"
+          "PLOTLY_CDN_URL",
+          "THREE_VERSION",
+          "THREE_CDN_BASE",
+          "THREE_MODULES",
+          "THREE_MAIN_URL"
         ]
       },
       "src/browser/profile.ts": {
@@ -2395,6 +2404,94 @@
           "GLB_COPIES"
         ]
       },
+      "src/mesh/backend-html.ts": {
+        "description": "Renders a STEP, IGES or BREP file to html: one page with a Three.js viewer that embeds the glb. The page names the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "render"
+            ]
+          },
+          {
+            "file": "./viewer.ts",
+            "imports": [
+              "viewerPageHtml"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/mesh/backend-png.ts": {
+        "description": "Renders a STEP, IGES or BREP file to png: the viewer page in the headless browser. The client fulfils the pinned",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../browser/input.ts",
+            "imports": [
+              "blockedWarnings",
+              "browserPathOf",
+              "parsePngOptions"
+            ]
+          },
+          {
+            "file": "../browser/render.ts",
+            "imports": [
+              "renderHtmlPage"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "render"
+            ]
+          },
+          {
+            "file": "./pinned-three.ts",
+            "imports": [
+              "pinnedThree"
+            ]
+          },
+          {
+            "file": "./viewer.ts",
+            "imports": [
+              "viewerPageHtml"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/mesh/glb.ts": {
         "description": "Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped",
         "externalDependencies": [],
@@ -2489,6 +2586,52 @@
         "workspaceDependencies": [],
         "exports": []
       },
+      "src/mesh/pinned-three.ts": {
+        "description": "Reads the pinned Three.js files from the assets folder and checks the SHA-256 of each. A missing file rejects with",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../browser/pinned.ts",
+            "imports": [
+              "THREE_MODULES"
+            ]
+          },
+          {
+            "file": "../browser/render.ts",
+            "imports": [
+              "PinnedBytes"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../assets.ts",
+            "imports": [
+              "readAsset"
+            ]
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "pinnedThree"
+        ],
+        "functions": [
+          "pinnedThree"
+        ]
+      },
       "src/mesh/read.ts": {
         "description": "Reads a STEP, IGES or BREP file to meshes. The linear unit applies to STEP and IGES only.",
         "externalDependencies": [],
@@ -2511,6 +2654,49 @@
         ],
         "functions": [
           "readCad"
+        ]
+      },
+      "src/mesh/viewer-script.ts": {
+        "description": "The module script of the viewer page. The page builder replaces three markers before it writes the page:",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "VIEWER_SCRIPT"
+        ],
+        "constants": [
+          "VIEWER_SCRIPT"
+        ]
+      },
+      "src/mesh/viewer.ts": {
+        "description": "A page that views one glTF binary. The page embeds the glb as base64 text and loads the pinned Three.js modules",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../browser/pinned.ts",
+            "imports": [
+              "THREE_MAIN_URL",
+              "THREE_MODULES"
+            ]
+          },
+          {
+            "file": "./viewer-script.ts",
+            "imports": [
+              "VIEWER_SCRIPT"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "viewerPageHtml"
+        ],
+        "interfaces": [
+          "ViewerOptions"
+        ],
+        "functions": [
+          "viewerPageHtml"
         ]
       }
     },
@@ -3515,10 +3701,15 @@
       "name": "Mesh",
       "files": [
         "src/mesh/backend-glb.ts",
+        "src/mesh/backend-html.ts",
+        "src/mesh/backend-png.ts",
         "src/mesh/glb.ts",
         "src/mesh/index.ts",
         "src/mesh/occt-import-js.d.ts",
-        "src/mesh/read.ts"
+        "src/mesh/pinned-three.ts",
+        "src/mesh/read.ts",
+        "src/mesh/viewer-script.ts",
+        "src/mesh/viewer.ts"
       ]
     },
     {
