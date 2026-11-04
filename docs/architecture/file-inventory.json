@@ -1,11 +1,11 @@
 {
-  "totalFiles": 194,
+  "totalFiles": 197,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 56,
+    "build-entry": 58,
     "test-only": 3,
     "orphan": 11,
-    "test": 96,
+    "test": 97,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 70,
-    "tests": 96
+    "src": 72,
+    "tests": 97
   },
   "byPackage": {
-    "(root)": 138,
-    "@danielsimonjr/sciengjs": 56
+    "(root)": 139,
+    "@danielsimonjr/sciengjs": 58
   },
   "files": [
     {
@@ -181,6 +181,20 @@
       "area": "src",
       "disposition": "build-entry",
       "loc": 3
+    },
+    {
+      "file": "src/html/convert.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 421
+    },
+    {
+      "file": "src/html/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 2
     },
     {
       "file": "src/index.ts",
@@ -792,6 +806,13 @@
       "loc": 54
     },
     {
+      "file": "test/unit/html-convert.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 142
+    },
+    {
       "file": "test/unit/math-backends.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -1381,8 +1402,5 @@
     }
   ],
   "skippedLinks": [],
-  "warnings": [
-    "package.json entry './dist/html/index.d.ts' did not resolve to a known source file. The entry is ignored.",
-    "package.json entry './dist/html/index.js' did not resolve to a known source file. The entry is ignored."
-  ]
+  "warnings": []
 }

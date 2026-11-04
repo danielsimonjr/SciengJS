@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 194
+  totalFiles: 197
   totalModules: 3
-  totalExports: 404
+  totalExports: 410
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -824,6 +824,27 @@ modules:
       exports:
         - dotToSvg
         - DotSvgResult
+    src/html/convert.ts:
+      externalDependencies:
+        - parse5
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - Asset
+        - ConvertOptions
+        - ConvertResult
+        - convertHtml
+        - htmlToMarkdown
+    src/html/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/html/convert.ts
+          imports:
+            - htmlToMarkdown
+          typeOnly: false
+      exports:
+        - htmlToMarkdown
     src/index.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2692,6 +2713,19 @@ modules:
             - WorkerJob
           typeOnly: true
       exports: []
+    test/unit/html-convert.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:url
+      internalDependencies:
+        - file: src/html/convert.ts
+          imports:
+            - convertHtml
+            - htmlToMarkdown
+          typeOnly: false
+      exports: []
     test/unit/math-backends.test.ts:
       externalDependencies:
         - bun:test
@@ -3511,13 +3545,13 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 194
-  totalSourceFiles: 194
+  totalTypeScriptFiles: 197
+  totalSourceFiles: 197
   totalModules: 3
-  totalLinesOfCode: 22106
-  totalExports: 404
-  entryRoots: 56
-  reachableFiles: 56
+  totalLinesOfCode: 22671
+  totalExports: 410
+  entryRoots: 58
+  reachableFiles: 58
   dormantFiles: 14
   orphanedFiles: 11
   testOnlyFiles: 3
@@ -3525,19 +3559,19 @@ statistics:
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 32
   noImporterFileCount: 7
-  unusedExportsCount: 34
+  unusedExportsCount: 37
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 66
-  totalFunctions: 181
+  totalInterfaces: 69
+  totalFunctions: 183
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 57
-  totalReExports: 80
+  totalReExports: 81
 reachability:
   roots:
     - src/index.ts
@@ -3547,6 +3581,7 @@ reachability:
     - src/mermaid/index.ts
     - src/math/index.ts
     - src/plot/index.ts
+    - src/html/index.ts
     - src/assets.ts
     - src/browser/backend-pdf.ts
     - src/browser/backend-png.ts
@@ -3566,6 +3601,7 @@ reachability:
     - src/graph/backend-svg.ts
     - src/graph/dot.ts
     - src/graph/image.ts
+    - src/html/convert.ts
     - src/math/backend-pdf.ts
     - src/math/backend-png.ts
     - src/math/backend-svg.ts
@@ -3596,7 +3632,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 56
+  reachableCount: 58
   dormantCount: 14
   orphaned:
     - trials/t1-graph/compare-layout.mjs
@@ -3614,6 +3650,4 @@ reachability:
     - trials/t5-tex-build/runtime/tfm.mjs
     - trials/t5-tex-build/runtime/type1.mjs
     - trials/t6-etex-build/runtime/dvisvgm-specials.mjs
-warnings:
-  - package.json entry './dist/html/index.d.ts' did not resolve to a known source file. The entry is ignored.
-  - package.json entry './dist/html/index.js' did not resolve to a known source file. The entry is ignored.
+warnings: []

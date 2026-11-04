@@ -77,6 +77,10 @@
       "stripImageAttributes",
       "svgDocumentToPng"
     ],
+    "html": [
+      "convertHtml",
+      "htmlToMarkdown"
+    ],
     "math": [
       "MATH_PACKAGES",
       "MHCHEM_ALIASES",

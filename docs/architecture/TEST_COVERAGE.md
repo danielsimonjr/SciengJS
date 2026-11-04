@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 70 |
-| Total Test Files | 69 |
-| Source Files with Tests | 46 |
-| Source Files without Tests | 24 |
-| Coverage (raw, direct-import) | **65.7%** |
+| Total Source Files | 72 |
+| Total Test Files | 70 |
+| Source Files with Tests | 47 |
+| Source Files without Tests | 25 |
+| Coverage (raw, direct-import) | **65.3%** |
 ---
 
 ## Source Files Not Imported By A Test
 
-The following 24 source files are not directly imported by any test file:
+The following 25 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -27,6 +27,10 @@ The following 24 source files are not directly imported by any test file:
 
 - `src/graph/backend-pdf.ts`
 - `src/graph/index.ts`
+
+### html/
+
+- `src/html/index.ts`
 
 ### math/
 
@@ -100,6 +104,7 @@ The following 24 source files are not directly imported by any test file:
 | `graph/backend-svg.ts` | `graph-svg-backend.test.ts` |
 | `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `mermaid-class.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts`, `raster-warnings.test.ts` |
 | `graph/image.ts` | `graph-image.test.ts` |
+| `html/convert.ts` | `html-convert.test.ts` |
 | `src/index.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mermaid-route-lenient.test.ts` |
 | `math/backend-pdf.ts` | `math-backends.test.ts` |
 | `math/backend-png.ts` | `math-backends.test.ts` |
@@ -160,6 +165,7 @@ The following 24 source files are not directly imported by any test file:
 | `unit/graph-png.test.ts` | 5 files |
 | `unit/graph-registry.test.ts` | 2 files |
 | `unit/graph-svg-backend.test.ts` | 4 files |
+| `unit/html-convert.test.ts` | 1 files |
 | `unit/math-backends.test.ts` | 6 files |
 | `unit/math-registry.test.ts` | 2 files |
 | `unit/math-svg.test.ts` | 1 files |
