@@ -402,3 +402,60 @@ describe("plotToSvg grid numbering", () => {
     expect(third.y).toBeGreaterThan(first.y);
   });
 });
+
+/** The RenderError of a rejected call, or undefined. A raw error fails the test. */
+function renderError(fn: () => unknown): RenderError | undefined {
+  try {
+    fn();
+    return undefined;
+  } catch (error) {
+    if (!(error instanceof RenderError)) throw error;
+    return error;
+  }
+}
+
+describe("tick count limits", () => {
+  test("a dtick of 1e-9 over a range of 1000 rejects fast with E_INPUT naming layout.xaxis.dtick", () => {
+    const started = performance.now();
+    const error = renderError(() => plotToSvg(scatter({ x: [0, 1000], y: [0, 1] }, { xaxis: { dtick: 1e-9 } })));
+    expect(performance.now() - started).toBeLessThan(500);
+    expect(error?.code).toBe("E_INPUT");
+    expect(error?.message).toContain("layout.xaxis.dtick");
+  });
+
+  test("a dtick that gives 1000 ticks is accepted, 1001 ticks rejects", () => {
+    expect(renderError(() => plotToSvg(scatter({}, { xaxis: { range: [1, 1000], dtick: 1 } })))).toBeUndefined();
+    expect(renderError(() => plotToSvg(scatter({}, { xaxis: { range: [0, 1000], dtick: 1 } })))?.code).toBe("E_INPUT");
+  });
+
+  test("a dtick on a second axis names its full path", () => {
+    const figure = {
+      data: [{ type: "scatter", mode: "lines", x: [0, 1], y: [0, 1], xaxis: "x2", yaxis: "y2" }],
+      layout: { grid: { rows: 1, columns: 2 }, yaxis2: { dtick: 1e-12 } },
+    };
+    expect(renderError(() => plotToSvg(figure))?.message).toContain("layout.yaxis2.dtick");
+  });
+});
+
+describe("tick labels at extreme magnitudes", () => {
+  test("a log range of -300 to 300 decades draws without a raw error and with few labels", () => {
+    const { svg } = plotToSvg(scatter({ x: [1, 2], y: [1, 2] }, { xaxis: { type: "log", range: [-300, 300] } }));
+    expect(svg).toContain("1e-300");
+    expect(svg).toContain("1e+300");
+    expect(count(svg, /<line[^>]*class="tick-minor"/)).toBe(0);
+  });
+
+  test("log data near 1e-300 draws without a raw error", () => {
+    const { svg } = plotToSvg(scatter({ x: [1e-300, 1e-299], y: [1, 2] }, { xaxis: { type: "log" } }));
+    expect(svg.startsWith("<svg")).toBe(true);
+  });
+
+  test("linear data near 1e-300 draws with exponent labels", () => {
+    const { svg } = plotToSvg(scatter({ x: [0, 4e-300], y: [1, 2] }));
+    expect(texts(svg).some((t) => /e-30\d$/.test(t))).toBe(true);
+  });
+
+  test("a tickformat with more than 20 decimals rejects with E_INPUT", () => {
+    expect(renderError(() => plotToSvg(scatter({}, { xaxis: { tickformat: ".101f" } })))?.code).toBe("E_INPUT");
+  });
+});

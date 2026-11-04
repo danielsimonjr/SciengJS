@@ -6,6 +6,9 @@ export interface LogTick {
   major: boolean;
 }
 
+/** The most ticks that one axis draws. A larger request rejects with E_INPUT. */
+export const MAX_TICKS = 1000;
+
 /** Pads a range by 5 percent of its span on each side. */
 export function paddedRange(min: number, max: number): [number, number] {
   const pad = (max - min) * 0.05;
@@ -46,7 +49,7 @@ export function linearTicks(min: number, max: number): number[] {
   return ticks;
 }
 
-/** Returns logarithmic ticks covering [min, max]: k * 10^n for k in 1..9, k = 1 is major. */
+/** Returns logarithmic ticks covering [min, max]: k * 10^n for k in 1..9, k = 1 is major. More than MAX_TICKS ticks rejects with E_INPUT. */
 export function logTicks(min: number, max: number): LogTick[] {
   if (!Number.isFinite(min) || !Number.isFinite(max) || min <= 0 || min > max) {
     throw new RenderError(
@@ -56,6 +59,9 @@ export function logTicks(min: number, max: number): LogTick[] {
   }
   const firstDecade = Math.floor(Math.log10(min));
   const lastDecade = Math.ceil(Math.log10(max));
+  if ((lastDecade - firstDecade + 1) * 9 > MAX_TICKS) {
+    throw new RenderError("E_INPUT", `logTicks: the range ${min} to ${max} needs more than ${MAX_TICKS} ticks`);
+  }
   const ticks: LogTick[] = [];
   for (let n = firstDecade; n <= lastDecade; n++) {
     const base = Math.pow(10, Math.abs(n));

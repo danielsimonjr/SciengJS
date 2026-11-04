@@ -78,3 +78,10 @@ describe("logTicks", () => {
     expect(() => logTicks(-1, 10)).toThrow(RenderError);
   });
 });
+
+describe("logTicks tick limit", () => {
+  test("rejects a range that needs more than 1000 ticks with E_INPUT", () => {
+    expect(() => logTicks(1e-300, 1e300)).toThrow(RenderError);
+    expect(logTicks(1e-50, 1e50).length).toBeLessThanOrEqual(1000);
+  });
+});

@@ -138,3 +138,17 @@ function setPath(obj: Record<string, unknown>, path: string, value: unknown): Re
 function getPath(obj: object, path: string): unknown {
   return path.split(".").reduce<unknown>((o, p) => (o as Record<string, unknown>)?.[p], obj);
 }
+
+describe("the reader rejects a dtick of zero or less", () => {
+  for (const dtick of [0, -1]) {
+    test(`dtick ${dtick} rejects with E_INPUT and the path`, () => {
+      try {
+        readPlotFigure({ data: [], layout: { xaxis: { dtick } } });
+        throw new Error("no rejection");
+      } catch (e) {
+        expect((e as RenderError).code).toBe("E_INPUT");
+        expect((e as RenderError).message).toContain("layout.xaxis.dtick");
+      }
+    });
+  }
+});

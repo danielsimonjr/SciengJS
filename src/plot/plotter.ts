@@ -1,6 +1,6 @@
 import { RenderError } from "../errors.ts";
 import { readPlotFigure } from "./reader.ts";
-import { linearTicks, logTicks, paddedRange } from "./ticks.ts";
+import { MAX_TICKS, linearTicks, logTicks, paddedRange } from "./ticks.ts";
 
 // Plotly figure subset to standalone SVG. Every number is formatted with a fixed
 // number of decimals, so the same figure always gives the same bytes.
@@ -106,6 +106,17 @@ function fmt(value: number, decimals: number): string {
   return /^-0(\.0*)?$/.test(text) ? text.slice(1) : text;
 }
 
+// A label that needs more decimals than this uses exponent form; a tickformat above it rejects.
+const MAX_FIXED_DECIMALS = 20;
+// A log axis with too many decades for minor ticks shows about this many major ticks.
+const LOG_MAJOR_TARGET = 10;
+
+/** Formats a tick label: fixed decimals, or exponent form when the decimals exceed MAX_FIXED_DECIMALS. */
+function tickLabel(value: number, decimals: number): string {
+  if (decimals <= MAX_FIXED_DECIMALS) return fmt(value, decimals);
+  return value === 0 ? "0" : value.toExponential();
+}
+
 /** Returns the decimals that show a step without loss. */
 function decimalsFor(step: number): number {
   return step > 0 ? Math.max(0, -Math.floor(Math.log10(step))) : 0;
@@ -149,7 +160,9 @@ function fixedDecimals(format: unknown, path: string): number | undefined {
   if (format === undefined) return undefined;
   const match = typeof format === "string" ? /^\.(\d+)f$/.exec(format) : null;
   if (match === null) fail(`${path} must be ".Nf" with a whole number N (got ${String(format)})`);
-  return Number(match![1]);
+  const decimals = Number(match![1]);
+  if (decimals > MAX_FIXED_DECIMALS) fail(`${path} must have at most ${MAX_FIXED_DECIMALS} decimals (got ${decimals})`);
+  return decimals;
 }
 
 /** Chooses the scale of one axis: an explicit range, else the padded data extent. */
@@ -184,15 +197,29 @@ function scaleOf(cfg: Rec, extent: [number, number] | undefined): Scale {
 function ticksOf(scale: Scale, cfg: Rec, path: string): Tick[] {
   const decimals = fixedDecimals(cfg.tickformat, `${path}.tickformat`);
   if (scale.log) {
+    const first = Math.floor(scale.lo);
+    const last = Math.ceil(scale.hi);
+    if ((last - first + 1) * 9 > MAX_TICKS) {
+      // Too many decades for minor ticks: major ticks only, on every stride-th decade.
+      const stride = Math.ceil((last - first) / LOG_MAJOR_TARGET);
+      const ticks: Tick[] = [];
+      for (let n = Math.ceil(first / stride) * stride; n <= last; n += stride) {
+        const value = Number(`1e${n}`);
+        ticks.push({ value, label: tickLabel(value, decimals ?? decimalsFor(value)), major: true });
+      }
+      return ticks;
+    }
     return logTicks(10 ** scale.lo, 10 ** scale.hi).map((tick) => ({
       value: tick.value,
-      label: fmt(tick.value, decimals ?? decimalsFor(tick.value)),
+      label: tickLabel(tick.value, decimals ?? decimalsFor(tick.value)),
       major: tick.major,
     }));
   }
   let values: number[];
   const dtick = typeof cfg.dtick === "number" && cfg.dtick > 0 ? cfg.dtick : undefined;
   if (dtick !== undefined) {
+    const count = Math.floor(scale.hi / dtick) - Math.ceil(scale.lo / dtick) + 1;
+    if (count > MAX_TICKS) fail(`${path}.dtick gives ${count} ticks over the axis range; the limit is ${MAX_TICKS}`);
     values = [];
     for (let k = Math.ceil(scale.lo / dtick); k * dtick <= scale.hi; k += 1) values.push(k * dtick);
   } else {
@@ -200,7 +227,7 @@ function ticksOf(scale: Scale, cfg: Rec, path: string): Tick[] {
   }
   const step = values.length > 1 ? values[1]! - values[0]! : 1;
   const digits = decimals ?? decimalsFor(dtick ?? step);
-  return values.map((value) => ({ value, label: fmt(value, digits), major: true }));
+  return values.map((value) => ({ value, label: tickLabel(value, digits), major: true }));
 }
 
 /** Parses a shape reference: "paper", an axis such as "x2", or an axis domain such as "x2 domain". */
@@ -483,7 +510,7 @@ export function plotToSvg(source: string | object, options?: { lenient?: boolean
   for (const id of axisIds) {
     const scale = scaleOf(axisCfg(id), groupExtent.get(rootOf(id, axisCfg)));
     scales.set(id, scale);
-    ticks.set(id, ticksOf(scale, axisCfg(id), axisKey(id)));
+    ticks.set(id, ticksOf(scale, axisCfg(id), `layout.${axisKey(id)}`));
   }
   const ctx: Context = { scales, ticks, plot, style, panels, axisCfg };
 

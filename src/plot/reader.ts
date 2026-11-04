@@ -50,7 +50,7 @@ const AXIS_SPECS: SpecTable = new Map<string, string>([
   ["type", "enum:linear|log"],
   ["title.text", "string"],
   ["range", "pair"],
-  ["dtick", "number"],
+  ["dtick", "positiveNumber"],
   ["tickformat", "string"],
   ["gridcolor", "string"],
   ["zeroline", "boolean"],
@@ -90,6 +90,9 @@ function validateValue(value: unknown, spec: string, path: string): void {
       return;
     case "number":
       if (!isNumber(value)) throw inputError(`${path} must be a number`);
+      return;
+    case "positiveNumber":
+      if (!isNumber(value) || value <= 0) throw inputError(`${path} must be a number above zero`);
       return;
     case "boolean":
       if (typeof value !== "boolean") throw inputError(`${path} must be a boolean`);
