@@ -45,7 +45,8 @@ if (requireNetns) {
 // socket list would prove nothing.
 async function attributionControl() {
   const marker = `sciengjs-probe-${process.pid}-${Date.now()}`;
-  const code = 'const net=require("node:net");const s=net.createServer((c)=>{c.on("error",()=>{});c.end();}).listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1",()=>{c.on("error",()=>{});setTimeout(()=>{c.destroy();s.close();},8000);});});';
+  // The child keeps itself alive with a timer at the top level, so it lives on even when the connect fails.
+  const code = 'const net=require("node:net");const s=net.createServer((c)=>{c.on("error",()=>{});c.end();});s.listen(0,"127.0.0.1",()=>{const c=net.connect(s.address().port,"127.0.0.1");c.on("error",()=>{});setTimeout(()=>{c.destroy();s.close();},8000);});';
   const child = spawn(process.execPath, ["-e", code, marker], { stdio: ["ignore", "ignore", "inherit"] });
   let seen = null;
   try {
