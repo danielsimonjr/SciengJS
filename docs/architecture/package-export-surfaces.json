@@ -71,6 +71,15 @@
       "stripImageAttributes",
       "svgDocumentToPng"
     ],
+    "math": [
+      "MATH_PACKAGES",
+      "checkRequires",
+      "defineMhchemVariant",
+      "exToPx",
+      "loadFontRanges",
+      "mathToSvg",
+      "standaloneSvg"
+    ],
     "mermaid": [
       "ActivateEvent",
       "BlockEvent",

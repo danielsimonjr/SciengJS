@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 168,
+    "totalFiles": 171,
     "totalModules": 3,
-    "totalExports": 327
+    "totalExports": 335
   },
   "modules": {
     "tools": {
@@ -1273,6 +1273,96 @@
           "Capability",
           "render",
           "capabilities"
+        ]
+      },
+      "src/math/font-ranges.ts": {
+        "externalDependencies": [
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/PUA.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/accents-b-i.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/accents.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/arabic.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/arrows.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/braille-d.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/braille.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/calligraphic.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/cherokee.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic-ss.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/devanagari.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/double-struck.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/fraktur.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/greek-ss.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/greek.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/hebrew.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-b.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-bi.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-i.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/marrows.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/math.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-ex.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-l.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/mshapes.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics-ss.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-b.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-bi.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-ex.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-i.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-r.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/script.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/shapes.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols-b-i.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols.js",
+          "@mathjax/mathjax-newcm-font/js/svg/dynamic/variants.js"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "loadFontRanges",
+          "defineMhchemVariant"
+        ]
+      },
+      "src/math/tex.ts": {
+        "externalDependencies": [
+          "@mathjax/src/js/adaptors/liteAdaptor.js",
+          "@mathjax/src/js/handlers/html.js",
+          "@mathjax/src/js/input/tex.js",
+          "@mathjax/src/js/input/tex/ams/AmsConfiguration.js",
+          "@mathjax/src/js/input/tex/base/BaseConfiguration.js",
+          "@mathjax/src/js/input/tex/boldsymbol/BoldsymbolConfiguration.js",
+          "@mathjax/src/js/input/tex/color/ColorConfiguration.js",
+          "@mathjax/src/js/input/tex/mhchem/MhchemConfiguration.js",
+          "@mathjax/src/js/mathjax.js",
+          "@mathjax/src/js/output/svg.js"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/math/font-ranges.ts",
+            "imports": [
+              "defineMhchemVariant",
+              "loadFontRanges"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "MATH_PACKAGES",
+          "MathOptions",
+          "checkRequires",
+          "exToPx",
+          "standaloneSvg",
+          "mathToSvg"
         ]
       },
       "src/mermaid/backend-pdf.ts": {
@@ -3315,6 +3405,29 @@
         ],
         "exports": []
       },
+      "test/unit/math-svg.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/math/tex.ts",
+            "imports": [
+              "mathToSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/rejections.ts",
+            "imports": [
+              "rejectionOf"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/mermaid-browser-route.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -4238,13 +4351,13 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 168,
-    "totalSourceFiles": 168,
+    "totalTypeScriptFiles": 171,
+    "totalSourceFiles": 171,
     "totalModules": 3,
-    "totalLinesOfCode": 18069,
-    "totalExports": 327,
-    "entryRoots": 42,
-    "reachableFiles": 42,
+    "totalLinesOfCode": 18342,
+    "totalExports": 335,
+    "entryRoots": 44,
+    "reachableFiles": 44,
     "dormantFiles": 14,
     "orphanedFiles": 11,
     "testOnlyFiles": 3,
@@ -4252,18 +4365,18 @@
     "typeOnlyCircularDeps": 0,
     "totalTypeOnlyImports": 23,
     "noImporterFileCount": 7,
-    "unusedExportsCount": 20,
+    "unusedExportsCount": 25,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
     "runtimeFilesInCycles": 0,
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 6,
-    "totalInterfaces": 51,
-    "totalFunctions": 151,
+    "totalInterfaces": 52,
+    "totalFunctions": 157,
     "totalTypeGuards": 4,
     "totalEnums": 0,
-    "totalConstants": 50,
+    "totalConstants": 51,
     "totalReExports": 55
   },
   "reachability": {
@@ -4292,6 +4405,8 @@
       "src/graph/backend-svg.ts",
       "src/graph/dot.ts",
       "src/graph/image.ts",
+      "src/math/font-ranges.ts",
+      "src/math/tex.ts",
       "src/mermaid/backend-pdf.ts",
       "src/mermaid/backend-png.ts",
       "src/mermaid/backend-svg.ts",
@@ -4311,7 +4426,7 @@
       "src/worker/protocol.ts",
       "src/worker/run.ts"
     ],
-    "reachableCount": 42,
+    "reachableCount": 44,
     "dormantCount": 14,
     "orphaned": [
       "trials/t1-graph/compare-layout.mjs",
@@ -4332,5 +4447,8 @@
       "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
     ]
   },
-  "warnings": []
+  "warnings": [
+    "package.json entry './dist/math/index.d.ts' did not resolve to a known source file. The entry is ignored.",
+    "package.json entry './dist/math/index.js' did not resolve to a known source file. The entry is ignored."
+  ]
 }

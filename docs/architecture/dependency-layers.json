@@ -1095,6 +1095,275 @@
         ]
       }
     },
+    "math": {
+      "src/math/font-ranges.ts": {
+        "description": "Static imports of every dynamic font range of MathJax-Newcm, the default math font. Each import",
+        "externalDependencies": [
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/PUA.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/accents-b-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/accents.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/arabic.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/arrows.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/braille-d.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/braille.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/calligraphic.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/cherokee.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic-ss.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/cyrillic.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/devanagari.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/double-struck.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/fraktur.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/greek-ss.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/greek.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/hebrew.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-b.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-bi.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/latin.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/marrows.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/math.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-ex.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace-l.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/monospace.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/mshapes.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics-ss.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/phonetics.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-b.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-bi.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-ex.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif-r.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/sans-serif.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/script.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/shapes.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols-b-i.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/symbols.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/mathjax-newcm-font/js/svg/dynamic/variants.js",
+            "imports": []
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "loadFontRanges",
+          "defineMhchemVariant"
+        ],
+        "functions": [
+          "loadFontRanges",
+          "defineMhchemVariant"
+        ]
+      },
+      "src/math/tex.ts": {
+        "description": "Rejects a `\\require` of a package that this build does not hold. MathJax never fetches a package,",
+        "externalDependencies": [
+          {
+            "package": "@mathjax/src/js/adaptors/liteAdaptor.js",
+            "imports": [
+              "liteAdaptor"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/handlers/html.js",
+            "imports": [
+              "RegisterHTMLHandler"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/mathjax.js",
+            "imports": [
+              "mathjax"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/input/tex.js",
+            "imports": [
+              "TeX"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/output/svg.js",
+            "imports": [
+              "SVG"
+            ]
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/base/BaseConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/ams/AmsConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/boldsymbol/BoldsymbolConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/color/ColorConfiguration.js",
+            "imports": []
+          },
+          {
+            "package": "@mathjax/src/js/input/tex/mhchem/MhchemConfiguration.js",
+            "imports": []
+          }
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./font-ranges.ts",
+            "imports": [
+              "defineMhchemVariant",
+              "loadFontRanges"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "MATH_PACKAGES",
+          "checkRequires",
+          "exToPx",
+          "standaloneSvg",
+          "mathToSvg"
+        ],
+        "interfaces": [
+          "MathOptions"
+        ],
+        "functions": [
+          "checkRequires",
+          "exToPx",
+          "standaloneSvg",
+          "mathToSvg"
+        ],
+        "constants": [
+          "MATH_PACKAGES"
+        ]
+      }
+    },
     "mermaid": {
       "src/mermaid/backend-pdf.ts": {
         "description": "Renders one Mermaid source to pdf in the browser stage. A native diagram is laid out first, then its SVG is",
@@ -2245,6 +2514,13 @@
       "name": "Entry",
       "files": [
         "src/index.ts"
+      ]
+    },
+    {
+      "name": "Math",
+      "files": [
+        "src/math/font-ranges.ts",
+        "src/math/tex.ts"
       ]
     },
     {

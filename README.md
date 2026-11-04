@@ -82,7 +82,7 @@ for (const pair of await capabilities()) {
 }
 ```
 
-`capabilities` reports each input and output pair of the design, the stage that the pair needs, and whether the stage is ready here. In this release only `dot -> svg` and `dot -> png` are ready.
+`capabilities` reports each input and output pair of the design, the stage that the pair needs, and whether the stage is ready here. Ready pairs include `dot -> svg`, `dot -> png`, `math -> svg` and `math -> png`. A pair that needs the browser stage is ready only when a browser is configured.
 
 ## Errors
 
@@ -99,7 +99,7 @@ try {
 | Code | Means |
 |---|---|
 | `E_INPUT` | the source or an option is not valid |
-| `E_UNSUPPORTED` | this build has no backend for the pair, for example `math` to `svg` |
+| `E_UNSUPPORTED` | this build has no backend for the pair, for example `tikz` to `svg` |
 | `E_LIMIT` | the source, the heap or the PNG pixels are over a limit |
 | `E_TIMEOUT` | the render took longer than `timeoutMs` |
 | `E_STAGE_MISSING` | a file that a stage needs, for example the bundled font, is missing |
@@ -165,7 +165,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 |---|---|---|
 | DOT | graph, raster | released in 0.1.0 |
 | Mermaid | graph, mermaid, browser | class, state and sequence: released in 0.2.0; other types: released in 0.3.0 |
-| LaTeX math | math (MathJax) | planned |
+| LaTeX math | math (MathJax) | svg, png and pdf are built; pdf needs the browser stage |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
 | Plots | plot | planned |
 | SysML v2 | sysml | planned |

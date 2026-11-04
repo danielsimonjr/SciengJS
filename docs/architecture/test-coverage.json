@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 56,
-    "totalTestFiles": 59,
-    "testedCount": 37,
-    "untestedCount": 19,
-    "coveragePercent": "66.1",
+    "totalSourceFiles": 58,
+    "totalTestFiles": 60,
+    "testedCount": 38,
+    "untestedCount": 20,
+    "coveragePercent": "65.5",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 56,
-      "testedActive": 37,
-      "activeUntested": 19,
+      "activeFiles": 58,
+      "testedActive": 38,
+      "activeUntested": 20,
       "excludedTotal": 0,
-      "percent": "66.1",
+      "percent": "65.5",
       "breakdown": {
-        "active_untested": 19
+        "active_untested": 20
       }
     }
   },
@@ -21,6 +21,7 @@
     "src/browser/index.ts",
     "src/graph/backend-pdf.ts",
     "src/graph/index.ts",
+    "src/math/font-ranges.ts",
     "src/mermaid/backend-pdf.ts",
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
@@ -58,6 +59,7 @@
     "src/graph/dot.ts",
     "src/graph/image.ts",
     "src/index.ts",
+    "src/math/tex.ts",
     "src/mermaid/browser.ts",
     "src/mermaid/class.ts",
     "src/mermaid/common.ts",
@@ -175,6 +177,10 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/unit/mermaid-route-lenient.test.ts"
+    ],
+    "src/math/font-ranges.ts": [],
+    "src/math/tex.ts": [
+      "test/unit/math-svg.test.ts"
     ],
     "src/mermaid/backend-pdf.ts": [],
     "src/mermaid/backend-png.ts": [],
@@ -378,6 +384,9 @@
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
     ],
+    "test/unit/math-svg.test.ts": [
+      "src/math/tex.ts"
+    ],
     "test/unit/mermaid-browser-route.test.ts": [],
     "test/unit/mermaid-class.test.ts": [
       "src/errors.ts",
@@ -486,6 +495,10 @@
     },
     {
       "file": "src/graph/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/math/font-ranges.ts",
       "category": null
     },
     {

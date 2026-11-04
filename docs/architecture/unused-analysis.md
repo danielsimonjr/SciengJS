@@ -10,9 +10,9 @@
 - **Dormant files**: 14
   - **Orphaned (reachable from nothing)**: 11
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 20
+- **Potentially unused exports**: 25
   - **Unreferenced anywhere**: 2
-  - **Referenced in their own module**: 18
+  - **Referenced in their own module**: 23
   - **Not classified**: 0
 
 ## Caveats
@@ -79,6 +79,7 @@ No other file imports these names, but their own module uses them.
 - `src/browser/render.ts`: `PAGE_URL`, `capturePage`
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
+- `src/math/tex.ts`: `MATH_PACKAGES`, `MathOptions`, `checkRequires`, `exToPx`, `standaloneSvg`
 - `src/mermaid/backend-pdf.ts`: `render`
 - `src/mermaid/backend-png.ts`: `render`
 - `src/mermaid/backend-svg.ts`: `render`
