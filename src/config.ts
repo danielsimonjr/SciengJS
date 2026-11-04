@@ -22,6 +22,10 @@ export interface SciengConfig {
   assetsUrl: string;
   /** Path of a TrueType or OpenType file that the raster stage uses in place of the bundled font. */
   rasterFont?: string;
+  /** The time limit of one remote image download, in milliseconds, over all its redirects. */
+  imageTimeoutMs: number;
+  /** The size limit of the body of one remote image, in bytes. */
+  maxImageBytes: number;
 }
 
 /** The inputs of the loader. A caller injects them in a test. */
@@ -47,6 +51,8 @@ const ENV = {
   allowNetwork: "SCIENG_ALLOW_NETWORK",
   assetsUrl: "SCIENG_ASSETS_URL",
   rasterFont: "SCIENG_RASTER_FONT",
+  imageTimeoutMs: "SCIENG_IMAGE_TIMEOUT_MS",
+  maxImageBytes: "SCIENG_MAX_IMAGE_BYTES",
 } as const;
 
 const RELEASE_URL_BASE = "https://github.com/danielsimonjr/sciengjs/releases/download";
@@ -91,6 +97,8 @@ function defaults(engineVersion: string): Required<Omit<SciengConfig, "browser" 
     maxMemoryMb: 2048,
     allowNetwork: "tex-bundles",
     assetsUrl: DEFAULT_ASSETS_URL,
+    imageTimeoutMs: 15000,
+    maxImageBytes: 10485760,
   };
 }
 
@@ -114,6 +122,8 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
     case "timeoutMs":
     case "maxSourceBytes":
     case "maxMemoryMb":
+    case "imageTimeoutMs":
+    case "maxImageBytes":
       if (typeof value !== "number" || !Number.isInteger(value) || value <= 0) {
         return fail("must be a positive integer");
       }
@@ -128,9 +138,11 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
   }
 }
 
+const NUMBER_KEYS: readonly ConfigKey[] = ["timeoutMs", "maxSourceBytes", "maxMemoryMb", "imageTimeoutMs", "maxImageBytes"];
+
 /** Converts an environment text to a value of the key. Numbers must be whole and positive. */
 function fromEnvText(key: ConfigKey, text: string, envName: string): SciengConfig[ConfigKey] {
-  if (key === "timeoutMs" || key === "maxSourceBytes" || key === "maxMemoryMb") {
+  if (NUMBER_KEYS.includes(key)) {
     if (!/^\d+$/.test(text)) {
       throw new RenderError("E_CONFIG", `${envName} must be a whole number, got "${text}"`);
     }
@@ -149,6 +161,8 @@ const ENV_KEYS: Record<Exclude<ConfigKey, never>, string> = {
   allowNetwork: ENV.allowNetwork,
   assetsUrl: ENV.assetsUrl,
   rasterFont: ENV.rasterFont,
+  imageTimeoutMs: ENV.imageTimeoutMs,
+  maxImageBytes: ENV.maxImageBytes,
 };
 
 /** Reads the config file. A missing file is fine only at the default path. */

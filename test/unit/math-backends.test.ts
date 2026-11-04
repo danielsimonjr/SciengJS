@@ -33,7 +33,7 @@ function job(format: "svg" | "png" | "pdf", options: Record<string, unknown> = {
     format,
     source: SOURCE,
     options,
-    settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: ASSETS_DIR, browser: haveBrowser ? BROWSER : undefined, timeoutMs: 60000, allowNetwork: "tex-bundles" },
+    settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: ASSETS_DIR, browser: haveBrowser ? BROWSER : undefined, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 },
   };
 }
 

@@ -78,6 +78,8 @@ export async function renderWithRegistry(
           browser: cfg.browser,
           timeoutMs: cfg.timeoutMs,
           allowNetwork: cfg.allowNetwork,
+          imageTimeoutMs: cfg.imageTimeoutMs,
+          maxImageBytes: cfg.maxImageBytes,
         },
       },
     },
