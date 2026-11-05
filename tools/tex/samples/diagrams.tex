@@ -1,0 +1,19 @@
+\documentclass[dvisvgm]{standalone}
+\usepackage{tikz-cd}
+\usepackage{tikz-3dplot}
+\usepackage{smartdiagram}
+\usetikzlibrary{hobby}
+\begin{document}
+\begin{tikzcd}A \arrow[r, "f"] & B \arrow[d, "g"] \\ C \arrow[u] & D\end{tikzcd}
+\tdplotsetmaincoords{60}{110}
+\begin{tikzpicture}[tdplot_main_coords]
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[anchor=south]{$z$};
+\end{tikzpicture}
+\begin{tikzpicture}
+  \draw[closed hobby] (0,0) to (1,1) to (2,0) to (1,-1);
+\end{tikzpicture}
+\smartdiagram[flow diagram:horizontal]{a,b,c}
+\smartdiagram[bubble diagram]{Top,A,B,C}
+\end{document}
