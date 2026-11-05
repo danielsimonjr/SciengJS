@@ -25,7 +25,7 @@ export async function render(request) {
       symbols: JSON.parse(readFileSync(join(out, "setprod.symbols.json"), "utf8")),
       pool: new Uint8Array(readFileSync(join(out, "setprod.pool"))),
     },
-    format: { name: "scieng.fmt", bytes: new Uint8Array(readFileSync(join(dir, "fmt", "scieng.fmt"))) },
+    format: { name: "scieng.fmt", bytes: new Uint8Array(readFileSync(join(out, "fmt", "scieng.fmt"))) },
     tree,
     source: request.source,
     jobName: "job",

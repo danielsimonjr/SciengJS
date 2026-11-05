@@ -31,6 +31,8 @@ export interface RenderTexOptions {
   jobName?: string;
   /** The time limit of the TeX run in milliseconds. */
   timeoutMs?: number;
+  /** The bound on the bytes that the run writes. A run over it rejects with `E_LIMIT`. The default is 64 MiB. */
+  maxOutputBytes?: number;
   /** The border of the SVG in SVG units. */
   margin?: number;
 }
@@ -90,6 +92,7 @@ export async function renderTex(o: RenderTexOptions): Promise<RenderTexResult> {
     files: run,
     terminal: [`&${o.format.name.replace(/\.fmt$/i, "")} ${job}`],
     ...(o.timeoutMs === undefined ? {} : { timeoutMs: o.timeoutMs }),
+    ...(o.maxOutputBytes === undefined ? {} : { maxOutputBytes: o.maxOutputBytes }),
   });
   const texMs = performance.now() - t0;
   const dvi = run.written.get(`${job}.dvi`);

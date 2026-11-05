@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { dviToSvg } from "../../src/tex/dvi.ts";
+import { returned } from "../support/rejections.ts";
 import { buildTfm, buildType1, charstring as cs, DviBuilder } from "../support/tex-fixtures.ts";
 
 const SQUARE = cs(0, 500, "hsbw", 100, "hmoveto", 200, "hlineto", 300, "vlineto", -200, "hlineto", "closepath", "endchar");
@@ -61,7 +62,7 @@ describe("tex dvi: glyphs and rules", () => {
   });
 
   test("a font with no PFB keeps its advances and lists each glyph; an unknown font lists its name", () => {
-    const r = dviToSvg(page().set(65).setRule(1, 1).font(1, "zz", 10).set(65).eop().post().done(), (n) => (n === "tf" ? { tfm: TFM, pfb: null } : null));
+    const r = returned(() => dviToSvg(page().set(65).setRule(1, 1).font(1, "zz", 10).set(65).eop().post().done(), (n) => (n === "tf" ? { tfm: TFM, pfb: null } : null)));
     expect(r.missing).toEqual(["tf:65", "zz"]);
     expect(rects(r.svg)).toEqual([[5, -1]]);
   });
@@ -98,7 +99,7 @@ describe("tex dvi: movement", () => {
     const regs = page().w(1, 4).x(1, 5).y(1, 6).z(1, 7).eop().bop().font(0, "tf", 10).w(0).x(0).y(0).z(0).putRule(1, 1).eop().post();
     expect(rects(dviToSvg(regs.done(), files, { page: 2 }).svg)).toEqual([[0, -1]]);
     const sixtyThree = new DviBuilder().pre().bop().font(63, "tf", 10).setRule(1, 1).set(66).eop().post();
-    expect(dviToSvg(sixtyThree.done(), files).glyphs).toBe(1);
+    expect(returned(() => dviToSvg(sixtyThree.done(), files)).glyphs).toBe(1);
     const d = page().eop().bop().set(65);
     expect(() => dviToSvg(d.done(), files)).toThrow("char before a font");
   });
