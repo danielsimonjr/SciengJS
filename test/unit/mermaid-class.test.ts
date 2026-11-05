@@ -58,6 +58,21 @@ describe("classDiagram: class declarations and members", () => {
     const m = parse("classDiagram\nclass Animal{\n+int age\n}");
     expect(m.classes[0]?.members).toEqual(["+int age"]);
   });
+
+  test("a class body may open and close on the declaration line, and holds the one member between the braces", () => {
+    const m = parse("classDiagram\nclass Engine { +render() }\nclass Stage\nEngine --> Stage");
+    expect(m.classes[0]).toEqual({ name: "Engine", generic: undefined, members: ["+render()"], line: 2 });
+    expect(m.classes[1]?.name).toBe("Stage");
+  });
+
+  test("a one-line body with no member text gives a class with no members", () => {
+    const m = parse("classDiagram\nclass Shape~T~ {}");
+    expect(m.classes[0]).toEqual({ name: "Shape", generic: "T", members: [], line: 2 });
+  });
+
+  test("a brace inside a one-line body rejects with E_INPUT, so bodies never nest", () => {
+    expect(rejection(() => parse("classDiagram\nclass A { { }"))).toMatchObject({ code: "E_INPUT", line: 2 });
+  });
 });
 
 describe("classDiagram: relations", () => {
