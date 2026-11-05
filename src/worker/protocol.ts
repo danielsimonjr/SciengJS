@@ -17,6 +17,10 @@ export interface BackendSettings {
   allowNetwork: NetworkPolicy;
   /** The time limit of one remote image download, in milliseconds. */
   imageTimeoutMs: number;
+  /** The node limit of one CAD document. */
+  maxCadNodes: number;
+  /** The facet limit of one CAD model. */
+  maxCadFacets: number;
   /** The size limit of one remote image body, in bytes. */
   maxImageBytes: number;
 }

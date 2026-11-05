@@ -79,6 +79,8 @@ export async function renderWithRegistry(
           timeoutMs: cfg.timeoutMs,
           allowNetwork: cfg.allowNetwork,
           imageTimeoutMs: cfg.imageTimeoutMs,
+          maxCadNodes: cfg.maxCadNodes,
+          maxCadFacets: cfg.maxCadFacets,
           maxImageBytes: cfg.maxImageBytes,
         },
       },

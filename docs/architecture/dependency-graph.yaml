@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 224
+  totalFiles: 232
   totalModules: 3
-  totalExports: 458
+  totalExports: 526
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1525,6 +1525,14 @@ modules:
           imports:
             - writeGlb
           typeOnly: false
+        - file: src/mesh/cad-build.ts
+          imports:
+            - buildCad
+          typeOnly: false
+        - file: src/mesh/cad-document.ts
+          imports:
+            - parseCadDocument
+          typeOnly: false
         - file: src/mesh/read.ts
           imports:
             - readCad
@@ -1537,6 +1545,7 @@ modules:
         - estimateGlbBytes
         - readMeshOptions
         - GlbDeps
+        - readMeshes
         - render
     src/mesh/backend-html.ts:
       externalDependencies: []
@@ -1590,6 +1599,145 @@ modules:
           typeOnly: false
       exports:
         - render
+    src/mesh/backend-stl.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - readMeshes
+          typeOnly: false
+        - file: src/mesh/stl.ts
+          imports:
+            - stlByteLength
+            - writeStl
+          typeOnly: false
+      exports:
+        - render
+    src/mesh/cad-build.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/mesh/cad-document.ts
+          imports:
+            - CadDocument
+            - ProfileNode
+            - Rgb
+            - SolidNode
+          typeOnly: true
+        - file: src/mesh/cad-document.ts
+          imports:
+            - DEFAULT_SEGMENTS
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - CadFace
+            - CadMesh
+          typeOnly: true
+      exports:
+        - loadManifold
+        - CadBuildResult
+        - buildCad
+    src/mesh/cad-builder.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/cad-document.ts
+          imports:
+            - BooleanNode
+            - CadDocument
+            - CadStyle
+            - CircleNode
+            - CubeNode
+            - CylinderNode
+            - ExtrudeNode
+            - MirrorNode
+            - PolygonNode
+            - PolyhedronNode
+            - ProfileNode
+            - RectangleNode
+            - RevolveNode
+            - RotateNode
+            - ScaleNode
+            - SolidNode
+            - SphereNode
+            - TranslateNode
+            - Vec2
+            - Vec3
+          typeOnly: true
+      exports:
+        - CubeOptions
+        - RoundOptions
+        - cube
+        - cylinder
+        - sphere
+        - polyhedron
+        - rectangle
+        - circle
+        - polygon
+        - ExtrudeOptions
+        - extrude
+        - revolve
+        - union
+        - difference
+        - intersection
+        - translate
+        - rotate
+        - scale
+        - mirror
+        - cadDocument
+    src/mesh/cad-document.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - Vec2
+        - Vec3
+        - Rgb
+        - CadStyle
+        - CubeNode
+        - CylinderNode
+        - SphereNode
+        - PolyhedronNode
+        - RectangleNode
+        - CircleNode
+        - PolygonNode
+        - ProfileNode
+        - ExtrudeNode
+        - RevolveNode
+        - BooleanNode
+        - TranslateNode
+        - RotateNode
+        - ScaleNode
+        - MirrorNode
+        - SolidNode
+        - CadNode
+        - CadDocument
+        - CadLimits
+        - CheckedCadDocument
+        - DEFAULT_SEGMENTS
+        - MIN_SEGMENTS
+        - MAX_SEGMENTS
+        - sphereFacets
+        - checkCadDocument
+        - parseCadDocument
     src/mesh/glb.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1628,6 +1776,33 @@ modules:
           imports:
             - readMeshOptions
           typeOnly: false
+        - file: src/mesh/stl.ts
+          imports:
+            - writeStl
+          typeOnly: false
+        - file: src/mesh/cad-document.ts
+          imports:
+            - checkCadDocument
+            - parseCadDocument
+            - DEFAULT_SEGMENTS
+            - MAX_SEGMENTS
+            - MIN_SEGMENTS
+          typeOnly: false
+        - file: src/mesh/cad-document.ts
+          imports: []
+          typeOnly: true
+        - file: src/mesh/cad-build.ts
+          imports:
+            - buildCad
+          typeOnly: false
+        - file: src/mesh/cad-build.ts
+          imports:
+            - CadBuildResult
+          typeOnly: true
+        - file: src/mesh/cad-builder.ts
+          imports:
+            - '*'
+          typeOnly: false
       exports:
         - readCad
         - CadFormat
@@ -1636,6 +1811,15 @@ modules:
         - LinearUnit
         - writeGlb
         - readMeshOptions
+        - writeStl
+        - checkCadDocument
+        - parseCadDocument
+        - DEFAULT_SEGMENTS
+        - MAX_SEGMENTS
+        - MIN_SEGMENTS
+        - buildCad
+        - CadBuildResult
+        - cad
     src/mesh/occt-import-js.d.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1678,6 +1862,18 @@ modules:
         - CadFace
         - CadMesh
         - readCad
+    src/mesh/stl.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/read.ts
+          imports:
+            - CadMesh
+          typeOnly: true
+      exports:
+        - stlFacetCount
+        - stlByteLength
+        - writeStl
     src/mesh/viewer-script.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2612,6 +2808,20 @@ modules:
         - rejectionOf
         - returned
         - resolved
+    test/support/settings.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/config.ts
+          imports:
+            - DEFAULT_ASSETS_URL
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendSettings
+          typeOnly: true
+      exports:
+        - testSettings
     test/support/stubs/stub-dot.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2846,6 +3056,77 @@ modules:
             - ISOLATED_CONFIG_DEPS
             - renderIsolated
           typeOnly: false
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
+      exports: []
+    test/unit/cad-build.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/cad-build.ts
+          imports:
+            - buildCad
+          typeOnly: false
+        - file: src/mesh/cad-builder.ts
+          imports:
+            - '*'
+          typeOnly: false
+        - file: src/mesh/cad-document.ts
+          imports:
+            - checkCadDocument
+            - CadDocument
+            - SolidNode
+          typeOnly: false
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - render
+            - readMeshes
+          typeOnly: false
+        - file: src/mesh/backend-stl.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/mesh/backend-html.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+        - file: test/support/glb-reader.ts
+          imports:
+            - readGlb
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
+      exports: []
+    test/unit/cad-document.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/cad-document.ts
+          imports:
+            - checkCadDocument
+            - parseCadDocument
+            - sphereFacets
+            - CadLimits
+            - CheckedCadDocument
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
       exports: []
     test/unit/config-assets.test.ts:
       externalDependencies:
@@ -3059,6 +3340,10 @@ modules:
             - wasmWhoseStartTraps
             - wasmWithCustomSection
           typeOnly: false
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
       exports: []
     test/unit/graph-registry.test.ts:
       externalDependencies:
@@ -3085,10 +3370,6 @@ modules:
         - bun:test
       nodeDependencies: []
       internalDependencies:
-        - file: src/config.ts
-          imports:
-            - DEFAULT_ASSETS_URL
-          typeOnly: false
         - file: test/support/rejections.ts
           imports:
             - rejectionOf
@@ -3106,6 +3387,10 @@ modules:
           imports:
             - WorkerJob
           typeOnly: true
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
       exports: []
     test/unit/html-convert-escape.test.ts:
       externalDependencies:
@@ -3237,6 +3522,10 @@ modules:
           imports:
             - WorkerJob
           typeOnly: true
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
       exports: []
     test/unit/math-registry.test.ts:
       externalDependencies:
@@ -4065,9 +4354,9 @@ modules:
           imports:
             - TEST_REGISTRY
           typeOnly: false
-        - file: src/config.ts
+        - file: test/support/settings.ts
           imports:
-            - DEFAULT_ASSETS_URL
+            - testSettings
           typeOnly: false
       exports: []
     trials/t5-tex-build/test/tangle.test.mjs:
@@ -4151,33 +4440,33 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 224
-  totalSourceFiles: 224
+  totalTypeScriptFiles: 232
+  totalSourceFiles: 232
   totalModules: 3
-  totalLinesOfCode: 25572
-  totalExports: 458
-  entryRoots: 71
-  reachableFiles: 71
+  totalLinesOfCode: 27024
+  totalExports: 526
+  entryRoots: 76
+  reachableFiles: 76
   dormantFiles: 15
   orphanedFiles: 12
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 48
+  totalTypeOnlyImports: 57
   noImporterFileCount: 8
-  unusedExportsCount: 43
+  unusedExportsCount: 46
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 81
-  totalFunctions: 201
+  totalInterfaces: 100
+  totalFunctions: 229
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 63
-  totalReExports: 89
+  totalConstants: 66
+  totalReExports: 99
 reachability:
   roots:
     - src/index.ts
@@ -4231,9 +4520,14 @@ reachability:
     - src/mesh/backend-glb.ts
     - src/mesh/backend-html.ts
     - src/mesh/backend-png.ts
+    - src/mesh/backend-stl.ts
+    - src/mesh/cad-build.ts
+    - src/mesh/cad-builder.ts
+    - src/mesh/cad-document.ts
     - src/mesh/glb.ts
     - src/mesh/pinned-three.ts
     - src/mesh/read.ts
+    - src/mesh/stl.ts
     - src/mesh/viewer-script.ts
     - src/mesh/viewer.ts
     - src/pairs.ts
@@ -4251,7 +4545,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 71
+  reachableCount: 76
   dormantCount: 15
   orphaned:
     - src/mesh/occt-import-js.d.ts

@@ -5,6 +5,7 @@ import { render as renderPngBackend } from "../../src/browser/backend-png.ts";
 import { render as renderPdfBackend } from "../../src/browser/backend-pdf.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 import { ISOLATED_CONFIG_DEPS, renderIsolated } from "../support/test-registry.ts";
+import { testSettings } from "../support/settings.ts";
 
 function job(options: Record<string, unknown>, browser?: string): WorkerJob["request"] {
   return {
@@ -12,7 +13,7 @@ function job(options: Record<string, unknown>, browser?: string): WorkerJob["req
     format: "png",
     source: "<p>x</p>",
     options,
-    settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: "file:///unused/", browser, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 },
+    settings: testSettings({ assetsUrl: "file:///unused/", browser }),
   };
 }
 

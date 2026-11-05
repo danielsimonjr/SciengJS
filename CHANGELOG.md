@@ -4,6 +4,25 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The input type `cad` reads a CAD document: a CSG model in JSON. The pairs `cad` to `glb`, `stl`, `html` and `png` render through `render()`. The engine reads the document as data and runs no code from the document.
+- The nodes of a CAD document are `cube`, `cylinder`, `sphere`, `polyhedron`, `rectangle`, `circle`, `polygon`, `extrude`, `revolve`, `union`, `difference`, `intersection`, `translate`, `rotate`, `scale` and `mirror`. Each node can have a `name` and a `color`.
+- The solid operations run through `manifold-3d` 3.2.1 (exact pin, Apache-2.0). Version 3.2.1 is the newest release with no npm dependencies. Version 3.5.4 installs about 30 MB of packages for its command-line tool, `sharp` included.
+- The `./mesh` subpath exports `cad`, the builder functions, which write the same document from a TypeScript program. It also exports `parseCadDocument`, `checkCadDocument`, `buildCad`, `writeStl` and the node types.
+- The configuration keys `maxCadNodes` (default 10000) and `maxCadFacets` (default 2000000). A document over the node limit, or a facet estimate over the facet limit, rejects with `E_LIMIT` before the solid operations start. Each operation result is checked again.
+- A bad value in a CAD document rejects with `E_INPUT`. The message gives the JSON path of the value. A polyhedron with inward faces and a clockwise polygon also reject with `E_INPUT`.
+- The faces keep the colour of the primitive that made them. STL holds no colour, so a coloured model gives a warning in STL.
+
+### Changed
+
+- The backend settings of the tests come from one helper, `test/support/settings.ts`, in place of five copies.
+- The README lists every runtime dependency and the mesh and CAD inputs. COMPONENTS.md and API.md describe the mesh stage.
+
+### Fixed
+
+- `manifold-3d` 3.2.1 reads a number as the top scale of an extrusion as `[n, 0]`. The build always passes both components.
+
 ## [0.7.1] - 2026-11-05
 
 ### Added

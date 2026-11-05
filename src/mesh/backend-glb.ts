@@ -1,6 +1,8 @@
 import { RenderError } from "../errors.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
 import { writeGlb } from "./glb.ts";
+import { buildCad } from "./cad-build.ts";
+import { parseCadDocument } from "./cad-document.ts";
 import { readCad, type CadFormat, type CadMesh, type LinearUnit } from "./read.ts";
 
 /** The linear units that the STEP and IGES readers accept. Each value has one definition, here. */
@@ -61,29 +63,52 @@ export function readMeshOptions(format: CadFormat, options: Record<string, unkno
   return { linearUnit: unit as LinearUnit };
 }
 
-/** The reader of a glb render. A test gives a fake reader. */
+/** The readers of a mesh render. A test gives a fake reader. */
 export interface GlbDeps {
   readCad: typeof readCad;
+  buildCad: typeof buildCad;
+}
+
+const DEFAULT_DEPS: GlbDeps = { readCad, buildCad };
+
+/**
+ * Reads the meshes of a mesh render. A CAD document is JSON text, checked against the node and facet limits and
+ * built through manifold-3d. A CAD render takes no option. STEP, IGES and BREP are bytes, read through occt-import-js.
+ * A source with no triangles rejects with E_INPUT.
+ */
+export async function readMeshes(request: WorkerJob["request"], deps: Partial<GlbDeps> = {}): Promise<CadMesh[]> {
+  const d = { ...DEFAULT_DEPS, ...deps };
+  let meshes: CadMesh[];
+  if (request.type === "cad") {
+    if (typeof request.source !== "string") throw new RenderError("E_INPUT", "cad takes JSON text, not bytes");
+    for (const key of Object.keys(request.options)) throw new RenderError("E_INPUT", `cad takes no option ${key}`);
+    const { maxCadNodes, maxCadFacets } = request.settings;
+    const checked = parseCadDocument(request.source, { maxNodes: maxCadNodes, maxFacets: maxCadFacets });
+    meshes = [(await d.buildCad(checked.document, maxCadFacets)).mesh];
+  } else {
+    const format = request.type as CadFormat;
+    if (!FORMATS.includes(format)) {
+      throw new RenderError("E_INPUT", `${request.type} is not a mesh input`);
+    }
+    if (!(request.source instanceof Uint8Array)) {
+      throw new RenderError("E_INPUT", `${format} takes bytes, not text`);
+    }
+    const { linearUnit } = readMeshOptions(format, request.options);
+    meshes = await d.readCad(format, request.source, linearUnit);
+  }
+  const triangles = meshes.reduce((n, m) => n + m.indices.length / 3, 0);
+  if (triangles === 0) {
+    throw new RenderError("E_INPUT", `the ${request.type} source holds no triangles`);
+  }
+  return meshes;
 }
 
 /**
- * Renders a STEP, IGES or BREP file to glTF binary. The worker calls this function.
+ * Renders a CAD document, or a STEP, IGES or BREP file, to glTF binary. The worker calls this function.
  * An output over maxMemoryMb rejects with E_LIMIT before the writer starts.
  */
-export async function render(request: WorkerJob["request"], deps: GlbDeps = { readCad }): Promise<BackendOutput> {
-  const format = request.type as CadFormat;
-  if (!FORMATS.includes(format)) {
-    throw new RenderError("E_INPUT", `${request.type} is not a mesh input`);
-  }
-  if (!(request.source instanceof Uint8Array)) {
-    throw new RenderError("E_INPUT", `${format} takes bytes, not text`);
-  }
-  const { linearUnit } = readMeshOptions(format, request.options);
-  const meshes = await deps.readCad(format, request.source, linearUnit);
-  const triangles = meshes.reduce((n, m) => n + m.indices.length / 3, 0);
-  if (triangles === 0) {
-    throw new RenderError("E_INPUT", `the ${format} file holds no triangles`);
-  }
+export async function render(request: WorkerJob["request"], deps: Partial<GlbDeps> = {}): Promise<BackendOutput> {
+  const meshes = await readMeshes(request, deps);
   checkGlbLimit(meshes, request.settings.maxMemoryMb);
   return { bytes: writeGlb(meshes) };
 }

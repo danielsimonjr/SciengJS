@@ -82,5 +82,6 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | `./graph` | DOT to SVG through the viz library. It exports `dotToSvg`. |
 | `./raster` | SVG to PNG through resvg. It exports `svgToPng` and `isFontFile`. |
 | `./mermaid` | The Mermaid parsers, the DOT builders, the sequence layout and the SVG render. It exports `prepare`, `parseClassDiagram`, `classToDot`, `parseStateDiagram`, `stateToDot`, `parseSequenceDiagram`, `layoutSequence` and `renderMermaidSvg`. |
+| `./mesh` | The mesh stage. The subpath exports `readCad` (STEP, IGES and BREP through occt-import-js), `writeGlb`, `writeStl`, `readMeshOptions`, `parseCadDocument`, `checkCadDocument`, `buildCad`, the segment constants `DEFAULT_SEGMENTS`, `MIN_SEGMENTS` and `MAX_SEGMENTS`, the node types of a CAD document, and `cad`, the builder functions. |
 
 The package exports only the subpaths that have content. A caller that imports a subpath loads no WASM file.

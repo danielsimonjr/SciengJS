@@ -33,7 +33,7 @@ Status: the graph, raster and Mermaid stages exist. The package renders DOT to S
 | `src/plot/` | The plot stage: the reader of the Plotly JSON subset, the tick algorithm, the control plots, and the SVG, PNG and HTML backends. |
 | `src/browser/` | The browser stage: the Chrome DevTools Protocol client, the browser flags and profile, the page render, and the PNG and PDF backends. |
 | `src/html/` | The html stage: HTML to Markdown through parse5, the image download, and the md backend. |
-| `src/mesh/` | The mesh stage: the STEP, IGES and BREP reader through occt-import-js, the glTF binary writer, and the glb backend with its output limit. |
+| `src/mesh/` | The mesh stage. It holds the STEP, IGES and BREP reader through occt-import-js, the CAD document reader, the builder functions and the solid operations through manifold-3d. It also holds the glTF binary and STL writers, and the glb, stl, html and png backends with their output limits. |
 | `assets/` | The files that ship in the package: the bundled raster font, the resvg WASM file `index_bg.wasm` and the licence texts. |
 | `scripts/` | `prepare-build.mjs`, which the build runs. The script writes `src/version.ts` and copies `index_bg.wasm` into `assets/`. |
 | `test/unit/` | Unit tests of each module. |
@@ -56,9 +56,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 224 | repo-tools map |
-| totalLinesOfCode | 25572 | repo-tools map |
-| totalExports | 458 | repo-tools map |
-| totalTypeOnlyImports | 48 | repo-tools map |
+| totalSourceFiles | 232 | repo-tools map |
+| totalLinesOfCode | 27024 | repo-tools map |
+| totalExports | 526 | repo-tools map |
+| totalTypeOnlyImports | 57 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 71 | repo-tools map |
+| entryRoots | 76 | repo-tools map |

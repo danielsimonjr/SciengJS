@@ -44,6 +44,10 @@ export const DEFAULT_REGISTRY: Registry = {
   "step:png": { backend: "mesh/occt+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
   "iges:png": { backend: "mesh/occt+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
   "brep:png": { backend: "mesh/occt+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
+  "cad:glb": { backend: "mesh/manifold+glb", moduleUrl: backendUrl("mesh/backend-glb") },
+  "cad:stl": { backend: "mesh/manifold+stl", moduleUrl: backendUrl("mesh/backend-stl") },
+  "cad:html": { backend: "mesh/manifold+viewer", moduleUrl: backendUrl("mesh/backend-html") },
+  "cad:png": { backend: "mesh/manifold+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
 };
 
 /** Builds the registry key of a pair. */

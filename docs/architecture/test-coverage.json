@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 85,
-    "totalTestFiles": 81,
-    "testedCount": 56,
-    "untestedCount": 29,
-    "coveragePercent": "65.9",
+    "totalSourceFiles": 90,
+    "totalTestFiles": 83,
+    "testedCount": 62,
+    "untestedCount": 28,
+    "coveragePercent": "68.9",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 85,
-      "testedActive": 56,
-      "activeUntested": 29,
+      "activeFiles": 90,
+      "testedActive": 62,
+      "activeUntested": 28,
       "excludedTotal": 0,
-      "percent": "65.9",
+      "percent": "68.9",
       "breakdown": {
-        "active_untested": 29
+        "active_untested": 28
       }
     }
   },
@@ -28,7 +28,6 @@
     "src/mermaid/backend-png.ts",
     "src/mermaid/backend-svg.ts",
     "src/mermaid/index.ts",
-    "src/mesh/backend-html.ts",
     "src/mesh/backend-png.ts",
     "src/mesh/viewer-script.ts",
     "src/plot/backend-html.ts",
@@ -85,10 +84,16 @@
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
     "src/mesh/backend-glb.ts",
+    "src/mesh/backend-html.ts",
+    "src/mesh/backend-stl.ts",
+    "src/mesh/cad-build.ts",
+    "src/mesh/cad-builder.ts",
+    "src/mesh/cad-document.ts",
     "src/mesh/glb.ts",
     "src/mesh/index.ts",
     "src/mesh/pinned-three.ts",
     "src/mesh/read.ts",
+    "src/mesh/stl.ts",
     "src/mesh/viewer.ts",
     "src/pairs.ts",
     "src/plot/control.ts",
@@ -157,13 +162,11 @@
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
-      "test/unit/graph-svg-backend.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/mesh-large.test.ts",
-      "test/unit/render.test.ts",
-      "test/unit/worker-run.test.ts"
+      "test/unit/render.test.ts"
     ],
     "src/core.ts": [
       "test/unit/browser-pdf-pairs.test.ts",
@@ -184,6 +187,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/unit/cad-document.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
       "test/unit/graph-dot.test.ts",
@@ -303,10 +307,29 @@
     ],
     "src/mesh/backend-glb.ts": [
       "test/integration/mesh-viewer.test.ts",
+      "test/unit/cad-build.test.ts",
       "test/unit/mesh-limit.test.ts"
     ],
-    "src/mesh/backend-html.ts": [],
+    "src/mesh/backend-html.ts": [
+      "test/unit/cad-build.test.ts"
+    ],
     "src/mesh/backend-png.ts": [],
+    "src/mesh/backend-stl.ts": [
+      "test/unit/cad-build.test.ts"
+    ],
+    "src/mesh/cad-build.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/cad-build.test.ts"
+    ],
+    "src/mesh/cad-builder.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/cad-build.test.ts"
+    ],
+    "src/mesh/cad-document.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/cad-build.test.ts",
+      "test/unit/cad-document.test.ts"
+    ],
     "src/mesh/glb.ts": [
       "test/integration/mesh-viewer.test.ts",
       "test/unit/glb-writer.test.ts"
@@ -323,6 +346,9 @@
       "test/unit/glb-writer.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-limit.test.ts"
+    ],
+    "src/mesh/stl.ts": [
+      "test/integration/mesh-viewer.test.ts"
     ],
     "src/mesh/viewer-script.ts": [],
     "src/mesh/viewer.ts": [
@@ -388,6 +414,7 @@
     "src/worker/entry.ts": [],
     "src/worker/protocol.ts": [
       "test/unit/browser-stage.test.ts",
+      "test/unit/cad-build.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/graph-svg-backend.test.ts",
       "test/unit/math-backends.test.ts",
@@ -455,6 +482,10 @@
       "src/mesh/read.ts",
       "src/mesh/glb.ts",
       "src/mesh/backend-glb.ts",
+      "src/mesh/stl.ts",
+      "src/mesh/cad-document.ts",
+      "src/mesh/cad-build.ts",
+      "src/mesh/cad-builder.ts",
       "src/mesh/viewer.ts"
     ],
     "test/integration/page-checker.test.ts": [],
@@ -493,6 +524,19 @@
       "src/browser/backend-png.ts",
       "src/browser/backend-pdf.ts",
       "src/worker/protocol.ts"
+    ],
+    "test/unit/cad-build.test.ts": [
+      "src/mesh/cad-build.ts",
+      "src/mesh/cad-builder.ts",
+      "src/mesh/cad-document.ts",
+      "src/mesh/backend-glb.ts",
+      "src/mesh/backend-stl.ts",
+      "src/mesh/backend-html.ts",
+      "src/worker/protocol.ts"
+    ],
+    "test/unit/cad-document.test.ts": [
+      "src/mesh/cad-document.ts",
+      "src/errors.ts"
     ],
     "test/unit/config-assets.test.ts": [
       "src/config.ts",
@@ -536,7 +580,6 @@
       "src/registry.ts"
     ],
     "test/unit/graph-svg-backend.test.ts": [
-      "src/config.ts",
       "src/graph/backend-svg.ts",
       "src/graph/dot.ts",
       "src/worker/protocol.ts"
@@ -717,8 +760,7 @@
     ],
     "test/unit/worker-run.test.ts": [
       "src/worker/run.ts",
-      "src/errors.ts",
-      "src/config.ts"
+      "src/errors.ts"
     ],
     "trials/t5-tex-build/test/tangle.test.mjs": [],
     "trials/t5-tex-build/test/trip-gate.test.mjs": [],
@@ -771,10 +813,6 @@
     },
     {
       "file": "src/mermaid/index.ts",
-      "category": null
-    },
-    {
-      "file": "src/mesh/backend-html.ts",
       "category": null
     },
     {

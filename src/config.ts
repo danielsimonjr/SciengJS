@@ -26,6 +26,10 @@ export interface SciengConfig {
   imageTimeoutMs: number;
   /** The size limit of the body of one remote image, in bytes. */
   maxImageBytes: number;
+  /** The node limit of one CAD document. */
+  maxCadNodes: number;
+  /** The facet (triangle) limit of one CAD model. */
+  maxCadFacets: number;
 }
 
 /** The inputs of the loader. A caller injects them in a test. */
@@ -53,6 +57,8 @@ const ENV = {
   rasterFont: "SCIENG_RASTER_FONT",
   imageTimeoutMs: "SCIENG_IMAGE_TIMEOUT_MS",
   maxImageBytes: "SCIENG_MAX_IMAGE_BYTES",
+  maxCadNodes: "SCIENG_MAX_CAD_NODES",
+  maxCadFacets: "SCIENG_MAX_CAD_FACETS",
 } as const;
 
 const RELEASE_URL_BASE = "https://github.com/danielsimonjr/sciengjs/releases/download";
@@ -99,6 +105,8 @@ function defaults(engineVersion: string): Required<Omit<SciengConfig, "browser" 
     assetsUrl: DEFAULT_ASSETS_URL,
     imageTimeoutMs: 15000,
     maxImageBytes: 10485760,
+    maxCadNodes: 10000,
+    maxCadFacets: 2000000,
   };
 }
 
@@ -124,6 +132,8 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
     case "maxMemoryMb":
     case "imageTimeoutMs":
     case "maxImageBytes":
+    case "maxCadNodes":
+    case "maxCadFacets":
       if (typeof value !== "number" || !Number.isInteger(value) || value <= 0) {
         return fail("must be a positive integer");
       }
@@ -138,7 +148,7 @@ function checkValue(key: ConfigKey, value: unknown, source: string): SciengConfi
   }
 }
 
-const NUMBER_KEYS: readonly ConfigKey[] = ["timeoutMs", "maxSourceBytes", "maxMemoryMb", "imageTimeoutMs", "maxImageBytes"];
+const NUMBER_KEYS: readonly ConfigKey[] = ["timeoutMs", "maxSourceBytes", "maxMemoryMb", "imageTimeoutMs", "maxImageBytes", "maxCadNodes", "maxCadFacets"];
 
 /** Converts an environment text to a value of the key. Numbers must be whole and positive. */
 function fromEnvText(key: ConfigKey, text: string, envName: string): SciengConfig[ConfigKey] {
@@ -163,6 +173,8 @@ const ENV_KEYS: Record<Exclude<ConfigKey, never>, string> = {
   rasterFont: ENV.rasterFont,
   imageTimeoutMs: ENV.imageTimeoutMs,
   maxImageBytes: ENV.maxImageBytes,
+  maxCadNodes: ENV.maxCadNodes,
+  maxCadFacets: ENV.maxCadFacets,
 };
 
 /** Reads the config file. A missing file is fine only at the default path. */

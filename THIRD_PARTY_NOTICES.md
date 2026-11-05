@@ -15,6 +15,7 @@ Version: each row gives the version that the engine pins.
 | tex | The own WASM build of `tex.web` with `etex.ch` (trials T5 and T6) | The "tex" stage of the design gives the licence of each input | not yet a dependency |
 | tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
 | mesh | `occt-import-js` 0.0.23 (OpenCascade compiled to WASM) | LGPL-2.1 | a dependency |
+| mesh | `manifold-3d` 3.2.1 (Manifold compiled to WASM) | Apache-2.0 | a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
 | mesh (viewer page) | `three` 0.187.0 (six pinned module files, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copies to pages |
 | browser | `mermaid` 11.17.2 (the pinned build `dist/mermaid.min.js`, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copy to pages |
@@ -83,6 +84,10 @@ The MIT licence applies to `three` 0.187.0. The package is a devDependency. The 
 ### OpenCascade (LGPL-2.1)
 
 `occt-import-js` 0.0.23 is licensed under the GNU Lesser General Public License 2.1. The WASM file stays a separate, unmodified file. The mesh stage reads STEP, IGES and BREP files through this package. The licence text is in the installed package at `node_modules/occt-import-js/LICENSE.md`.
+
+### Manifold (Apache-2.0)
+
+`manifold-3d` 3.2.1 is licensed under the Apache License 2.0. The package ships no NOTICE file. The WASM file stays a separate, unmodified file. The mesh stage runs the solid operations of CAD documents through this package. The licence text is in the installed package at `node_modules/manifold-3d/LICENSE`.
 
 ### resvg (MPL-2.0)
 

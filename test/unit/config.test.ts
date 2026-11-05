@@ -41,6 +41,8 @@ describe("loadConfig defaults", () => {
       assetsUrl: new URL("../../assets/", import.meta.url).href,
       imageTimeoutMs: 15000,
       maxImageBytes: 10485760,
+      maxCadNodes: 10000,
+      maxCadFacets: 2000000,
     });
     expect(cfg.browser).toBeUndefined();
   });
@@ -116,6 +118,8 @@ describe("loadConfig precedence: call option > environment > file > default", ()
       SCIENG_ASSETS_URL: "file:///srv/assets/",
       SCIENG_IMAGE_TIMEOUT_MS: "8",
       SCIENG_MAX_IMAGE_BYTES: "9",
+      SCIENG_MAX_CAD_NODES: "10",
+      SCIENG_MAX_CAD_FACETS: "11",
     };
     const cfg = await loadConfig({}, deps({ env }));
     expect(cfg).toEqual({
@@ -129,6 +133,8 @@ describe("loadConfig precedence: call option > environment > file > default", ()
       assetsUrl: "file:///srv/assets/",
       imageTimeoutMs: 8,
       maxImageBytes: 9,
+      maxCadNodes: 10,
+      maxCadFacets: 11,
     });
   });
 
