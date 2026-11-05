@@ -99,9 +99,9 @@ The font `assets/fonts/LiberationSerif-Regular.ttf` is Liberation Serif Regular,
 
 ### TeX toolchain and packages
 
-The tex stage downloads its bundles on first use. The engine package holds no TeX package file and no font file. The package holds the pinned sha256 of each bundle in `src/tex/bundles.json`. There are four bundle files: `scieng-tex-core.sctb`, `scieng-tex-diagrams.sctb`, `scieng-tex-science.sctb` and `scieng-tex-math.sctb`. They hold unmodified files of the TeX Live 2023 archives in the table. The archives come from `tlnet-final`. Each has a sha256 pin in `tools/tex/config.json`. The core bundle also holds the WASM build of `tex.web` with `etex.ch` and the format `scieng.fmt`.
+The tex stage downloads its bundles on first use. The engine package holds no TeX package file and no font file. The engine package holds the pinned sha256 of each bundle in `src/tex/bundles.json`. There are four bundle files: `scieng-tex-core.sctb`, `scieng-tex-diagrams.sctb`, `scieng-tex-science.sctb` and `scieng-tex-math.sctb`. They hold unmodified files of the TeX Live 2023 archives in the table. The archives come from `tlnet-final`. Each has a sha256 pin in `tools/tex/config.json`. The core bundle also holds the WASM build of `tex.web` with `etex.ch` and the format `scieng.fmt`.
 
-The column Licence gives the `catalogue-license` field of `texlive.tlpdb` of TeX Live 2023, as written there. The values have these meanings. `lppl`, `lppl1.3` and `lppl1.3c` are the LaTeX Project Public License. `ofl` is the SIL Open Font License. `pd` is public domain. `knuth` is the licence of the Computer Modern TFM files and the Knuth library files. The package `pgf` lists the LPPL, the GPL 2 and the FDL; the engine uses the LPPL. The package `circuitikz` lists the LPPL and the GPL; the engine uses the LPPL. The Type 1 outlines of Computer Modern and of the AMS fonts come from `amsfonts` (OFL). Latin Modern (`lm`, GFL) is not in a bundle: no sample glyph needed it. No package with the GPL as its only licence is in a bundle.
+The column Licence gives the `catalogue-license` field of `texlive.tlpdb` of TeX Live 2023, as written there. The values have these meanings. `lppl`, `lppl1.3` and `lppl1.3c` are the LaTeX Project Public License. `ofl` is the SIL Open Font License. `pd` is public domain. `knuth` is the licence of the Computer Modern TFM files and the Knuth library files. The package `pgf` lists the LPPL, the GPL 2 and the FDL. The engine uses the LPPL. The package `circuitikz` lists the LPPL and the GPL; the engine uses the LPPL. The Type 1 outlines of Computer Modern and of the AMS fonts come from `amsfonts` (OFL). Latin Modern (`lm`, GFL) is not in a bundle. No sample glyph needed Latin Modern. No package with the GPL as its only licence is in a bundle.
 
 | Package | Archive | Licence | Used in |
 |---|---|---|---|
@@ -164,7 +164,7 @@ The format build reads `hyphen.tex` and puts its patterns into the format `scien
 
 ### Template method credit
 
-The package detection of the `tex` stage follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT). The engine credits that project for the method. Copyright 2015-2025 Roman Parpalak. Licence: MIT. The method is `lib/Templater.php` of that project. The templater tests the source for known environments and commands, and adds the package that each one needs. `src/tex/detect.ts` follows that method with its own tables and its own code. `src/tex/detect.ts` copies no code of the templater.
+The package detection of the `tex` stage follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT). The engine credits that project for the method. Copyright 2015-2025 Roman Parpalak. Licence: MIT. The method is `lib/Templater.php` of that project. The templater tests the source for known environments and known commands. The templater adds the package that each environment or command needs. `src/tex/detect.ts` follows that method with its own tables and its own code. `src/tex/detect.ts` copies no code of the templater.
 
 ### Trial T2 sample files (LGPL-2.0-or-later, LGPL-2.1 and Apache-2.0)
 

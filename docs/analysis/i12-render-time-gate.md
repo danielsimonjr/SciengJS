@@ -6,16 +6,16 @@ The gate keeps the warm TeX time of the circuit sample inside the T6 number plus
 
 ## Method
 
-The script `test/node/tex-render-time.mjs` runs under Node and under Bun. It uses the built package in `dist/`.
+The script `test/node/tex-render-time.mjs` runs under Node and under Bun. The script uses the built package in `dist/`.
 
-1. It loads the core bundle once, as `src/tex/stage.ts` does.
+1. The script loads the core bundle once, as `src/tex/stage.ts` does.
 2. It renders `circuit-divider.tex` one time (first render) and 20 more times (warm renders).
 3. It takes the median of the 20 warm values of `texMs` and `svgMs` from `renderTex`.
 4. It compares each median with the limit of the runtime.
 
 The limit is `T6 number * (1 + marginRatio) + marginMs`. The file `test/support/tex-render-budget.json` holds the T6 numbers, the margin and the sample name. The variable `SCIENG_TEX_BUDGET_FILE` selects another file. The variable `SCIENG_TEX_TIME_REPORT=1` prints the timings and does not compare them.
 
-The script also prints the time of `render()` end to end. The gate does not compare this time. The T6 table has no number for it.
+The script also prints the time of `render()` end to end. The gate does not compare this time. The T6 table has no number for the time of `render()` end to end.
 
 ## Variance
 
