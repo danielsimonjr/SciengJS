@@ -1,0 +1,26 @@
+[
+  {
+    "name": "core",
+    "file": "scieng-tex-core.sctb",
+    "sha256": "69f9bde3bd0a056af418ee783f1260f2f3437686cf6061e5f5e474b0d5d9fe72",
+    "bytes": 9368444
+  },
+  {
+    "name": "diagrams",
+    "file": "scieng-tex-diagrams.sctb",
+    "sha256": "635f265b500975fcb8ab42d9e122f9d9a850b4e3403859074fd4b1f76d256010",
+    "bytes": 81282
+  },
+  {
+    "name": "science",
+    "file": "scieng-tex-science.sctb",
+    "sha256": "c13ff181689de6551dfcc3470be0d2a247192a7eb05ac476bdde2bd0cecd29df",
+    "bytes": 92849
+  },
+  {
+    "name": "math",
+    "file": "scieng-tex-math.sctb",
+    "sha256": "ffb760bdb04aa35d4ee56e8bf9ae6a628dd7d204c6aac55d147e651f1854343e",
+    "bytes": 721870
+  }
+]

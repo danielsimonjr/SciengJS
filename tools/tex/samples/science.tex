@@ -1,0 +1,15 @@
+\documentclass[dvisvgm]{standalone}
+\usepackage[version=4]{mhchem}
+\usepackage{chemfig}
+\usepackage{chemgreek}
+\usepackage{bussproofs}
+\begin{document}
+\ce{2H2 + O2 -> 2H2O}\quad \ce{CO2 + H2O <=> H2CO3}\quad \ce{SO4^2-}\quad \ce{^{227}_{90}Th+}
+\chemfig{*6(-=-=-=)}\quad \chemfig{A-B(-C)=D}\quad \chemfig{[:30]R-C(=[:90]O)-OH}
+\chemalpha\ \chembeta
+\begin{minipage}{6cm}
+\begin{prooftree}
+\AxiomC{$A$}\AxiomC{$B$}\BinaryInfC{$A\land B$}\UnaryInfC{$A$}
+\end{prooftree}
+\end{minipage}
+\end{document}
