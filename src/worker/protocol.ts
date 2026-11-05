@@ -23,6 +23,10 @@ export interface BackendSettings {
   maxCadFacets: number;
   /** The size limit of one remote image body, in bytes. */
   maxImageBytes: number;
+  /** The cache folder. The tex stage keeps its bundles there. */
+  cacheDir: string;
+  /** The base URL of the TeX bundles. */
+  texBundleUrl: string;
 }
 
 /** What the worker receives: one render request and the backend module that serves it. */

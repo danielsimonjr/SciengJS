@@ -291,7 +291,9 @@
         "file": "scieng-tex-core.sctb",
         "engine": true,
         "include": [
+          "array.sty",
           "article.cls",
+          "calc.sty",
           "cmb10.pfb",
           "cmb10.tfm",
           "cmbsy10.pfb",
@@ -472,6 +474,9 @@
           "cmu10.tfm",
           "cmvtt10.pfb",
           "cmvtt10.tfm",
+          "etoolbox.sty",
+          "ifthen.sty",
+          "inputenc.sty",
           "l3backend-dvisvgm.def",
           "lasy10.pfb",
           "lasy10.tfm",
@@ -503,19 +508,19 @@
           "size10.clo",
           "standalone.cfg",
           "standalone.cls",
+          "textcomp.sty",
           "xkeyval.sty",
           "xkeyval.tex",
-          "xkvutils.tex"
+          "xkvutils.tex",
+          "xspace.sty"
         ]
       },
       {
         "name": "diagrams",
         "file": "scieng-tex-diagrams.sctb",
         "include": [
-          "etoolbox.sty",
           "expl3.sty",
           "hobby.code.tex",
-          "ifthen.sty",
           "pgflibraryarrows.code.tex",
           "pgflibraryfadings.code.tex",
           "pgflibraryhobby.code.tex",
@@ -554,7 +559,6 @@
           "amsopn.sty",
           "amstext.sty",
           "bussproofs.sty",
-          "calc.sty",
           "chemfig.sty",
           "chemfig.tex",
           "chemgreek.sty",
