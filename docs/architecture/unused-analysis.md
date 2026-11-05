@@ -81,7 +81,7 @@ No other file imports these names, but their own module uses them.
 
 - `src/browser/input.ts`: `PngOptions`
 - `src/browser/page.ts`: `scriptData`
-- `src/browser/render.ts`: `PAGE_URL`, `capturePage`
+- `src/browser/render.ts`: `PAGE_URL`, `capturePage`, `killTree`
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
 - `src/html/backend-md.ts`: `render`
@@ -110,7 +110,7 @@ No other file imports these names, but their own module uses them.
 - `src/sysml/backend-png.ts`: `render`
 - `src/sysml/backend-svg.ts`: `render`
 - `src/sysml/parse.ts`: `Specializable`
-- `src/tex/stage.ts`: `LoadedCore`, `loadCore`
+- `src/tex/stage.ts`: `LoadedCore`
 - `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`
 
 ## Exports not classified

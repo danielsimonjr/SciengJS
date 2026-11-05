@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- The browser stage no longer fails with `kill EPERM` on macOS after a clean browser close. macOS refuses the group signal with EPERM when only zombies are left in the process group. After the browser exited, the stage treats EPERM as a group with no process left. EPERM while the browser runs is still an error.
+
 ### Changed
 
 - A tikz render loads the core TeX bundle once in the main thread. Each fresh render worker gets a copy of the files, so the worker does not read, hash and inflate the bundle again. A warm render takes about 295 ms; it took 360 to 530 ms before on the same machine.

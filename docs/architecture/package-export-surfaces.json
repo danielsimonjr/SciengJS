@@ -37,6 +37,7 @@
       "connectCdp",
       "forcedBrowserFlags",
       "htmlSource",
+      "killTree",
       "makeProfile",
       "mermaidPageHtml",
       "parsePdfOptions",

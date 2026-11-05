@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 281
+**Total files**: 282
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 101 | A `src`-area file that is an entry root. |
 | `test-only` | 0 | A `src`-area file that only a test reaches. |
 | `orphan` | 8 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 137 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 138 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 35 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **281** | |
+| **Total** | **282** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 109 |
-| `tests` | 137 |
+| `tests` | 138 |
 | `tools` | 35 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 179 |
+| `(root)` | 180 |
 | `@danielsimonjr/sciengjs` | 102 |
 
 ## All files
@@ -57,7 +57,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/browser/pinned.ts` | @danielsimonjr/sciengjs | src | build-entry | 63 |
 | `src/browser/profile.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
 | `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 77 |
-| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 530 |
+| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 537 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 251 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 58 |
@@ -271,6 +271,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/sysml-views.test.ts` | (root) | tests | test | 169 |
 | `test/unit/teardown.test.ts` | (root) | tests | test | 33 |
 | `test/unit/tex-bundles.test.ts` | (root) | tests | test | 177 |
+| `test/unit/tex-core-preload.test.ts` | (root) | tests | test | 76 |
 | `test/unit/tex-detect.test.ts` | (root) | tests | test | 309 |
 | `test/unit/tex-dvi.test.ts` | (root) | tests | test | 229 |
 | `test/unit/tex-host-names.test.ts` | (root) | tests | test | 28 |

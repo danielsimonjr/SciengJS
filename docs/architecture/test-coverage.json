@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 108,
-    "totalTestFiles": 98,
+    "totalTestFiles": 99,
     "testedCount": 75,
     "untestedCount": 33,
     "coveragePercent": "69.4",
@@ -199,7 +199,8 @@
       "test/unit/mesh-viewer.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts",
-      "test/unit/render.test.ts"
+      "test/unit/render.test.ts",
+      "test/unit/tex-core-preload.test.ts"
     ],
     "src/errors.ts": [
       "test/integration/browser-render.test.ts",
@@ -220,6 +221,7 @@
       "test/unit/plot-svg.test.ts",
       "test/unit/plot-ticks.test.ts",
       "test/unit/render.test.ts",
+      "test/unit/tex-core-preload.test.ts",
       "test/unit/worker-run.test.ts"
     ],
     "src/graph/backend-pdf.ts": [],
@@ -420,6 +422,7 @@
       "test/unit/mesh-viewer.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts",
+      "test/unit/tex-core-preload.test.ts",
       "test/unit/tex-wiring.test.ts"
     ],
     "src/sysml/backend-pdf.ts": [],
@@ -446,7 +449,8 @@
       "test/unit/tex-wiring.test.ts"
     ],
     "src/tex/bundles.ts": [
-      "test/unit/tex-bundles.test.ts"
+      "test/unit/tex-bundles.test.ts",
+      "test/unit/tex-core-preload.test.ts"
     ],
     "src/tex/detect.ts": [
       "test/unit/tex-detect.test.ts"
@@ -468,6 +472,7 @@
       "test/unit/tex-specials.test.ts"
     ],
     "src/tex/stage.ts": [
+      "test/unit/tex-core-preload.test.ts",
       "test/unit/tex-wiring.test.ts"
     ],
     "src/tex/tfm.ts": [
@@ -849,6 +854,13 @@
     "test/unit/teardown.test.ts": [],
     "test/unit/tex-bundles.test.ts": [
       "src/tex/bundles.ts"
+    ],
+    "test/unit/tex-core-preload.test.ts": [
+      "src/core.ts",
+      "src/errors.ts",
+      "src/registry.ts",
+      "src/tex/bundles.ts",
+      "src/tex/stage.ts"
     ],
     "test/unit/tex-detect.test.ts": [
       "src/tex/detect.ts"
