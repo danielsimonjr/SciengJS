@@ -1,8 +1,7 @@
-// Build the e-TeX programs of T6 from the pinned sources.
+// Build the TeX programs (e-TeX trip and production, pltotf, tftopl, dvitype) from the pinned sources.
 // node build.mjs <sources-dir> <build-dir>
 // The sources dir must be a new, empty dir or a dir of an earlier run of this tool. The tool
-// downloads each pinned file that is not there yet and checks each sha256: the Knuth files
-// of T5, the TeX Live 2023 source tarball and the tlnet-final 2023 package archives.
+// downloads each pinned file that is not there yet and checks each sha256: the Knuth files, the TeX Live 2023 source tarball and the tlnet-final 2023 package archives.
 // It extracts the e-TeX files of the tarball into <sources>/tl and the package archives into
 // <sources>/texmf with the system tar (cwd set, relative names). Then it tangles and compiles
 // each program of config.json and writes build.json with the sizes, times and the added primitives.
@@ -10,14 +9,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { fetchPinned, buildProgram, runtimeName, sha } from '../../t5-tex-build/tools/build-lib.mjs';
+import { fetchPinned, buildProgram, runtimeName, sha } from './build-lib.mjs';
 import { addedPrimitives } from './primitives.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const trial = path.resolve(here, '..');
-const t5 = path.resolve(trial, '../t5-tex-build');
-const config = JSON.parse(fs.readFileSync(path.join(trial, 'config.json'), 'utf8'));
-const knuth = JSON.parse(fs.readFileSync(path.resolve(trial, config.knuthSources), 'utf8')).sources;
+// The config file is tools/tex/config.json. TEX_BUILD_CONFIG overrides the location.
+const configPath = process.env.TEX_BUILD_CONFIG ? path.resolve(process.env.TEX_BUILD_CONFIG) : path.join(here, 'config.json');
+const toolDir = path.dirname(configPath);
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const knuth = config.knuthSources;
 const [srcArg, buildArg] = process.argv.slice(2);
 if (!srcArg || !buildArg) {
   console.error('usage: build.mjs <sources-dir> <build-dir>');
@@ -26,7 +26,7 @@ if (!srcArg || !buildArg) {
 const srcDir = path.resolve(srcArg), buildDir = path.resolve(buildArg);
 const dirs = { knuth: path.join(srcDir, 'knuth'), archives: path.join(srcDir, 'archives'), tl: path.join(srcDir, 'tl'), texmf: path.join(srcDir, 'texmf') };
 for (const d of [buildDir, ...Object.values(dirs)]) fs.mkdirSync(d, { recursive: true });
-const ua = 'sciengjs-trial-t6';
+const ua = config.userAgent;
 const out = { sources: [], programs: [], runtime: runtimeName(), platform: `${process.platform}-${process.arch}` };
 const t0 = performance.now();
 
@@ -51,10 +51,10 @@ for (const p of config.packages.files) {
 }
 out.fetchMs = Math.round(performance.now() - t0);
 
-/** A source name: knuth:<path>, tl:<path under the web2c dir>, t5:<path in T5>, or a path in T6. */
+/** A source name: tl:<path under the web2c dir>, knuth:<path> (the web files), or a path in the tool dir (the change files). */
 const resolve = (name) => {
-  const [k, rest] = name.includes(':') ? name.split(/:(.*)/s) : ['t6', name];
-  const base = { knuth: dirs.knuth, tl: tlRoot, t5, t6: trial }[k];
+  const [k, rest] = name.includes(':') ? name.split(/:(.*)/s) : ['tool', name];
+  const base = { knuth: dirs.knuth, tl: tlRoot, tool: toolDir }[k];
   if (!base) throw new Error(`unknown source prefix in ${name}`);
   return path.join(base, rest);
 };
@@ -62,9 +62,9 @@ out.changeFiles = {};
 for (const prog of config.programs) {
   const changes = prog.changes.map((c) => ({ name: c, text: fs.readFileSync(resolve(c), 'latin1') }));
   for (const c of changes) out.changeFiles[c.name] ??= { sha256: sha(Buffer.from(c.text, 'latin1')), lines: c.text.split('\n').length - 1 };
-  out.programs.push(await buildProgram({ name: prog.name, realBytes: prog.realBytes, buildDir, web: fs.readFileSync(resolve(prog.web), 'latin1'), changes }));
+  out.programs.push(await buildProgram({ name: prog.name, realBytes: prog.realBytes, buildDir, web: fs.readFileSync(resolve('knuth:' + prog.web), 'latin1'), changes }));
 }
-out.addedPrimitives = addedPrimitives(fs.readFileSync(path.join(trial, config.utilityChangeFile), 'latin1'));
+out.addedPrimitives = addedPrimitives(fs.readFileSync(path.join(toolDir, config.utilityChangeFile), 'latin1'));
 out.texmf = dirs.texmf;
 out.etexDir = path.join(tlRoot, 'etexdir');
 // the trip dir of etrip.mjs: the trip files of tex.web and tripos.tex of the tarball
@@ -72,5 +72,17 @@ out.tripDir = path.join(srcDir, 'trip');
 fs.mkdirSync(out.tripDir, { recursive: true });
 for (const f of fs.readdirSync(path.join(dirs.knuth, 'tex'))) if (f.startsWith('trip')) fs.copyFileSync(path.join(dirs.knuth, 'tex', f), path.join(out.tripDir, f));
 fs.copyFileSync(path.join(tlRoot, 'triptrap', 'tripos.tex'), path.join(out.tripDir, 'tripos.tex'));
+// The format: run the production program in INITEX mode on the ini file.
+const fm = config.format;
+const fmtDir = path.join(buildDir, 'fmt');
+const t1 = performance.now();
+execFileSync(process.execPath, [path.join(here, 'tex-run.mjs'), buildDir, fmtDir, '*' + fm.ini, path.join(toolDir, fm.dir), ...fm.roots.map((r) => path.join(srcDir, r))],
+  { env: { ...process.env, TEX_PROGRAM: fm.program }, stdio: 'pipe', maxBuffer: 1 << 28 });
+const fmtFile = path.join(fmtDir, fm.outName + '.fmt');
+const log = fs.readFileSync(path.join(fmtDir, fm.outName + '.log'), 'latin1');
+const driver = (log.match(/^Driver file for pgf: (\S+)/m) || [])[1];
+if (driver !== fm.pgfDriver) throw new Error('pgf driver is ' + driver + ', not ' + fm.pgfDriver);
+out.format = { file: fmtFile, bytes: fs.statSync(fmtFile).size, sha256: sha(fs.readFileSync(fmtFile)), pgfDriver: driver, ms: Math.round(performance.now() - t1) };
+out.totalMs = Math.round(performance.now() - t0);
 fs.writeFileSync(path.join(buildDir, 'build.json'), JSON.stringify(out, null, 1));
 console.log(JSON.stringify({ ...out, sources: out.sources.length }));

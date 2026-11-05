@@ -1,11 +1,11 @@
 // Test of the trip test gate: only the banner line may differ in the logs.
-// node --test trials/t5-tex-build/test/trip-gate.test.mjs
+// node --test test/tex-tools/trip-gate.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { tripGate, buildBanner } from '../tools/trip-gate.mjs';
+import { tripGate, buildBanner } from '../../tools/tex/trip-gate.mjs';
 
 const TEX = 'This is TeX, Version 3.141592653';
 const SET = 'This is SET, Version 3.141592653';

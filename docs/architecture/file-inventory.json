@@ -904,6 +904,34 @@
       "loc": 45
     },
     {
+      "file": "test/tex-tools/etrip-gate.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 149
+    },
+    {
+      "file": "test/tex-tools/primitives.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 22
+    },
+    {
+      "file": "test/tex-tools/tangle.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 21
+    },
+    {
+      "file": "test/tex-tools/trip-gate.test.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 80
+    },
+    {
       "file": "test/unit/assets.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -1429,6 +1457,146 @@
       "loc": 97
     },
     {
+      "file": "tools/tex/build-lib.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 71
+    },
+    {
+      "file": "tools/tex/build.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 88
+    },
+    {
+      "file": "tools/tex/check-format.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 19
+    },
+    {
+      "file": "tools/tex/compare-builds.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 13
+    },
+    {
+      "file": "tools/tex/compile-cli.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 18
+    },
+    {
+      "file": "tools/tex/etrip-gate.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 409
+    },
+    {
+      "file": "tools/tex/etrip.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 85
+    },
+    {
+      "file": "tools/tex/linediff.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 53
+    },
+    {
+      "file": "tools/tex/pascal.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 1402
+    },
+    {
+      "file": "tools/tex/primitives.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 33
+    },
+    {
+      "file": "tools/tex/render.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 88
+    },
+    {
+      "file": "tools/tex/run-texware.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 32
+    },
+    {
+      "file": "tools/tex/sizes.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 12
+    },
+    {
+      "file": "tools/tex/tangle-cli.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 18
+    },
+    {
+      "file": "tools/tex/tangle.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 531
+    },
+    {
+      "file": "tools/tex/tex-run.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 38
+    },
+    {
+      "file": "tools/tex/trip-gate.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 65
+    },
+    {
+      "file": "tools/tex/trip-steps.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 55
+    },
+    {
+      "file": "tools/tex/trip.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 92
+    },
+    {
+      "file": "tools/tex/wasm.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 177
+    },
+    {
       "file": "trials/t1-graph/compare-layout.mjs",
       "package": "(root)",
       "area": "src",
@@ -1562,137 +1730,11 @@
       "loc": 46
     },
     {
-      "file": "trials/t5-tex-build/test/tangle.test.mjs",
-      "package": "(root)",
-      "area": "tests",
-      "disposition": "test",
-      "loc": 21
-    },
-    {
-      "file": "trials/t5-tex-build/test/trip-gate.test.mjs",
-      "package": "(root)",
-      "area": "tests",
-      "disposition": "test",
-      "loc": 80
-    },
-    {
       "file": "trials/t5-tex-build/test/type1.test.mjs",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
       "loc": 43
-    },
-    {
-      "file": "trials/t5-tex-build/tools/build-lib.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 71
-    },
-    {
-      "file": "trials/t5-tex-build/tools/build.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 37
-    },
-    {
-      "file": "trials/t5-tex-build/tools/compare-builds.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 13
-    },
-    {
-      "file": "trials/t5-tex-build/tools/compile-cli.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 18
-    },
-    {
-      "file": "trials/t5-tex-build/tools/linediff.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 53
-    },
-    {
-      "file": "trials/t5-tex-build/tools/pascal.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 1402
-    },
-    {
-      "file": "trials/t5-tex-build/tools/render.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 88
-    },
-    {
-      "file": "trials/t5-tex-build/tools/run-texware.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 32
-    },
-    {
-      "file": "trials/t5-tex-build/tools/sizes.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 12
-    },
-    {
-      "file": "trials/t5-tex-build/tools/tangle-cli.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 18
-    },
-    {
-      "file": "trials/t5-tex-build/tools/tangle.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 531
-    },
-    {
-      "file": "trials/t5-tex-build/tools/tex-run.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 38
-    },
-    {
-      "file": "trials/t5-tex-build/tools/trip-gate.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 65
-    },
-    {
-      "file": "trials/t5-tex-build/tools/trip-steps.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 55
-    },
-    {
-      "file": "trials/t5-tex-build/tools/trip.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 90
-    },
-    {
-      "file": "trials/t5-tex-build/tools/wasm.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 177
     },
     {
       "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
@@ -1707,48 +1749,6 @@
       "area": "tests",
       "disposition": "test",
       "loc": 52
-    },
-    {
-      "file": "trials/t6-etex-build/test/etrip-gate.test.mjs",
-      "package": "(root)",
-      "area": "tests",
-      "disposition": "test",
-      "loc": 149
-    },
-    {
-      "file": "trials/t6-etex-build/test/primitives.test.mjs",
-      "package": "(root)",
-      "area": "tests",
-      "disposition": "test",
-      "loc": 22
-    },
-    {
-      "file": "trials/t6-etex-build/tools/build.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 76
-    },
-    {
-      "file": "trials/t6-etex-build/tools/etrip-gate.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 409
-    },
-    {
-      "file": "trials/t6-etex-build/tools/etrip.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 85
-    },
-    {
-      "file": "trials/t6-etex-build/tools/primitives.mjs",
-      "package": "(root)",
-      "area": "tools",
-      "disposition": "tool",
-      "loc": 33
     }
   ],
   "skippedLinks": [],

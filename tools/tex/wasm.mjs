@@ -1,4 +1,4 @@
-// WASM binary encoder of the T5 trial compiler.
+// WASM binary encoder.
 // Writes the sections that the compiler needs: types, imports, functions,
 // memory, globals, exports, code and data. No outside tool takes part.
 

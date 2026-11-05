@@ -1,8 +1,8 @@
 // Test of the e-TRIP gate (tools/etrip-gate.mjs).
-// node --test trials/t6-etex-build/test/etrip-gate.test.mjs
+// node --test test/tex-tools/etrip-gate.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { judgeFile, parseReferenceDiffs, etripConstants, etripMessageOf, dropEchoText } from '../tools/etrip-gate.mjs';
+import { judgeFile, parseReferenceDiffs, etripConstants, etripMessageOf, dropEchoText } from '../../tools/tex/etrip-gate.mjs';
 
 const SET = 'This is SET, Version 3.141592653-2.6';
 const TEX = 'This is TeX, Version 3.141592653';

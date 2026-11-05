@@ -16,3 +16,6 @@ assets/three.SkeletonUtils.js
 
 # The large STEP sample. CI downloads it; see test/corpus/mesh/large.json.
 test/corpus-large/
+
+# TeX build output of tools/tex
+.tex-build/
