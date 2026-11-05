@@ -538,14 +538,11 @@ class Resolver {
     for (const s of raw) m.satisfies.push(this.satisfy(s));
   }
 
-  private noCycle(defs: { name: string; base: string | undefined; line: number }[]): void {
-    const byName = new Map(defs.map((d) => [d.name, d]));
+  private noCycle(defs: readonly Specializable[]): void {
     for (const def of defs) {
-      const seen = new Set<string>();
-      for (let at: typeof def | undefined = def; at !== undefined; at = at.base === undefined ? undefined : byName.get(at.base)) {
-        if (seen.has(at.name)) throw inputError(def.line, `the specialization of ${def.name} is a cycle`);
-        seen.add(at.name);
-      }
+      const chain = baseChain(defs, def);
+      const last = chain[chain.length - 1]!;
+      if (chain.some((d) => d.name === last.base)) throw inputError(def.line, `the specialization of ${def.name} is a cycle`);
     }
   }
 
@@ -582,13 +579,20 @@ class Resolver {
   }
 }
 
+/** A definition that can name a base with `:>`. */
+export interface Specializable {
+  name: string;
+  base: string | undefined;
+  line: number;
+}
+
 /**
- * The chain of a part def and its bases, the part def first. The chain stops at a base that names no part def, and
- * at a base that is already in the chain, so a cycle cannot loop.
+ * The chain of a definition and its bases, the definition first. The chain stops at a base that names no definition
+ * of the list, and at a base that is already in the chain, so a cycle cannot loop.
  */
-export function baseChain(partDefs: readonly PartDef[], def: PartDef): PartDef[] {
-  const out: PartDef[] = [];
-  for (let at: PartDef | undefined = def; at !== undefined && !out.includes(at); at = partDefs.find((d) => d.name === at!.base)) {
+export function baseChain<T extends Specializable>(defs: readonly T[], def: T): T[] {
+  const out: T[] = [];
+  for (let at: T | undefined = def; at !== undefined && !out.includes(at); at = defs.find((d) => d.name === at!.base)) {
     out.push(at);
   }
   return out;

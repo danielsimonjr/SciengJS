@@ -1,0 +1,308 @@
+{
+ "mutants": [
+  {
+   "id": "sys-1",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "const SYMBOLS = [\":>\", \"::\", \"..\",",
+   "replacement": "const SYMBOLS = [\"::\", \"..\",",
+   "equivalent": null
+  },
+  {
+   "id": "sys-2",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "\"..\", \"{\", \"}\"",
+   "replacement": "\"{\", \"}\"",
+   "equivalent": null
+  },
+  {
+   "id": "sys-3",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "const NUMBER = /[0-9]+(?:\\.[0-9]+)?/y;",
+   "replacement": "const NUMBER = /[0-9]+/y;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-4",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "if (c === undefined || c === \"\\n\")",
+   "replacement": "if (c === undefined)",
+   "equivalent": null
+  },
+  {
+   "id": "sys-5",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "if (c === \"\\\\\" && (source[k + 1] === '\"' || source[k + 1] === \"\\\\\")) {",
+   "replacement": "if (false) {",
+   "equivalent": null
+  },
+  {
+   "id": "sys-6",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "const column = at - lineStart + 1;",
+   "replacement": "const column = at - lineStart;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-7",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "          line += 1;\n          lineStart = k + 1;",
+   "replacement": "          lineStart = k + 1;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-8",
+   "file": "src/sysml/tokens.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "      at = end < 0 ? source.length : end;",
+   "replacement": "      at = end < 0 ? source.length : end + 1;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-9",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "if (m.partDefs.length + m.portDefs.length + m.interfaceDefs.length + m.requirementDefs.length + m.requirements.length === 0)",
+   "replacement": "if (m.partDefs.length + m.portDefs.length === 0)",
+   "equivalent": null
+  },
+  {
+   "id": "sys-10",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "  satisfy: [\"package\", \"part def\"],",
+   "replacement": "  satisfy: [\"package\"],",
+   "equivalent": null
+  },
+  {
+   "id": "sys-11",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "  requirement: [\"package\", \"requirement\"],",
+   "replacement": "  requirement: [\"package\", \"requirement\", \"part def\"],",
+   "equivalent": null
+  },
+  {
+   "id": "sys-12",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "  attribute: [\"part def\", \"port def\", \"interface def\", \"requirement\"],",
+   "replacement": "  attribute: [\"part def\", \"port def\", \"interface def\", \"requirement\", \"package\"],",
+   "equivalent": null
+  },
+  {
+   "id": "sys-13",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "  part: [\"part def\"],",
+   "replacement": "  part: [\"part def\", \"package\"],",
+   "equivalent": null
+  },
+  {
+   "id": "sys-14",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "      if (!this.lenient) throw inputError(line, `the keyword \"${token.value}\" is outside the subset`);",
+   "replacement": "      if (false) throw inputError(line, `the keyword \"${token.value}\" is outside the subset`);",
+   "equivalent": null
+  },
+  {
+   "id": "sys-15",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "if (token === undefined || (depth === 0 && token.kind === \"symbol\" && token.value === \"}\")) {",
+   "replacement": "if (token === undefined) {",
+   "equivalent": null
+  },
+  {
+   "id": "sys-16",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "        if (depth === 0) break;",
+   "replacement": "        if (depth < 0) break;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-17",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "} else if (token.value === \";\" && depth === 0) break;",
+   "replacement": "} else if (token.value === \";\") break;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-18",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "    if (this.names.has(name)) throw inputError(line, `${name} is defined twice`);",
+   "replacement": "    if (false) throw inputError(line, `${name} is defined twice`);",
+   "equivalent": null
+  },
+  {
+   "id": "sys-19",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "  if (set.has(name)) throw inputError(line, `${name} is defined twice`);",
+   "replacement": "  if (false) throw inputError(line, `${name} is defined twice`);",
+   "equivalent": null
+  },
+  {
+   "id": "sys-20",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "if (chain.some((d) => d.name === last.base)) throw",
+   "replacement": "if (false) throw",
+   "equivalent": null
+  },
+  {
+   "id": "sys-21",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "      if (def.base !== undefined) this.expect(def.base, \"requirement def\", def.line);",
+   "replacement": "      if (false) this.expect(def.base!, \"requirement def\", def.line);",
+   "equivalent": null
+  },
+  {
+   "id": "sys-22",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "      for (const port of def.ports) this.expect(port.type, \"port def\", port.line);",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "sys-23",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "        if (c.def !== undefined) this.expect(c.def, \"interface def\", c.line);",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "sys-24",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "        this.end(def, c.to, c.line);",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "sys-25",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "    if (rest.length > 0) throw",
+   "replacement": "    if (rest.length > 1) throw",
+   "equivalent": null
+  },
+  {
+   "id": "sys-26",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "      if (owner !== undefined && this.partOf(owner, first!) !== undefined) {",
+   "replacement": "      if (false) {",
+   "equivalent": null
+  },
+  {
+   "id": "sys-27",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "    if (!this.requirementAddresses.has(requirement)) throw",
+   "replacement": "    if (false) throw",
+   "equivalent": null
+  },
+  {
+   "id": "sys-28",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "multiplicity += `..${this.isSymbol(\"*\") ? (this.pos += 1, \"*\") : this.number()}`;",
+   "replacement": "multiplicity += `..${this.number()}`;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-29",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "value = literal.kind === \"string\" ? JSON.stringify(literal.value) : literal.value;",
+   "replacement": "value = literal.value;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-30",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "name, address: ownerAddress === undefined ? name : `${ownerAddress}.${name}`,",
+   "replacement": "name, address: name,",
+   "equivalent": null
+  },
+  {
+   "id": "sys-31",
+   "file": "src/sysml/parse.ts",
+   "test": "test/unit/sysml-parse.test.ts",
+   "original": "for (let at: T | undefined = def; at !== undefined && !out.includes(at);",
+   "replacement": "for (let at: T | undefined = def; at !== undefined && out.length === 0;",
+   "equivalent": null
+  },
+  {
+   "id": "sys-32",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "  if (out.view === \"ibd\" && out.root === undefined) throw",
+   "replacement": "  if (false) throw",
+   "equivalent": null
+  },
+  {
+   "id": "sys-33",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "  if (out.view !== \"ibd\" && out.root !== undefined) throw",
+   "replacement": "  if (false) throw",
+   "equivalent": null
+  },
+  {
+   "id": "sys-34",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "      if (!VIEWS.includes(value as SysmlView)) throw",
+   "replacement": "      if (false) throw",
+   "equivalent": null
+  },
+  {
+   "id": "sys-35",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "if (root === undefined) throw new RenderError",
+   "replacement": "if (false) throw new RenderError",
+   "equivalent": null
+  },
+  {
+   "id": "sys-36",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "compartments.filter((c) => c.length > 0)",
+   "replacement": "compartments",
+   "equivalent": null
+  },
+  {
+   "id": "sys-37",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "    if (def.base !== undefined) out.push(`  ${q(def.name)} -> ${q(def.base)} [arrowhead=empty];`);",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "sys-38",
+   "file": "src/sysml/views.ts",
+   "test": "test/unit/sysml-views.test.ts",
+   "original": "    if (!seen.has(s.path)) {",
+   "replacement": "    if (true) {",
+   "equivalent": null
+  }
+ ]
+}
