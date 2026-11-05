@@ -12,6 +12,7 @@ describe("tex specials", () => {
     const s = createSpecials();
     expect(s.special('dvisvgm:raw <g transform="translate({?x},{?y})">{?nl}', at)).toEqual({ svg: '<g transform="translate(10,20.5)">\n' });
     expect(s.special("dvisvgm: raw </g>", at)).toEqual({ svg: "</g>" });
+    expect(s.special("  dvisvgm:raw <u/>", at)).toEqual({ svg: "<u/>" });
     expect(s.special("dvisvgm:raw {?x}{?x}", { x: 0.1 + 0.2, y: 0, unit: 1 })).toEqual({ svg: "0.30.3" });
     expect(s.special("dvisvgm:raw {?x}", { x: 1.23456789, y: 0, unit: 1 })).toEqual({ svg: "1.2346" });
   });

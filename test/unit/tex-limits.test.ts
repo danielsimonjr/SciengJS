@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "bun:test";
+import { DEFAULT_MAX_OUTPUT_BYTES } from "../../src/tex/host.ts";
 import { renderTex } from "../../src/tex/render.ts";
 import { rejectionOf } from "../support/rejections.ts";
 import { texBuildOrSkip } from "../support/tex-engine.ts";
@@ -61,6 +62,26 @@ describe("tex tree refusals through the engine", () => {
     const source = doc("\\openin3=missing-file \\ifeof3 \\message{NOFILE}\\fi");
     const out = await renderTex({ engine: build!.engine, format: build!.format, tree: build!.tree, source, jobName: "miss", timeoutMs: 60000 });
     expect(out.log).toContain("NOFILE");
+  });
+});
+
+describe("tex output limit", () => {
+  run("a run that writes to the terminal without end ends with E_LIMIT at the bound", async () => {
+    const source = doc("\\def\\a{\\immediate\\write16{xxxxxxxxxx}\\a}\\a");
+    const err = await rejectionOf(renderTex({ engine: build!.engine, format: build!.format, tree: build!.tree, source, jobName: "big1", timeoutMs: 60000, maxOutputBytes: 200000 }));
+    expect(err.code).toBe("E_LIMIT");
+    expect(err.message).toContain("200000");
+  });
+
+  run("a run that writes to a file without end ends with E_LIMIT at the bound", async () => {
+    const source = doc("\\immediate\\openout5=big.txt \\def\\a{\\immediate\\write5{xxxxxxxxxx}\\a}\\a");
+    const err = await rejectionOf(renderTex({ engine: build!.engine, format: build!.format, tree: build!.tree, source, jobName: "big2", timeoutMs: 60000, maxOutputBytes: 200000 }));
+    expect(err.code).toBe("E_LIMIT");
+  });
+
+  run("a normal render stays under the default bound", async () => {
+    const out = await renderTex({ engine: build!.engine, format: build!.format, tree: build!.tree, source: doc("x"), jobName: "small", timeoutMs: 60000 });
+    expect(out.dvi.length + out.log.length + out.terminal.length).toBeLessThan(DEFAULT_MAX_OUTPUT_BYTES / 16);
   });
 });
 

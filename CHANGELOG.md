@@ -17,9 +17,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The runtime of the TeX stage is in `src/tex/`. It holds the virtual file tree, the host functions of the WASM engine, the run function and the render. It also holds the DVI reader, the Type 1 and TFM readers, and the reader of the dvisvgm specials. The stage is not in the registry yet, and no package export names it.
 - The virtual file tree holds only the files that a caller puts in it. A name that escapes the tree makes the open fail and the host records the name. The names are a `..` segment, an absolute path, a drive letter and a UNC path. Writes stay in memory.
 - The engine has no import that starts a program, so `\write18` runs no command. A test shows the text of `\write18` in the log.
+- A run that writes more than `maxOutputBytes` to the terminal and to files rejects with `E_LIMIT`. The default bound is `DEFAULT_MAX_OUTPUT_BYTES`, 64 MiB; a caller can set it from `maxMemoryMb`.
 - The run function takes `timeoutMs`. The host reads the clock at each file call and rejects with `E_TIMEOUT`. A source that loops with no file call, such as `\def\a{\a}\a`, ends when the render worker ends. A Node test shows this. Bun does not end a worker that sits in a WASM loop.
 - The render of `circuit.tex` with the runtime gives the SVG of the T6 trial (sha256 starts with `f3896ab85341d476`, 10 glyph paths, no `<text>`). The test needs a build folder in `SCIENG_TEX_BUILD_DIR` and skips with a printed reason without it.
-- The mutation list `test/mutation/tex-mutants.json` covers the DVI reader and the Type 1 reader. It kills 115 of 115 non-equivalent mutants, 109 of them by an assertion. It excludes 4 equivalent mutants.
+- The mutation list `test/mutation/tex-mutants.json` covers the DVI, Type 1, TFM and specials readers. It kills 147 of 147 non-equivalent mutants, all by an assertion. It excludes 6 equivalent mutants.
 
 ### Removed
 

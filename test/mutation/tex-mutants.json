@@ -951,6 +951,278 @@
    "original": "if (hit !== undefined) return hit;",
    "replacement": "",
    "equivalent": null
+  },
+  {
+   "id": "tex-120",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "72 / 72.27",
+   "replacement": "72 / 72",
+   "equivalent": null
+  },
+  {
+   "id": "tex-121",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": ".replace(/\\{\\?y\\}/g, fmt(at.y))",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-122",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": ".replace(/\\{\\?nl\\}/g, \"\\n\")",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-123",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "Math.round(v * 1e4) / 1e4",
+   "replacement": "Math.round(v * 1e3) / 1e3",
+   "equivalent": null
+  },
+  {
+   "id": "tex-124",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "head === \"unlock\" || head === \"fix\" ||",
+   "replacement": "head === \"unlock\" ||",
+   "equivalent": "the word fix is not a number, so the width check Number.isFinite returns null for it in the same way"
+  },
+  {
+   "id": "tex-125",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "if (toks.length < 2) return null;",
+   "replacement": "if (toks.length < 1) return null;",
+   "equivalent": "a bbox with one number gives a height of NaN, and the Number.isFinite check returns null in the same way"
+  },
+  {
+   "id": "tex-126",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "const d = toks.length > 2 ? Number(toks[2]) : 0;",
+   "replacement": "const d = toks.length > 2 ? Number(toks[2]) : 1;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-127",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "at.y - h * at.unit",
+   "replacement": "at.y - h",
+   "equivalent": null
+  },
+  {
+   "id": "tex-128",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "at.x + w * at.unit",
+   "replacement": "at.x + w",
+   "equivalent": null
+  },
+  {
+   "id": "tex-129",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "at.y + d * at.unit",
+   "replacement": "at.y - d * at.unit",
+   "equivalent": null
+  },
+  {
+   "id": "tex-130",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "return { svg: \"<defs>\" + fill(arg, at) + \"</defs>\" };",
+   "replacement": "return { svg: fill(arg, at) };",
+   "equivalent": null
+  },
+  {
+   "id": "tex-131",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "if (name !== \"\" && active === null) {",
+   "replacement": "if (name !== \"\") {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-132",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "if (stored === undefined || name === active) return null;",
+   "replacement": "if (stored === undefined) return null;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-133",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "sets.set(active, sets.get(active) + arg);",
+   "replacement": "sets.set(active, arg);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-134",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "Math.round(v * 255)",
+   "replacement": "Math.floor(v * 255)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-135",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "model === \"rgb\" && words.length >= 6",
+   "replacement": "model === \"rgb\" && words.length >= 5",
+   "equivalent": null
+  },
+  {
+   "id": "tex-136",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "(1 - c) * (1 - k)",
+   "replacement": "(1 - c) * k",
+   "equivalent": null
+  },
+  {
+   "id": "tex-137",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "if (words[1] === \"pop\") return { svg: \"</g>\" };",
+   "replacement": "if (words[1] === \"pop\") return { svg: \"\" };",
+   "equivalent": null
+  },
+  {
+   "id": "tex-138",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "if (word && !ignoredList.includes(word)) ignoredList.push(word);",
+   "replacement": "if (word) ignoredList.push(word);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-139",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "ignored: () => ignoredList.slice(),",
+   "replacement": "ignored: () => ignoredList,",
+   "equivalent": null
+  },
+  {
+   "id": "tex-140",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "if (active !== null) {",
+   "replacement": "if (false) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-141",
+   "file": "src/tex/specials.ts",
+   "test": "test/unit/tex-specials.test.ts",
+   "original": "text.match(/^\\s*dvisvgm:/)",
+   "replacement": "text.match(/^dvisvgm:/)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-142",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "lf * 4 > bytes.length",
+   "replacement": "lf * 4 >= bytes.length",
+   "equivalent": null
+  },
+  {
+   "id": "tex-143",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "bc > ec + 1",
+   "replacement": "bc > ec",
+   "equivalent": null
+  },
+  {
+   "id": "tex-144",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "ec > 255",
+   "replacement": "ec >= 255",
+   "equivalent": null
+  },
+  {
+   "id": "tex-145",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": ">>> 24",
+   "replacement": ">>> 25",
+   "equivalent": null
+  },
+  {
+   "id": "tex-146",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "if (widthIndex === 0) continue;",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-147",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "if (widthIndex >= nw)",
+   "replacement": "if (widthIndex > nw)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-148",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "const charBase = 6 + lh;",
+   "replacement": "const charBase = 5 + lh;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-149",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "designSize: fix(7)",
+   "replacement": "designSize: fix(6)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-150",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "checksum: word(6)",
+   "replacement": "checksum: word(7)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-151",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "/ 2 ** 20",
+   "replacement": "/ 2 ** 19",
+   "equivalent": null
+  },
+  {
+   "id": "tex-152",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "(ec - bc + 1)",
+   "replacement": "(ec - bc)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-153",
+   "file": "src/tex/tfm.ts",
+   "test": "test/unit/tex-tfm.test.ts",
+   "original": "fix(widthBase + widthIndex)",
+   "replacement": "fix(widthBase + widthIndex + 1)",
+   "equivalent": null
   }
  ]
 }
