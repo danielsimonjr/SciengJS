@@ -25,3 +25,12 @@ test("node imports dist/mesh and reads a BREP file to triangles", async () => {
   const meshes = await readCad("brep", bytes);
   assert.ok(meshes.some((mesh) => mesh.indices.length > 0));
 });
+
+test("node renders a BREP file to a viewer page that names the pinned Three.js modules", async () => {
+  const { render } = await import(pathToFileURL(join(dist, "index.js")).href);
+  const result = await render({ type: "brep", source: bytes, format: "html" });
+  const text = new TextDecoder().decode(result.bytes);
+  assert.match(text, /<script type="importmap">/);
+  assert.match(text, /https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.187\.0\/build\/three\.module\.js/);
+  assert.match(text, /const GLB_BASE64 = "[A-Za-z0-9+\/=]+";/);
+});

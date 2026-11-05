@@ -16,7 +16,7 @@ Version: each row gives the version that the engine pins.
 | tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
 | mesh | `occt-import-js` 0.0.23 (OpenCascade compiled to WASM) | LGPL-2.1 | a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
-| mesh (viewer page) | `three` | MIT | not yet a dependency |
+| mesh (viewer page) | `three` 0.187.0 (six pinned module files, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copies to pages |
 | browser | `mermaid` 11.17.2 (the pinned build `dist/mermaid.min.js`, copied into the assets folder at build) | MIT | a devDependency. The browser stage serves the copy to pages |
 | raster | `@resvg/resvg-wasm` 2.6.2 | MPL-2.0 | a dependency |
 | raster | Liberation Serif Regular 2.1.5 (font, in `assets/fonts/`) | SIL Open Font License 1.1 | bundled |
@@ -75,6 +75,10 @@ The file mermaid.min.js also holds the code of the runtime dependencies of `merm
 - Unlicense: `robust-predicates`.
 
 The file `assets/licenses/mermaid-bundle.txt` holds the licence text of each of the 79 packages, with its name and version. The script `scripts/mermaid-licenses.mjs` writes that file from the installed `mermaid` package. Run the script again after a change of the pinned Mermaid version.
+
+### Three.js (MIT)
+
+The MIT licence applies to `three` 0.187.0. The package is a devDependency. The build copies six files of the package into the assets folder: three.module.js, three.core.js, three.OrbitControls.js, three.GLTFLoader.js, three.BufferGeometryUtils.js and three.SkeletonUtils.js. Those copies are generated at build time and are not committed. The html output of the mesh stage is a page. The page loads the six pinned files from the CDN URLs in the engine, with a subresource integrity hash for each file. The browser stage fulfils the same URLs from the copies in the assets folder, so a png render makes no network request. The licence text is in `assets/licenses/MIT-three.txt`.
 
 ### OpenCascade (LGPL-2.1)
 

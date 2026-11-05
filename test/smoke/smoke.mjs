@@ -63,6 +63,22 @@ try {
   if (!readFileSync(shippedMermaid).equals(readFileSync(lockedMermaid))) {
     throw new Error("the shipped assets/mermaid.min.js differs from the locked mermaid dist file");
   }
+  // The tarball must ship the six pinned Three.js files that the viewer page and the png render need.
+  const threeFiles = {
+    "three.module.js": "build/three.module.js",
+    "three.core.js": "build/three.core.js",
+    "three.OrbitControls.js": "examples/jsm/controls/OrbitControls.js",
+    "three.GLTFLoader.js": "examples/jsm/loaders/GLTFLoader.js",
+    "three.BufferGeometryUtils.js": "examples/jsm/utils/BufferGeometryUtils.js",
+    "three.SkeletonUtils.js": "examples/jsm/utils/SkeletonUtils.js",
+  };
+  for (const [shipped, inPackage] of Object.entries(threeFiles)) {
+    const shippedFile = join(installedAssets, shipped);
+    if (!existsSync(shippedFile)) throw new Error("the installed package has no assets/" + shipped);
+    if (!readFileSync(shippedFile).equals(readFileSync(join(repo, "node_modules", "three", inPackage)))) {
+      throw new Error("the shipped assets/" + shipped + " differs from the locked three file");
+    }
+  }
   // A folder with the bundled font and no WASM file: a render through the folder must reject with E_STAGE_MISSING.
   const noWasmFolder = join(app, "no-wasm-assets");
   mkdirSync(join(noWasmFolder, "fonts"), { recursive: true });
@@ -90,6 +106,9 @@ const brep = new Uint8Array(readFileSync(new URL("./cylinder1.brep", import.meta
 const glb = await render({ type: "brep", source: brep, format: "glb" }, {});
 const glbView = new DataView(glb.bytes.buffer, glb.bytes.byteOffset, glb.bytes.byteLength);
 if (glb.mime !== "model/gltf-binary" || glbView.getUint32(0, true) !== 0x46546c67 || glbView.getUint32(8, true) !== glb.bytes.byteLength) throw new Error("brep to glb returned no glTF binary");
+const viewer = await render({ type: "brep", source: brep, format: "html" }, {});
+const viewerText = new TextDecoder().decode(viewer.bytes);
+if (!viewerText.includes('<script type="importmap">') || !viewerText.includes("https://cdn.jsdelivr.net/npm/three@") || !viewerText.includes("GLB_BASE64")) throw new Error("brep to html returned no viewer page");
 const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
 const md = await render({ type: "html", source: "<p>a <b>b</b></p>", format: "md" }, {});
@@ -164,7 +183,7 @@ try {
   mathPdfCode = err.code;
 }
 if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes");
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes");
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

@@ -25,6 +25,16 @@ const WASM_PACKAGE_FILE = "index_bg.wasm";
 const MERMAID_PACKAGE_FILE = "mermaid/dist/mermaid.min.js";
 const MERMAID_TARGET_PATH = path.join(ASSETS_DIR, "mermaid.min.js");
 
+// The pinned Three.js files inside their package, and the copies in assets/. The list equals THREE_MODULES in src/browser/pinned.ts.
+const THREE_FILES = [
+  ["build/three.module.js", "three.module.js"],
+  ["build/three.core.js", "three.core.js"],
+  ["examples/jsm/controls/OrbitControls.js", "three.OrbitControls.js"],
+  ["examples/jsm/loaders/GLTFLoader.js", "three.GLTFLoader.js"],
+  ["examples/jsm/utils/BufferGeometryUtils.js", "three.BufferGeometryUtils.js"],
+  ["examples/jsm/utils/SkeletonUtils.js", "three.SkeletonUtils.js"],
+];
+
 // The repository root is the parent folder of the folder holding this script.
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(scriptDir);
@@ -79,6 +89,12 @@ async function main() {
   // The pinned Mermaid build, a devDependency, is copied the same way. The browser stage serves it to pages.
   const mermaidSourcePath = createRequire(path.join(root, "package.json")).resolve(MERMAID_PACKAGE_FILE);
   await writeFile(path.join(root, MERMAID_TARGET_PATH), await readFile(mermaidSourcePath));
+
+  // The pinned Three.js files, a devDependency, are copied the same way. The browser stage serves them to the viewer page.
+  const packageDir = path.join(root, "node_modules", "three");
+  for (const [packagePath, target] of THREE_FILES) {
+    await writeFile(path.join(root, ASSETS_DIR, target), await readFile(path.join(packageDir, packagePath)));
+  }
 }
 
 main()

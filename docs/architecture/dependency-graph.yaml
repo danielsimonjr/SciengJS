@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 215
+  totalFiles: 223
   totalModules: 3
-  totalExports: 445
+  totalExports: 457
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -556,6 +556,11 @@ modules:
         - PLOTLY_SHA256
         - PLOTLY_SRI
         - PLOTLY_CDN_URL
+        - THREE_VERSION
+        - THREE_CDN_BASE
+        - ThreeModule
+        - THREE_MODULES
+        - THREE_MAIN_URL
     src/browser/profile.ts:
       externalDependencies: []
       nodeDependencies:
@@ -1531,6 +1536,58 @@ modules:
         - readMeshOptions
         - GlbDeps
         - render
+    src/mesh/backend-html.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/mesh/viewer.ts
+          imports:
+            - viewerPageHtml
+          typeOnly: false
+      exports:
+        - render
+    src/mesh/backend-png.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/input.ts
+          imports:
+            - blockedWarnings
+            - browserPathOf
+            - parsePngOptions
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - renderHtmlPage
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/mesh/pinned-three.ts
+          imports:
+            - pinnedThree
+          typeOnly: false
+        - file: src/mesh/viewer.ts
+          imports:
+            - viewerPageHtml
+          typeOnly: false
+      exports:
+        - render
     src/mesh/glb.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1582,6 +1639,29 @@ modules:
       nodeDependencies: []
       internalDependencies: []
       exports: []
+    src/mesh/pinned-three.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:crypto
+      internalDependencies:
+        - file: src/browser/pinned.ts
+          imports:
+            - THREE_MODULES
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - PinnedBytes
+          typeOnly: true
+        - file: src/assets.ts
+          imports:
+            - readAsset
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - pinnedThree
     src/mesh/read.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1596,6 +1676,28 @@ modules:
         - CadFace
         - CadMesh
         - readCad
+    src/mesh/viewer-script.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - VIEWER_SCRIPT
+    src/mesh/viewer.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/pinned.ts
+          imports:
+            - THREE_MAIN_URL
+            - THREE_MODULES
+          typeOnly: false
+        - file: src/mesh/viewer-script.ts
+          imports:
+            - VIEWER_SCRIPT
+          typeOnly: false
+      exports:
+        - ViewerOptions
+        - viewerPageHtml
     src/pairs.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2152,6 +2254,59 @@ modules:
             - render
           typeOnly: false
       exports: []
+    test/integration/mesh-viewer.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - renderHtmlPage
+          typeOnly: false
+        - file: src/browser/pinned.ts
+          imports:
+            - THREE_MODULES
+          typeOnly: false
+        - file: src/mesh/pinned-three.ts
+          imports:
+            - pinnedThree
+          typeOnly: false
+        - file: src/mesh/index.ts
+          imports:
+            - readCad
+            - writeGlb
+          typeOnly: false
+        - file: src/mesh/viewer.ts
+          imports:
+            - viewerPageHtml
+          typeOnly: false
+        - file: test/support/page-checker.ts
+          imports:
+            - checkPage
+          typeOnly: false
+        - file: test/support/png-decode.ts
+          imports:
+            - decodePng
+          typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeScratch
+            - makeThreeAssetsFolder
+            - removeScratch
+          typeOnly: false
+        - file: test/support/glb-reader.ts
+          imports:
+            - readGlb
+          typeOnly: false
+      exports: []
     test/integration/page-checker.test.ts:
       externalDependencies:
         - bun:test
@@ -2343,7 +2498,11 @@ modules:
         - node:os
         - node:path
         - node:url
-      internalDependencies: []
+      internalDependencies:
+        - file: src/browser/pinned.ts
+          imports:
+            - THREE_MODULES
+          typeOnly: false
       exports:
         - REAL_FONT_PATH
         - REAL_WASM_PATH
@@ -2353,6 +2512,7 @@ modules:
         - makeScratch
         - removeScratch
         - makeAssetsFolder
+        - makeThreeAssetsFolder
         - wasmImportingMissingFunction
         - wasmWhoseStartTraps
     test/support/bun-scan.ts:
@@ -3448,6 +3608,51 @@ modules:
             - resolved
           typeOnly: false
       exports: []
+    test/unit/mesh-viewer.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/core.ts
+          imports:
+            - renderWithRegistry
+          typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: src/browser/pinned.ts
+          imports:
+            - THREE_MAIN_URL
+            - THREE_MODULES
+          typeOnly: false
+        - file: src/mesh/viewer.ts
+          imports:
+            - viewerPageHtml
+          typeOnly: false
+        - file: src/mesh/pinned-three.ts
+          imports:
+            - pinnedThree
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - ISOLATED_CONFIG_DEPS
+          typeOnly: false
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeScratch
+            - makeThreeAssetsFolder
+            - removeScratch
+          typeOnly: false
+        - file: test/support/glb-reader.ts
+          imports:
+            - readGlb
+          typeOnly: false
+      exports: []
     test/unit/no-bun-api.test.ts:
       externalDependencies:
         - bun:test
@@ -3784,6 +3989,21 @@ modules:
         - node:path
       internalDependencies: []
       exports: []
+    test/unit/three-pinned.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: src/browser/pinned.ts
+          imports:
+            - THREE_CDN_BASE
+            - THREE_MODULES
+            - THREE_VERSION
+          typeOnly: false
+      exports: []
     test/unit/version.test.ts:
       externalDependencies:
         - bun:test
@@ -3914,32 +4134,32 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 215
-  totalSourceFiles: 215
+  totalTypeScriptFiles: 223
+  totalSourceFiles: 223
   totalModules: 3
-  totalLinesOfCode: 24756
-  totalExports: 445
-  entryRoots: 66
-  reachableFiles: 66
+  totalLinesOfCode: 25562
+  totalExports: 457
+  entryRoots: 71
+  reachableFiles: 71
   dormantFiles: 15
   orphanedFiles: 12
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 45
+  totalTypeOnlyImports: 48
   noImporterFileCount: 8
-  unusedExportsCount: 42
+  unusedExportsCount: 43
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 79
-  totalFunctions: 196
+  totalInterfaces: 81
+  totalFunctions: 201
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 58
+  totalConstants: 63
   totalReExports: 88
 reachability:
   roots:
@@ -3992,8 +4212,13 @@ reachability:
     - src/mermaid/sequence.ts
     - src/mermaid/state.ts
     - src/mesh/backend-glb.ts
+    - src/mesh/backend-html.ts
+    - src/mesh/backend-png.ts
     - src/mesh/glb.ts
+    - src/mesh/pinned-three.ts
     - src/mesh/read.ts
+    - src/mesh/viewer-script.ts
+    - src/mesh/viewer.ts
     - src/pairs.ts
     - src/plot/backend-html.ts
     - src/plot/backend-png.ts
@@ -4009,7 +4234,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 66
+  reachableCount: 71
   dormantCount: 15
   orphaned:
     - src/mesh/occt-import-js.d.ts

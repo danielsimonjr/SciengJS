@@ -38,6 +38,12 @@ export const DEFAULT_REGISTRY: Registry = {
   "step:glb": { backend: "mesh/occt+glb", moduleUrl: backendUrl("mesh/backend-glb") },
   "iges:glb": { backend: "mesh/occt+glb", moduleUrl: backendUrl("mesh/backend-glb") },
   "brep:glb": { backend: "mesh/occt+glb", moduleUrl: backendUrl("mesh/backend-glb") },
+  "step:html": { backend: "mesh/occt+viewer", moduleUrl: backendUrl("mesh/backend-html") },
+  "iges:html": { backend: "mesh/occt+viewer", moduleUrl: backendUrl("mesh/backend-html") },
+  "brep:html": { backend: "mesh/occt+viewer", moduleUrl: backendUrl("mesh/backend-html") },
+  "step:png": { backend: "mesh/occt+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
+  "iges:png": { backend: "mesh/occt+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
+  "brep:png": { backend: "mesh/occt+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
 };
 
 /** Builds the registry key of a pair. */

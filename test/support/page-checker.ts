@@ -27,6 +27,11 @@ export interface PageCheckOptions {
   settleMs?: number;
   /** Time allowed for the browser to stop after the close request, in milliseconds. */
   stopTimeoutMs?: number;
+  /**
+   * Pinned files by exact URL. The checker fulfils each from memory and refuses every other request except the page
+   * itself. This is the same rule as the client of the browser stage.
+   */
+  pinned?: ReadonlyMap<string, { bytes: Uint8Array; mime: string }>;
   /** Called with the profile folder of this check, once the folder exists. The leak check matches on it. */
   onProfile?: (profile: string) => void;
 }
@@ -55,8 +60,8 @@ export const PROFILE_PREFIX = "sciengjs-page-check-";
  * The flags of the checker on top of the forced flags of the browser stage. The forced flags keep the sandbox on
  * and route every connection to a refusing proxy. The pages under check are local files.
  */
+// The checker does not add --disable-gpu. The engine does not set it, and on macOS it removes WebGL, which the viewer page needs.
 const CHECKER_ARGS = [
-  "--disable-gpu",
   // Chrome writes its own log to stderr, so a start failure shows what the browser did.
   "--enable-logging=stderr",
 ];
@@ -244,6 +249,7 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
   let port: number | undefined;
   let socket: WebSocket | undefined;
   let proxy: RefusingProxy | undefined;
+  const pageUrl = pathToFileURL(options.htmlPath).href;
 
   try {
     proxy = await startRefusingProxy();
@@ -293,6 +299,27 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
         pending.delete(msg.id);
         return;
       }
+      if (msg.method === "Fetch.requestPaused") {
+        const paused = msg.params as { requestId: string; request: { url: string } };
+        const asset = options.pinned?.get(paused.request.url);
+        const reply =
+          paused.request.url === pageUrl
+            ? send("Fetch.continueRequest", { requestId: paused.requestId })
+            : asset !== undefined
+              ? send("Fetch.fulfillRequest", {
+                  requestId: paused.requestId,
+                  responseCode: 200,
+                  responseHeaders: [
+                    { name: "Content-Type", value: asset.mime },
+                    { name: "Access-Control-Allow-Origin", value: "*" },
+                  ],
+                  body: Buffer.from(asset.bytes).toString("base64"),
+                })
+              : (problems.push(`blocked request: ${paused.request.url}`),
+                send("Fetch.failRequest", { requestId: paused.requestId, errorReason: "BlockedByClient" }));
+        reply.catch((err: Error) => problems.push(`fetch reply failed: ${err.message}`));
+        return;
+      }
       if (msg.method === "Runtime.exceptionThrown") {
         const details = msg.params?.exceptionDetails as { text?: string; exception?: { description?: string } };
         problems.push(`script error: ${details?.exception?.description ?? details?.text ?? "unknown"}`);
@@ -317,7 +344,8 @@ export async function checkPage(options: PageCheckOptions): Promise<PageCheckRes
     await send("Runtime.enable");
     await send("Log.enable");
     await send("Page.enable");
-    await send("Page.navigate", { url: pathToFileURL(options.htmlPath).href });
+    if (options.pinned !== undefined) await send("Fetch.enable", { patterns: [{ urlPattern: "*" }] });
+    await send("Page.navigate", { url: pageUrl });
 
     const loadDeadline = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error("the page did not finish loading in time")), startTimeoutMs),
