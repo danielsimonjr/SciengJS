@@ -140,6 +140,28 @@ The column Licence gives the `catalogue-license` field of `texlive.tlpdb` of TeX
 | xkeyval | `xkeyval.tar.xz` | lppl1.3 | format and core bundle |
 | xstring | `xstring.tar.xz` | lppl1.3c | extra bundles |
 
+### Files of Knuth (TeX Live 2023)
+
+The licence of Knuth permits copies of an unchanged file. A changed file must have a new name. The build reads these files unchanged from the archives in the table above. This section quotes the licence lines of the files that carry them.
+
+`fonts/source/public/cm/cmbase.mf` (package `cm`), lines 1 and 2:
+
+```
+% THIS IS THE OFFICIAL COMPUTER MODERN SOURCE FILE cmbase.mf BY D E KNUTH.
+% IT MUST NOT BE MODIFIED IN ANY WAY UNLESS THE FILE NAME IS CHANGED!
+```
+
+`tex/generic/hyphen/hyphen.tex` (package `hyphen-base`), lines 1 to 4:
+
+```
+% The Plain TeX hyphenation tables [NOT TO BE CHANGED IN ANY WAY!]
+% Unlimited copying and redistribution of this file are permitted as long
+% as this file is not modified. Modifications are permitted, but only if
+% the resulting file is not named hyphen.tex.
+```
+
+The format build reads `hyphen.tex` and puts its patterns into the format `scieng.fmt`. The file lists of the bundles in `tools/tex/config.json` name neither `hyphen.tex` nor `cmbase.mf`. They name no run file of the package `knuth-lib`. The Computer Modern TFM files of the package `cm` are binary metric data and have no licence line.
+
 ### Template method credit
 
 The package detection of the `tex` stage follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT). The engine credits that project for the method. Copyright 2015-2025 Roman Parpalak. Licence: MIT. The method is `lib/Templater.php` of that project. The templater tests the source for known environments and commands, and adds the package that each one needs. `src/tex/detect.ts` follows that method with its own tables and its own code. `src/tex/detect.ts` copies no code of the templater.
