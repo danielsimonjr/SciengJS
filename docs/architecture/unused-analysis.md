@@ -7,11 +7,11 @@
 ## Summary
 
 - **Files with no in-repo importer**: 8
-- **Dormant files**: 15
-  - **Orphaned (reachable from nothing)**: 12
-  - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 52
-  - **Unreferenced anywhere**: 7
+- **Dormant files**: 8
+  - **Orphaned (reachable from nothing)**: 8
+  - **Test-only (only a test reaches them)**: 0
+- **Potentially unused exports**: 51
+  - **Unreferenced anywhere**: 6
   - **Referenced in their own module**: 45
   - **Not classified**: 0
 
@@ -35,18 +35,12 @@ Source files that no root and no test reaches. Verify each one before you delete
 - `trials/t3-tex/shim/index.cjs`
 - `trials/t4-browser/assets/pinned.js`
 - `trials/t4-browser/measure.mjs`
-- `trials/t5-tex-build/runtime/dvi2svg.mjs`
-- `trials/t5-tex-build/runtime/host.mjs`
-- `trials/t5-tex-build/runtime/run.mjs`
-- `trials/t5-tex-build/runtime/vfs.mjs`
 
 ## Dormant files: test-only
 
 Source files that only a test reaches. They ship nothing, but a test uses them.
 
-- `trials/t5-tex-build/runtime/tfm.mjs`
-- `trials/t5-tex-build/runtime/type1.mjs`
-- `trials/t6-etex-build/runtime/dvisvgm-specials.mjs`
+_None._
 
 ## Files with no in-repo importer
 
@@ -71,7 +65,6 @@ No other file imports these names, and their own module does not use them.
 - `src/plot/backend-svg.ts`: `render`
 - `src/tex/backend-pdf.ts`: `render`
 - `src/tex/backend-png.ts`: `render`
-- `trials/t6-etex-build/runtime/dvisvgm-specials.mjs`: `unitPerPt`
 
 ### Notes
 
@@ -81,7 +74,6 @@ No other file imports these names, and their own module does not use them.
 - `src/plot/backend-svg.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/plot/backend-svg.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/tex/backend-pdf.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/tex/backend-pdf.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 - `src/tex/backend-png.ts` `render`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'src/tex/backend-png.ts' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'render' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
-- `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` `unitPerPt`: Checked for a dynamic import() call with a LITERAL string specifier resolving to 'trials/t6-etex-build/runtime/dvisvgm-specials.mjs' across the whole repo and found none. This scan can only see import() calls with a literal string specifier -- a dynamic import built from a variable or template literal (e.g. import(`./cmds/${name}.js`)) is invisible to it, so 'found none' means no LITERAL match was found, NOT that nothing imports this. 'unitPerPt' may still be consumed via such a call. Also verify against consumption this scan cannot see at all (docs examples, published API surface, a runtime-built path/`new Worker(...)`) before deleting.
 
 ## Exports referenced in their own module
 

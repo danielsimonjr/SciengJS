@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 284
+**Total files**: 277
 
 ## Disposition counts
 
@@ -16,28 +16,28 @@ This report lists each source file that the map census finds, with a disposition
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
 | `build-entry` | 101 | A `src`-area file that is an entry root. |
-| `test-only` | 3 | A `src`-area file that only a test reaches. |
-| `orphan` | 12 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 134 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
-| `tool` | 34 | A file in a `tools/` or `scripts/` folder outside `src/`. |
+| `test-only` | 0 | A `src`-area file that only a test reaches. |
+| `orphan` | 8 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
+| `test` | 133 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `tool` | 35 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **284** | |
+| **Total** | **277** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 116 |
-| `tests` | 134 |
-| `tools` | 34 |
+| `src` | 109 |
+| `tests` | 133 |
+| `tools` | 35 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 182 |
+| `(root)` | 175 |
 | `@danielsimonjr/sciengjs` | 102 |
 
 ## All files
@@ -131,12 +131,12 @@ This report lists each source file that the map census finds, with a disposition
 | `src/tex/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
 | `src/tex/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 9 |
 | `src/tex/bundles.ts` | @danielsimonjr/sciengjs | src | build-entry | 179 |
-| `src/tex/detect.ts` | @danielsimonjr/sciengjs | src | build-entry | 241 |
+| `src/tex/detect.ts` | @danielsimonjr/sciengjs | src | build-entry | 263 |
 | `src/tex/dvi.ts` | @danielsimonjr/sciengjs | src | build-entry | 314 |
-| `src/tex/host.ts` | @danielsimonjr/sciengjs | src | build-entry | 331 |
+| `src/tex/host.ts` | @danielsimonjr/sciengjs | src | build-entry | 338 |
 | `src/tex/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 16 |
 | `src/tex/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 127 |
-| `src/tex/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 87 |
+| `src/tex/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 93 |
 | `src/tex/specials.ts` | @danielsimonjr/sciengjs | src | build-entry | 149 |
 | `src/tex/stage.ts` | @danielsimonjr/sciengjs | src | build-entry | 111 |
 | `src/tex/tfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 38 |
@@ -267,8 +267,9 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/sysml-views.test.ts` | (root) | tests | test | 169 |
 | `test/unit/teardown.test.ts` | (root) | tests | test | 33 |
 | `test/unit/tex-bundles.test.ts` | (root) | tests | test | 177 |
-| `test/unit/tex-detect.test.ts` | (root) | tests | test | 257 |
+| `test/unit/tex-detect.test.ts` | (root) | tests | test | 309 |
 | `test/unit/tex-dvi.test.ts` | (root) | tests | test | 214 |
+| `test/unit/tex-host-names.test.ts` | (root) | tests | test | 28 |
 | `test/unit/tex-limits.test.ts` | (root) | tests | test | 100 |
 | `test/unit/tex-specials.test.ts` | (root) | tests | test | 92 |
 | `test/unit/tex-tfm.test.ts` | (root) | tests | test | 55 |
@@ -290,21 +291,22 @@ This report lists each source file that the map census finds, with a disposition
 | `tools/tex/compare-builds.mjs` | (root) | tools | tool | 13 |
 | `tools/tex/compile-cli.mjs` | (root) | tools | tool | 18 |
 | `tools/tex/etrip-gate.mjs` | (root) | tools | tool | 409 |
-| `tools/tex/etrip.mjs` | (root) | tools | tool | 85 |
+| `tools/tex/etrip.mjs` | (root) | tools | tool | 86 |
 | `tools/tex/linediff.mjs` | (root) | tools | tool | 53 |
 | `tools/tex/pascal.mjs` | (root) | tools | tool | 1402 |
 | `tools/tex/primitives.mjs` | (root) | tools | tool | 33 |
 | `tools/tex/record-bundle-files.ts` | (root) | tools | tool | 41 |
-| `tools/tex/render.mjs` | (root) | tools | tool | 88 |
-| `tools/tex/run-texware.mjs` | (root) | tools | tool | 32 |
+| `tools/tex/render.mjs` | (root) | tools | tool | 84 |
+| `tools/tex/run-texware.mjs` | (root) | tools | tool | 29 |
 | `tools/tex/set-bundle-includes.mjs` | (root) | tools | tool | 47 |
 | `tools/tex/sizes.mjs` | (root) | tools | tool | 12 |
 | `tools/tex/tangle-cli.mjs` | (root) | tools | tool | 18 |
 | `tools/tex/tangle.mjs` | (root) | tools | tool | 531 |
-| `tools/tex/tex-run.mjs` | (root) | tools | tool | 38 |
+| `tools/tex/tex-run.mjs` | (root) | tools | tool | 36 |
+| `tools/tex/tree.mjs` | (root) | tools | tool | 46 |
 | `tools/tex/trip-gate.mjs` | (root) | tools | tool | 65 |
-| `tools/tex/trip-steps.mjs` | (root) | tools | tool | 55 |
-| `tools/tex/trip.mjs` | (root) | tools | tool | 92 |
+| `tools/tex/trip-steps.mjs` | (root) | tools | tool | 49 |
+| `tools/tex/trip.mjs` | (root) | tools | tool | 93 |
 | `tools/tex/wasm.mjs` | (root) | tools | tool | 177 |
 | `trials/t1-graph/compare-layout.mjs` | (root) | src | orphan | 74 |
 | `trials/t1-graph/make-sources.mjs` | (root) | src | orphan | 19 |
@@ -319,15 +321,6 @@ This report lists each source file that the map census finds, with a disposition
 | `trials/t3-tex/tools/tex-engine.mjs` | (root) | tools | tool | 62 |
 | `trials/t4-browser/assets/pinned.js` | (root) | src | orphan | 8 |
 | `trials/t4-browser/measure.mjs` | (root) | src | orphan | 912 |
-| `trials/t5-tex-build/runtime/dvi2svg.mjs` | (root) | src | orphan | 133 |
-| `trials/t5-tex-build/runtime/host.mjs` | (root) | src | orphan | 212 |
-| `trials/t5-tex-build/runtime/run.mjs` | (root) | src | orphan | 41 |
-| `trials/t5-tex-build/runtime/tfm.mjs` | (root) | src | test-only | 23 |
-| `trials/t5-tex-build/runtime/type1.mjs` | (root) | src | test-only | 236 |
-| `trials/t5-tex-build/runtime/vfs.mjs` | (root) | src | orphan | 46 |
-| `trials/t5-tex-build/test/type1.test.mjs` | (root) | tests | test | 43 |
-| `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` | (root) | src | test-only | 160 |
-| `trials/t6-etex-build/test/dvisvgm-specials.test.mjs` | (root) | tests | test | 52 |
 
 ## Skipped links
 

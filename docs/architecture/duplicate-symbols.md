@@ -17,11 +17,11 @@ A name is listed here when two or more distinct files across the monorepo define
 
 | Category | Count |
 | --- | --: |
-| **TRUE_DUPLICATE** (actionable) | 7 |
+| **TRUE_DUPLICATE** (actionable) | 1 |
 | DISPATCH_VARIANT | 0 |
 | ALIAS_DELEGATION | 0 |
 | ALLOWLISTED | 0 |
-| _Total flagged names_ | 7 |
+| _Total flagged names_ | 1 |
 
 ## Summary — types (interface/type/enum)
 
@@ -40,12 +40,6 @@ A name is listed here when two or more distinct files across the monorepo define
 | Name | Category | Defining files (package, public?, sub-tag) | Canonical hint |
 | --- | --- | --- | --- |
 | `render` | function | `src/browser/backend-pdf.ts` (unknown, public, PLAIN)<br>`src/browser/backend-png.ts` (unknown, public, PLAIN)<br>`src/graph/backend-pdf.ts` (unknown, public, PLAIN)<br>`src/graph/backend-png.ts` (unknown, public, PLAIN)<br>`src/graph/backend-svg.ts` (unknown, public, PLAIN)<br>`src/html/backend-md.ts` (unknown, public, PLAIN)<br>`src/index.ts` (unknown, public, PLAIN)<br>`src/math/backend-pdf.ts` (unknown, public, PLAIN)<br>`src/math/backend-png.ts` (unknown, public, PLAIN)<br>`src/math/backend-svg.ts` (unknown, public, PLAIN)<br>`src/mermaid/backend-pdf.ts` (unknown, public, PLAIN)<br>`src/mermaid/backend-png.ts` (unknown, public, PLAIN)<br>`src/mermaid/backend-svg.ts` (unknown, public, PLAIN)<br>`src/mesh/backend-glb.ts` (unknown, public, PLAIN)<br>`src/mesh/backend-html.ts` (unknown, public, PLAIN)<br>`src/mesh/backend-png.ts` (unknown, public, PLAIN)<br>`src/mesh/backend-stl.ts` (unknown, public, PLAIN)<br>`src/plot/backend-html.ts` (unknown, public, PLAIN)<br>`src/plot/backend-png.ts` (unknown, public, PLAIN)<br>`src/plot/backend-svg.ts` (unknown, public, PLAIN)<br>`src/sysml/backend-pdf.ts` (unknown, public, PLAIN)<br>`src/sysml/backend-png.ts` (unknown, public, PLAIN)<br>`src/sysml/backend-svg.ts` (unknown, public, PLAIN)<br>`src/tex/backend-pdf.ts` (unknown, public, PLAIN)<br>`src/tex/backend-png.ts` (unknown, public, PLAIN)<br>`src/tex/backend-svg.ts` (unknown, public, PLAIN) | **AMBIGUOUS** |
-| `ExitSignal` | class | `src/tex/host.ts` (unknown, public, PLAIN)<br>`trials/t5-tex-build/runtime/host.mjs` (unknown, internal, PLAIN) | `src/tex/host.ts` |
-| `createSpecials` | function | `src/tex/specials.ts` (unknown, public, PLAIN)<br>`trials/t6-etex-build/runtime/dvisvgm-specials.mjs` (unknown, internal, PLAIN) | `src/tex/specials.ts` |
-| `dviToSvg` | function | `src/tex/dvi.ts` (unknown, public, PLAIN)<br>`trials/t5-tex-build/runtime/dvi2svg.mjs` (unknown, internal, PLAIN) | `src/tex/dvi.ts` |
-| `readTfm` | function | `src/tex/tfm.ts` (unknown, public, PLAIN)<br>`trials/t5-tex-build/runtime/tfm.mjs` (unknown, internal, PLAIN) | `src/tex/tfm.ts` |
-| `readType1` | function | `src/tex/type1.ts` (unknown, public, PLAIN)<br>`trials/t5-tex-build/runtime/type1.mjs` (unknown, internal, PLAIN) | `src/tex/type1.ts` |
-| `runProgram` | function | `src/tex/run.ts` (unknown, public, PLAIN)<br>`trials/t5-tex-build/runtime/run.mjs` (unknown, internal, PLAIN) | `src/tex/run.ts` |
 
 ### DISPATCH_VARIANT — distinct public typed-dispatch surfaces
 
