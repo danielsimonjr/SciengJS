@@ -255,7 +255,7 @@ Each trial build is a short branch that answers one question with numbers. Its r
   - `\write18` and a file read outside the virtual tree fail.
   - A `circuitikz` circuit, a `tikz-cd` diagram and a `chemfig` molecule match their expected SVG files.
   - Each glyph of each expected SVG file is a `<path>`.
-  - The trip test and the e-TRIP test pass in CI on each WASM build. Each log differs from the reference only in the banner line.
+  - The trip test and the e-TRIP test pass in CI on each WASM build. Each log differs from the reference only in the classes of the design (section "tex").
   - A source that loads a package with the GPL as its only licence rejects with `E_UNSUPPORTED`. The message names the replacement.
   - The render times stay inside the T5 numbers plus a stated margin.
 - **Release:** sciengjs 0.10.0. Then **A**: the `tikz` command; the `circuit` command gains a TikZ route.
