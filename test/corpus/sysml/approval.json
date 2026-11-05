@@ -1,0 +1,12 @@
+{
+  "entries": [
+    { "source": "bdd-packages.sysml", "options": {}, "approved": false },
+    { "source": "bdd-ports-interfaces.sysml", "options": {}, "approved": false },
+    { "source": "bdd-specialization.sysml", "options": {}, "approved": false },
+    { "source": "bdd-vehicle.sysml", "options": {}, "approved": false },
+    { "source": "ibd-inherited.sysml", "options": { "view": "ibd", "root": "RemoteStation" }, "approved": false },
+    { "source": "ibd-vehicle.sysml", "options": { "view": "ibd", "root": "Vehicle" }, "approved": false },
+    { "source": "requirements-basic.sysml", "options": { "view": "requirements" }, "approved": false },
+    { "source": "requirements-nested.sysml", "options": { "view": "requirements" }, "approved": false }
+  ]
+}

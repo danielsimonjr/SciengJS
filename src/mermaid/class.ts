@@ -1,4 +1,4 @@
-import { inputError, outside, xmlSafe, type ContentLine, type Source } from "./common.ts";
+import { escapeDot, escapeRecord, inputError, outside, type ContentLine, type Source } from "./common.ts";
 
 /** The shape at one end of a class relation: none, an open arrow, a triangle, or a diamond that is filled or open. */
 export type Marker = "none" | "arrow" | "triangle" | "diamond" | "filled-diamond";
@@ -196,14 +196,6 @@ const DOT_MARKERS: Record<Marker, string> = {
   diamond: "odiamond",
   "filled-diamond": "diamond",
 };
-
-function escapeDot(text: string): string {
-  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
-}
-
-function escapeRecord(text: string): string {
-  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/[{}|<>"]/g, "\\$&");
-}
 
 function memberDisplay(text: string): string {
   return escapeRecord(text.replace(/~([^~]*)~/g, "<$1>"));
