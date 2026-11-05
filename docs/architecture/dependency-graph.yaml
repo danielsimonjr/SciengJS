@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 247
+  totalFiles: 284
   totalModules: 3
-  totalExports: 577
+  totalExports: 693
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -20,6 +20,15 @@ modules:
       nodeDependencies:
         - node:fs/promises
         - node:module
+        - node:path
+        - node:url
+      internalDependencies: []
+      exports: []
+    tools/tex/add-bundle-package.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:crypto
+        - node:fs
         - node:path
         - node:url
       internalDependencies: []
@@ -64,6 +73,42 @@ modules:
           imports:
             - addedPrimitives
           typeOnly: false
+      exports: []
+    tools/tex/bundle-tree.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies: []
+      exports:
+        - collectTree
+    tools/tex/bundles.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:path
+        - node:url
+        - node:zlib
+      internalDependencies:
+        - file: tools/tex/build-lib.mjs
+          imports:
+            - fetchPinned
+            - sha
+          typeOnly: false
+        - file: tools/tex/bundle-tree.mjs
+          imports:
+            - collectTree
+          typeOnly: false
+      exports:
+        - MAGIC
+        - packBundle
+        - unpackBundle
+    tools/tex/check-bundles.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies: []
       exports: []
     tools/tex/check-format.mjs:
       externalDependencies: []
@@ -159,6 +204,25 @@ modules:
       internalDependencies: []
       exports:
         - addedPrimitives
+    tools/tex/record-bundle-files.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: src/tex/render.ts
+          imports:
+            - renderTex
+          typeOnly: false
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: false
+        - file: tools/tex/bundle-tree.mjs
+          imports:
+            - collectTree
+          typeOnly: false
+      exports: []
     tools/tex/render.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -192,6 +256,18 @@ modules:
         - file: trials/t5-tex-build/runtime/run.mjs
           imports:
             - runProgram
+          typeOnly: false
+      exports: []
+    tools/tex/set-bundle-includes.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: tools/tex/bundle-tree.mjs
+          imports:
+            - collectTree
           typeOnly: false
       exports: []
     tools/tex/sizes.mjs:
@@ -2424,6 +2500,458 @@ modules:
         - SysmlOptions
         - readSysmlOptions
         - sysmlToDot
+    src/tex/backend-pdf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawSvgToPdf
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/tex/stage.ts
+          imports:
+            - renderTikzSvg
+          typeOnly: false
+      exports:
+        - render
+    src/tex/backend-png.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/input.ts
+          imports:
+            - MAX_SCALE
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/backend-png.ts
+          imports:
+            - readScale
+            - svgDocumentToPng
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/tex/stage.ts
+          imports:
+            - renderTikzSvg
+          typeOnly: false
+      exports:
+        - render
+    src/tex/backend-svg.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/tex/stage.ts
+          imports:
+            - renderTikzSvg
+          typeOnly: false
+      exports:
+        - render
+    src/tex/bundles.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:crypto
+        - node:fs/promises
+        - node:path
+        - node:url
+        - node:zlib
+      internalDependencies:
+        - file: src/config.ts
+          imports:
+            - NetworkPolicy
+          typeOnly: true
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/tex/detect.ts
+          imports:
+            - BundleName
+          typeOnly: true
+      exports:
+        - BundleEntry
+        - BUNDLES
+        - BundleSettings
+        - CACHE_SUBFOLDER
+        - cachePath
+        - bundleUrl
+        - findBundle
+        - loadBundleBytes
+        - unpackBundle
+        - loadBundles
+    src/tex/detect.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - BundleName
+        - Detection
+        - detectBundles
+    src/tex/dvi.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/tfm.ts
+          imports:
+            - readTfm
+            - Tfm
+          typeOnly: false
+        - file: src/tex/type1.ts
+          imports:
+            - readType1
+            - Type1Font
+          typeOnly: false
+        - file: src/tex/specials.ts
+          imports:
+            - SpecialPosition
+            - SpecialResult
+          typeOnly: true
+      exports:
+        - FontFiles
+        - DviOptions
+        - DviSvg
+        - dviToSvg
+    src/tex/host.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - isRenderError
+          typeOnly: false
+        - file: src/tex/wasm.ts
+          imports:
+            - EngineImports
+            - WasmInstance
+            - WasmMemory
+          typeOnly: true
+        - file: src/tex/vfs.ts
+          imports:
+            - treeName
+            - TexTree
+          typeOnly: false
+      exports:
+        - DEFAULT_MAX_OUTPUT_BYTES
+        - ExitSignal
+        - HostOptions
+        - TexHost
+    src/tex/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+            - treeName
+            - TreeFile
+          typeOnly: false
+        - file: src/tex/host.ts
+          imports:
+            - TexHost
+            - ExitSignal
+            - DEFAULT_MAX_OUTPUT_BYTES
+            - HostOptions
+          typeOnly: false
+        - file: src/tex/run.ts
+          imports:
+            - runProgram
+            - RunOptions
+            - RunResult
+            - EngineSymbols
+          typeOnly: false
+        - file: src/tex/tfm.ts
+          imports:
+            - readTfm
+            - Tfm
+          typeOnly: false
+        - file: src/tex/type1.ts
+          imports:
+            - readType1
+            - decryptType1
+            - Type1Font
+            - Type1Glyph
+          typeOnly: false
+        - file: src/tex/dvi.ts
+          imports:
+            - dviToSvg
+            - DviOptions
+            - DviSvg
+            - FontFiles
+          typeOnly: false
+        - file: src/tex/specials.ts
+          imports:
+            - createSpecials
+            - SPECIAL_UNIT_PER_PT
+            - Specials
+            - SpecialPosition
+            - SpecialResult
+          typeOnly: false
+        - file: src/tex/render.ts
+          imports:
+            - renderTex
+            - TexEngine
+            - RenderTexOptions
+            - RenderTexResult
+          typeOnly: false
+        - file: src/tex/bundles.ts
+          imports:
+            - BUNDLES
+            - CACHE_SUBFOLDER
+            - bundleUrl
+            - cachePath
+            - findBundle
+            - loadBundleBytes
+            - loadBundles
+            - unpackBundle
+            - BundleEntry
+            - BundleSettings
+          typeOnly: false
+        - file: src/tex/detect.ts
+          imports:
+            - detectBundles
+            - BundleName
+            - Detection
+          typeOnly: false
+        - file: src/tex/stage.ts
+          imports:
+            - renderTikzSvg
+            - wrapSource
+            - TikzSvg
+          typeOnly: false
+      exports:
+        - TexTree
+        - treeName
+        - TreeFile
+        - TexHost
+        - ExitSignal
+        - DEFAULT_MAX_OUTPUT_BYTES
+        - HostOptions
+        - runProgram
+        - RunOptions
+        - RunResult
+        - EngineSymbols
+        - readTfm
+        - Tfm
+        - readType1
+        - decryptType1
+        - Type1Font
+        - Type1Glyph
+        - dviToSvg
+        - DviOptions
+        - DviSvg
+        - FontFiles
+        - createSpecials
+        - SPECIAL_UNIT_PER_PT
+        - Specials
+        - SpecialPosition
+        - SpecialResult
+        - renderTex
+        - TexEngine
+        - RenderTexOptions
+        - RenderTexResult
+        - BUNDLES
+        - CACHE_SUBFOLDER
+        - bundleUrl
+        - cachePath
+        - findBundle
+        - loadBundleBytes
+        - loadBundles
+        - unpackBundle
+        - BundleEntry
+        - BundleSettings
+        - detectBundles
+        - BundleName
+        - Detection
+        - renderTikzSvg
+        - wrapSource
+        - TikzSvg
+    src/tex/render.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - isRenderError
+            - RenderError
+          typeOnly: false
+        - file: src/tex/dvi.ts
+          imports:
+            - dviToSvg
+            - DviSvg
+          typeOnly: false
+        - file: src/tex/run.ts
+          imports:
+            - runProgram
+            - EngineSymbols
+          typeOnly: false
+        - file: src/tex/specials.ts
+          imports:
+            - createSpecials
+            - SPECIAL_UNIT_PER_PT
+          typeOnly: false
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: true
+        - file: src/tex/wasm.ts
+          imports:
+            - WasmModule
+          typeOnly: true
+      exports:
+        - TexEngine
+        - RenderTexOptions
+        - RenderTexResult
+        - renderTex
+    src/tex/run.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - isRenderError
+            - RenderError
+          typeOnly: false
+        - file: src/tex/host.ts
+          imports:
+            - ExitSignal
+            - TexHost
+          typeOnly: false
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: true
+        - file: src/tex/wasm.ts
+          imports:
+            - instantiate
+            - WasmModule
+          typeOnly: false
+      exports:
+        - EngineSymbols
+        - RunOptions
+        - RunResult
+        - runProgram
+    src/tex/specials.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - SPECIAL_UNIT_PER_PT
+        - SpecialPosition
+        - SpecialResult
+        - Specials
+        - createSpecials
+    src/tex/stage.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendSettings
+          typeOnly: true
+        - file: src/tex/bundles.ts
+          imports:
+            - findBundle
+            - loadBundleBytes
+            - loadBundles
+            - unpackBundle
+            - BundleSettings
+          typeOnly: false
+        - file: src/tex/detect.ts
+          imports:
+            - detectBundles
+            - BundleName
+          typeOnly: false
+        - file: src/tex/render.ts
+          imports:
+            - renderTex
+            - RenderTexResult
+            - TexEngine
+          typeOnly: false
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: false
+      exports:
+        - wrapSource
+        - TikzSvg
+        - renderTikzSvg
+    src/tex/tfm.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - Tfm
+        - readTfm
+    src/tex/type1.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - Type1Glyph
+        - Type1Font
+        - decryptType1
+        - readType1
+    src/tex/vfs.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports:
+        - TreeFile
+        - treeName
+        - TexTree
+    src/tex/wasm.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - WasmModule
+        - WasmInstance
+        - WasmMemory
+        - EngineImports
+        - instantiate
     src/types.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2800,6 +3328,41 @@ modules:
             - processesHolding
           typeOnly: false
       exports: []
+    test/integration/tex-render.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+      internalDependencies:
+        - file: src/tex/render.ts
+          imports:
+            - renderTex
+          typeOnly: false
+        - file: test/support/tex-engine.ts
+          imports:
+            - texBuildOrSkip
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+      exports: []
+    test/integration/tikz-render.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - render
+            - SciengConfig
+          typeOnly: false
+      exports: []
     test/mutation/run-mutants.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -2834,6 +3397,14 @@ modules:
     test/node/backends/ok.mjs:
       externalDependencies: []
       nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - render
+    test/node/backends/tex-source.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
       internalDependencies: []
       exports:
         - render
@@ -2930,6 +3501,15 @@ modules:
       nodeDependencies:
         - node:assert/strict
         - node:fs
+        - node:path
+        - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
+    test/node/tex-timeout.node.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
         - node:path
         - node:test
         - node:url
@@ -3087,7 +3667,9 @@ modules:
         - resolved
     test/support/settings.ts:
       externalDependencies: []
-      nodeDependencies: []
+      nodeDependencies:
+        - node:os
+        - node:path
       internalDependencies:
         - file: src/config.ts
           imports:
@@ -3160,6 +3742,37 @@ modules:
         - TEST_REGISTRY
         - ISOLATED_CONFIG_DEPS
         - renderIsolated
+    test/support/tex-engine.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: src/tex/render.ts
+          imports:
+            - TexEngine
+          typeOnly: true
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: false
+      exports:
+        - BUILD_DIR_VAR
+        - TexBuild
+        - loadTexBuild
+        - texBuildOrSkip
+    test/support/tex-fixtures.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - t1Encrypt
+        - csNumber
+        - charstring
+        - TestFont
+        - buildType1
+        - buildTfm
+        - DviBuilder
     test/support/xml-wellformed.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -4715,6 +5328,192 @@ modules:
             - teardownLaunch
           typeOnly: false
       exports: []
+    test/unit/tex-bundles.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+        - node:zlib
+      internalDependencies:
+        - file: src/tex/bundles.ts
+          imports:
+            - BUNDLES
+            - bundleUrl
+            - cachePath
+            - findBundle
+            - loadBundleBytes
+            - loadBundles
+            - unpackBundle
+            - BundleEntry
+            - BundleSettings
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+            - rejection
+          typeOnly: false
+      exports: []
+    test/unit/tex-detect.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/detect.ts
+          imports:
+            - detectBundles
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+            - returned
+          typeOnly: false
+      exports: []
+    test/unit/tex-dvi.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/dvi.ts
+          imports:
+            - dviToSvg
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - returned
+          typeOnly: false
+        - file: test/support/tex-fixtures.ts
+          imports:
+            - buildTfm
+            - buildType1
+            - charstring
+            - DviBuilder
+          typeOnly: false
+      exports: []
+    test/unit/tex-limits.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: src/tex/host.ts
+          imports:
+            - DEFAULT_MAX_OUTPUT_BYTES
+          typeOnly: false
+        - file: src/tex/render.ts
+          imports:
+            - renderTex
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/tex-engine.ts
+          imports:
+            - texBuildOrSkip
+          typeOnly: false
+      exports: []
+    test/unit/tex-specials.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/specials.ts
+          imports:
+            - createSpecials
+            - SPECIAL_UNIT_PER_PT
+          typeOnly: false
+      exports: []
+    test/unit/tex-tfm.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/tfm.ts
+          imports:
+            - readTfm
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - returned
+          typeOnly: false
+        - file: test/support/tex-fixtures.ts
+          imports:
+            - buildTfm
+          typeOnly: false
+      exports: []
+    test/unit/tex-type1.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/type1.ts
+          imports:
+            - decryptType1
+            - readType1
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - returned
+          typeOnly: false
+        - file: test/support/tex-fixtures.ts
+          imports:
+            - buildType1
+            - charstring
+            - csNumber
+            - t1Encrypt
+            - TestFont
+          typeOnly: false
+      exports: []
+    test/unit/tex-vfs.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+            - treeName
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+          typeOnly: false
+      exports: []
+    test/unit/tex-wiring.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+          typeOnly: false
+        - file: src/pairs.ts
+          imports:
+            - PAIRS
+          typeOnly: false
+        - file: src/tex/stage.ts
+          imports:
+            - wrapSource
+          typeOnly: false
+        - file: src/tex/backend-svg.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+      exports: []
     test/unit/third-party-notices.test.ts:
       externalDependencies:
         - bun:test
@@ -4816,33 +5615,33 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 247
-  totalSourceFiles: 247
+  totalTypeScriptFiles: 284
+  totalSourceFiles: 284
   totalModules: 3
-  totalLinesOfCode: 28628
-  totalExports: 577
-  entryRoots: 85
-  reachableFiles: 85
+  totalLinesOfCode: 32884
+  totalExports: 693
+  entryRoots: 101
+  reachableFiles: 101
   dormantFiles: 15
   orphanedFiles: 12
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 60
+  totalTypeOnlyImports: 72
   noImporterFileCount: 8
-  unusedExportsCount: 50
+  unusedExportsCount: 52
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
-  totalClasses: 6
-  totalInterfaces: 116
-  totalFunctions: 240
+  totalClasses: 10
+  totalInterfaces: 141
+  totalFunctions: 272
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 66
-  totalReExports: 121
+  totalConstants: 72
+  totalReExports: 167
 reachability:
   roots:
     - src/index.ts
@@ -4855,6 +5654,7 @@ reachability:
     - src/html/index.ts
     - src/mesh/index.ts
     - src/sysml/index.ts
+    - src/tex/index.ts
     - src/assets.ts
     - src/browser/backend-pdf.ts
     - src/browser/backend-png.ts
@@ -4925,12 +5725,27 @@ reachability:
     - src/sysml/render.ts
     - src/sysml/tokens.ts
     - src/sysml/views.ts
+    - src/tex/backend-pdf.ts
+    - src/tex/backend-png.ts
+    - src/tex/backend-svg.ts
+    - src/tex/bundles.ts
+    - src/tex/detect.ts
+    - src/tex/dvi.ts
+    - src/tex/host.ts
+    - src/tex/render.ts
+    - src/tex/run.ts
+    - src/tex/specials.ts
+    - src/tex/stage.ts
+    - src/tex/tfm.ts
+    - src/tex/type1.ts
+    - src/tex/vfs.ts
+    - src/tex/wasm.ts
     - src/types.ts
     - src/version.ts
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 85
+  reachableCount: 101
   dormantCount: 15
   orphaned:
     - src/mesh/occt-import-js.d.ts

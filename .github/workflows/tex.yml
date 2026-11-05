@@ -80,6 +80,17 @@ jobs:
           set -euo pipefail
           $RUN tools/tex/check-format.mjs .tex-build/out/build.json "$FORMAT_SHA256" "$FORMAT_PGF_DRIVER"
 
+      # The bundles are packed with node:zlib, so the gate runs on the Node legs. The bytes must equal
+      # the list in src/tex/bundles.json on every OS. A change of an archive, a file list or a sample
+      # changes the list on purpose, in the same commit.
+      - name: Build the bundles and check them against src/tex/bundles.json
+        if: matrix.runtime == 'node'
+        run: |
+          set -euo pipefail
+          node tools/tex/bundles.mjs fetch .tex-build/src
+          node tools/tex/bundles.mjs pack .tex-build/src .tex-build .tex-build/bundles
+          node tools/tex/check-bundles.mjs .tex-build/bundles/bundles.json src/tex/bundles.json
+
       - name: Upload the WASM files and the format
         if: matrix.os == 'ubuntu-latest' && matrix.runtime == 'node'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -91,5 +102,7 @@ jobs:
             .tex-build/out/*.pool
             .tex-build/out/build.json
             .tex-build/out/fmt/scieng.fmt
+            .tex-build/bundles/*.sctb
+            .tex-build/bundles/bundles.json
           if-no-files-found: error
           retention-days: 14

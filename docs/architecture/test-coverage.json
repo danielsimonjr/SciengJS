@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 99,
-    "totalTestFiles": 87,
-    "testedCount": 67,
-    "untestedCount": 32,
-    "coveragePercent": "67.7",
+    "totalSourceFiles": 115,
+    "totalTestFiles": 98,
+    "testedCount": 78,
+    "untestedCount": 37,
+    "coveragePercent": "67.8",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 99,
-      "testedActive": 67,
-      "activeUntested": 32,
+      "activeFiles": 115,
+      "testedActive": 78,
+      "activeUntested": 37,
       "excludedTotal": 0,
-      "percent": "67.7",
+      "percent": "67.8",
       "breakdown": {
-        "active_untested": 32
+        "active_untested": 37
       }
     }
   },
@@ -38,6 +38,11 @@
     "src/sysml/backend-png.ts",
     "src/sysml/backend-svg.ts",
     "src/sysml/index.ts",
+    "src/tex/backend-pdf.ts",
+    "src/tex/backend-png.ts",
+    "src/tex/index.ts",
+    "src/tex/run.ts",
+    "src/tex/wasm.ts",
     "src/worker/entry.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
@@ -112,6 +117,17 @@
     "src/sysml/render.ts",
     "src/sysml/tokens.ts",
     "src/sysml/views.ts",
+    "src/tex/backend-svg.ts",
+    "src/tex/bundles.ts",
+    "src/tex/detect.ts",
+    "src/tex/dvi.ts",
+    "src/tex/host.ts",
+    "src/tex/render.ts",
+    "src/tex/specials.ts",
+    "src/tex/stage.ts",
+    "src/tex/tfm.ts",
+    "src/tex/type1.ts",
+    "src/tex/vfs.ts",
     "src/types.ts",
     "src/version.ts",
     "src/worker/protocol.ts",
@@ -168,6 +184,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/tikz-render.test.ts",
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
@@ -196,6 +213,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/tikz-render.test.ts",
       "test/unit/cad-document.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
@@ -258,6 +276,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/tikz-render.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts"
@@ -367,7 +386,8 @@
       "test/unit/mesh-viewer.test.ts"
     ],
     "src/pairs.ts": [
-      "test/unit/browser-pdf-pairs.test.ts"
+      "test/unit/browser-pdf-pairs.test.ts",
+      "test/unit/tex-wiring.test.ts"
     ],
     "src/plot/backend-html.ts": [],
     "src/plot/backend-png.ts": [],
@@ -406,7 +426,8 @@
       "test/unit/mesh-large.test.ts",
       "test/unit/mesh-viewer.test.ts",
       "test/unit/plot-html.test.ts",
-      "test/unit/plot-registry.test.ts"
+      "test/unit/plot-registry.test.ts",
+      "test/unit/tex-wiring.test.ts"
     ],
     "src/sysml/backend-pdf.ts": [],
     "src/sysml/backend-png.ts": [],
@@ -426,11 +447,51 @@
     "src/sysml/views.ts": [
       "test/unit/sysml-views.test.ts"
     ],
+    "src/tex/backend-pdf.ts": [],
+    "src/tex/backend-png.ts": [],
+    "src/tex/backend-svg.ts": [
+      "test/unit/tex-wiring.test.ts"
+    ],
+    "src/tex/bundles.ts": [
+      "test/unit/tex-bundles.test.ts"
+    ],
+    "src/tex/detect.ts": [
+      "test/unit/tex-detect.test.ts"
+    ],
+    "src/tex/dvi.ts": [
+      "test/unit/tex-dvi.test.ts"
+    ],
+    "src/tex/host.ts": [
+      "test/unit/tex-limits.test.ts"
+    ],
+    "src/tex/index.ts": [],
+    "src/tex/render.ts": [
+      "test/integration/tex-render.test.ts",
+      "test/unit/tex-limits.test.ts"
+    ],
+    "src/tex/run.ts": [],
+    "src/tex/specials.ts": [
+      "test/unit/tex-specials.test.ts"
+    ],
+    "src/tex/stage.ts": [
+      "test/unit/tex-wiring.test.ts"
+    ],
+    "src/tex/tfm.ts": [
+      "test/unit/tex-tfm.test.ts"
+    ],
+    "src/tex/type1.ts": [
+      "test/unit/tex-type1.test.ts"
+    ],
+    "src/tex/vfs.ts": [
+      "test/unit/tex-vfs.test.ts"
+    ],
+    "src/tex/wasm.ts": [],
     "src/types.ts": [
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/tikz-render.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
@@ -518,6 +579,15 @@
       "src/mesh/viewer.ts"
     ],
     "test/integration/page-checker.test.ts": [],
+    "test/integration/tex-render.test.ts": [
+      "src/tex/render.ts"
+    ],
+    "test/integration/tikz-render.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
     "test/mutation/run-mutants.test.ts": [],
     "test/tex-tools/etrip-gate.test.mjs": [],
     "test/tex-tools/primitives.test.mjs": [],
@@ -794,6 +864,37 @@
       "src/sysml/render.ts"
     ],
     "test/unit/teardown.test.ts": [],
+    "test/unit/tex-bundles.test.ts": [
+      "src/tex/bundles.ts"
+    ],
+    "test/unit/tex-detect.test.ts": [
+      "src/tex/detect.ts"
+    ],
+    "test/unit/tex-dvi.test.ts": [
+      "src/tex/dvi.ts"
+    ],
+    "test/unit/tex-limits.test.ts": [
+      "src/tex/host.ts",
+      "src/tex/render.ts"
+    ],
+    "test/unit/tex-specials.test.ts": [
+      "src/tex/specials.ts"
+    ],
+    "test/unit/tex-tfm.test.ts": [
+      "src/tex/tfm.ts"
+    ],
+    "test/unit/tex-type1.test.ts": [
+      "src/tex/type1.ts"
+    ],
+    "test/unit/tex-vfs.test.ts": [
+      "src/tex/vfs.ts"
+    ],
+    "test/unit/tex-wiring.test.ts": [
+      "src/registry.ts",
+      "src/pairs.ts",
+      "src/tex/stage.ts",
+      "src/tex/backend-svg.ts"
+    ],
     "test/unit/third-party-notices.test.ts": [],
     "test/unit/three-pinned.test.ts": [
       "src/browser/pinned.ts"
@@ -895,6 +996,26 @@
     },
     {
       "file": "src/sysml/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/tex/backend-pdf.ts",
+      "category": null
+    },
+    {
+      "file": "src/tex/backend-png.ts",
+      "category": null
+    },
+    {
+      "file": "src/tex/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/tex/run.ts",
+      "category": null
+    },
+    {
+      "file": "src/tex/wasm.ts",
       "category": null
     },
     {
