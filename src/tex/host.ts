@@ -54,6 +54,11 @@ export interface HostOptions {
   extra?: Record<string, (...args: number[]) => unknown>;
   /** The names that mean the terminal. The default is `TTY:`. */
   ttyNames?: string[];
+  /**
+   * Turns a file name of the program into the key of the tree. The default is `treeName`.
+   * A caller key must return a name that `treeName` accepts, because the tree reduces the key again.
+   */
+  nameKey?: (raw: string) => string;
   /** Echo the terminal input lines to the terminal output, as a terminal does. The default is true. */
   echo?: boolean;
   /** The time in milliseconds on the `performance.now()` clock after which a host call throws `E_TIMEOUT`. */
@@ -71,6 +76,7 @@ export class TexHost {
   private readonly extra: Record<string, (...args: number[]) => unknown>;
   private readonly ttyNames: Set<string>;
   private readonly echoInput: boolean;
+  private readonly nameKey: (raw: string) => string;
   private readonly termIn: Handle;
   private readonly termOut: number[] = [];
   private readonly handles: (Handle | null)[] = [null];
@@ -89,6 +95,7 @@ export class TexHost {
     this.extra = o.extra ?? {};
     this.ttyNames = new Set(o.ttyNames ?? ["TTY:"]);
     this.echoInput = o.echo ?? true;
+    this.nameKey = o.nameKey ?? treeName;
     this.deadline = o.deadline;
     this.timeoutMs = o.timeoutMs;
     this.maxOutputBytes = o.maxOutputBytes ?? DEFAULT_MAX_OUTPUT_BYTES;
@@ -209,7 +216,7 @@ export class TexHost {
         // A failed open keeps the run alive: the LaTeX kernel probes `/dev/null` to learn about the system.
         let key: string | undefined;
         try {
-          key = treeName(raw);
+          key = this.nameKey(raw);
         } catch (e) {
           if (!isRenderError(e)) throw e;
           this.refusedNames.push(raw);

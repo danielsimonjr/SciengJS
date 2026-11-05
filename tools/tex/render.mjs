@@ -2,18 +2,15 @@
 // node render.mjs <build-dir> <format-file> <sample.tex> <font-dir> <out-dir> <repeats> [root folders...]
 // The font dir holds the TFM and PFB files; the roots hold the other input files.
 // Environment: TEX_PROGRAM gives the program name of the build dir (default texprod).
-// DVI_SPECIALS gives an ES module with createSpecials() and unitPerPt for the \special
-// commands of the DVI file (T6: runtime/dvisvgm-specials.mjs); without it, specials are skipped.
+// The \special commands of the DVI file go through createSpecials() of src/tex/specials.ts.
 import fs from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
-import { runProgram } from '../../trials/t5-tex-build/runtime/run.mjs';
-import { ExitSignal } from '../../trials/t5-tex-build/runtime/host.mjs';
-import { TreeFS, flatName } from '../../trials/t5-tex-build/runtime/vfs.mjs';
-import { dviToSvg } from '../../trials/t5-tex-build/runtime/dvi2svg.mjs';
+import { runProgram } from '../../src/tex/run.ts';
+import { dviToSvg } from '../../src/tex/dvi.ts';
+import { createSpecials, SPECIAL_UNIT_PER_PT } from '../../src/tex/specials.ts';
+import { flatKey, treeFromRoots } from './tree.mjs';
 
 const program = process.env.TEX_PROGRAM || 'texprod';
-const specialsModule = process.env.DVI_SPECIALS ? await import(pathToFileURL(path.resolve(process.env.DVI_SPECIALS)).href) : null;
 
 const [buildDir, fmtFile, sample, fontDir, outDir, repeatsArg, ...roots] = process.argv.slice(2);
 if (!outDir) {
@@ -31,30 +28,29 @@ const fmtName = path.basename(fmtFile).toLowerCase();
 const fmt = new Uint8Array(fs.readFileSync(fmtFile));
 const job = path.basename(sample, '.tex').toLowerCase();
 const src = new Uint8Array(fs.readFileSync(sample));
-const fontFs = new TreeFS([fontDir]);
+const fontFs = treeFromRoots([fontDir]).tree;
 const fontFiles = (name) => {
   const tfm = fontFs.get(`${name}.tfm`), pfb = fontFs.get(`${name}.pfb`);
   return tfm ? { tfm, pfb: pfb ?? null } : null;
 };
 
 const one = async () => {
-  const vfs = new TreeFS([fontDir, ...roots]);
-  vfs.set('tex.pool', pool);
-  vfs.set(fmtName, fmt);
-  vfs.set(`${job}.tex`, src);
+  const vfs = treeFromRoots([fontDir, ...roots]).tree;
+  vfs.put('tex.pool', pool);
+  vfs.put(fmtName, fmt);
+  vfs.put(`${job}.tex`, src);
   const a = performance.now();
   const r = await runProgram({
-    module, symbols, files: vfs, terminal: [`&${fmtName.replace(/\.fmt$/, '')} ${job}`], mapName: flatName,
-    extra: { hostexit: (code) => { throw new ExitSignal(code); } },
+    module, symbols, files: vfs, terminal: [`&${fmtName.replace(/\.fmt$/, '')} ${job}`], nameKey: flatKey,
   });
   const texMs = performance.now() - a;
-  const dvi = vfs.mem.get(`${job}.dvi`);
+  const dvi = vfs.written.get(`${job}.dvi`);
   if (!dvi) throw new Error(`no DVI; terminal:\n${r.terminal}`);
   const b = performance.now();
-  const sp = specialsModule?.createSpecials();
-  const svg = dviToSvg(dvi, fontFiles, sp ? { special: sp.special, unitPerPt: specialsModule.unitPerPt } : {});
+  const sp = createSpecials();
+  const svg = dviToSvg(dvi, fontFiles, { special: sp.special, unitPerPt: SPECIAL_UNIT_PER_PT });
   const svgMs = performance.now() - b;
-  return { texMs, svgMs, svg, dvi, log: vfs.mem.get(`${job}.log`), terminal: r.terminal, ignoredSpecials: sp?.ignored() ?? null };
+  return { texMs, svgMs, svg, dvi, log: vfs.written.get(`${job}.log`), terminal: r.terminal, ignoredSpecials: sp.ignored() };
 };
 
 const first = await one();

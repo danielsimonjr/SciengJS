@@ -9,6 +9,7 @@ import path from 'node:path';
 import { lineDiff } from './linediff.mjs';
 import { tripGate, buildBanner } from './trip-gate.mjs';
 import { latin, loadProgram, plRoundTrip, texRun, dvitypeRun } from './trip-steps.mjs';
+import { treeOf } from './tree.mjs';
 
 const [buildDir, srcDir, outDir] = process.argv.slice(2);
 if (!buildDir || !srcDir || !outDir) {
@@ -35,7 +36,7 @@ results.steps.pltotf.tmpPlDiffers = rt.plDiffers;
 
 // Steps 3 and 4: the trip build of tex.web
 const tex = await load(program);
-const vfs = new Map([
+const vfs = treeOf([
   ['tex.pool', read(path.join(buildDir, program + '.pool'))],
   ['trip.tex', src('trip.tex')],
   ['trip.tfm', rt.tfm],

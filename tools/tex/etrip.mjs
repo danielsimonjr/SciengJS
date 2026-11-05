@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { lineDiff } from './linediff.mjs';
 import { latin, loadProgram, plRoundTrip, texRun, dvitypeRun } from './trip-steps.mjs';
+import { treeOf } from './tree.mjs';
 import { etripGate, COMPARISONS } from './etrip-gate.mjs';
 
 const [buildDir, outDir] = process.argv.slice(2);
@@ -42,7 +43,7 @@ results.plDiffers['etrip.pl'] = etripTfm.plDiffers;
  * @param {string} p the prefix of the output names (c, x or e)
  */
 async function twoRuns(p, job, input, tfm, first, second) {
-  const vfs = new Map([['tex.pool', pool], [`${job}.tex`, input], [`${job}.tfm`, tfm]]);
+  const vfs = treeOf([['tex.pool', pool], [`${job}.tex`, input], [`${job}.tfm`, tfm]]);
   const r1 = await texRun(tex, vfs, first);
   results.steps[`${p}1`] = { exit: r1.exit, ms: Math.round(r1.runMs), fmtBytes: vfs.get(`${job}.fmt`)?.length ?? 0 };
   write(`${p}${job}in.fot`, r1.terminal);
