@@ -70,7 +70,8 @@ const RELATION_PATTERN = new RegExp(
 );
 
 const MEMBER_PATTERN = /^([A-Za-z_][A-Za-z0-9_]*) *:(.*)$/;
-const CLASS_PATTERN = /^class ([A-Za-z_][A-Za-z0-9_]*)(?:~([A-Za-z0-9_ ,]+)~)?( *\{)?$/;
+/** A declaration may open a body (group 3) or hold a whole one-line body (group 4 is the text between the braces). */
+const CLASS_PATTERN = /^class ([A-Za-z_][A-Za-z0-9_]*)(?:~([A-Za-z0-9_ ,]+)~)?(?:( *\{)| *\{([^{}]*)\})?$/;
 const DIRECTION_PATTERN = /^direction (TB|BT|LR|RL)$/;
 
 /** Parses the content lines of a class diagram. A line outside the grammar rejects with E_INPUT. In lenient mode the line is skipped and a warning names it. */
@@ -150,6 +151,10 @@ export function parseClassDiagram(src: Source): ClassModel {
         classes.push(created);
       } else if (generic !== undefined) {
         existing.generic = generic;
+      }
+      const inline = declaration[4]?.trim();
+      if (inline !== undefined && inline !== "") {
+        byName.get(name)!.members.push(inline);
       }
       if (declaration[3] !== undefined) {
         open = { name, line: line.number };

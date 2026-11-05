@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- A Mermaid class diagram accepts a one-line class body, for example `class Engine { +render() }`. The text between the braces is the one member of the class, and `{}` gives no member. A brace inside the body still rejects with E_INPUT.
+
 ## [1.0.0] - 2026-11-05
 
 The engine has every stage of the design: graph, Mermaid, browser, math, plot, HTML to Markdown, mesh, CAD, SysML and TeX. Each increment gate of the build plan holds. The public API of the package entry points is stable from this version.
