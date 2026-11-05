@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- COMPONENTS.md describes each module of the math, plot, html and browser stages, with the exported signatures. API.md lists the `./math`, `./plot`, `./html` and `./browser` subpaths.
+
 ## [0.8.0] - 2026-11-04
 
 ### Added
