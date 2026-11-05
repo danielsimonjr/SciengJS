@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-05
+
 ### Changed
 
 - The TeX tools `tex-run`, `render`, `run-texware` and `trip-steps` in `tools/tex/` use the runtime of `src/tex/`. Node 22.18 and later and Bun load the TypeScript source. The change deletes the trial copies of the runtime and the trial tests that covered only those copies. The trip test, the e-TRIP gate and the sha256 of `scieng.fmt` do not change.
