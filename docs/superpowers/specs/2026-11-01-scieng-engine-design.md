@@ -241,16 +241,16 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 #### SysML grammar
 
 - Tokens: a name (`[A-Za-z_][A-Za-z0-9_]*`), a number, a string in double quotes, the keywords, and the symbols `{ } ; : :> [ ] .. . = *`. The longest symbol wins, so `:>` is one token. A `//` comment runs to the end of its line. A `/* */` comment can hold several lines. Each token keeps its line and its column.
-- A source is `member*`. A member of a source or a package is a `package`, a `part def`, a `port def`, an `interface def`, a `requirement def`, a `requirement` or a `satisfy`. A source with no definition and no requirement rejects.
+- A source is `member*`. A member of a source or a package has one of these forms: `package`, `part def`, `port def`, `interface def`, `requirement def`, `requirement` or `satisfy`. A source with no definition and no requirement rejects.
 - `package Name { member* }`. A package can hold a package. The definition names and the top-level requirement names of one source share one namespace. A second definition with the same name rejects. A qualified name (`A::B`) is outside the subset.
 - The engine resolves the names after it reads the whole source, so a reference can come before its definition.
 - `part def Name (:> Base)? ( ; | { member* } )`. A member is an `attribute`, a `part`, a `port`, a `connect`, an `interface` or a `satisfy`.
-- `part name : Type ([n] | [n..m] | [n..*])? ;`. `Type` names a `part def`. A part usage is allowed only in a `part def`.
+- `part name : Type ([n] | [n..m] | [n..*])? ;`. `Type` names a `part def`. The parser allows a part usage only in a `part def`.
 - `attribute name (: Type)? (= literal)? ;`. A literal is a number, a string or a name. `Type` is a name. The engine does not check it against a definition.
 - `port def Name ( ; | { attribute* } )`. `port name : Type ;`, where `Type` names a `port def`.
 - `connect a.p to b.q ;`. An end is `part.port`, or `port` for a port of the enclosing definition. Each end must name a port that exists.
 - `interface def Name ( ; | { attribute* } )`. `interface name : Def connect a.p to b.q ;`, with the ends of `connect`.
-- `requirement def Name (:> Base)? ( ; | { (attribute | requirement)* } )`. `requirement name (: Def)? ( ; | { (attribute | requirement)* } )`. A requirement usage is allowed in a package and in a requirement. A nested usage has the address `Owner.name`.
+- `requirement def Name (:> Base)? ( ; | { (attribute | requirement)* } )`. `requirement name (: Def)? ( ; | { (attribute | requirement)* } )`. The parser allows a requirement usage in a package and in a requirement. A nested usage has the address `Owner.name`.
 - `satisfy Req by Path ;`. `Req` names a requirement definition, a top-level requirement usage, or a nested usage as `Owner.name`. `Path` is a `part def` name, or `Def.part` for a part usage. In a `part def`, `Path` can also be a part usage of that definition.
 - `:>` names the definition that a definition specializes. The base must be a definition of the same kind. A part def has the attributes, parts, ports and connections of its bases. A part usage has the ports of its type and of the bases of its type.
 - Any other keyword or symbol is outside the subset. `doc`, `import`, `alias`, `action`, `state` and `item` are outside the subset.
@@ -258,7 +258,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 #### SysML views and options
 
 - `view`: `bdd` (the default), `ibd` or `requirements`. `root`: the name of a `part def`. `ibd` needs `root`. `root` with another view rejects. `lenient`: true or false.
-- `bdd` draws each `part def`, `port def` and `interface def` as a record node: the kind in ASCII (`part def`), the name, the attributes and the ports. A part usage draws a composition edge from its owner to its type. The edge has a filled diamond at the owner, and the name and the multiplicity at the type. `:>` draws an edge with an empty triangle at the base. Requirements are not in `bdd`.
+- `bdd` draws each `part def`, `port def` and `interface def` as a record node. The node shows the kind in ASCII (`part def`), the name, the attributes and the ports. A part usage draws a composition edge from its owner to its type. The edge has a filled diamond at the owner, and the name and the multiplicity at the type. `:>` draws an edge with an empty triangle at the base. Requirements are not in `bdd`.
 - `ibd` draws the root as a cluster, with the parts, ports and connections of the root and of its bases. Each part usage of the root is a record node with one field for each port of its type. Each port of the root is a node on the cluster. Each `connect` and `interface` is an edge between the two ports. An interface edge has the label `name : Def`.
 - `requirements` draws each requirement definition and each requirement usage as a record node with its attributes. A usage inside a requirement draws a containment edge from the owner. `: Def` draws a dashed edge to the definition. `:>` draws an edge with an empty triangle. Each `satisfy` draws a dashed edge from a node of its path to the requirement, with the label `<<satisfy>>`. Each path that a `satisfy` names is a node of this view: a `part def` as a record, and `Def.part` as `part : Type`.
 
@@ -274,7 +274,7 @@ Each rejection gives `E_INPUT` with the line:
 - a `satisfy` that names an unknown requirement or an unknown path;
 - a `root` that names no `part def`, `ibd` without `root`, or an unknown `view`.
 
-With `lenient: true`, a statement with an unknown keyword is skipped to its `;` or to its closed block, and the engine reports a warning. The other rejections stay errors in lenient mode.
+With `lenient: true`, the engine skips a statement with an unknown keyword to its `;` or to its closed block, and reports a warning. The other rejections stay errors in lenient mode.
 
 ### CAD
 
@@ -288,7 +288,7 @@ With `lenient: true`, a statement with an unknown keyword is skipped to its `;` 
 - An unknown key, a missing key, a wrong type, a number that is not finite, or a size that is not positive rejects with `E_INPUT`. The message gives the JSON path of the value, for example `model.children[1].radius`.
 - The reader counts the nodes before the solid operations start. A document with more than `maxCadNodes` nodes rejects with `E_LIMIT`.
 - The reader estimates the facets of each primitive from its segments before the solid operations start. An estimate over `maxCadFacets` rejects with `E_LIMIT`. The result of the solid operations is checked again, because an operation can add facets.
-- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with one. A face of the result keeps the colour of the primitive that made it. Thus the cut face of a `difference` has the colour of the cutting solid. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name.
+- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with a colour. A face of the result keeps the colour of the primitive that made the face. Thus the cut face of a `difference` has the colour of the cutting solid. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name.
 
 ### STEP, IGES, BREP
 
