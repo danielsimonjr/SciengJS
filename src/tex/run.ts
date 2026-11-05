@@ -24,6 +24,10 @@ export interface RunOptions {
    * A program that loops without a file call needs a thread that the caller can end: the render worker.
    */
   timeoutMs?: number;
+  /** The file names that mean the terminal. The default is `TTY:`. DVItype also names `termin`. */
+  ttyNames?: string[];
+  /** Turns a file name of the program into the key of the tree. The default is `treeName`. See `HostOptions.nameKey`. */
+  nameKey?: (raw: string) => string;
   /** Echo the terminal input to the terminal output. The default is true. */
   echo?: boolean;
   /** The bound on the bytes that the run writes. A run over it ends with `E_LIMIT`. The default is `DEFAULT_MAX_OUTPUT_BYTES` (64 MiB). */
@@ -60,6 +64,8 @@ export async function runProgram(o: RunOptions): Promise<RunResult> {
     terminal: o.terminal,
     std: { input: std.input, output: std.output },
     echo: o.echo,
+    ...(o.ttyNames === undefined ? {} : { ttyNames: o.ttyNames }),
+    ...(o.nameKey === undefined ? {} : { nameKey: o.nameKey }),
     ...(o.maxOutputBytes === undefined ? {} : { maxOutputBytes: o.maxOutputBytes }),
     extra: {
       hostexit: (code) => {

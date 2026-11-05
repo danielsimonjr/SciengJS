@@ -5,9 +5,8 @@
 // and run.json with the times and the list of files that the run read.
 import fs from 'node:fs';
 import path from 'node:path';
-import { runProgram } from '../../trials/t5-tex-build/runtime/run.mjs';
-import { ExitSignal } from '../../trials/t5-tex-build/runtime/host.mjs';
-import { TreeFS, flatName } from '../../trials/t5-tex-build/runtime/vfs.mjs';
+import { runProgram } from '../../src/tex/run.ts';
+import { flatKey, treeFromRoots } from './tree.mjs';
 
 const program = process.env.TEX_PROGRAM || 'texprod';
 
@@ -21,18 +20,17 @@ const t0 = performance.now();
 const module = await WebAssembly.compile(fs.readFileSync(path.join(buildDir, `${program}.wasm`)));
 const compileMs = performance.now() - t0;
 const symbols = JSON.parse(fs.readFileSync(path.join(buildDir, `${program}.symbols.json`), 'utf8'));
-const vfs = new TreeFS([outDir, ...roots]);
-vfs.set('tex.pool', new Uint8Array(fs.readFileSync(path.join(buildDir, `${program}.pool`))));
+const { tree: vfs, paths } = treeFromRoots([outDir, ...roots]);
+vfs.put('tex.pool', new Uint8Array(fs.readFileSync(path.join(buildDir, `${program}.pool`))));
 const r = await runProgram({
-  module, symbols, files: vfs, terminal: [line], mapName: flatName,
-  extra: { hostexit: (code) => { throw new ExitSignal(code); } },
+  module, symbols, files: vfs, terminal: [line], nameKey: flatKey,
 });
-for (const [n, d] of vfs.mem) if (n !== 'tex.pool') fs.writeFileSync(path.join(outDir, n), d);
+for (const [n, d] of vfs.written) if (n !== 'tex.pool') fs.writeFileSync(path.join(outDir, n), d);
 fs.writeFileSync(path.join(outDir, 'terminal.txt'), r.terminal, 'latin1');
 const info = {
   line, exit: r.exit, wasmCompileMs: Math.round(compileMs), instantiateMs: Math.round(r.instantiateMs), runMs: Math.round(r.runMs),
-  wrote: [...vfs.mem.keys()].filter((n) => n !== 'tex.pool').map((n) => ({ name: n, bytes: vfs.mem.get(n).length })),
-  read: [...vfs.read].map(([n, p]) => ({ name: n, path: p })),
+  wrote: [...vfs.written.keys()].filter((n) => n !== 'tex.pool').map((n) => ({ name: n, bytes: vfs.written.get(n).length })),
+  read: [...vfs.read].map((n) => ({ name: n, path: paths.get(n) ?? null })),
 };
 fs.writeFileSync(path.join(outDir, 'run.json'), JSON.stringify(info, null, 1));
 console.log(JSON.stringify({ ...info, read: info.read.length }));
