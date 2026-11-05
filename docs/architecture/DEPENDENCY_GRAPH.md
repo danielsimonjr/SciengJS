@@ -25,17 +25,18 @@ This document provides a comprehensive dependency graph of all files, components
 11. [Plot Dependencies](#plot-dependencies)
 12. [Raster Dependencies](#raster-dependencies)
 13. [Sysml Dependencies](#sysml-dependencies)
-14. [Worker Dependencies](#worker-dependencies)
-15. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-16. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-17. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-18. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-19. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-20. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-21. [Dependency Matrix](#dependency-matrix)
-22. [Circular Dependency Analysis](#circular-dependency-analysis)
-23. [Visual Dependency Graph](#visual-dependency-graph)
-24. [Summary Statistics](#summary-statistics)
+14. [Tex Dependencies](#tex-dependencies)
+15. [Worker Dependencies](#worker-dependencies)
+16. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+17. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+18. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+19. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+20. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+21. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+22. [Dependency Matrix](#dependency-matrix)
+23. [Circular Dependency Analysis](#circular-dependency-analysis)
+24. [Visual Dependency Graph](#visual-dependency-graph)
+25. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -55,6 +56,7 @@ The codebase is organized into the following modules:
 - **plot**: 8 files
 - **raster**: 2 files
 - **sysml**: 8 files
+- **tex**: 16 files
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
 - **trials/t2-mesh**: 1 file
@@ -1474,6 +1476,260 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="tex-dependencies"></a>
+
+## Tex Dependencies
+
+### `src/tex/backend-pdf.ts` - backend-pdf module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../graph/text.ts` | `sourceText` | Import |
+| `../mermaid/browser.ts` | `drawSvgToPdf` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./stage.ts` | `renderTikzSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/tex/backend-png.ts` - Renders one tikz source to PNG: the SVG of the tex stage, then the raster stage. The option scale multiplies the pixel
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../browser/input.ts` | `MAX_SCALE` | Import |
+| `../errors.ts` | `RenderError` | Import |
+| `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
+| `../graph/text.ts` | `sourceText` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./stage.ts` | `renderTikzSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/tex/backend-svg.ts` - backend-svg module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../graph/text.ts` | `sourceText` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./stage.ts` | `renderTikzSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/tex/bundles.ts` - Returns the verified bytes of a bundle. The order is the cache, then the download.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash, randomBytes` |
+| `fs/promises` | `mkdir, readFile, rename, rm, writeFile` |
+| `path` | `default` |
+| `url` | `fileURLToPath` |
+| `zlib` | `inflateRawSync` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../config.ts` | `NetworkPolicy` | Import (type-only) |
+| `../errors.ts` | `RenderError` | Import |
+| `./detect.ts` | `BundleName` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `BundleEntry`, `BundleSettings`
+- Functions: `cachePath`, `bundleUrl`, `findBundle`, `loadBundleBytes`, `unpackBundle`, `loadBundles`
+- Constants: `BUNDLES`, `CACHE_SUBFOLDER`
+
+---
+
+### `src/tex/detect.ts` - Package detection of the TeX stage.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces: `Detection`
+- Types: `BundleName`
+- Functions: `detectBundles`
+
+---
+
+### `src/tex/dvi.ts` - Converts a DVI file to SVG.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./tfm.ts` | `readTfm, Tfm` | Import |
+| `./type1.ts` | `readType1, Type1Font` | Import |
+| `./specials.ts` | `SpecialPosition, SpecialResult` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `FontFiles`, `DviOptions`, `DviSvg`
+- Functions: `dviToSvg`
+
+---
+
+### `src/tex/host.ts` - The default bound on the bytes that one run writes, in the terminal output and in the output files together.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../errors.ts` | `isRenderError` | Import |
+| `./wasm.ts` | `EngineImports, WasmInstance, WasmMemory` | Import (type-only) |
+| `./vfs.ts` | `treeName, TexTree` | Import |
+
+**Exports:**
+- Classes: `ExitSignal`, `TexHost`
+- Interfaces: `HostOptions`
+- Constants: `DEFAULT_MAX_OUTPUT_BYTES`
+
+---
+
+### `src/tex/index.ts` - The runtime of the TeX stage: the virtual file tree, the host functions of the WASM engine, the run function,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./vfs.ts` | `TexTree, treeName, TreeFile` | Re-export |
+| `./host.ts` | `TexHost, ExitSignal, DEFAULT_MAX_OUTPUT_BYTES, HostOptions` | Re-export |
+| `./run.ts` | `runProgram, RunOptions, RunResult, EngineSymbols` | Re-export |
+| `./tfm.ts` | `readTfm, Tfm` | Re-export |
+| `./type1.ts` | `readType1, decryptType1, Type1Font, Type1Glyph` | Re-export |
+| `./dvi.ts` | `dviToSvg, DviOptions, DviSvg, FontFiles` | Re-export |
+| `./specials.ts` | `createSpecials, SPECIAL_UNIT_PER_PT, Specials, SpecialPosition, SpecialResult` | Re-export |
+| `./render.ts` | `renderTex, TexEngine, RenderTexOptions, RenderTexResult` | Re-export |
+| `./bundles.ts` | `BUNDLES, CACHE_SUBFOLDER, bundleUrl, cachePath, findBundle, loadBundleBytes, loadBundles, unpackBundle, BundleEntry, BundleSettings` | Re-export |
+| `./detect.ts` | `detectBundles, BundleName, Detection` | Re-export |
+| `./stage.ts` | `renderTikzSvg, wrapSource, TikzSvg` | Re-export |
+
+**Exports:**
+- Re-exports:
+
+  ```text
+  TexTree, treeName, TreeFile, TexHost, ExitSignal, DEFAULT_MAX_OUTPUT_BYTES, HostOptions, runProgram,
+  RunOptions, RunResult, EngineSymbols, readTfm, Tfm, readType1, decryptType1, Type1Font, Type1Glyph,
+  dviToSvg, DviOptions, DviSvg, FontFiles, createSpecials, SPECIAL_UNIT_PER_PT, Specials,
+  SpecialPosition, SpecialResult, renderTex, TexEngine, RenderTexOptions, RenderTexResult, BUNDLES,
+  CACHE_SUBFOLDER, bundleUrl, cachePath, findBundle, loadBundleBytes, loadBundles, unpackBundle,
+  BundleEntry, BundleSettings, detectBundles, BundleName, Detection, renderTikzSvg, wrapSource,
+  TikzSvg
+  ```
+
+
+---
+
+### `src/tex/render.ts` - The tree with the bundles: the macro files, the TFM files and the PFB files.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `isRenderError, RenderError` | Import |
+| `./dvi.ts` | `dviToSvg, DviSvg` | Import |
+| `./run.ts` | `runProgram, EngineSymbols` | Import |
+| `./specials.ts` | `createSpecials, SPECIAL_UNIT_PER_PT` | Import |
+| `./vfs.ts` | `TexTree` | Import (type-only) |
+| `./wasm.ts` | `WasmModule` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `TexEngine`, `RenderTexOptions`, `RenderTexResult`
+- Functions: `renderTex`
+
+---
+
+### `src/tex/run.ts` - The time limit in milliseconds. The host checks the clock at the file calls of the program.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `isRenderError, RenderError` | Import |
+| `./host.ts` | `ExitSignal, TexHost` | Import |
+| `./vfs.ts` | `TexTree` | Import (type-only) |
+| `./wasm.ts` | `instantiate, WasmModule` | Import |
+
+**Exports:**
+- Interfaces: `EngineSymbols`, `RunOptions`, `RunResult`
+- Functions: `runProgram`
+
+---
+
+### `src/tex/specials.ts` - Creates a reader for the `dvisvgm:raw`, `rawdef`, `rawset`, `endrawset`, `rawput` and `bbox` specials
+
+**Exports:**
+- Interfaces: `SpecialPosition`, `SpecialResult`, `Specials`
+- Functions: `createSpecials`
+- Constants: `SPECIAL_UNIT_PER_PT`
+
+---
+
+### `src/tex/stage.ts` - Makes a standalone document from a TikZ source. A source with a `\documentclass` is a document: the function only adds
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendSettings` | Import (type-only) |
+| `./bundles.ts` | `findBundle, loadBundleBytes, loadBundles, unpackBundle, BundleSettings` | Import |
+| `./detect.ts` | `detectBundles, BundleName` | Import |
+| `./render.ts` | `renderTex, RenderTexResult, TexEngine` | Import |
+| `./vfs.ts` | `TexTree` | Import |
+
+**Exports:**
+- Interfaces: `TikzSvg`
+- Functions: `wrapSource`, `renderTikzSvg`
+
+---
+
+### `src/tex/tfm.ts` - Reads the character widths and the design size of a TFM file.
+
+**Exports:**
+- Interfaces: `Tfm`
+- Functions: `readTfm`
+
+---
+
+### `src/tex/type1.ts` - Decrypts Type 1 data with the cipher of the font format: `c1 = 52845`, `c2 = 22719`.
+
+**Exports:**
+- Interfaces: `Type1Glyph`, `Type1Font`
+- Functions: `decryptType1`, `readType1`
+
+---
+
+### `src/tex/vfs.ts` - Reduces a file name of TeX to the key of the tree. The tree has one flat name space in lower case.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Classes: `TexTree`
+- Types: `TreeFile`
+- Functions: `treeName`
+
+---
+
+### `src/tex/wasm.ts` - The WebAssembly types that the TeX runtime needs. The build uses the Node types only, which do not declare
+
+**Exports:**
+- Interfaces: `WasmInstance`, `WasmMemory`, `EngineImports`
+- Types: `WasmModule`
+- Functions: `instantiate`
+
+---
+
 <a id="worker-dependencies"></a>
 
 ## Worker Dependencies
@@ -1694,19 +1950,22 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 42 files |
-| `src/worker/protocol` | 2 files | 24 files |
-| `src/graph/text` | 0 files | 14 files |
+| `src/errors` | 0 files | 50 files |
+| `src/worker/protocol` | 2 files | 28 files |
+| `src/graph/text` | 0 files | 17 files |
 | `src/browser/render` | 6 files | 7 files |
-| `src/mermaid/browser` | 6 files | 6 files |
-| `src/graph/backend-png` | 7 files | 4 files |
+| `src/mermaid/browser` | 6 files | 7 files |
+| `src/graph/backend-png` | 7 files | 5 files |
+| `src/tex/index` | 11 files | 0 files |
+| `src/browser/input` | 1 file | 9 files |
 | `src/mermaid/common` | 2 files | 8 files |
 | `src/mermaid/render` | 6 files | 4 files |
 | `src/mesh/backend-glb` | 6 files | 4 files |
-| `src/browser/input` | 1 file | 8 files |
-| `src/config` | 3 files | 5 files |
+| `src/tex/stage` | 6 files | 4 files |
+| `src/config` | 3 files | 6 files |
 | `src/graph/dot` | 2 files | 6 files |
 | `src/mermaid/backend-png` | 8 files | 0 files |
+| `src/tex/render` | 6 files | 2 files |
 | `src/core` | 6 files | 1 file |
 | `src/mesh/index` | 7 files | 0 files |
 | `src/sysml/render` | 3 files | 4 files |
@@ -1718,6 +1977,9 @@ The codebase is organized into the following modules:
 | `src/mesh/read` | 1 file | 5 files |
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/sysml/backend-png` | 6 files | 0 files |
+| `src/tex/backend-png` | 6 files | 0 files |
+| `src/tex/run` | 4 files | 2 files |
+| `src/tex/vfs` | 1 file | 5 files |
 | `src/graph/backend-pdf` | 5 files | 0 files |
 | `src/html/md` | 4 files | 1 file |
 | `src/index` | 5 files | 0 files |
@@ -1728,12 +1990,6 @@ The codebase is organized into the following modules:
 | `src/mermaid/state` | 3 files | 2 files |
 | `src/mesh/cad-build` | 3 files | 2 files |
 | `src/mesh/cad-document` | 1 file | 4 files |
-| `src/mesh/pinned-three` | 4 files | 1 file |
-| `src/plot/backend-html` | 5 files | 0 files |
-| `src/plot/backend-svg` | 3 files | 2 files |
-| `src/sysml/parse` | 2 files | 3 files |
-| `src/sysml/views` | 3 files | 2 files |
-| `src/types` | 0 files | 5 files |
 
 ---
 
@@ -1860,48 +2116,62 @@ graph TD
         N78[views]
     end
 
+    subgraph Tex
+        N79[backend-pdf]
+        N80[backend-png]
+        N81[backend-svg]
+        N82[bundles]
+        N83[detect]
+        N84[dvi]
+        N85[host]
+        N86[index]
+        N87[render]
+        N88[run]
+        N89[...6 more]
+    end
+
     subgraph Worker
-        N79[entry]
-        N80[protocol]
-        N81[run]
+        N90[entry]
+        N91[protocol]
+        N92[run]
     end
 
     subgraph Trials/t1-graph
-        N82[compare-layout.mjs]
-        N83[make-sources.mjs]
-        N84[measure.mjs]
+        N93[compare-layout.mjs]
+        N94[make-sources.mjs]
+        N95[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N85[measure.mjs]
+        N96[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N86[index.cjs]
+        N97[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N87[pinned.js]
-        N88[measure.mjs]
+        N98[pinned.js]
+        N99[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N89[dvi2svg.mjs]
-        N90[host.mjs]
-        N91[run.mjs]
-        N92[tfm.mjs]
-        N93[type1.mjs]
-        N94[vfs.mjs]
+        N100[dvi2svg.mjs]
+        N101[host.mjs]
+        N102[run.mjs]
+        N103[tfm.mjs]
+        N104[type1.mjs]
+        N105[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N95[dvisvgm-specials.mjs]
+        N106[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N80
+    N8 --> N91
     N8 --> N13
-    N9 --> N80
+    N9 --> N91
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1916,28 +2186,28 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N81
+    N2 --> N92
     N2 --> N6
     N19 --> N3
-    N19 --> N80
+    N19 --> N91
     N19 --> N42
     N19 --> N22
     N19 --> N25
     N20 --> N3
     N20 --> N0
-    N20 --> N80
+    N20 --> N91
     N20 --> N22
     N20 --> N25
     N20 --> N69
     N20 --> N70
     N21 --> N3
-    N21 --> N80
+    N21 --> N91
     N21 --> N22
     N21 --> N25
     N22 --> N3
     N22 --> N23
     N24 --> N22
-    N26 --> N80
+    N26 --> N91
     N26 --> N3
     N26 --> N13
     N26 --> N31
@@ -1955,19 +2225,19 @@ graph TD
     N32 --> N3
     N33 --> N3
     N33 --> N42
-    N33 --> N80
+    N33 --> N91
     N33 --> N38
     N34 --> N3
     N34 --> N20
-    N34 --> N80
+    N34 --> N91
     N34 --> N38
     N35 --> N3
-    N35 --> N80
+    N35 --> N91
     N35 --> N38
     N37 --> N38
     N38 --> N3
     N38 --> N36
-    N39 --> N80
+    N39 --> N91
     N39 --> N25
     N39 --> N44
     N39 --> N42
@@ -1982,17 +2252,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 247 |
-| Subsystems | 18 |
-| Total Lines of Code | 28628 |
-| Total Exports | 577 |
-| Total Re-exports | 121 |
-| Total Classes | 6 |
-| Total Interfaces | 116 |
-| Total Functions | 240 |
+| Total Source Files | 284 |
+| Subsystems | 19 |
+| Total Lines of Code | 32884 |
+| Total Exports | 693 |
+| Total Re-exports | 167 |
+| Total Classes | 10 |
+| Total Interfaces | 141 |
+| Total Functions | 272 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 60 |
+| Type-only Imports | 72 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

@@ -12,8 +12,8 @@ Version: each row gives the version that the engine pins.
 |---|---|---|---|
 | graph | `@viz-js/viz` 3.31.0 (Graphviz 16.1.0 compiled to WASM) | Wrapper: MIT. Graphviz: EPL-2.0 | a dependency |
 | math | `@mathjax/src` 4.1.3 (MathJax, with the Newcm math font and the packages it installs; see "MathJax") | Apache-2.0 for MathJax and the math font; the other packages are listed under "MathJax" | a dependency |
-| tex | The own WASM build of `tex.web` with `etex.ch` (trials T5 and T6) | The "tex" stage of the design gives the licence of each input | not yet a dependency |
-| tex | TeX packages (bundles) | LPPL or public domain only. Each package keeps its own licence | not yet a dependency |
+| tex | The own WASM build of `tex.web` with `etex.ch` (trials T5 and T6) | The "tex" stage of the design gives the licence of each input | downloaded in the core bundle |
+| tex | TeX packages (bundles) | LPPL, public domain, OFL or GFL. Each package keeps its own licence (see "TeX toolchain and packages") | downloaded in the bundles |
 | mesh | `occt-import-js` 0.0.23 (OpenCascade compiled to WASM) | LGPL-2.1 | a dependency |
 | mesh | `manifold-3d` 3.2.1 (Manifold compiled to WASM) | Apache-2.0 | a dependency |
 | mesh | `manifold-3d` | Apache-2.0 | not yet a dependency |
@@ -99,7 +99,46 @@ The font `assets/fonts/LiberationSerif-Regular.ttf` is Liberation Serif Regular,
 
 ### TeX toolchain and packages
 
-This release does not ship the tex stage. The "tex" stage of the design gives the licence of each TeX input. A bundle holds only packages under the LPPL or in the public domain. Each package keeps its own licence.
+The tex stage downloads its bundles on first use. The engine package holds no TeX package file and no font file. The package holds the pinned sha256 of each bundle in `src/tex/bundles.json`. There are four bundle files: `scieng-tex-core.sctb`, `scieng-tex-diagrams.sctb`, `scieng-tex-science.sctb` and `scieng-tex-math.sctb`. They hold unmodified files of the TeX Live 2023 archives in the table. The archives come from `tlnet-final`. Each has a sha256 pin in `tools/tex/config.json`. The core bundle also holds the WASM build of `tex.web` with `etex.ch` and the format `scieng.fmt`.
+
+The column Licence gives the `catalogue-license` field of `texlive.tlpdb` of TeX Live 2023, as written there. The values have these meanings. `lppl`, `lppl1.3` and `lppl1.3c` are the LaTeX Project Public License. `ofl` is the SIL Open Font License. `pd` is public domain. `knuth` is the licence of the Computer Modern TFM files and the Knuth library files. The package `pgf` lists the LPPL, the GPL 2 and the FDL; the engine uses the LPPL. The package `circuitikz` lists the LPPL and the GPL; the engine uses the LPPL. The Type 1 outlines of Computer Modern and of the AMS fonts come from `amsfonts` (OFL). Latin Modern (`lm`, GFL) is not in a bundle: no sample glyph needed it. No package with the GPL as its only licence is in a bundle.
+
+| Package | Archive | Licence | Used in |
+|---|---|---|---|
+| amscls | `amscls.tar.xz` | lppl1.3c | extra bundles |
+| amsfonts | `amsfonts.tar.xz` | ofl | format and core bundle, and the extra bundles |
+| amsmath | `amsmath.tar.xz` | lppl1.3c | extra bundles |
+| babel | `babel.tar.xz` | lppl1.3 | format and core bundle |
+| bussproofs | `bussproofs.tar.xz` | lppl1.3 | extra bundles |
+| chemfig | `chemfig.tar.xz` | lppl1.3c | extra bundles |
+| chemgreek | `chemgreek.tar.xz` | lppl1.3 | extra bundles |
+| circuitikz | `circuitikz.tar.xz` | lppl gpl | format and core bundle |
+| cm | `cm.tar.xz` | knuth | format and core bundle |
+| etoolbox | `etoolbox.tar.xz` | lppl1.3c | extra bundles |
+| firstaid | `firstaid.tar.xz` | lppl1.3c | format and core bundle |
+| graphics | `graphics.tar.xz` | lppl1.3c | format and core bundle |
+| graphics-cfg | `graphics-cfg.tar.xz` | pd | format and core bundle |
+| graphics-def | `graphics-def.tar.xz` | lppl1.3c | format and core bundle |
+| hobby | `hobby.tar.xz` | lppl1.3c | extra bundles |
+| hyphen-base | `hyphen-base.tar.xz` | (no field) | format and core bundle |
+| knuth-lib | `knuth-lib.tar.xz` | knuth | format and core bundle |
+| l3backend | `l3backend.tar.xz` | lppl1.3c | format and core bundle |
+| l3kernel | `l3kernel.tar.xz` | lppl1.3c | format and core bundle |
+| l3packages | `l3packages.tar.xz` | lppl1.3c | extra bundles |
+| latex | `latex.tar.xz` | lppl1.3c | format and core bundle |
+| latex-fonts | `latex-fonts.tar.xz` | lppl | format and core bundle |
+| mhchem | `mhchem.tar.xz` | lppl1.3c | extra bundles |
+| pgf | `pgf.tar.xz` | lppl1.3c gpl2 fdl | format and core bundle |
+| simplekv | `simplekv.tar.xz` | lppl1.3c | extra bundles |
+| smartdiagram | `smartdiagram.tar.xz` | lppl1.3 | extra bundles |
+| standalone | `standalone.tar.xz` | lppl1.3 | format and core bundle |
+| tikz-3dplot | `tikz-3dplot.tar.xz` | lppl1.3 | extra bundles |
+| tikz-cd | `tikz-cd.tar.xz` | lppl1.3 | extra bundles |
+| tools | `tools.tar.xz` | lppl1.3c | format and core bundle |
+| unicode-data | `unicode-data.tar.xz` | lppl1.3c | format and core bundle |
+| xcolor | `xcolor.tar.xz` | lppl1.3c | format and core bundle |
+| xkeyval | `xkeyval.tar.xz` | lppl1.3 | format and core bundle |
+| xstring | `xstring.tar.xz` | lppl1.3c | extra bundles |
 
 ### Template method credit
 

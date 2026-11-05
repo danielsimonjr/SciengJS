@@ -1,24 +1,24 @@
 {
-  "totalFiles": 247,
+  "totalFiles": 284,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 85,
+    "build-entry": 101,
     "test-only": 3,
     "orphan": 12,
-    "test": 119,
-    "tool": 28,
+    "test": 134,
+    "tool": 34,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "tools": 28,
-    "src": 100,
-    "tests": 119
+    "tools": 34,
+    "src": 116,
+    "tests": 134
   },
   "byPackage": {
-    "(root)": 161,
-    "@danielsimonjr/sciengjs": 86
+    "(root)": 182,
+    "@danielsimonjr/sciengjs": 102
   },
   "files": [
     {
@@ -131,7 +131,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 117
+      "loc": 119
     },
     {
       "file": "src/errors.ts",
@@ -544,7 +544,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 59
+      "loc": 62
     },
     {
       "file": "src/sysml/backend-pdf.ts",
@@ -603,6 +603,118 @@
       "loc": 155
     },
     {
+      "file": "src/tex/backend-pdf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 11
+    },
+    {
+      "file": "src/tex/backend-png.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 19
+    },
+    {
+      "file": "src/tex/backend-svg.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 9
+    },
+    {
+      "file": "src/tex/bundles.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 179
+    },
+    {
+      "file": "src/tex/detect.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 241
+    },
+    {
+      "file": "src/tex/dvi.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 314
+    },
+    {
+      "file": "src/tex/host.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 331
+    },
+    {
+      "file": "src/tex/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 16
+    },
+    {
+      "file": "src/tex/render.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 127
+    },
+    {
+      "file": "src/tex/run.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 87
+    },
+    {
+      "file": "src/tex/specials.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 149
+    },
+    {
+      "file": "src/tex/stage.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 111
+    },
+    {
+      "file": "src/tex/tfm.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 38
+    },
+    {
+      "file": "src/tex/type1.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 401
+    },
+    {
+      "file": "src/tex/vfs.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 88
+    },
+    {
+      "file": "src/tex/wasm.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 26
+    },
+    {
       "file": "src/types.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -628,7 +740,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 54
+      "loc": 58
     },
     {
       "file": "src/worker/run.ts",
@@ -694,6 +806,20 @@
       "loc": 124
     },
     {
+      "file": "test/integration/tex-render.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 49
+    },
+    {
+      "file": "test/integration/tikz-render.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 35
+    },
+    {
       "file": "test/mutation/run-mutants.mjs",
       "package": "(root)",
       "area": "tests",
@@ -727,6 +853,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 4
+    },
+    {
+      "file": "test/node/backends/tex-source.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 35
     },
     {
       "file": "test/node/browser-gates.mjs",
@@ -778,6 +911,13 @@
       "loc": 36
     },
     {
+      "file": "test/node/tex-timeout.node.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 48
+    },
+    {
       "file": "test/node/worker-execargv.node.mjs",
       "package": "(root)",
       "area": "tests",
@@ -796,7 +936,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 203
+      "loc": 204
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -859,7 +999,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 20
+      "loc": 24
     },
     {
       "file": "test/support/stubs/stub-dot.ts",
@@ -895,6 +1035,20 @@
       "area": "tests",
       "disposition": "test",
       "loc": 33
+    },
+    {
+      "file": "test/support/tex-engine.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 56
+    },
+    {
+      "file": "test/support/tex-fixtures.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 216
     },
     {
       "file": "test/support/xml-wellformed.ts",
@@ -1422,6 +1576,69 @@
       "loc": 33
     },
     {
+      "file": "test/unit/tex-bundles.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 177
+    },
+    {
+      "file": "test/unit/tex-detect.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 257
+    },
+    {
+      "file": "test/unit/tex-dvi.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 214
+    },
+    {
+      "file": "test/unit/tex-limits.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 100
+    },
+    {
+      "file": "test/unit/tex-specials.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 92
+    },
+    {
+      "file": "test/unit/tex-tfm.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 55
+    },
+    {
+      "file": "test/unit/tex-type1.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 273
+    },
+    {
+      "file": "test/unit/tex-vfs.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 127
+    },
+    {
+      "file": "test/unit/tex-wiring.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 62
+    },
+    {
       "file": "test/unit/third-party-notices.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -1457,6 +1674,13 @@
       "loc": 97
     },
     {
+      "file": "tools/tex/add-bundle-package.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 39
+    },
+    {
       "file": "tools/tex/build-lib.mjs",
       "package": "(root)",
       "area": "tools",
@@ -1469,6 +1693,27 @@
       "area": "tools",
       "disposition": "tool",
       "loc": 88
+    },
+    {
+      "file": "tools/tex/bundle-tree.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 27
+    },
+    {
+      "file": "tools/tex/bundles.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 121
+    },
+    {
+      "file": "tools/tex/check-bundles.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 24
     },
     {
       "file": "tools/tex/check-format.mjs",
@@ -1527,6 +1772,13 @@
       "loc": 33
     },
     {
+      "file": "tools/tex/record-bundle-files.ts",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 41
+    },
+    {
       "file": "tools/tex/render.mjs",
       "package": "(root)",
       "area": "tools",
@@ -1539,6 +1791,13 @@
       "area": "tools",
       "disposition": "tool",
       "loc": 32
+    },
+    {
+      "file": "tools/tex/set-bundle-includes.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 47
     },
     {
       "file": "tools/tex/sizes.mjs",
