@@ -82,6 +82,8 @@ export async function renderWithRegistry(
           maxCadNodes: cfg.maxCadNodes,
           maxCadFacets: cfg.maxCadFacets,
           maxImageBytes: cfg.maxImageBytes,
+          cacheDir: cfg.cacheDir,
+          texBundleUrl: cfg.texBundleUrl,
         },
       },
     },

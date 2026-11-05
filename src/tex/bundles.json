@@ -2,20 +2,20 @@
   {
     "name": "core",
     "file": "scieng-tex-core.sctb",
-    "sha256": "69f9bde3bd0a056af418ee783f1260f2f3437686cf6061e5f5e474b0d5d9fe72",
-    "bytes": 9368444
+    "sha256": "20b7654bbf6da695eed7eef7895f3a59533f99e675cdb10e48f73d22ac47f43c",
+    "bytes": 9383293
   },
   {
     "name": "diagrams",
     "file": "scieng-tex-diagrams.sctb",
-    "sha256": "635f265b500975fcb8ab42d9e122f9d9a850b4e3403859074fd4b1f76d256010",
-    "bytes": 81282
+    "sha256": "d11be2a1c7931c0d37496852adebe9b3de3deda4bcad98e5396e7eab9c56f2f7",
+    "bytes": 71534
   },
   {
     "name": "science",
     "file": "scieng-tex-science.sctb",
-    "sha256": "c13ff181689de6551dfcc3470be0d2a247192a7eb05ac476bdde2bd0cecd29df",
-    "bytes": 92849
+    "sha256": "38990ecd718cf5c670c7661418b2a0e427100a8f6b1bb0fc95f21faed0bb45df",
+    "bytes": 90196
   },
   {
     "name": "math",

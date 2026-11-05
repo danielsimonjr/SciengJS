@@ -1,4 +1,6 @@
 // The backend settings of a test render. A test gives only the values that it changes.
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
 import type { BackendSettings } from "../../src/worker/protocol.ts";
 
@@ -15,6 +17,8 @@ export function testSettings(overrides: Partial<BackendSettings> = {}): BackendS
     maxImageBytes: 10485760,
     maxCadNodes: 10000,
     maxCadFacets: 2000000,
+    cacheDir: path.join(tmpdir(), "scieng-test-cache"),
+    texBundleUrl: "file:///scieng-test-no-bundles/",
     ...overrides,
   };
 }
