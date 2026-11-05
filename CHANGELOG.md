@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-05
+
 ### Fixed
 
 - A Mermaid class diagram accepts a one-line class body, for example `class Engine { +render() }`. The text between the braces is the one member of the class, and `{}` gives no member. A brace inside the body still rejects with E_INPUT.

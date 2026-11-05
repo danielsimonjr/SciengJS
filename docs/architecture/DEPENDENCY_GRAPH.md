@@ -4,7 +4,7 @@
 
 # @danielsimonjr/sciengjs - Dependency Graph
 
-**Version**: 1.0.0
+**Version**: 1.0.1
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -2168,7 +2168,7 @@ graph TD
 |----------|-------|
 | Total Source Files | 283 |
 | Subsystems | 17 |
-| Total Lines of Code | 32612 |
+| Total Lines of Code | 32632 |
 | Total Exports | 694 |
 | Total Re-exports | 167 |
 | Total Classes | 7 |
@@ -2184,4 +2184,4 @@ graph TD
 
 ---
 
-*Version*: 1.0.0
+*Version*: 1.0.1

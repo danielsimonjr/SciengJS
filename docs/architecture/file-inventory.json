@@ -313,7 +313,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 247
+      "loc": 252
     },
     {
       "file": "src/mermaid/common.ts",
@@ -1349,7 +1349,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 268
+      "loc": 283
     },
     {
       "file": "test/unit/mermaid-common.test.ts",
