@@ -103,7 +103,7 @@ This release does not ship the tex stage. The "tex" stage of the design gives th
 
 ### Template method credit
 
-The package detection of the `tex` stage follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT). The engine credits that project for the method.
+The package detection of the `tex` stage follows the templater of the Upmath renderer (`parpalak/i.upmath.me`, MIT). The engine credits that project for the method. Copyright 2015-2025 Roman Parpalak. Licence: MIT. The method is `lib/Templater.php` of that project. The templater tests the source for known environments and commands, and adds the package that each one needs. `src/tex/detect.ts` follows that method with its own tables and its own code. `src/tex/detect.ts` copies no code of the templater.
 
 ### Trial T2 sample files (LGPL-2.0-or-later, LGPL-2.1 and Apache-2.0)
 
