@@ -2,7 +2,7 @@
 
 - Build the engine. Follow the increments of `docs/superpowers/plans/2026-11-01-scieng-engine-build.md`. The first item is the trial builds.
 - [ ] Docs: add the math, plot, html and browser stages to docs/architecture/COMPONENTS.md and API.md (gap since I4).
-- [ ] I10 CAD (branch feat/i10-cad): the CSG document reader, the builder API, the solid operations through manifold-3d, STL output, the node and facet limits. Release 0.8.0. Then add the scieng-mcp cad command.
+- [x] I10 CAD (released 0.8.0): the CSG document reader, the builder API, the solid operations through manifold-3d, STL output, the node and facet limits. Release 0.8.0. Then add the scieng-mcp cad command.
 - 2026-11-01 five-axis (docs-only change: the design and the build plan): speed, stability, reliability, security and maintainability apply from increment I0.
 - Increment I0 fills the empty folders: the ten documents of `docs/architecture/`, `THIRD_PARTY_NOTICES.md`, and the commands in `AGENTS.md` and `CONTRIBUTING.md`.
 - 2026-11-01 five-axis (docs-only change: the repository layout and the context files): the five axes apply from increment I0.
