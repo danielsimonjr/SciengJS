@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 108 |
-| Total Test Files | 97 |
+| Total Test Files | 98 |
 | Source Files with Tests | 75 |
 | Source Files without Tests | 33 |
 | Coverage (raw, direct-import) | **69.4%** |
@@ -188,6 +188,7 @@ The following 33 source files are not directly imported by any test file:
 | `integration/mesh-viewer.test.ts` | 16 files |
 | `integration/page-checker.test.ts` | 0 files |
 | `integration/tex-render.test.ts` | 1 files |
+| `integration/tikz-corpus.test.ts` | 0 files |
 | `integration/tikz-render.test.ts` | 4 files |
 | `mutation/run-mutants.test.ts` | 0 files |
 | `tex-tools/etrip-gate.test.mjs` | 0 files |

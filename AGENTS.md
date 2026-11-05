@@ -29,6 +29,8 @@ This project uses the Agentic Context File Suite (ACFS). The following files exi
 
 Install Bun 1.4.4 and Node 22 or later. Run `bun install --frozen-lockfile` in the repository root.
 
+The TeX build tools in `tools/tex/` import the `.ts` files of `src/tex/` through the type stripping of Node. These tools need Node 22.18 or later. The engine package does not need this version.
+
 The page checker tests need a Chrome or Chromium executable. Set `SCIENG_BROWSER` to the absolute path of the executable. Without the executable, those tests skip with a printed reason. In CI, the tests never skip.
 
 ## Build & Test Commands

@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 277
+  totalFiles: 281
   totalModules: 3
-  totalExports: 685
+  totalExports: 690
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -3150,6 +3150,22 @@ modules:
             - SysmlApproval
           typeOnly: false
       exports: []
+    test/corpus/regenerate-tikz.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: test/support/tikz-corpus.ts
+          imports:
+            - BUNDLE_DIR_VAR
+            - renderTikzSvg
+            - svgCounts
+            - texConfig
+            - TikzApproval
+          typeOnly: false
+      exports: []
     test/integration/browser-render.test.ts:
       externalDependencies:
         - bun:test
@@ -3310,6 +3326,23 @@ modules:
             - rejectionOf
           typeOnly: false
       exports: []
+    test/integration/tikz-corpus.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: test/support/tikz-corpus.ts
+          imports:
+            - BUNDLE_DIR_VAR
+            - renderTikzSvg
+            - svgCounts
+            - texConfig
+            - TikzApproval
+          typeOnly: false
+      exports: []
     test/integration/tikz-render.test.ts:
       externalDependencies:
         - bun:test
@@ -3465,6 +3498,15 @@ modules:
         - node:fs
         - node:path
         - node:test
+        - node:url
+      internalDependencies: []
+      exports: []
+    test/node/tex-render-time.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
         - node:url
       internalDependencies: []
       exports: []
@@ -3735,6 +3777,25 @@ modules:
         - buildType1
         - buildTfm
         - DviBuilder
+    test/support/tikz-corpus.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:os
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/index.ts
+          imports:
+            - render
+            - SciengConfig
+          typeOnly: false
+      exports:
+        - TikzApproval
+        - BUNDLE_DIR_VAR
+        - svgCounts
+        - texConfig
+        - renderTikzSvg
     test/support/xml-wellformed.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -5563,11 +5624,11 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 277
-  totalSourceFiles: 277
+  totalTypeScriptFiles: 281
+  totalSourceFiles: 281
   totalModules: 3
-  totalLinesOfCode: 32086
-  totalExports: 685
+  totalLinesOfCode: 32433
+  totalExports: 690
   entryRoots: 101
   reachableFiles: 101
   dormantFiles: 8
@@ -5584,11 +5645,11 @@ statistics:
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 7
-  totalInterfaces: 141
-  totalFunctions: 269
+  totalInterfaces: 142
+  totalFunctions: 272
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 70
+  totalConstants: 71
   totalReExports: 167
 reachability:
   roots:

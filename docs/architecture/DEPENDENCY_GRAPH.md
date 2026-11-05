@@ -1561,7 +1561,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/tex/dvi.ts` - Converts a DVI file to SVG.
+### `src/tex/dvi.ts` - Tells whether the page is inside a transformed group. While it gives true, the boxes of glyphs and rules do not
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1660,7 +1660,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/tex/specials.ts` - Creates a reader for the `dvisvgm:raw`, `rawdef`, `rawset`, `endrawset`, `rawput` and `bbox` specials
+### `src/tex/specials.ts` - Tells whether the page is inside a raw group with a `transform` attribute. A pgf picture moves its text
 
 **Exports:**
 - Interfaces: `SpecialPosition`, `SpecialResult`, `Specials`
@@ -2159,14 +2159,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 277 |
+| Total Source Files | 281 |
 | Subsystems | 17 |
-| Total Lines of Code | 32086 |
-| Total Exports | 685 |
+| Total Lines of Code | 32433 |
+| Total Exports | 690 |
 | Total Re-exports | 167 |
 | Total Classes | 7 |
-| Total Interfaces | 141 |
-| Total Functions | 269 |
+| Total Interfaces | 142 |
+| Total Functions | 272 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 72 |

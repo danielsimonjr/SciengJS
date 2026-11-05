@@ -1,11 +1,11 @@
 {
-  "totalFiles": 277,
+  "totalFiles": 281,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 101,
     "test-only": 0,
     "orphan": 8,
-    "test": 133,
+    "test": 137,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 35,
     "src": 109,
-    "tests": 133
+    "tests": 137
   },
   "byPackage": {
-    "(root)": 175,
+    "(root)": 179,
     "@danielsimonjr/sciengjs": 102
   },
   "files": [
@@ -642,7 +642,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 314
+      "loc": 319
     },
     {
       "file": "src/tex/host.ts",
@@ -663,7 +663,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 127
+      "loc": 132
     },
     {
       "file": "src/tex/run.ts",
@@ -677,7 +677,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 149
+      "loc": 166
     },
     {
       "file": "src/tex/stage.ts",
@@ -771,6 +771,13 @@
       "loc": 64
     },
     {
+      "file": "test/corpus/regenerate-tikz.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 67
+    },
+    {
       "file": "test/integration/browser-render.test.ts",
       "package": "(root)",
       "area": "tests",
@@ -810,7 +817,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 49
+      "loc": 61
+    },
+    {
+      "file": "test/integration/tikz-corpus.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 65
     },
     {
       "file": "test/integration/tikz-render.test.ts",
@@ -909,6 +923,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 36
+    },
+    {
+      "file": "test/node/tex-render-time.mjs",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 86
     },
     {
       "file": "test/node/tex-timeout.node.mjs",
@@ -1049,6 +1070,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 216
+    },
+    {
+      "file": "test/support/tikz-corpus.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 39
     },
     {
       "file": "test/support/xml-wellformed.ts",
@@ -1594,7 +1622,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 214
+      "loc": 229
     },
     {
       "file": "test/unit/tex-host-names.test.ts",
@@ -1615,7 +1643,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 92
+      "loc": 128
     },
     {
       "file": "test/unit/tex-tfm.test.ts",
