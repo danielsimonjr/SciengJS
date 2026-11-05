@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 223,
+    "totalFiles": 224,
     "totalModules": 3,
-    "totalExports": 457
+    "totalExports": 458
   },
   "modules": {
     "tools": {
@@ -1421,6 +1421,7 @@
             "file": "src/types.ts",
             "imports": [
               "INPUT_TYPES",
+              "BINARY_INPUT_TYPES",
               "OUTPUT_FORMATS",
               "InputType",
               "OutputFormat",
@@ -1441,6 +1442,7 @@
           "SciengConfig",
           "NetworkPolicy",
           "INPUT_TYPES",
+          "BINARY_INPUT_TYPES",
           "OUTPUT_FORMATS",
           "InputType",
           "OutputFormat",
@@ -4613,6 +4615,30 @@
         ],
         "exports": []
       },
+      "test/unit/index-exports.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "*"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "BINARY_INPUT_TYPES",
+              "INPUT_TYPES"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/math-backends.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -6132,11 +6158,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 223,
-    "totalSourceFiles": 223,
+    "totalTypeScriptFiles": 224,
+    "totalSourceFiles": 224,
     "totalModules": 3,
-    "totalLinesOfCode": 25562,
-    "totalExports": 457,
+    "totalLinesOfCode": 25572,
+    "totalExports": 458,
     "entryRoots": 71,
     "reachableFiles": 71,
     "dormantFiles": 15,
@@ -6158,7 +6184,7 @@
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 63,
-    "totalReExports": 88
+    "totalReExports": 89
   },
   "reachability": {
     "roots": [

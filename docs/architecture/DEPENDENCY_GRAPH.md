@@ -554,7 +554,7 @@ The codebase is organized into the following modules:
 
 ## Entry Dependencies
 
-### `src/index.ts` - Package entry point for src (re-exports 15 symbols)
+### `src/index.ts` - Package entry point for src (re-exports 16 symbols)
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -565,7 +565,7 @@ The codebase is organized into the following modules:
 | `./types.ts` | `Capability, RenderRequest, RenderResult` | Import (type-only) |
 | `./errors.ts` | `RenderError, RENDER_ERROR_CODES, RenderErrorCode` | Re-export |
 | `./config.ts` | `loadConfig, SciengConfig, NetworkPolicy` | Re-export |
-| `./types.ts` | `INPUT_TYPES, OUTPUT_FORMATS, InputType, OutputFormat, RenderOptions, RenderRequest, RenderResult, RenderAsset, Capability` | Re-export |
+| `./types.ts` | `INPUT_TYPES, BINARY_INPUT_TYPES, OUTPUT_FORMATS, InputType, OutputFormat, RenderOptions, RenderRequest, RenderResult, RenderAsset, Capability` | Re-export |
 
 **Exports:**
 - Functions: `render`, `capabilities`
@@ -573,8 +573,8 @@ The codebase is organized into the following modules:
 
   ```text
   RenderError, RENDER_ERROR_CODES, RenderErrorCode, loadConfig, SciengConfig, NetworkPolicy,
-  INPUT_TYPES, OUTPUT_FORMATS, InputType, OutputFormat, RenderOptions, RenderRequest, RenderResult,
-  RenderAsset, Capability
+  INPUT_TYPES, BINARY_INPUT_TYPES, OUTPUT_FORMATS, InputType, OutputFormat, RenderOptions,
+  RenderRequest, RenderResult, RenderAsset, Capability
   ```
 
 
@@ -1712,11 +1712,11 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 223 |
+| Total Source Files | 224 |
 | Subsystems | 17 |
-| Total Lines of Code | 25562 |
-| Total Exports | 457 |
-| Total Re-exports | 88 |
+| Total Lines of Code | 25572 |
+| Total Exports | 458 |
+| Total Re-exports | 89 |
 | Total Classes | 6 |
 | Total Interfaces | 81 |
 | Total Functions | 201 |

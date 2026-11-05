@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 85,
-    "totalTestFiles": 80,
+    "totalTestFiles": 81,
     "testedCount": 56,
     "untestedCount": 29,
     "coveragePercent": "65.9",
@@ -159,6 +159,7 @@
       "test/unit/config.test.ts",
       "test/unit/graph-svg-backend.test.ts",
       "test/unit/html-md-render.test.ts",
+      "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/mesh-large.test.ts",
       "test/unit/render.test.ts",
@@ -188,6 +189,7 @@
       "test/unit/graph-dot.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/html-md-render.test.ts",
+      "test/unit/index-exports.test.ts",
       "test/unit/mermaid-class.test.ts",
       "test/unit/mermaid-common.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
@@ -242,6 +244,7 @@
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
       "test/unit/html-md-render.test.ts",
+      "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts"
     ],
     "src/math/backend-pdf.ts": [
@@ -374,6 +377,7 @@
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
       "test/unit/html-md-render.test.ts",
+      "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/render.test.ts"
     ],
@@ -555,6 +559,12 @@
       "src/types.ts",
       "src/html/md.ts",
       "src/html/images.ts"
+    ],
+    "test/unit/index-exports.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
     ],
     "test/unit/math-backends.test.ts": [
       "src/math/backend-svg.ts",
