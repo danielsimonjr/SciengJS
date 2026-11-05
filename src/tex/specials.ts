@@ -22,6 +22,11 @@ export interface Specials {
   special(text: string, at: SpecialPosition): SpecialResult | null;
   /** The first words of the specials that the reader did not handle, in order and without repeats. */
   ignored(): string[];
+  /**
+   * Tells whether the page is inside a raw group with a `transform` attribute. A pgf picture moves its text
+   * with such a group, so the DVI position of a glyph there is not its place on the page.
+   */
+  transformed(): boolean;
 }
 
 const round4 = (v: number): number => Math.round(v * 1e4) / 1e4;
@@ -45,6 +50,17 @@ export function createSpecials(): Specials {
   const sets = new Map<string, string>();
   let active: string | null = null;
   const ignoredList: string[] = [];
+  // One entry for each open group on the page: true when the group has a transform attribute.
+  const groups: boolean[] = [];
+
+  function track(r: SpecialResult | null): SpecialResult | null {
+    if (r?.svg === undefined) return r;
+    for (const m of r.svg.matchAll(/<g(\s[^>]*)?>|<\/g>/g)) {
+      if (m[0] === "</g>") groups.pop();
+      else groups.push(/transform\s*=/.test(m[1] ?? ""));
+    }
+    return r;
+  }
 
   function remember(word: string | undefined): void {
     if (word && !ignoredList.includes(word)) ignoredList.push(word);
@@ -138,12 +154,13 @@ export function createSpecials(): Specials {
   return {
     special(text, at) {
       const lead = text.match(/^\s*dvisvgm:/);
-      if (lead !== null) return dvisvgm(text.slice(lead[0].length), text.trim().split(/\s+/)[0]!, at);
+      if (lead !== null) return track(dvisvgm(text.slice(lead[0].length), text.trim().split(/\s+/)[0]!, at));
       const words = text.trim().split(/\s+/);
-      if (words[0] === "color") return color(words);
+      if (words[0] === "color") return track(color(words));
       remember(words[0]);
       return null;
     },
     ignored: () => ignoredList.slice(),
+    transformed: () => groups.some((g) => g),
   };
 }
