@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-04
+
 ### Added
 
 - The input type `cad` reads a CAD document: a CSG model in JSON. The pairs `cad` to `glb`, `stl`, `html` and `png` render through `render()`. The engine reads the document as data and runs no code from the document.
