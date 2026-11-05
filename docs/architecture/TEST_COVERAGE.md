@@ -179,6 +179,10 @@ The following 32 source files are not directly imported by any test file:
 | `integration/mesh-viewer.test.ts` | 16 files |
 | `integration/page-checker.test.ts` | 0 files |
 | `mutation/run-mutants.test.ts` | 0 files |
+| `tex-tools/etrip-gate.test.mjs` | 0 files |
+| `tex-tools/primitives.test.mjs` | 0 files |
+| `tex-tools/tangle.test.mjs` | 0 files |
+| `tex-tools/trip-gate.test.mjs` | 0 files |
 | `unit/assets.test.ts` | 2 files |
 | `unit/browser-cdp.test.ts` | 1 files |
 | `unit/browser-flags.test.ts` | 1 files |
@@ -254,9 +258,5 @@ The following 32 source files are not directly imported by any test file:
 | `unit/version.test.ts` | 1 files |
 | `unit/worker-exec-argv.test.ts` | 1 files |
 | `unit/worker-run.test.ts` | 2 files |
-| `test/tangle.test.mjs` | 0 files |
-| `test/trip-gate.test.mjs` | 0 files |
 | `test/type1.test.mjs` | 2 files |
 | `test/dvisvgm-specials.test.mjs` | 1 files |
-| `test/etrip-gate.test.mjs` | 0 files |
-| `test/primitives.test.mjs` | 0 files |

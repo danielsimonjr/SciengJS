@@ -1,6 +1,6 @@
-// The trip test of tripman.tex, Appendix A, on the WASM builds of the trial.
+// The trip test of tripman.tex, Appendix A, on the WASM builds of the build.
 // node trip.mjs <build-dir> <trip-source-dir> <out-dir>
-// The build dir holds textrip.wasm, textrip.symbols.json, textrip.pool and the
+// The build dir holds the wasm, symbols and pool files of the trip program (textrip) and the
 // texware programs pltotf, tftopl and dvitype. The source dir holds the files
 // of the TeX distribution: trip.tex, trip.pl, tripin.log, trip.log, trip.fot,
 // tripin.fot and trip.typ. The out dir gets each output file and each difference.
@@ -16,6 +16,8 @@ if (!buildDir || !srcDir || !outDir) {
   process.exit(2);
 }
 fs.mkdirSync(outDir, { recursive: true });
+// TRIP_PROGRAM names the trip program of the build dir.
+const program = process.env.TRIP_PROGRAM || 'textrip';
 const read = (p) => fs.readFileSync(p);
 const src = (n) => read(path.join(srcDir, n));
 const load = (name) => loadProgram(buildDir, name);
@@ -32,9 +34,9 @@ fs.writeFileSync(path.join(outDir, 'tmp.pl'), rt.pl, 'latin1');
 results.steps.pltotf.tmpPlDiffers = rt.plDiffers;
 
 // Steps 3 and 4: the trip build of tex.web
-const tex = await load('textrip');
+const tex = await load(program);
 const vfs = new Map([
-  ['tex.pool', read(path.join(buildDir, 'textrip.pool'))],
+  ['tex.pool', read(path.join(buildDir, program + '.pool'))],
   ['trip.tex', src('trip.tex')],
   ['trip.tfm', rt.tfm],
 ]);
@@ -82,7 +84,7 @@ for (const [mine, ref] of [['tripin.log', 'tripin.log'], ['tripin.fot', 'tripin.
 // The pass rule: only the banner line may differ (see trip-gate.mjs); exit status 1 otherwise.
 results.gate = tripGate({
   refDir: srcDir, outDir,
-  banner: buildBanner(fs.readFileSync(path.join(buildDir, 'textrip.p'), 'latin1')),
+  banner: buildBanner(fs.readFileSync(path.join(buildDir, program + '.p'), 'latin1')),
   tmpPlDiffers: results.steps.pltotf.tmpPlDiffers,
 });
 fs.writeFileSync(path.join(outDir, 'trip-results.json'), JSON.stringify(results, null, 1));

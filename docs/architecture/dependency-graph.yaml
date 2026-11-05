@@ -24,6 +24,297 @@ modules:
         - node:url
       internalDependencies: []
       exports: []
+    tools/tex/build-lib.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:crypto
+        - node:fs
+        - node:path
+        - node:zlib
+      internalDependencies:
+        - file: tools/tex/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+        - file: tools/tex/pascal.mjs
+          imports:
+            - compile
+          typeOnly: false
+      exports:
+        - sha
+        - fetchPinned
+        - buildProgram
+        - runtimeName
+    tools/tex/build.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:child_process
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: tools/tex/build-lib.mjs
+          imports:
+            - fetchPinned
+            - buildProgram
+            - runtimeName
+            - sha
+          typeOnly: false
+        - file: tools/tex/primitives.mjs
+          imports:
+            - addedPrimitives
+          typeOnly: false
+      exports: []
+    tools/tex/check-format.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies: []
+      exports: []
+    tools/tex/compare-builds.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies: []
+      exports: []
+    tools/tex/compile-cli.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: tools/tex/pascal.mjs
+          imports:
+            - compile
+          typeOnly: false
+      exports: []
+    tools/tex/etrip-gate.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: tools/tex/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - COMPARISONS
+        - etripConstants
+        - parseReferenceDiffs
+        - dropEchoText
+        - etripMessageOf
+        - judgeFile
+        - etripGate
+    tools/tex/etrip.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: tools/tex/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+        - file: tools/tex/trip-steps.mjs
+          imports:
+            - latin
+            - loadProgram
+            - plRoundTrip
+            - texRun
+            - dvitypeRun
+          typeOnly: false
+        - file: tools/tex/etrip-gate.mjs
+          imports:
+            - etripGate
+            - COMPARISONS
+          typeOnly: false
+      exports: []
+    tools/tex/linediff.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - lineDiff
+    tools/tex/pascal.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: tools/tex/wasm.mjs
+          imports:
+            - ModuleBuilder
+            - OP
+            - I32
+            - F64
+            - VOID
+            - uleb
+            - sleb
+            - f64bytes
+          typeOnly: false
+      exports:
+        - canon
+        - compile
+    tools/tex/primitives.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - addedPrimitives
+    tools/tex/render.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/vfs.mjs
+          imports:
+            - TreeFS
+            - flatName
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/dvi2svg.mjs
+          imports:
+            - dviToSvg
+          typeOnly: false
+      exports: []
+    tools/tex/run-texware.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+      exports: []
+    tools/tex/sizes.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:zlib
+      internalDependencies: []
+      exports: []
+    tools/tex/tangle-cli.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: tools/tex/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+      exports: []
+    tools/tex/tangle.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - applyChanges
+        - tangle
+    tools/tex/tex-run.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/vfs.mjs
+          imports:
+            - TreeFS
+            - flatName
+          typeOnly: false
+      exports: []
+    tools/tex/trip-gate.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: tools/tex/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - TEX_BANNER
+        - buildBanner
+        - tripGate
+    tools/tex/trip-steps.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: trials/t5-tex-build/runtime/run.mjs
+          imports:
+            - runProgram
+          typeOnly: false
+        - file: trials/t5-tex-build/runtime/host.mjs
+          imports:
+            - ExitSignal
+          typeOnly: false
+        - file: tools/tex/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+      exports:
+        - latin
+        - flatName
+        - loadProgram
+        - plRoundTrip
+        - texRun
+        - dvitypeRun
+    tools/tex/trip.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: tools/tex/linediff.mjs
+          imports:
+            - lineDiff
+          typeOnly: false
+        - file: tools/tex/trip-gate.mjs
+          imports:
+            - tripGate
+            - buildBanner
+          typeOnly: false
+        - file: tools/tex/trip-steps.mjs
+          imports:
+            - latin
+            - loadProgram
+            - plRoundTrip
+            - texRun
+            - dvitypeRun
+          typeOnly: false
+      exports: []
+    tools/tex/wasm.mjs:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - I32
+        - F64
+        - VOID
+        - OP
+        - uleb
+        - sleb
+        - f64bytes
+        - ModuleBuilder
     trials/t3-tex/tools/build-format.cjs:
       externalDependencies: []
       nodeDependencies: []
@@ -91,305 +382,6 @@ modules:
         - loadEngine
         - setCoreDump
         - renderTex
-    trials/t5-tex-build/tools/build-lib.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:crypto
-        - node:fs
-        - node:path
-        - node:zlib
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/tangle.mjs
-          imports:
-            - tangle
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/pascal.mjs
-          imports:
-            - compile
-          typeOnly: false
-      exports:
-        - sha
-        - fetchPinned
-        - buildProgram
-        - runtimeName
-    trials/t5-tex-build/tools/build.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/build-lib.mjs
-          imports:
-            - fetchPinned
-            - buildProgram
-            - runtimeName
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/compare-builds.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies: []
-      exports: []
-    trials/t5-tex-build/tools/compile-cli.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/pascal.mjs
-          imports:
-            - compile
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/linediff.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - lineDiff
-    trials/t5-tex-build/tools/pascal.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/wasm.mjs
-          imports:
-            - ModuleBuilder
-            - OP
-            - I32
-            - F64
-            - VOID
-            - uleb
-            - sleb
-            - f64bytes
-          typeOnly: false
-      exports:
-        - canon
-        - compile
-    trials/t5-tex-build/tools/render.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/vfs.mjs
-          imports:
-            - TreeFS
-            - flatName
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/dvi2svg.mjs
-          imports:
-            - dviToSvg
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/run-texware.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/sizes.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:zlib
-      internalDependencies: []
-      exports: []
-    trials/t5-tex-build/tools/tangle-cli.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/tangle.mjs
-          imports:
-            - tangle
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/tangle.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - applyChanges
-        - tangle
-    trials/t5-tex-build/tools/tex-run.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/vfs.mjs
-          imports:
-            - TreeFS
-            - flatName
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/trip-gate.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-      exports:
-        - TEX_BANNER
-        - buildBanner
-        - tripGate
-    trials/t5-tex-build/tools/trip-steps.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
-          imports:
-            - runProgram
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-      exports:
-        - latin
-        - flatName
-        - loadProgram
-        - plRoundTrip
-        - texRun
-        - dvitypeRun
-    trials/t5-tex-build/tools/trip.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/trip-gate.mjs
-          imports:
-            - tripGate
-            - buildBanner
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/trip-steps.mjs
-          imports:
-            - latin
-            - loadProgram
-            - plRoundTrip
-            - texRun
-            - dvitypeRun
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/tools/wasm.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - I32
-        - F64
-        - VOID
-        - OP
-        - uleb
-        - sleb
-        - f64bytes
-        - ModuleBuilder
-    trials/t6-etex-build/tools/build.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:child_process
-        - node:fs
-        - node:path
-        - node:url
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/build-lib.mjs
-          imports:
-            - fetchPinned
-            - buildProgram
-            - runtimeName
-            - sha
-          typeOnly: false
-        - file: trials/t6-etex-build/tools/primitives.mjs
-          imports:
-            - addedPrimitives
-          typeOnly: false
-      exports: []
-    trials/t6-etex-build/tools/etrip-gate.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-      exports:
-        - COMPARISONS
-        - etripConstants
-        - parseReferenceDiffs
-        - dropEchoText
-        - etripMessageOf
-        - judgeFile
-        - etripGate
-    trials/t6-etex-build/tools/etrip.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/linediff.mjs
-          imports:
-            - lineDiff
-          typeOnly: false
-        - file: trials/t5-tex-build/tools/trip-steps.mjs
-          imports:
-            - latin
-            - loadProgram
-            - plRoundTrip
-            - texRun
-            - dvitypeRun
-          typeOnly: false
-        - file: trials/t6-etex-build/tools/etrip-gate.mjs
-          imports:
-            - etripGate
-            - COMPARISONS
-          typeOnly: false
-      exports: []
-    trials/t6-etex-build/tools/primitives.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - addedPrimitives
   src:
     src/assets.ts:
       externalDependencies: []
@@ -3174,6 +3166,58 @@ modules:
       internalDependencies: []
       exports:
         - xmlErrors
+    test/tex-tools/etrip-gate.test.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:test
+      internalDependencies:
+        - file: tools/tex/etrip-gate.mjs
+          imports:
+            - judgeFile
+            - parseReferenceDiffs
+            - etripConstants
+            - etripMessageOf
+            - dropEchoText
+          typeOnly: false
+      exports: []
+    test/tex-tools/primitives.test.mjs:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: tools/tex/primitives.mjs
+          imports:
+            - addedPrimitives
+          typeOnly: false
+      exports: []
+    test/tex-tools/tangle.test.mjs:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: tools/tex/tangle.mjs
+          imports:
+            - tangle
+          typeOnly: false
+      exports: []
+    test/tex-tools/trip-gate.test.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:assert/strict
+        - node:fs
+        - node:os
+        - node:path
+        - node:test
+      internalDependencies:
+        - file: tools/tex/trip-gate.mjs
+          imports:
+            - tripGate
+            - buildBanner
+          typeOnly: false
+      exports: []
     test/unit/assets.test.ts:
       externalDependencies:
         - bun:test
@@ -4743,31 +4787,6 @@ modules:
             - testSettings
           typeOnly: false
       exports: []
-    trials/t5-tex-build/test/tangle.test.mjs:
-      externalDependencies:
-        - bun:test
-      nodeDependencies: []
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/tangle.mjs
-          imports:
-            - tangle
-          typeOnly: false
-      exports: []
-    trials/t5-tex-build/test/trip-gate.test.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:assert/strict
-        - node:fs
-        - node:os
-        - node:path
-        - node:test
-      internalDependencies:
-        - file: trials/t5-tex-build/tools/trip-gate.mjs
-          imports:
-            - tripGate
-            - buildBanner
-          typeOnly: false
-      exports: []
     trials/t5-tex-build/test/type1.test.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -4796,38 +4815,11 @@ modules:
             - createSpecials
           typeOnly: false
       exports: []
-    trials/t6-etex-build/test/etrip-gate.test.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:assert/strict
-        - node:test
-      internalDependencies:
-        - file: trials/t6-etex-build/tools/etrip-gate.mjs
-          imports:
-            - judgeFile
-            - parseReferenceDiffs
-            - etripConstants
-            - etripMessageOf
-            - dropEchoText
-          typeOnly: false
-      exports: []
-    trials/t6-etex-build/test/primitives.test.mjs:
-      externalDependencies:
-        - bun:test
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies:
-        - file: trials/t6-etex-build/tools/primitives.mjs
-          imports:
-            - addedPrimitives
-          typeOnly: false
-      exports: []
 statistics:
   totalTypeScriptFiles: 247
   totalSourceFiles: 247
   totalModules: 3
-  totalLinesOfCode: 28632
+  totalLinesOfCode: 28628
   totalExports: 577
   entryRoots: 85
   reachableFiles: 85

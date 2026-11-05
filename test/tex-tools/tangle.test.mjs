@@ -1,6 +1,6 @@
 // Test of the tangler (tools/tangle.mjs): the control codes that start a module.
 import { test, expect } from 'bun:test';
-import { tangle } from '../tools/tangle.mjs';
+import { tangle } from '../../tools/tex/tangle.mjs';
 
 const web = (sep) => [
   '\\def\\x{limbo}',

@@ -3,8 +3,8 @@
 // on a virtual file system in memory.
 import fs from 'node:fs';
 import path from 'node:path';
-import { runProgram } from '../runtime/run.mjs';
-import { ExitSignal } from '../runtime/host.mjs';
+import { runProgram } from '../../trials/t5-tex-build/runtime/run.mjs';
+import { ExitSignal } from '../../trials/t5-tex-build/runtime/host.mjs';
 import { lineDiff } from './linediff.mjs';
 
 export const latin = (u8) => Buffer.from(u8).toString('latin1');
