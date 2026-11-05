@@ -50,7 +50,6 @@ jobs:
           node-version: "22"
 
       - name: Set up Bun 1.4.4
-        if: matrix.runtime == 'bun'
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: "1.4.4"
@@ -80,16 +79,18 @@ jobs:
           set -euo pipefail
           $RUN tools/tex/check-format.mjs .tex-build/out/build.json "$FORMAT_SHA256" "$FORMAT_PGF_DRIVER"
 
-      # The bundles are packed with node:zlib, so the gate runs on the Node legs. The bytes must equal
-      # the list in src/tex/bundles.json on every OS. A change of an archive, a file list or a sample
-      # changes the list on purpose, in the same commit.
-      - name: Build the bundles and check them against src/tex/bundles.json
-        if: matrix.runtime == 'node'
+      # The bundles are packed with node:zlib on every leg (Node 22 is on every leg). The bytes must equal
+      # the list in src/tex/bundles.json on every OS, so the check runs on the Node legs. A change of an
+      # archive, a file list or a sample changes the list on purpose, in the same commit.
+      - name: Build the bundles
         run: |
           set -euo pipefail
           node tools/tex/bundles.mjs fetch .tex-build/src
           node tools/tex/bundles.mjs pack .tex-build/src .tex-build .tex-build/bundles
-          node tools/tex/check-bundles.mjs .tex-build/bundles/bundles.json src/tex/bundles.json
+
+      - name: Check the bundles against src/tex/bundles.json
+        if: matrix.runtime == 'node'
+        run: node tools/tex/check-bundles.mjs .tex-build/bundles/bundles.json src/tex/bundles.json
 
       - name: Upload the WASM files and the format
         if: matrix.os == 'ubuntu-latest' && matrix.runtime == 'node'
@@ -106,3 +107,19 @@ jobs:
             .tex-build/bundles/bundles.json
           if-no-files-found: error
           retention-days: 14
+
+      # The render-time gate and the corpus gate run on the built package, with the bundles of this job.
+      # The time gate compares the warm TeX median with the T6 number of this runtime plus the margin in
+      # test/support/tex-render-budget.json. The corpus test fails until the reviewer sets approved to true
+      # for each sample in test/corpus/tikz/approval.json.
+      - name: Build the package
+        run: |
+          set -euo pipefail
+          bun install --frozen-lockfile
+          bun run build
+
+      - name: Render-time gate (circuit, first render and warm renders)
+        run: SCIENG_TEX_BUNDLE_DIR=.tex-build/bundles $RUN test/node/tex-render-time.mjs
+
+      - name: Corpus gate (tikz samples)
+        run: SCIENG_TEX_BUNDLE_DIR=.tex-build/bundles bun test test/integration/tikz-corpus.test.ts
