@@ -1,0 +1,956 @@
+{
+ "mutants": [
+  {
+   "id": "tex-1",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (dvi[0] !== 247 || dvi[1] !== 2)",
+   "replacement": "if (dvi[0] !== 247)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-2",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "p += 1 + dvi[14]!;",
+   "replacement": "p += dvi[14]!;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-3",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "(num / den) * (mag / 1000) * (72.27 / 254000)",
+   "replacement": "(num / den) * (72.27 / 254000)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-4",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "(72.27 / 254000)",
+   "replacement": "(72 / 254000)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-5",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (fonts.has(k)) return;",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-6",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "const lim = 2 ** (8 * n - 1);",
+   "replacement": "const lim = 2 ** (8 * n);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-7",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "return v >= lim ? v - 2 * lim : v;",
+   "replacement": "return v > lim ? v - 2 * lim : v;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-8",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (!fnt) throw new Error(\"char before a font\");",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-9",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (wd === undefined) throw new Error(`no width for char ${c} in ${fnt.name}`);",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-10",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "adv = wd * fnt.size;",
+   "replacement": "adv = wd;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-11",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (page === want && fnt.ld) {",
+   "replacement": "if (fnt.ld) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-12",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "else if (g.d) {",
+   "replacement": "else if (true) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-13",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "const k = (fnt.size * toPt) / 1000;",
+   "replacement": "const k = fnt.size * toPt;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-14",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "scale(${ks} ${-ks})",
+   "replacement": "scale(${ks} ${ks})",
+   "equivalent": null
+  },
+  {
+   "id": "tex-15",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "Y - g.bbox[3] * k,",
+   "replacement": "Y - g.bbox[1] * k,",
+   "equivalent": null
+  },
+  {
+   "id": "tex-16",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (page === want && a > 0 && b > 0) {",
+   "replacement": "if (page === want && a >= 0 && b > 0) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-17",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (page === want && a > 0 && b > 0) {",
+   "replacement": "if (page === want && a > 0 && b >= 0) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-18",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "const Y = (v - a) * toPt;",
+   "replacement": "const Y = v * toPt;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-19",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "h += drawChar(o);",
+   "replacement": "drawChar(o);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-20",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "h += drawChar(u(o - 127));",
+   "replacement": "drawChar(u(o - 127));",
+   "equivalent": null
+  },
+  {
+   "id": "tex-21",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "        drawChar(u(o - 132));",
+   "replacement": "        h += drawChar(u(o - 132));",
+   "equivalent": null
+  },
+  {
+   "id": "tex-22",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "drawRule(a, b);\n        h += b;",
+   "replacement": "drawRule(a, b);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-23",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "p += 44;",
+   "replacement": "p += 40;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-24",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "h = v = w = x = y = z = 0;",
+   "replacement": "h = v = 0;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-25",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "stack.length = 0;",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-26",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "f = undefined;",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-27",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "w = s(o - 147);\n        h += w;",
+   "replacement": "w = s(o - 147);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-28",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "x = s(o - 152);\n        h += x;",
+   "replacement": "x = s(o - 152);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-29",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "y = s(o - 161);\n        v += y;",
+   "replacement": "y = s(o - 161);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-30",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "z = s(o - 166);\n        v += z;",
+   "replacement": "z = s(o - 166);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-31",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "case 147:\n        h += w;",
+   "replacement": "case 147:\n        v += w;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-32",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "case 161:\n        v += y;",
+   "replacement": "case 161:\n        h += y;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-33",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "v += s(o - 156);",
+   "replacement": "h += s(o - 156);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-34",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "h += s(o - 142);",
+   "replacement": "v += s(o - 142);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-35",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "[h, v, w, x, y, z] = top as",
+   "replacement": "[h, v] = top as",
+   "equivalent": null
+  },
+  {
+   "id": "tex-36",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "stack.push([h, v, w, x, y, z]);",
+   "replacement": "stack.push([h, v, 0, 0, 0, 0]);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-37",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "const res = page === want && opt.special ?",
+   "replacement": "const res = opt.special ?",
+   "equivalent": null
+  },
+  {
+   "id": "tex-38",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "specials++;",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-39",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (res?.svg) out.push(res.svg);",
+   "replacement": "if (false) out.push(res!.svg!);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-40",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (res?.box) box(",
+   "replacement": "if (false) box(",
+   "equivalent": null
+  },
+  {
+   "id": "tex-41",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "const m = opt.margin ?? 1;",
+   "replacement": "const m = opt.margin ?? 0;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-42",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (!Number.isFinite(minX)) {",
+   "replacement": "if (false) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-43",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "[minX - m, minY - m,",
+   "replacement": "[minX - m, minY,",
+   "equivalent": null
+  },
+  {
+   "id": "tex-44",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (p >= dvi.length) throw new Error(\"DVI ended without post\");",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-45",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "fontDef(u(o - 242));",
+   "replacement": "fontDef(u(o - 243));",
+   "equivalent": null
+  },
+  {
+   "id": "tex-46",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "f = fonts.get(o - 171);",
+   "replacement": "f = fonts.get(o - 170);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-47",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "f = fonts.get(u(o - 234));",
+   "replacement": "f = fonts.get(u(o - 233));",
+   "equivalent": null
+  },
+  {
+   "id": "tex-48",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "missing.add(name);",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-49",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "files.pfb ? readType1(files.pfb) : null",
+   "replacement": "files.pfb ? readType1(files.pfb) : readType1(files.tfm)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-50",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "const sz = u(4);",
+   "replacement": "const sz = u(3);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-51",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "if (o >= 171 && o <= 234) {",
+   "replacement": "if (o >= 171 && o <= 233) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-52",
+   "file": "src/tex/dvi.ts",
+   "test": "test/unit/tex-dvi.test.ts",
+   "original": "box(X, Y, X + b * toPt, Y + a * toPt);",
+   "replacement": "box(X, Y, X + b * toPt, Y);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-53",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "(c + r) * 52845 + 22719",
+   "replacement": "(c + r) * 52845 + 22718",
+   "equivalent": null
+  },
+  {
+   "id": "tex-54",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "(c + r) * 52845 + 22719",
+   "replacement": "(c + r) * 52844 + 22719",
+   "equivalent": null
+  },
+  {
+   "id": "tex-55",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "const p = c ^ (r >> 8);",
+   "replacement": "const p = c ^ (r >> 7);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-56",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (i >= skip) out[i - skip] = p;",
+   "replacement": "if (i > skip) out[i - skip] = p;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-57",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (pfb[0] !== 0x80) {",
+   "replacement": "if (false) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-58",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "clear: text.slice(0, k + 5), enc: bin",
+   "replacement": "clear: text.slice(0, k + 4), enc: bin",
+   "equivalent": "the cleartext of a PFA is only searched for FontName, FontBBox, FontMatrix and Encoding, which never touch the last letter of eexec"
+  },
+  {
+   "id": "tex-59",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "text.slice(k + 5)",
+   "replacement": "text.slice(k + 4)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-60",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (type === 3) break;",
+   "replacement": "if (type === 4) break;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-61",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "(pfb[p + 3]! << 8)",
+   "replacement": "(pfb[p + 3]! << 7)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-62",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (p + 6 + n > pfb.length)",
+   "replacement": "if (p + 6 + n >= pfb.length)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-63",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (type === 1) clear += latin1(body);",
+   "replacement": "if (type === 2) clear += latin1(body);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-64",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (start + n > priv.length)",
+   "replacement": "if (start + n >= priv.length)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-65",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "head.lastIndex = start + n;",
+   "replacement": "head.lastIndex = start;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-66",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "const priv = decryptType1(enc, 55665, 4);",
+   "replacement": "const priv = decryptType1(enc, 55665, 3);",
+   "equivalent": "the four lead bytes are never read: a text search runs on the plain part, so one extra byte in front changes no result"
+  },
+  {
+   "id": "tex-67",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (!fontName) throw new Error(\"type1: no /FontName\");",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-68",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "?? [0, 0, 0, 0]",
+   "replacement": "?? [0, 0, 0, 1]",
+   "equivalent": null
+  },
+  {
+   "id": "tex-69",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "?? [0.001, 0, 0, 0.001, 0, 0]",
+   "replacement": "?? [0.01, 0, 0, 0.001, 0, 0]",
+   "equivalent": null
+  },
+  {
+   "id": "tex-70",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (/\\/Encoding\\s+StandardEncoding\\s+def/.test(clear)) encoding = STANDARD.slice();",
+   "replacement": "if (false) encoding = STANDARD.slice();",
+   "equivalent": null
+  },
+  {
+   "id": "tex-71",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "/\\/lenIV\\s+(-?\\d+)/.exec(text)?.[1] ?? 4",
+   "replacement": "/\\/lenIV\\s+(-?\\d+)/.exec(text)?.[1] ?? 3",
+   "equivalent": null
+  },
+  {
+   "id": "tex-72",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "(lenIV < 0 ? b :",
+   "replacement": "(lenIV <= 0 ? b :",
+   "equivalent": null
+  },
+  {
+   "id": "tex-73",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (subrStart >= 0) {",
+   "replacement": "if (false) {",
+   "equivalent": null
+  },
+  {
+   "id": "tex-74",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (csStart < 0) throw new Error(\"type1: no /CharStrings\");",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-75",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (depth > 20)",
+   "replacement": "if (depth > 21)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-76",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (depth > 20)",
+   "replacement": "if (depth > 19)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-77",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (v <= 246) st.push(v - 139);",
+   "replacement": "if (v <= 246) st.push(v - 138);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-78",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "(v - 247) * 256 + b[i++]! + 108",
+   "replacement": "(v - 247) * 256 + b[i++]! + 109",
+   "equivalent": null
+  },
+  {
+   "id": "tex-79",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "-(v - 251) * 256 - b[i++]! - 108",
+   "replacement": "-(v - 251) * 256 - b[i++]! - 107",
+   "equivalent": null
+  },
+  {
+   "id": "tex-80",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "else if (v <= 250)",
+   "replacement": "else if (v <= 251)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-81",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "advance = st[1]!;\n            x = ox + st[0]!;\n            y = oy;",
+   "replacement": "advance = st[0]!;\n            x = ox + st[0]!;\n            y = oy;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-82",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "x = ox + st[0]!;\n            y = oy;",
+   "replacement": "x = st[0]!;\n            y = oy;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-83",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "x = ox + st[0]!;\n            y = oy;",
+   "replacement": "x = ox + st[0]!;\n            y = 0;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-84",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "rmove(st[0]!, st[1]!);",
+   "replacement": "rmove(st[1]!, st[0]!);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-85",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "rmove(st[0]!, 0);",
+   "replacement": "rmove(0, st[0]!);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-86",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "rmove(0, st[0]!);",
+   "replacement": "rmove(st[0]!, 0);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-87",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "lineTo(x + st[0]!, y + st[1]!);",
+   "replacement": "lineTo(x + st[1]!, y + st[0]!);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-88",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "lineTo(x + st[0]!, y);",
+   "replacement": "lineTo(x, y + st[0]!);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-89",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "lineTo(x, y + st[0]!);",
+   "replacement": "lineTo(x + st[0]!, y);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-90",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "curveTo(x + a, y + b2, x + a + c, y + b2 + e, x + a + c + f, y + b2 + e + g);",
+   "replacement": "curveTo(x + a, y + b2, x + c, y + e, x + a + c + f, y + b2 + e + g);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-91",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "curveTo(x, y + a, x + b2, y + a + c, x + b2 + e, y + a + c);",
+   "replacement": "curveTo(x, y + a, x + b2, y + a + c, x + b2 + e, y + a);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-92",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "curveTo(x + a, y, x + a + b2, y + c, x + a + b2, y + c + e);",
+   "replacement": "curveTo(x + a, y, x + a + b2, y + c, x + a, y + c + e);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-93",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "case 9:\n            close();",
+   "replacement": "case 9:\n            ",
+   "equivalent": null
+  },
+  {
+   "id": "tex-94",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "case 14:\n            close();",
+   "replacement": "case 14:\n            ",
+   "equivalent": "every caller of the charstring runner closes the open path after endchar, so the close in endchar adds nothing"
+  },
+  {
+   "id": "tex-95",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "case 1:\n          case 3: // hstem, vstem\n            st.length = 0;",
+   "replacement": "case 1:\n          case 3: // hstem, vstem\n            ",
+   "equivalent": null
+  },
+  {
+   "id": "tex-96",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "case 2: // dotsection, vstem3, hstem3\n                st.length = 0;",
+   "replacement": "case 2: // dotsection, vstem3, hstem3\n                ",
+   "equivalent": null
+  },
+  {
+   "id": "tex-97",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "const n = st.pop()!;\n            const s = subrs.get(n);",
+   "replacement": "const n = st[0]!;\n            const s = subrs.get(n);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-98",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (exec(s, ox, oy, depth + 1, st) === \"end\") return \"end\";",
+   "replacement": "exec(s, ox, oy, depth + 1, st);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-99",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "case 11:\n            return \"return\";",
+   "replacement": "case 11:\n            return \"end\";",
+   "equivalent": null
+  },
+  {
+   "id": "tex-100",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "advance = st[2]!;\n                x = ox + st[0]!;\n                y = oy + st[1]!;",
+   "replacement": "advance = st[2]!;\n                x = ox + st[0]!;\n                y = oy;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-101",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "advance = st[2]!;",
+   "replacement": "advance = st[1]!;",
+   "equivalent": null
+  },
+  {
+   "id": "tex-102",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "st.push(p2 / q);",
+   "replacement": "st.push(p2 * q);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-103",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (other === 1) flex = [];",
+   "replacement": "if (other === 2) flex = [];",
+   "equivalent": null
+  },
+  {
+   "id": "tex-104",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "!flex || flex.length < 7",
+   "replacement": "!flex || flex.length < 6",
+   "equivalent": null
+  },
+  {
+   "id": "tex-105",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "ps.push(args[2]!, args[1]!);",
+   "replacement": "ps.push(args[1]!, args[2]!);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-106",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "curveTo(p[1]![0], p[1]![1], p[2]![0], p[2]![1], p[3]![0], p[3]![1]);",
+   "replacement": "curveTo(p[0]![0], p[0]![1], p[2]![0], p[2]![1], p[3]![0], p[3]![1]);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-107",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "flex.push([last[0] + dx, last[1] + dy]);",
+   "replacement": "flex.push([last[0] + dx, last[1]]);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-108",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "st.push(ps.pop()!);",
+   "replacement": "st.push(0);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-109",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "x = ox + st[0]!;\n                y = oy + st[1]!;\n                st.length = 0;\n                break;\n              case 6:",
+   "replacement": "x = st[0]!;\n                y = oy + st[1]!;\n                st.length = 0;\n                break;\n              case 6:",
+   "equivalent": null
+  },
+  {
+   "id": "tex-110",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "exec(as, ox + adx - asb + keep.sbx, oy + ady, depth + 1, []);",
+   "replacement": "exec(as, ox + adx - asb, oy + ady, depth + 1, []);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-111",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "exec(as, ox + adx - asb + keep.sbx, oy + ady, depth + 1, []);",
+   "replacement": "exec(as, ox + adx + asb + keep.sbx, oy + ady, depth + 1, []);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-112",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "exec(as, ox + adx - asb + keep.sbx, oy + ady, depth + 1, []);",
+   "replacement": "exec(as, ox + adx - asb + keep.sbx, oy, depth + 1, []);",
+   "equivalent": null
+  },
+  {
+   "id": "tex-113",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "advance = keep.advance;",
+   "replacement": "",
+   "equivalent": null
+  },
+  {
+   "id": "tex-114",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "sbx = keep.sbx;",
+   "replacement": "",
+   "equivalent": "the glyph returns at once after seac, so nothing reads sbx again"
+  },
+  {
+   "id": "tex-115",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "bbox: empty ? [0, 0, 0, 0] : [minX, minY, maxX, maxY]",
+   "replacement": "bbox: [minX, minY, maxX, maxY]",
+   "equivalent": null
+  },
+  {
+   "id": "tex-116",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "String(Math.round(v * 100) / 100)",
+   "replacement": "String(Math.floor(v * 100) / 100)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-117",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "String(Math.round(v * 100) / 100)",
+   "replacement": "String(Math.round(v * 10) / 10)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-118",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (start + n > priv.length)",
+   "replacement": "if (start + n > priv.length + 1)",
+   "equivalent": null
+  },
+  {
+   "id": "tex-119",
+   "file": "src/tex/type1.ts",
+   "test": "test/unit/tex-type1.test.ts",
+   "original": "if (hit !== undefined) return hit;",
+   "replacement": "",
+   "equivalent": null
+  }
+ ]
+}

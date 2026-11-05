@@ -64,7 +64,7 @@
     "test": "bun test",
     "smoke": "node test/smoke/smoke.mjs",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "test:node": "node --test test/node/worker.node.mjs test/node/eval-render.node.mjs test/node/worker-execargv.node.mjs test/node/math.node.mjs test/node/mesh.node.mjs"
+    "test:node": "node --test test/node/worker.node.mjs test/node/eval-render.node.mjs test/node/worker-execargv.node.mjs test/node/math.node.mjs test/node/mesh.node.mjs test/node/tex-timeout.node.mjs"
   },
   "keywords": [
     "graphviz",
