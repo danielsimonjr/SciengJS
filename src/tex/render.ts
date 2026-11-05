@@ -35,6 +35,11 @@ export interface RenderTexOptions {
   maxOutputBytes?: number;
   /** The border of the SVG in SVG units. */
   margin?: number;
+  /**
+   * When `false`, the boxes of glyphs and rules inside a transformed raw group join the bounds, as in the T6 trial.
+   * The default is `true`: they do not join, because their DVI positions are not their places on the page.
+   */
+  skipTransformedBoxes?: boolean;
 }
 
 /** The result of one TeX render. */
@@ -111,7 +116,7 @@ export async function renderTex(o: RenderTexOptions): Promise<RenderTexResult> {
         const tfm = run.get(`${name}.tfm`);
         return tfm ? { tfm, pfb: run.get(`${name}.pfb`) ?? null } : null;
       },
-      { special: specials.special, transformed: specials.transformed, unitPerPt: SPECIAL_UNIT_PER_PT, ...(o.margin === undefined ? {} : { margin: o.margin }) },
+      { special: specials.special, transformed: o.skipTransformedBoxes === false ? () => false : specials.transformed, unitPerPt: SPECIAL_UNIT_PER_PT, ...(o.margin === undefined ? {} : { margin: o.margin }) },
     );
   } catch (e) {
     if (isRenderError(e)) throw e;

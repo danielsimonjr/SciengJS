@@ -121,5 +121,8 @@ jobs:
       - name: Render-time gate (circuit, first render and warm renders)
         run: SCIENG_TEX_BUNDLE_DIR=.tex-build/bundles $RUN test/node/tex-render-time.mjs
 
+      - name: Engine render test (T6 hash and the bounds fix)
+        run: SCIENG_TEX_BUILD_DIR=.tex-build bun test test/integration/tex-render.test.ts
+
       - name: Corpus gate (tikz samples)
         run: SCIENG_TEX_BUNDLE_DIR=.tex-build/bundles bun test test/integration/tikz-corpus.test.ts
