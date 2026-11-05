@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- The package exports `BINARY_INPUT_TYPES`, the input types whose source is bytes. An adapter reads a file of these types as bytes, not as text.
+
 ## [0.7.0] - 2026-11-04
 
 ### Added
@@ -16,7 +20,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The test reader of glb files checks more. It checks the chunk order, the JSON space padding and the BIN zero padding. It checks unit normals, one material per colour, the scene and the nodes. Each accessor, buffer view and material must be used.
 - The mutation audit of the glb writer and the glb limit is in `test/mutation/mesh-glb-mutants.json`. An assertion kills all 46 non-equivalent mutants. Three mutants are equivalent.
 - The smoke test renders a BREP sample to `glb` from the installed tarball under Node. `test:node` runs a mesh test against `dist/`.
-- The pairs `step`, `iges` and `brep` to `html` render a viewer page. The page embeds the `glb` as base64 text. It loads Three.js 0.187.0 (exact pin, MIT) from six pinned CDN URLs, each with a subresource integrity value in an import map and in a modulepreload link. The page has orbit controls, section planes on the three axes and an exploded view. A normal browser requests only the pinned modules.
+- The pairs `step`, `iges` and `brep` to `html` render a viewer page. The page embeds the `glb` as base64 text. It loads Three.js 0.187.0 (exact pin, MIT) from six pinned CDN URLs. Each URL has a subresource integrity value in an import map and in a modulepreload link. The page has orbit controls, section planes on the three axes and an exploded view. A normal browser requests only the pinned modules.
 - The pairs `step`, `iges` and `brep` to `png` render the viewer page in the browser stage. The client fulfils the pinned Three.js URLs from the assets folder, so no request leaves the process. The options are `width`, `height`, `scale` and `linearUnit`. The png page has no control panel.
 - The build copies six Three.js files into `assets/`. `THIRD_PARTY_NOTICES.md` names Three.js. The licence text is in `assets/licenses/MIT-three.txt`. The module `three.module.js` needs `three.core.js` by relative path, so six files are pinned, not five.
 - The browser stage option `awaitReady` waits for `window.__sciengDone` and then takes a plain screenshot. The client now answers a pinned URL with an `Access-Control-Allow-Origin` header, because a module script is a cross-origin request.
@@ -43,7 +47,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Fixed
 
-- The browser gate `attribution-control` no longer races the process sampler. The child process stays alive until the gate stops it, and a 60 s deadline bounds the wait. Before, a slow first sample on a Windows runner let the child exit at its 15 s timer, so the gate failed with no fault in the engine.
+- The browser gate `attribution-control` no longer races the process sampler. The child process stays alive until the gate stops it, and a 60 s deadline bounds the wait. Before, a slow first sample on a Windows runner let the child exit at its 15 s timer. The gate then failed with no fault in the engine.
 
 ## [0.5.1] - 2026-11-04
 

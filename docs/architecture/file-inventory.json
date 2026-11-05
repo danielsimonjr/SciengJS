@@ -1,11 +1,11 @@
 {
-  "totalFiles": 223,
+  "totalFiles": 224,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 71,
     "test-only": 3,
     "orphan": 12,
-    "test": 109,
+    "test": 110,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 28,
     "src": 86,
-    "tests": 109
+    "tests": 110
   },
   "byPackage": {
-    "(root)": 151,
+    "(root)": 152,
     "@danielsimonjr/sciengjs": 72
   },
   "files": [
@@ -229,7 +229,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 28
+      "loc": 29
     },
     {
       "file": "src/math/backend-pdf.ts",
@@ -958,6 +958,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 124
+    },
+    {
+      "file": "test/unit/index-exports.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 9
     },
     {
       "file": "test/unit/math-backends.test.ts",

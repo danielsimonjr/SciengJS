@@ -7,6 +7,7 @@ export { RenderError, RENDER_ERROR_CODES, type RenderErrorCode } from "./errors.
 export { loadConfig, type SciengConfig, type NetworkPolicy } from "./config.ts";
 export {
   INPUT_TYPES,
+  BINARY_INPUT_TYPES,
   OUTPUT_FORMATS,
   type InputType,
   type OutputFormat,

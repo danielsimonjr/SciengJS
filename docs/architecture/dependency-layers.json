@@ -1244,7 +1244,7 @@
     },
     "entry": {
       "src/index.ts": {
-        "description": "Package entry point for src (re-exports 15 symbols)",
+        "description": "Package entry point for src (re-exports 16 symbols)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -1299,6 +1299,7 @@
             "file": "./types.ts",
             "imports": [
               "INPUT_TYPES",
+              "BINARY_INPUT_TYPES",
               "OUTPUT_FORMATS",
               "InputType",
               "OutputFormat",
@@ -1320,6 +1321,7 @@
           "SciengConfig",
           "NetworkPolicy",
           "INPUT_TYPES",
+          "BINARY_INPUT_TYPES",
           "OUTPUT_FORMATS",
           "InputType",
           "OutputFormat",
@@ -1339,6 +1341,7 @@
           "SciengConfig",
           "NetworkPolicy",
           "INPUT_TYPES",
+          "BINARY_INPUT_TYPES",
           "OUTPUT_FORMATS",
           "InputType",
           "OutputFormat",

@@ -51,6 +51,7 @@
       "svgPageHtml"
     ],
     "entry": [
+      "BINARY_INPUT_TYPES",
       "Capability",
       "INPUT_TYPES",
       "InputType",
