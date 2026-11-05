@@ -1,4 +1,5 @@
-import { RenderError } from "../errors.ts";
+import { inputError, RenderError } from "../errors.ts";
+import { xmlSafe } from "../graph/text.ts";
 
 /** The three Mermaid diagram kinds that the native layouts draw. */
 export type DiagramKind = "class" | "state" | "sequence";
@@ -55,37 +56,6 @@ export function readLenient(options: Record<string, unknown>, extra: readonly st
     }
   }
   return lenient;
-}
-
-/** The text of a request. The source is text for every Mermaid request, and a byte source is read as UTF-8. */
-export function sourceText(source: string | Uint8Array): string {
-  return typeof source === "string" ? source : new TextDecoder().decode(source);
-}
-
-/**
- * Replaces each code point that XML 1.0 forbids with U+FFFD.
- * Valid text, including surrogate pairs, stays unchanged.
- */
-export function xmlSafe(text: string): string {
-  return text.replace(
-    /[^\u{9}\u{A}\u{D}\u{20}-\u{D7FF}\u{E000}-\u{FFFD}\u{10000}-\u{10FFFF}]/gu,
-    "\u{FFFD}",
-  );
-}
-
-/** Escapes text for a quoted DOT string: XML-safe, with each backslash and double quote escaped. */
-export function escapeDot(text: string): string {
-  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
-}
-
-/** Escapes text for a field of a DOT record label: XML-safe, with each record symbol escaped. */
-export function escapeRecord(text: string): string {
-  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/[{}|<>"]/g, "\\$&");
-}
-
-/** An input error that names its source line. */
-export function inputError(line: number, message: string): RenderError {
-  return new RenderError("E_INPUT", `line ${line}: ${message}`, { line });
 }
 
 /**

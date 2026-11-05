@@ -1,5 +1,5 @@
 import { drawSvgToPdf } from "../mermaid/browser.ts";
-import { sourceText } from "../mermaid/common.ts";
+import { sourceText } from "../graph/text.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
 import { renderSysmlSvg } from "./render.ts";
 

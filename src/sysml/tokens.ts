@@ -1,4 +1,4 @@
-import { inputError } from "../mermaid/common.ts";
+import { inputError } from "../errors.ts";
 
 /** The kind of a SysML token. */
 export type TokenKind = "name" | "number" | "string" | "symbol";

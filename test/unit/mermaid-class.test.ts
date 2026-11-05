@@ -1,22 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/errors.ts";
 import { prepare } from "../../src/mermaid/common.ts";
 import { classToDot, parseClassDiagram, type ClassModel, type Marker } from "../../src/mermaid/class.ts";
 import { dotToSvg } from "../../src/graph/dot.ts";
+import { rejection } from "../support/rejections.ts";
 
 function parse(source: string, options: Record<string, unknown> = {}): ClassModel {
   return parseClassDiagram(prepare(source, options));
-}
-
-/** Runs a function that must throw a RenderError, and returns that error. */
-function rejection(fn: () => unknown): RenderError {
-  try {
-    fn();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
 }
 
 /** Each arrow token of the grammar, with the dash style and the marker at each end. */

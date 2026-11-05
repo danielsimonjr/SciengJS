@@ -1,18 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/errors.ts";
+import { rejection } from "../support/rejections.ts";
 import { tokenize } from "../../src/sysml/tokens.ts";
 import { parseSysml, type SysmlModel } from "../../src/sysml/parse.ts";
-
-/** Runs a function that must throw a RenderError, and returns that error. */
-function rejection(fn: () => unknown): RenderError {
-  try {
-    fn();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
-}
 
 /** Parses a source that must be accepted. A rejection fails the test with its message. */
 function accepted(source: string, lenient = false): SysmlModel {

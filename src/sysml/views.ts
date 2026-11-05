@@ -1,6 +1,6 @@
 import { RenderError } from "../errors.ts";
-import { escapeDot, escapeRecord } from "../mermaid/common.ts";
-import type { Attribute, PartDef, PlainDef, Requirement, RequirementDef, SysmlModel } from "./parse.ts";
+import { escapeDot, escapeRecord } from "../graph/text.ts";
+import { baseChain, type Attribute, type PartDef, type PlainDef, type Requirement, type RequirementDef, type SysmlModel } from "./parse.ts";
 
 /** The views of the design: block definition, internal block and requirements. */
 export type SysmlView = "bdd" | "ibd" | "requirements";
@@ -86,14 +86,8 @@ function bdd(model: SysmlModel, out: string[]): void {
   }
 }
 
-/** The chain of a part def and its bases. The parser has already rejected a cycle. */
 function chain(model: SysmlModel, def: PartDef): PartDef[] {
-  const out: PartDef[] = [];
-  for (let at: PartDef | undefined = def; at !== undefined; at = model.partDefs.find((d) => d.name === at!.base)) {
-    out.push(at);
-    if (at.base === undefined) break;
-  }
-  return out;
+  return baseChain(model.partDefs, def);
 }
 
 function ibd(model: SysmlModel, rootName: string, out: string[]): void {

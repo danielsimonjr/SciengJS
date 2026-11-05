@@ -1,4 +1,5 @@
-import { inputError, outside, type Source } from "./common.ts";
+import { inputError } from "../errors.ts";
+import { outside, type Source } from "./common.ts";
 
 /** Describes one participant of a sequence diagram. */
 export interface Participant {

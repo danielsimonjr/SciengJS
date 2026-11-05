@@ -1,4 +1,6 @@
-import { inputError, outside, xmlSafe, type ContentLine, type Source } from "./common.ts";
+import { inputError } from "../errors.ts";
+import { xmlSafe } from "../graph/text.ts";
+import { outside, type ContentLine, type Source } from "./common.ts";
 
 /** One declared state of a stateDiagram-v2. */
 export interface StateDef {

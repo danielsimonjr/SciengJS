@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/errors.ts";
+import { rejection } from "../support/rejections.ts";
 import { parseSysml } from "../../src/sysml/parse.ts";
 import { readSysmlOptions, sysmlToDot } from "../../src/sysml/views.ts";
 import { renderSysmlSvg } from "../../src/sysml/render.ts";
@@ -32,16 +32,6 @@ function dot(options: Record<string, unknown>, source = VEHICLE): string {
 
 function lines(text: string, part: string): string[] {
   return text.split("\n").filter((l) => l.includes(part));
-}
-
-function rejection(fn: () => unknown): RenderError {
-  try {
-    fn();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
 }
 
 describe("sysml options", () => {

@@ -1,5 +1,6 @@
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
-import { readLenient, routesToBrowser, sourceText } from "./common.ts";
+import { sourceText } from "../graph/text.ts";
+import { readLenient, routesToBrowser } from "./common.ts";
 import { drawMermaidInBrowser } from "./browser.ts";
 import { renderMermaidSvg } from "./render.ts";
 

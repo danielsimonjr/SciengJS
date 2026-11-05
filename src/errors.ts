@@ -51,3 +51,8 @@ export function isRenderError(value: unknown): value is RenderError {
   }
   return (RENDER_ERROR_CODES as readonly string[]).includes(code);
 }
+
+/** An input error that names its source line. */
+export function inputError(line: number, message: string): RenderError {
+  return new RenderError("E_INPUT", `line ${line}: ${message}`, { line });
+}

@@ -1,7 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { dotToSvg } from "../../src/graph/dot.ts";
 import { classToDot, parseClassDiagram, type ClassModel } from "../../src/mermaid/class.ts";
-import { prepare, xmlSafe } from "../../src/mermaid/common.ts";
+import { xmlSafe } from "../../src/graph/text.ts";
+import { prepare } from "../../src/mermaid/common.ts";
 import { renderMermaidSvg } from "../../src/mermaid/render.ts";
 import type { SequenceModel } from "../../src/mermaid/sequence.ts";
 import { layoutSequence } from "../../src/mermaid/sequence-layout.ts";
