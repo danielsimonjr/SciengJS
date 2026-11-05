@@ -21,6 +21,11 @@ export interface DviOptions {
   unitPerPt?: number;
   /** Reads one `\special` at the current position. It can give SVG text for the page and a box for the bounds. */
   special?: (text: string, at: SpecialPosition) => SpecialResult | null;
+  /**
+   * Tells whether the page is inside a transformed group. While it gives true, the boxes of glyphs and rules do not
+   * join the bounds, because their DVI positions are not their places on the page. The boxes of specials still do.
+   */
+  transformed?: () => boolean;
 }
 
 /** The result of the DVI converter. */
@@ -144,7 +149,7 @@ export function dviToSvg(dvi: Uint8Array, fontFiles: (name: string) => FontFiles
         const Y = v * toPt;
         const ks = Number(k.toFixed(6));
         out.push(`<path transform="translate(${r(X)} ${r(Y)}) scale(${ks} ${-ks})" d="${g.d}"/>`);
-        box(X + g.bbox[0] * k, Y - g.bbox[3] * k, X + g.bbox[2] * k, Y - g.bbox[1] * k);
+        if (!opt.transformed?.()) box(X + g.bbox[0] * k, Y - g.bbox[3] * k, X + g.bbox[2] * k, Y - g.bbox[1] * k);
         glyphs++;
       }
     }
@@ -155,7 +160,7 @@ export function dviToSvg(dvi: Uint8Array, fontFiles: (name: string) => FontFiles
       const X = h * toPt;
       const Y = (v - a) * toPt;
       out.push(`<rect x="${r(X)}" y="${r(Y)}" width="${r(b * toPt)}" height="${r(a * toPt)}"/>`);
-      box(X, Y, X + b * toPt, Y + a * toPt);
+      if (!opt.transformed?.()) box(X, Y, X + b * toPt, Y + a * toPt);
       rules++;
     }
   };

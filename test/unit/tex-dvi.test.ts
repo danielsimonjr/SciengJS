@@ -179,6 +179,21 @@ describe("tex dvi: pages and specials", () => {
     expect(r.specials).toBe(2);
   });
 
+  test("glyph and rule boxes do not join the bounds while the transformed option says true", () => {
+    const dvi = page().right(1, 3).special("dvisvgm:bbox 10 5").set(65).setRule(2, 3).eop().post().done();
+    let inside = true;
+    const base = { special: (t: string) => (t.startsWith("dvisvgm:bbox") ? { box: [0, 0, 10, 5] } : null) };
+    const all = dviToSvg(dvi, files, base);
+    expect(all.svg).toContain('viewBox="-1 -4 13 10"');
+    const kept = dviToSvg(dvi, files, { ...base, transformed: () => inside });
+    expect(kept.svg).toContain('viewBox="-1 -1 12 7"');
+    expect(kept.glyphs).toBe(1);
+    expect(kept.svg).toContain("<path");
+    expect(kept.svg).toContain("<rect");
+    inside = false;
+    expect(dviToSvg(dvi, files, { ...base, transformed: () => inside }).svg).toBe(all.svg);
+  });
+
   test("without a callback a special only counts, and a special on another page is not offered", () => {
     expect(dviToSvg(page().special("a").special("b").eop().post().done(), files).specials).toBe(2);
     let called = 0;

@@ -89,4 +89,40 @@ describe("tex specials", () => {
     s.ignored().push("x");
     expect(s.ignored()).toEqual(["ps:"]);
   });
+
+  test("transformed() is true between a raw group with a transform and its end", () => {
+    const s = createSpecials();
+    expect(s.transformed()).toBe(false);
+    s.special("color push gray 0", at);
+    expect(s.transformed()).toBe(false);
+    s.special('dvisvgm:raw <g stroke="none" transform="translate({?x},{?y})">', at);
+    expect(s.transformed()).toBe(true);
+    s.special("dvisvgm:raw <g fill='#000'>", at);
+    s.special("dvisvgm:raw </g>", at);
+    expect(s.transformed()).toBe(true);
+    s.special("dvisvgm:raw </g>", at);
+    expect(s.transformed()).toBe(false);
+    s.special("color pop", at);
+    expect(s.transformed()).toBe(false);
+    s.special("dvisvgm:raw </g>", at);
+    expect(s.transformed()).toBe(false);
+  });
+
+  test("transformed() counts the groups of color push, so that the next end closes the color group", () => {
+    const s = createSpecials();
+    s.special('dvisvgm:raw <g transform="rotate(1)">', at);
+    s.special("color push gray 0", at);
+    s.special("dvisvgm:raw </g>", at);
+    expect(s.transformed()).toBe(true);
+  });
+
+  test("transformed() counts a transform that a stored raw set puts on the page", () => {
+    const s = createSpecials();
+    s.special("dvisvgm:rawset a", at);
+    s.special('dvisvgm:raw <g transform="rotate(1)">', at);
+    expect(s.transformed()).toBe(false);
+    s.special("dvisvgm:endrawset", at);
+    s.special("dvisvgm:rawput a", at);
+    expect(s.transformed()).toBe(true);
+  });
 });
