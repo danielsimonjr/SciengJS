@@ -3,6 +3,7 @@ import { RenderError } from "./errors.ts";
 import { PAIRS, findPair } from "./pairs.ts";
 import { registryKey, type Registry } from "./registry.ts";
 import { runInWorker } from "./worker/run.ts";
+import type { BackendSettings } from "./worker/protocol.ts";
 import { BINARY_INPUT_TYPES, INPUT_TYPES, OUTPUT_FORMATS, type Capability, type OutputFormat, type RenderOptions, type RenderRequest, type RenderResult } from "./types.ts";
 
 /** The MIME type of each output format. */
@@ -62,6 +63,25 @@ export async function renderWithRegistry(
     throw new RenderError("E_STAGE_MISSING", "the browser stage needs SCIENG_BROWSER or the browser configuration key");
   }
 
+  const settings: BackendSettings = {
+    maxMemoryMb: cfg.maxMemoryMb,
+    rasterFont: cfg.rasterFont,
+    assetsUrl: cfg.assetsUrl,
+    browser: cfg.browser,
+    timeoutMs: cfg.timeoutMs,
+    allowNetwork: cfg.allowNetwork,
+    imageTimeoutMs: cfg.imageTimeoutMs,
+    maxCadNodes: cfg.maxCadNodes,
+    maxCadFacets: cfg.maxCadFacets,
+    maxImageBytes: cfg.maxImageBytes,
+    cacheDir: cfg.cacheDir,
+    texBundleUrl: cfg.texBundleUrl,
+  };
+  // A failed preload does not fail the render. The worker then loads the data itself and reports its own error,
+  // so the error codes and their order stay the same as without a preload.
+  const preloaded = entry.preload === undefined ? undefined : await entry.preload(settings, req.source).catch(() => undefined);
+  if (preloaded !== undefined) settings.texCore = preloaded;
+
   const out = await runInWorker(
     {
       moduleUrl: entry.moduleUrl,
@@ -71,20 +91,7 @@ export async function renderWithRegistry(
         format: req.format,
         source: req.source,
         options: (req.options ?? {}) as RenderOptions,
-        settings: {
-          maxMemoryMb: cfg.maxMemoryMb,
-          rasterFont: cfg.rasterFont,
-          assetsUrl: cfg.assetsUrl,
-          browser: cfg.browser,
-          timeoutMs: cfg.timeoutMs,
-          allowNetwork: cfg.allowNetwork,
-          imageTimeoutMs: cfg.imageTimeoutMs,
-          maxCadNodes: cfg.maxCadNodes,
-          maxCadFacets: cfg.maxCadFacets,
-          maxImageBytes: cfg.maxImageBytes,
-          cacheDir: cfg.cacheDir,
-          texBundleUrl: cfg.texBundleUrl,
-        },
+        settings,
       },
     },
     { timeoutMs: cfg.timeoutMs, maxMemoryMb: cfg.maxMemoryMb },

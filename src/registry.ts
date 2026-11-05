@@ -1,5 +1,7 @@
 import { extname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { texCoreFiles, type BundleSettings } from "./tex/bundles.ts";
+import { detectBundles } from "./tex/detect.ts";
 
 /** One backend: the module that the worker loads for a (type, format) pair. */
 export interface BackendEntry {
@@ -7,6 +9,11 @@ export interface BackendEntry {
   backend: string;
   /** An absolute file URL of a module that exports `render`. */
   moduleUrl: string;
+  /**
+   * Loads data in the parent process before the worker starts. The worker gets the result as `settings.texCore`.
+   * A preload that returns undefined or rejects leaves the worker to load the data itself.
+   */
+  preload?: (settings: BundleSettings, source: string | Uint8Array) => Promise<ReadonlyMap<string, Uint8Array> | undefined>;
 }
 
 /** Maps "type:format" to a backend. A key is missing when no backend is built in. */
@@ -16,6 +23,20 @@ export type Registry = Record<string, BackendEntry>;
 function backendUrl(name: string): string {
   const extension = extname(fileURLToPath(import.meta.url));
   return new URL(`./${name}${extension}`, import.meta.url).href;
+}
+
+/**
+ * The preload of the tikz entries. The package detection runs first. A source that the detection rejects loads no
+ * bundle: the worker then reports the error, as it does without a preload.
+ */
+async function texPreload(settings: BundleSettings, source: string | Uint8Array): Promise<ReadonlyMap<string, Uint8Array> | undefined> {
+  if (typeof source !== "string") return undefined;
+  try {
+    detectBundles(source);
+  } catch {
+    return undefined;
+  }
+  return texCoreFiles(settings);
 }
 
 /** The backends of this build. */
@@ -48,9 +69,9 @@ export const DEFAULT_REGISTRY: Registry = {
   "cad:stl": { backend: "mesh/manifold+stl", moduleUrl: backendUrl("mesh/backend-stl") },
   "cad:html": { backend: "mesh/manifold+viewer", moduleUrl: backendUrl("mesh/backend-html") },
   "cad:png": { backend: "mesh/manifold+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
-  "tikz:svg": { backend: "tex/etex", moduleUrl: backendUrl("tex/backend-svg") },
-  "tikz:png": { backend: "tex/etex+raster/resvg", moduleUrl: backendUrl("tex/backend-png") },
-  "tikz:pdf": { backend: "tex/etex+browser/chromium", moduleUrl: backendUrl("tex/backend-pdf") },
+  "tikz:svg": { backend: "tex/etex", moduleUrl: backendUrl("tex/backend-svg"), preload: texPreload },
+  "tikz:png": { backend: "tex/etex+raster/resvg", moduleUrl: backendUrl("tex/backend-png"), preload: texPreload },
+  "tikz:pdf": { backend: "tex/etex+browser/chromium", moduleUrl: backendUrl("tex/backend-pdf"), preload: texPreload },
   "sysml:svg": { backend: "sysml/graph", moduleUrl: backendUrl("sysml/backend-svg") },
   "sysml:png": { backend: "sysml/graph+raster/resvg", moduleUrl: backendUrl("sysml/backend-png") },
   "sysml:pdf": { backend: "sysml/graph+browser/chromium", moduleUrl: backendUrl("sysml/backend-pdf") },

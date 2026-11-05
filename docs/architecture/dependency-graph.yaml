@@ -4,7 +4,7 @@ metadata:
   language: typescript
   totalFiles: 281
   totalModules: 3
-  totalExports: 690
+  totalExports: 693
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -771,6 +771,10 @@ modules:
           imports:
             - runInWorker
           typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendSettings
+          typeOnly: true
         - file: src/types.ts
           imports:
             - BINARY_INPUT_TYPES
@@ -2293,7 +2297,16 @@ modules:
       nodeDependencies:
         - node:path
         - node:url
-      internalDependencies: []
+      internalDependencies:
+        - file: src/tex/bundles.ts
+          imports:
+            - texCoreFiles
+            - BundleSettings
+          typeOnly: false
+        - file: src/tex/detect.ts
+          imports:
+            - detectBundles
+          typeOnly: false
       exports:
         - BackendEntry
         - Registry
@@ -2627,6 +2640,7 @@ modules:
         - findBundle
         - loadBundleBytes
         - unpackBundle
+        - texCoreFiles
         - loadBundles
     src/tex/detect.ts:
       externalDependencies: []
@@ -2933,6 +2947,8 @@ modules:
             - TexTree
           typeOnly: false
       exports:
+        - LoadedCore
+        - loadCore
         - wrapSource
         - TikzSvg
         - renderTikzSvg
@@ -5627,8 +5643,8 @@ statistics:
   totalTypeScriptFiles: 281
   totalSourceFiles: 281
   totalModules: 3
-  totalLinesOfCode: 32433
-  totalExports: 690
+  totalLinesOfCode: 32501
+  totalExports: 693
   entryRoots: 101
   reachableFiles: 101
   dormantFiles: 8
@@ -5636,17 +5652,17 @@ statistics:
   testOnlyFiles: 0
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 72
+  totalTypeOnlyImports: 73
   noImporterFileCount: 8
-  unusedExportsCount: 51
+  unusedExportsCount: 53
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 7
-  totalInterfaces: 142
-  totalFunctions: 272
+  totalInterfaces: 143
+  totalFunctions: 274
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 71

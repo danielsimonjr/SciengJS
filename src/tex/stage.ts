@@ -9,7 +9,7 @@ import { TexTree } from "./vfs.ts";
 const FORMAT_PACKAGES: ReadonlySet<string> = new Set(["tikz", "pgf", "xcolor", "circuitikz", "standalone"]);
 
 /** The loaded engine of the core bundle: the module, the format and the tree of the core files. */
-interface LoadedCore {
+export interface LoadedCore {
   engine: TexEngine;
   format: { name: string; bytes: Uint8Array };
   tree: TexTree;
@@ -25,11 +25,21 @@ async function wasmModule(bytes: Uint8Array): Promise<object> {
   return api.compile(bytes);
 }
 
-/** Loads the core bundle once per process. The loaded value is reused while the pinned hash is the same. */
-async function core(settings: BundleSettings): Promise<LoadedCore> {
+/**
+ * Loads the core bundle once per process. The loaded value is reused while the pinned hash is the same. When the
+ * parent process gives the files in `settings.texCore`, the worker uses them, reads no bundle file and keeps no copy.
+ */
+export async function loadCore(settings: BundleSettings & { texCore?: ReadonlyMap<string, Uint8Array> }): Promise<LoadedCore> {
+  if (settings.texCore !== undefined) return coreOf(settings.texCore);
   const entry = findBundle("core");
   if (loadedCore?.sha256 === entry.sha256) return loadedCore.value;
-  const files = unpackBundle(await loadBundleBytes(entry, settings));
+  const value = await coreOf(unpackBundle(await loadBundleBytes(entry, settings)));
+  loadedCore = { sha256: entry.sha256, value };
+  return value;
+}
+
+/** Builds the loaded core from the files of the core bundle. */
+async function coreOf(files: ReadonlyMap<string, Uint8Array>): Promise<LoadedCore> {
   const need = (name: string): Uint8Array => {
     const f = files.get(name);
     if (f === undefined) throw new RenderError("E_INTEGRITY", `the core TeX bundle has no file ${name}`);
@@ -46,7 +56,6 @@ async function core(settings: BundleSettings): Promise<LoadedCore> {
     format: { name: "scieng.fmt", bytes: need("scieng.fmt") },
     tree,
   };
-  loadedCore = { sha256: entry.sha256, value };
   return value;
 }
 
@@ -77,7 +86,7 @@ export interface TikzSvg {
 export async function renderTikzSvg(
   source: string,
   options: Record<string, unknown>,
-  settings: Pick<BackendSettings, "cacheDir" | "texBundleUrl" | "allowNetwork" | "timeoutMs">,
+  settings: Pick<BackendSettings, "cacheDir" | "texBundleUrl" | "allowNetwork" | "timeoutMs" | "texCore">,
 ): Promise<TikzSvg> {
   const detected = detectBundles(source);
   const bundleSettings: BundleSettings = {
@@ -86,7 +95,7 @@ export async function renderTikzSvg(
     allowNetwork: settings.allowNetwork,
     timeoutMs: settings.timeoutMs,
   };
-  const base = await core(bundleSettings);
+  const base = await loadCore({ ...bundleSettings, ...(settings.texCore === undefined ? {} : { texCore: settings.texCore }) });
   const extra = detected.bundles.filter((b): b is Exclude<BundleName, "core"> => b !== "core");
   const tree = base.tree.fork();
   for (const files of (await loadBundles(extra, bundleSettings)).values()) {

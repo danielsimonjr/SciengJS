@@ -14,10 +14,11 @@
    5. The source size is within `maxSourceBytes`. Otherwise the render rejects with `E_LIMIT`. Heap exhaustion of the render worker also rejects with `E_LIMIT`.
    6. The registry has a backend for the pair. Otherwise the render rejects with `E_UNSUPPORTED`.
    7. The browser path exists when the stage needs a browser. Otherwise the render rejects with `E_STAGE_MISSING`.
-5. `runInWorker` in `src/worker/run.ts` starts a worker. The worker runs `src/worker/entry.ts`.
-6. The entry imports the backend module that the registry names. It calls `render` on that module and posts one message.
-7. The main thread settles on the first of: the message, a worker error, a worker exit, or the time limit. It then terminates the worker.
-8. `renderWithRegistry` returns the bytes, the MIME type, the backend name and the warnings.
+5. When the registry entry has a `preload`, the main thread runs it and puts the result in `settings.texCore`. A failed preload gives no value. The worker then loads the data itself and reports its own error.
+6. `runInWorker` in `src/worker/run.ts` starts a worker. The worker runs `src/worker/entry.ts`.
+7. The entry imports the backend module that the registry names. It calls `render` on that module and posts one message.
+8. The main thread settles on the first of: the message, a worker error, a worker exit, or the time limit. It then terminates the worker.
+9. `renderWithRegistry` returns the bytes, the MIME type, the backend name and the warnings.
 
 ## A DOT render to PNG
 

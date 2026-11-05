@@ -158,6 +158,13 @@
             ]
           },
           {
+            "file": "./worker/protocol.ts",
+            "imports": [
+              "BackendSettings"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./types.ts",
             "imports": [
               "BINARY_INPUT_TYPES",
@@ -237,7 +244,7 @@
         ]
       },
       "src/registry.ts": {
-        "description": "registry module",
+        "description": "Loads data in the parent process before the worker starts. The worker gets the result as `settings.texCore`.",
         "externalDependencies": [],
         "nodeDependencies": [
           {
@@ -253,7 +260,21 @@
             ]
           }
         ],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./tex/bundles.ts",
+            "imports": [
+              "texCoreFiles",
+              "BundleSettings"
+            ]
+          },
+          {
+            "file": "./tex/detect.ts",
+            "imports": [
+              "detectBundles"
+            ]
+          }
+        ],
         "workspaceDependencies": [],
         "exports": [
           "DEFAULT_REGISTRY",
@@ -4115,6 +4136,7 @@
           "findBundle",
           "loadBundleBytes",
           "unpackBundle",
+          "texCoreFiles",
           "loadBundles"
         ],
         "interfaces": [
@@ -4127,6 +4149,7 @@
           "findBundle",
           "loadBundleBytes",
           "unpackBundle",
+          "texCoreFiles",
           "loadBundles"
         ],
         "constants": [
@@ -4596,7 +4619,7 @@
         ]
       },
       "src/tex/stage.ts": {
-        "description": "Makes a standalone document from a TikZ source. A source with a `\\documentclass` is a document: the function only adds",
+        "description": "Loads the core bundle once per process. The loaded value is reused while the pinned hash is the same. When the",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -4647,13 +4670,16 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "loadCore",
           "wrapSource",
           "renderTikzSvg"
         ],
         "interfaces": [
+          "LoadedCore",
           "TikzSvg"
         ],
         "functions": [
+          "loadCore",
           "wrapSource",
           "renderTikzSvg"
         ]

@@ -120,6 +120,7 @@ The codebase is organized into the following modules:
 | `./pairs.ts` | `PAIRS, findPair` | Import |
 | `./registry.ts` | `registryKey, Registry` | Import |
 | `./worker/run.ts` | `runInWorker` | Import |
+| `./worker/protocol.ts` | `BackendSettings` | Import (type-only) |
 | `./types.ts` | `BINARY_INPUT_TYPES, INPUT_TYPES, OUTPUT_FORMATS, Capability, OutputFormat, RenderOptions, RenderRequest, RenderResult` | Import |
 
 **Exports:**
@@ -152,13 +153,19 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/registry.ts` - registry module
+### `src/registry.ts` - Loads data in the parent process before the worker starts. The worker gets the result as `settings.texCore`.
 
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
 | `path` | `extname` |
 | `url` | `fileURLToPath` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./tex/bundles.ts` | `texCoreFiles, BundleSettings` | Import |
+| `./tex/detect.ts` | `detectBundles` | Import |
 
 **Exports:**
 - Interfaces: `BackendEntry`
@@ -1542,7 +1549,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `BundleEntry`, `BundleSettings`
-- Functions: `cachePath`, `bundleUrl`, `findBundle`, `loadBundleBytes`, `unpackBundle`, `loadBundles`
+- Functions: `cachePath`, `bundleUrl`, `findBundle`, `loadBundleBytes`, `unpackBundle`, `texCoreFiles`, `loadBundles`
 - Constants: `BUNDLES`, `CACHE_SUBFOLDER`
 
 ---
@@ -1669,7 +1676,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/tex/stage.ts` - Makes a standalone document from a TikZ source. A source with a `\documentclass` is a document: the function only adds
+### `src/tex/stage.ts` - Loads the core bundle once per process. The loaded value is reused while the pinned hash is the same. When the
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1682,8 +1689,8 @@ The codebase is organized into the following modules:
 | `./vfs.ts` | `TexTree` | Import |
 
 **Exports:**
-- Interfaces: `TikzSvg`
-- Functions: `wrapSource`, `renderTikzSvg`
+- Interfaces: `LoadedCore`, `TikzSvg`
+- Functions: `loadCore`, `wrapSource`, `renderTikzSvg`
 
 ---
 
@@ -1871,7 +1878,7 @@ The codebase is organized into the following modules:
 | File | Imports From | Exports To |
 |------|--------------|------------|
 | `src/errors` | 0 files | 50 files |
-| `src/worker/protocol` | 2 files | 28 files |
+| `src/worker/protocol` | 2 files | 29 files |
 | `src/graph/text` | 0 files | 17 files |
 | `src/browser/render` | 6 files | 7 files |
 | `src/mermaid/browser` | 6 files | 7 files |
@@ -1883,10 +1890,10 @@ The codebase is organized into the following modules:
 | `src/mesh/backend-glb` | 6 files | 4 files |
 | `src/tex/stage` | 6 files | 4 files |
 | `src/config` | 3 files | 6 files |
+| `src/core` | 7 files | 1 file |
 | `src/graph/dot` | 2 files | 6 files |
 | `src/mermaid/backend-png` | 8 files | 0 files |
 | `src/tex/render` | 6 files | 2 files |
-| `src/core` | 6 files | 1 file |
 | `src/mesh/index` | 7 files | 0 files |
 | `src/sysml/render` | 3 files | 4 files |
 | `src/assets` | 1 file | 5 files |
@@ -1898,6 +1905,7 @@ The codebase is organized into the following modules:
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/sysml/backend-png` | 6 files | 0 files |
 | `src/tex/backend-png` | 6 files | 0 files |
+| `src/tex/bundles` | 3 files | 3 files |
 | `src/tex/run` | 4 files | 2 files |
 | `src/tex/vfs` | 1 file | 5 files |
 | `src/graph/backend-pdf` | 5 files | 0 files |
@@ -1909,7 +1917,6 @@ The codebase is organized into the following modules:
 | `src/mermaid/sequence` | 2 files | 3 files |
 | `src/mermaid/state` | 3 files | 2 files |
 | `src/mesh/cad-build` | 3 files | 2 files |
-| `src/mesh/cad-document` | 1 file | 4 files |
 
 ---
 
@@ -2094,6 +2101,7 @@ graph TD
     N2 --> N4
     N2 --> N5
     N2 --> N92
+    N2 --> N91
     N2 --> N6
     N19 --> N3
     N19 --> N91
@@ -2149,7 +2157,6 @@ graph TD
     N39 --> N44
     N39 --> N42
     N39 --> N46
-    N40 --> N13
 ```
 
 ---
@@ -2161,15 +2168,15 @@ graph TD
 |----------|-------|
 | Total Source Files | 281 |
 | Subsystems | 17 |
-| Total Lines of Code | 32433 |
-| Total Exports | 690 |
+| Total Lines of Code | 32501 |
+| Total Exports | 693 |
 | Total Re-exports | 167 |
 | Total Classes | 7 |
-| Total Interfaces | 142 |
-| Total Functions | 272 |
+| Total Interfaces | 143 |
+| Total Functions | 274 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 72 |
+| Type-only Imports | 73 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

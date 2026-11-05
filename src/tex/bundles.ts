@@ -164,6 +164,31 @@ export function unpackBundle(bytes: Uint8Array): Map<string, Uint8Array> {
   return out;
 }
 
+/** The files of the core bundle in this process, by the pinned hash and the loader. A rejected load is not kept. */
+let coreFiles: { sha256: string; load: unknown; files: Promise<ReadonlyMap<string, Uint8Array>> } | undefined;
+
+const loadCoreFiles = async (settings: BundleSettings): Promise<ReadonlyMap<string, Uint8Array>> =>
+  unpackBundle(await loadBundleBytes(findBundle("core"), settings));
+
+/**
+ * Returns the files of the core bundle. The parent process loads, checks and unpacks the bundle once. Each render
+ * worker then gets a copy of the files, so a fresh worker does not read, hash and inflate the bundle again. A load
+ * that rejects is not kept, so a later render tries again. `load` is a parameter so that tests replace it.
+ */
+export function texCoreFiles(
+  settings: BundleSettings,
+  load: (settings: BundleSettings) => Promise<ReadonlyMap<string, Uint8Array>> = loadCoreFiles,
+): Promise<ReadonlyMap<string, Uint8Array>> {
+  const sha256 = findBundle("core").sha256;
+  if (coreFiles?.sha256 === sha256 && coreFiles.load === load) return coreFiles.files;
+  const files = load(settings);
+  coreFiles = { sha256, load, files };
+  files.catch(() => {
+    if (coreFiles?.files === files) coreFiles = undefined;
+  });
+  return files;
+}
+
 /** Loads the named bundles and returns the files of each, in the order of the names. A name twice loads once. */
 export async function loadBundles(
   names: readonly BundleName[],

@@ -7,6 +7,10 @@ export function render(request: { source: string | Uint8Array; settings?: unknow
   if (source === "settings") {
     return { bytes: new TextEncoder().encode(JSON.stringify(request.settings)), warnings: [] };
   }
+  if (source === "texcore") {
+    const files = (request.settings as { texCore?: ReadonlyMap<string, Uint8Array> } | undefined)?.texCore;
+    return { bytes: new TextEncoder().encode(JSON.stringify(files === undefined ? null : [...files.keys()])), warnings: [] };
+  }
   if (source === "loop") {
     for (;;) {
       // Busy loop on purpose: the worker must be terminated by the time limit.
