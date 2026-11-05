@@ -255,3 +255,55 @@ describe("rejections", () => {
     expect(err.line).toBe(2);
   });
 });
+
+describe("font encodings", () => {
+  test("the OT1 encoding is accepted, with no option or as an option", () => {
+    expect(scan("\\usepackage{fontenc}").packages).toEqual(["fontenc"]);
+    expect(scan("\\usepackage[OT1]{fontenc}").packages).toEqual(["fontenc"]);
+    expect(scan("\\usepackage[]{fontenc}").bundles).toEqual(["core"]);
+    expect(scan("\\usepackage[ OT1 ]{fontenc}").bundles).toEqual(["core"]);
+  });
+
+  test("an option of another package may name T1", () => {
+    expect(scan("\\usepackage[utf8,T1]{inputenc}").packages).toEqual(["inputenc"]);
+  });
+
+  test("T1 rejects with the bundled encoding and the line", () => {
+    const err = rejection(() => detectBundles("a\n\\usepackage[T1]{fontenc}"));
+    expect(err.code).toBe("E_UNSUPPORTED");
+    expect(err.message).toContain('"T1"');
+    expect(err.message).toContain("only the OT1 encoding is bundled");
+    expect(err.line).toBe(2);
+  });
+
+  test("any encoding other than OT1 rejects, also in a list of options", () => {
+    for (const option of ["T2A", "OML", "T1,OT1", "OT1, T1", "OT1,\nT1", "LY1"]) {
+      const err = rejection(() => detectBundles(`\\usepackage[${option}]{fontenc}`));
+      expect(err.code).toBe("E_UNSUPPORTED");
+      expect(err.message).toContain("only the OT1 encoding is bundled");
+    }
+  });
+
+  test("the rejection names the first encoding that is not OT1", () => {
+    expect(rejection(() => detectBundles("\\usepackage[OT1,T1,T2A]{fontenc}")).message).toContain('"T1"');
+  });
+
+  test("fontenc inside a list of packages and RequirePackage reject too", () => {
+    expect(rejection(() => detectBundles("\\usepackage[T1]{tikz,fontenc}")).message).toContain("OT1");
+    expect(rejection(() => detectBundles("\\RequirePackage[T1]{fontenc}")).message).toContain("OT1");
+  });
+
+  test("T1 in a comment or in verbatim text is no request", () => {
+    expect(scan("% \\usepackage[T1]{fontenc}\n\\usepackage{fontenc}").packages).toEqual(["fontenc"]);
+    expect(scan("\\begin{verbatim}\\usepackage[T1]{fontenc}\\end{verbatim}").packages).toEqual([]);
+  });
+
+  test("the encoding rule does not match another package name", () => {
+    expect(scan("\\usepackage[T1]{inputenc}").packages).toEqual(["inputenc"]);
+  });
+
+  test("the first bad entry in the source wins", () => {
+    expect(rejection(() => detectBundles("\\usepackage{fancyhdr}\n\\usepackage[T1]{fontenc}")).message).toContain("fancyhdr");
+    expect(rejection(() => detectBundles("\\usepackage[T1]{fontenc}\n\\usepackage{fancyhdr}")).message).toContain("OT1");
+  });
+});
