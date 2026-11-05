@@ -141,6 +141,12 @@ describe("sysml requirements view", () => {
     expect(text).toContain('"elem:Truck" [shape=record, label="{part def\\nTruck}"];');
   });
 
+  test("a path that two satisfy relations name is one node", () => {
+    const t = dot({ view: "requirements" }, "requirement def A; requirement def B; part def V; satisfy A by V; satisfy B by V;");
+    expect(lines(t, '"elem:V" [').length).toBe(1);
+    expect(lines(t, '"elem:V" ->').length).toBe(2);
+  });
+
   test(":> between requirement defs draws a triangle edge", () => {
     const t = dot({ view: "requirements" }, "requirement def A; requirement def B :> A;");
     expect(t).toContain('"req:B" -> "req:A" [arrowhead=empty];');

@@ -5,11 +5,15 @@ import { parseSysml, type SysmlModel } from "../../src/sysml/parse.ts";
 
 /** Parses a source that must be accepted. A rejection fails the test with its message. */
 function accepted(source: string, lenient = false): SysmlModel {
+  let model: SysmlModel | undefined;
+  let message = "";
   try {
-    return parseSysml(source, lenient);
+    model = parseSysml(source, lenient);
   } catch (err) {
-    throw new Error(`expected the source to parse, got: ${(err as Error).message}`);
+    message = (err as Error).message;
   }
+  expect(message).toBe("");
+  return model!;
 }
 
 /** Asserts an E_INPUT rejection on a line, with a part of the message. */
@@ -41,6 +45,10 @@ describe("sysml tokens", () => {
 
   test("a string keeps an escaped quote and an escaped backslash", () => {
     expect(tokenize('"a\\"b\\\\c"')[0]!.value).toBe('a"b\\c');
+  });
+
+  test("a backslash before a quote or a backslash is an escape", () => {
+    expect(tokenize('"a\\\\b"')[0]!.value).toBe("a\\b");
   });
 
   test("line comments and block comments are skipped and keep the line count", () => {
@@ -262,6 +270,10 @@ describe("sysml lenient mode", () => {
     const m = accepted("action def X { a { b; } c; }\npart def A { doc; attribute x; }", true);
     expect(m.partDefs[0]!.attributes.map((a) => a.name)).toEqual(["x"]);
     expect(m.warnings.length).toBe(2);
+  });
+
+  test("an unknown statement stops at the close of its enclosing block", () => {
+    rejects("part def A { doc }\npart def B { attribute x; }", 1, "not closed", true);
   });
 
   test("an unknown statement that is not closed still rejects", () => {
