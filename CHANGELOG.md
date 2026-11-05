@@ -13,6 +13,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Added
 
+- Package detection of the TeX stage is in `src/tex/detect.ts`. `detectBundles(source)` reads package lines, `\usetikzlibrary`, environments and commands, and returns the bundles (`core` first) and the packages. It blanks comments, verbatim bodies and `\verb` text before the scan. A package with the GPL as its only licence rejects with `E_UNSUPPORTED`, and the message gives the replacement. A package that no bundle holds rejects with `E_UNSUPPORTED`. The method follows the Upmath templater (MIT), credited in `THIRD_PARTY_NOTICES.md`.
 - The workflow `tex.yml` builds the programs, runs the trip test and the e-TRIP gate, builds `scieng.fmt` and checks its sha256 and the pgf driver. It runs on Linux, Windows and macOS with Node 22, and on Linux with Bun 1.4.4. It uploads the artifact `tex-build`.
 - The runtime of the TeX stage is in `src/tex/`. It holds the virtual file tree, the host functions of the WASM engine, the run function and the render. It also holds the DVI reader, the Type 1 and TFM readers, and the reader of the dvisvgm specials. The stage is not in the registry yet, and no package export names it.
 - The virtual file tree holds only the files that a caller puts in it. A name that escapes the tree makes the open fail and the host records the name. The names are a `..` segment, an absolute path, a drive letter and a UNC path. Writes stay in memory.
