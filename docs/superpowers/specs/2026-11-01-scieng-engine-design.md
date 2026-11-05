@@ -174,7 +174,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - Runtime: the engine writes the host functions of the WASM module: file open, read and write on the virtual file system, and the terminal output.
 - The format holds LaTeX, `standalone`, `xcolor`, `tikz` and `circuitikz`. The text language is English only. No bundle holds `latex.fmt`.
 - The format and the bundles build from the packages of one pinned TeX Live year.
-- Licence rule: a package goes into a bundle only under the LPPL or in the public domain. A package that offers the LPPL as one option also qualifies. For a package with a licence choice, the engine uses the LPPL. A package with the GPL as its only licence does not go into a bundle. A font goes into a bundle only under the OFL or the GFL.
+- Licence rule: a package goes into a bundle only under the LPPL or in the public domain. A package that offers the LPPL as one option also qualifies. For a package with a licence choice, the engine uses the LPPL. A package with the GPL as its only licence does not go into a bundle. A font goes into a bundle only under the OFL or the GFL. The licence of Knuth also qualifies for the files of Knuth: the Computer Modern metric files (`cm`), `knuth-lib` and `hyphen.tex`. This licence permits copies of an unchanged file, and a changed file must have a new name. `tex.web` has the same terms. A TFM metric file is package data, not a font: the OFL and GFL rule applies to the outline files. For a file with no licence field in the catalogue, the engine reads the licence from the file header.
 - Extra bundles hold the rest of the package set:
   - diagrams: `tikz-cd`, `tikz-3dplot`, `smartdiagram`, the `hobby` TikZ library;
   - science: `chemfig`, `mhchem`, `bussproofs`;
