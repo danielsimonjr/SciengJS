@@ -1,5 +1,5 @@
 /**
- * The public surface of the SysML stage. It holds the tokenizer, the parser of the design subset, the option reader,
+ * The public surface of the SysML stage. The surface holds the tokenizer, the parser of the design subset, the option reader,
  * the views to DOT and the SVG render.
  */
 export { tokenize, type Token, type TokenKind } from "./tokens.ts";

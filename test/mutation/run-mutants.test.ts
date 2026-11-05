@@ -256,6 +256,23 @@ describe("the report gives the full text of each mutant", () => {
   }, WAIT_MS);
 });
 
+describe("a mutant with a line break matches a file with either line end", () => {
+  for (const eol of ["\n", "\r\n"]) {
+    test(`a two-line mutant applies to a source with ${eol === "\n" ? "LF" : "CRLF"} line ends`, () => {
+      const root = makeProbeFixture(
+        'test("assert", () => { if (mutated) expect(1).toBe(2); });',
+        { original: "export const value = 1;\n// the second line", replacement: "export const value = 1; // MUTATED\n// the second line" },
+        `export const value = 1;${eol}// the second line${eol}`,
+      );
+      try {
+        expect(reportOfProbe(root)).toContain("| value | src/value.ts:1 | killed |");
+      } finally {
+        rmSync(root, { recursive: true, force: true });
+      }
+    }, WAIT_MS);
+  }
+});
+
 describe("a kill is an assertion failure or an error that the code throws", () => {
   test("an assertion failure is counted as an assertion kill", () => {
     const root = makeProbeFixture('test("assert", () => { if (mutated) expect(1).toBe(2); });');

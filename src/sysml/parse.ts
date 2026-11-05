@@ -127,8 +127,8 @@ const KEYWORDS: ReadonlySet<string> = new Set(["package", "part", "port", "inter
 
 /**
  * Parses a source of the SysML subset of the design. A construct outside the subset rejects with E_INPUT and the line.
- * With lenient, a statement with an unknown keyword is skipped with a warning. The names resolve after the whole
- * source is read.
+ * With lenient, the parser skips a statement with an unknown keyword and records a warning. The names resolve after
+ * the parser reads the whole source.
  */
 export function parseSysml(source: string, lenient: boolean): SysmlModel {
   return new Parser(tokenize(source), lenient).run();
@@ -588,7 +588,7 @@ export interface Specializable {
 
 /**
  * The chain of a definition and its bases, the definition first. The chain stops at a base that names no definition
- * of the list, and at a base that is already in the chain, so a cycle cannot loop.
+ * of the list. The chain also stops at a base that is already in the chain, so a cycle cannot loop.
  */
 export function baseChain<T extends Specializable>(defs: readonly T[], def: T): T[] {
   const out: T[] = [];
