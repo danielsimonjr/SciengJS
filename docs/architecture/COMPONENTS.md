@@ -324,6 +324,29 @@ export function render(request: WorkerJob["request"]): Promise<BackendOutput>;
 
 Purpose: the public entry of the `./sysml` subpath. It re-exports the functions and the types of the SysML stage.
 
+## `src/tex/bundles.ts`
+
+Purpose: the bundle manager of the tex stage. `loadBundleBytes` resolves one bundle from the cache folder (`<cacheDir>/tex-bundles/<file>`) and hashes the file on every load. A cached file with a wrong hash is deleted. A download needs `tex-bundles` in `allowNetwork`. It reads `<texBundleUrl><file>` over `https:`, `http:` or `file:`, writes a temporary file, checks the size and the sha256, and renames the file into place. A wrong file is deleted and rejects with `E_INTEGRITY`. A bundle that is not cached, with the download not allowed, rejects with `E_STAGE_MISSING`, and the message names the bundle and the URL. `unpackBundle` reads the SCTB1 container that `tools/tex/bundles.mjs` writes.
+
+```ts
+export const BUNDLES: readonly BundleEntry[];
+export function loadBundleBytes(entry: BundleEntry, settings: BundleSettings): Promise<Uint8Array>;
+export function loadBundles(names: readonly BundleName[], settings: BundleSettings, bundles?: readonly BundleEntry[]): Promise<Map<BundleName, Map<string, Uint8Array>>>;
+export function unpackBundle(bytes: Uint8Array): Map<string, Uint8Array>;
+```
+
+## `src/tex/bundles.json`
+
+Purpose: the pinned list of the four bundles (name, file, sha256, bytes). `tools/tex/bundles.mjs pack` writes the list. The CI job `tex` fails when a built bundle differs from this file.
+
+## `src/tex/stage.ts`
+
+Purpose: the tikz render. `renderTikzSvg` calls `detectBundles`. It loads the core bundle once per process: the engine files, the format and the core tree. Then it forks the tree, adds the files of the other detected bundles and calls `renderTex`. `wrapSource` puts a bare picture in a `standalone` document with the class option `dvisvgm`, and adds that option to a source with its own `documentclass`. The option `margin` sets the border of the SVG.
+
+## `src/tex/backend-svg.ts`, `src/tex/backend-png.ts`, `src/tex/backend-pdf.ts`
+
+Purpose: the backends of `tikz` to `svg`, `png` and `pdf`. The png backend reads `scale` and calls `svgDocumentToPng`. The pdf backend calls `drawSvgToPdf` in the browser stage.
+
 ## `src/math/tex.ts`
 
 Purpose: the MathJax stage of the math subpath. It converts LaTeX math to a standalone SVG. The module holds the list `MATH_PACKAGES` and the type `MathOptions`.

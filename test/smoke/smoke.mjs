@@ -90,6 +90,7 @@ try {
   writeFileSync(
     join(app, "check.mjs"),
     `import { readFileSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { capabilities, render, RenderError } from "@danielsimonjr/sciengjs";
 import * as graph from "@danielsimonjr/sciengjs/graph";
 import * as raster from "@danielsimonjr/sciengjs/raster";
@@ -123,16 +124,16 @@ const sysml = await import("@danielsimonjr/sciengjs/sysml");
 if (typeof sysml.parseSysml !== "function" || typeof sysml.sysmlToDot !== "function") throw new Error("the sysml subpath did not load");
 const sysmlSvg = await render({ type: "sysml", source: "part def A { part b : B; } part def B;", format: "svg" }, {});
 if (!new TextDecoder().decode(sysmlSvg.bytes).includes("<svg")) throw new Error("sysml to svg returned no svg");
-for (const empty of ["tex"]) {
-  let refused = false;
-  try {
-    await import("@danielsimonjr/sciengjs/" + empty);
-  } catch (err) {
-    refused = err && err.code === "ERR_PACKAGE_PATH_NOT_EXPORTED";
-    if (!refused) throw err;
-  }
-  if (!refused) throw new Error("the subpath ./" + empty + " has no content and must not be exported");
+const tex = await import("@danielsimonjr/sciengjs/tex");
+if (!Array.isArray(tex.BUNDLES) || tex.BUNDLES.length !== 4 || typeof tex.detectBundles !== "function") throw new Error("the tex subpath did not load with its bundle list");
+let texLine = "tex subpath loads; tikz render not run (SCIENG_TEX_BUNDLE_DIR is not set)";
+if (process.env.SCIENG_TEX_BUNDLE_DIR) {
+  const texCache = fileURLToPath(new URL("./tex-cache/", import.meta.url));
+  const picture = await render({ type: "tikz", source: "\\\\begin{tikzpicture}\\\\draw (0,0) -- (1,1);\\\\end{tikzpicture}", format: "svg" }, { cacheDir: texCache, texBundleUrl: pathToFileURL(process.env.SCIENG_TEX_BUNDLE_DIR).href + "/", allowNetwork: "tex-bundles", timeoutMs: 120000 });
+  if (!new TextDecoder().decode(picture.bytes).includes("<path")) throw new Error("tikz to svg returned no path");
+  texLine = "tikz to svg " + picture.bytes.length + " bytes through the bundles of SCIENG_TEX_BUNDLE_DIR";
 }
+console.log(texLine);
 const caps = await capabilities({});
 if (!Array.isArray(caps) || caps.length === 0) throw new Error("capabilities returned no pairs");
 const svg = await render({ type: "dot", source: "digraph G { a -> b }", format: "svg" }, {});

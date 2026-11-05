@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 99 |
-| Total Test Files | 87 |
-| Source Files with Tests | 67 |
-| Source Files without Tests | 32 |
-| Coverage (raw, direct-import) | **67.7%** |
+| Total Source Files | 115 |
+| Total Test Files | 98 |
+| Source Files with Tests | 78 |
+| Source Files without Tests | 37 |
+| Coverage (raw, direct-import) | **67.8%** |
 ---
 
 ## Source Files Not Imported By A Test
 
-The following 32 source files are not directly imported by any test file:
+The following 37 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -62,6 +62,14 @@ The following 32 source files are not directly imported by any test file:
 - `src/sysml/backend-png.ts`
 - `src/sysml/backend-svg.ts`
 - `src/sysml/index.ts`
+
+### tex/
+
+- `src/tex/backend-pdf.ts`
+- `src/tex/backend-png.ts`
+- `src/tex/index.ts`
+- `src/tex/run.ts`
+- `src/tex/wasm.ts`
 
 ### worker/
 
@@ -110,9 +118,9 @@ The following 32 source files are not directly imported by any test file:
 | `browser/profile.ts` | `browser-render.test.ts` |
 | `browser/proxy.ts` | `browser-proxy.test.ts` |
 | `browser/render.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mesh-viewer.test.ts` |
-| `src/config.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `mesh-large.test.ts`, `render.test.ts` |
+| `src/config.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `mesh-large.test.ts`, `render.test.ts` |
 | `src/core.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-glb.test.ts`, `mesh-large.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `render.test.ts` |
-| `src/errors.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `cad-document.test.ts`, `config-assets.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `plot-control.test.ts`, `plot-reader.test.ts`, `plot-svg.test.ts`, `plot-ticks.test.ts`, `render.test.ts`, `worker-run.test.ts` |
+| `src/errors.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `cad-document.test.ts`, `config-assets.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `plot-control.test.ts`, `plot-reader.test.ts`, `plot-svg.test.ts`, `plot-ticks.test.ts`, `render.test.ts`, `worker-run.test.ts` |
 | `graph/backend-png.ts` | `graph-png.test.ts` |
 | `graph/backend-svg.ts` | `graph-svg-backend.test.ts` |
 | `graph/dot.ts` | `graph-corpus.test.ts`, `graph-dot.test.ts`, `graph-network.test.ts`, `graph-svg-backend.test.ts`, `mermaid-class.test.ts`, `mermaid-state.test.ts`, `mermaid-xml.test.ts`, `raster-warnings.test.ts` |
@@ -122,7 +130,7 @@ The following 32 source files are not directly imported by any test file:
 | `html/fetch-image.ts` | `html-fetch-image.test.ts` |
 | `html/images.ts` | `html-convert-escape.test.ts`, `html-md-render.test.ts` |
 | `html/md.ts` | `html-convert-escape.test.ts`, `html-md-render.test.ts` |
-| `src/index.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts` |
+| `src/index.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts` |
 | `math/backend-pdf.ts` | `math-backends.test.ts` |
 | `math/backend-png.ts` | `math-backends.test.ts` |
 | `math/backend-svg.ts` | `math-backends.test.ts` |
@@ -147,19 +155,30 @@ The following 32 source files are not directly imported by any test file:
 | `mesh/read.ts` | `mesh-viewer.test.ts`, `glb-writer.test.ts`, `mesh-glb.test.ts`, `mesh-limit.test.ts` |
 | `mesh/stl.ts` | `mesh-viewer.test.ts` |
 | `mesh/viewer.ts` | `mesh-viewer.test.ts`, `mesh-viewer.test.ts` |
-| `src/pairs.ts` | `browser-pdf-pairs.test.ts` |
+| `src/pairs.ts` | `browser-pdf-pairs.test.ts`, `tex-wiring.test.ts` |
 | `plot/control.ts` | `plot-control.test.ts` |
 | `plot/plotter.ts` | `plot-control.test.ts`, `plot-corpus.test.ts`, `plot-svg.test.ts` |
 | `plot/reader.ts` | `plot-reader.test.ts` |
 | `plot/ticks.ts` | `plot-ticks.test.ts` |
 | `raster/index.ts` | `graph-network.test.ts`, `mermaid-xml.test.ts`, `raster.test.ts` |
 | `raster/warnings.ts` | `raster-warnings.test.ts` |
-| `src/registry.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-glb.test.ts`, `mesh-large.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts` |
+| `src/registry.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-glb.test.ts`, `mesh-large.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `tex-wiring.test.ts` |
 | `sysml/parse.ts` | `sysml-parse.test.ts`, `sysml-views.test.ts` |
 | `sysml/render.ts` | `sysml-corpus.test.ts`, `sysml-views.test.ts` |
 | `sysml/tokens.ts` | `sysml-parse.test.ts` |
 | `sysml/views.ts` | `sysml-views.test.ts` |
-| `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `render.test.ts` |
+| `tex/backend-svg.ts` | `tex-wiring.test.ts` |
+| `tex/bundles.ts` | `tex-bundles.test.ts` |
+| `tex/detect.ts` | `tex-detect.test.ts` |
+| `tex/dvi.ts` | `tex-dvi.test.ts` |
+| `tex/host.ts` | `tex-limits.test.ts` |
+| `tex/render.ts` | `tex-render.test.ts`, `tex-limits.test.ts` |
+| `tex/specials.ts` | `tex-specials.test.ts` |
+| `tex/stage.ts` | `tex-wiring.test.ts` |
+| `tex/tfm.ts` | `tex-tfm.test.ts` |
+| `tex/type1.ts` | `tex-type1.test.ts` |
+| `tex/vfs.ts` | `tex-vfs.test.ts` |
+| `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `render.test.ts` |
 | `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
 | `worker/protocol.ts` | `browser-stage.test.ts`, `cad-build.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `math-backends.test.ts`, `mesh-limit.test.ts` |
 | `worker/run.ts` | `worker-exec-argv.test.ts`, `worker-run.test.ts` |
@@ -178,6 +197,8 @@ The following 32 source files are not directly imported by any test file:
 | `integration/mermaid-browser.test.ts` | 4 files |
 | `integration/mesh-viewer.test.ts` | 16 files |
 | `integration/page-checker.test.ts` | 0 files |
+| `integration/tex-render.test.ts` | 1 files |
+| `integration/tikz-render.test.ts` | 4 files |
 | `mutation/run-mutants.test.ts` | 0 files |
 | `tex-tools/etrip-gate.test.mjs` | 0 files |
 | `tex-tools/primitives.test.mjs` | 0 files |
@@ -253,6 +274,15 @@ The following 32 source files are not directly imported by any test file:
 | `unit/sysml-parse.test.ts` | 2 files |
 | `unit/sysml-views.test.ts` | 3 files |
 | `unit/teardown.test.ts` | 0 files |
+| `unit/tex-bundles.test.ts` | 1 files |
+| `unit/tex-detect.test.ts` | 1 files |
+| `unit/tex-dvi.test.ts` | 1 files |
+| `unit/tex-limits.test.ts` | 2 files |
+| `unit/tex-specials.test.ts` | 1 files |
+| `unit/tex-tfm.test.ts` | 1 files |
+| `unit/tex-type1.test.ts` | 1 files |
+| `unit/tex-vfs.test.ts` | 1 files |
+| `unit/tex-wiring.test.ts` | 4 files |
 | `unit/third-party-notices.test.ts` | 0 files |
 | `unit/three-pinned.test.ts` | 1 files |
 | `unit/version.test.ts` | 1 files |

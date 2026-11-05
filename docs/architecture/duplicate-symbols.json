@@ -2,12 +2,12 @@
   "note": "`duplicates` groups the names OWN-exported by >=2 'src' files, by name only, with no classification. `runtime` and `types` hold depgraph's classified lists of the same kind of names (see classificationNote); only TRUE_DUPLICATE entries there are merge targets.",
   "classificationNote": "This report groups names by OWN definition, not by call graph, then classifies each flagged name (see DupEntryTag): TRUE_DUPLICATE (the actionable merge targets), DISPATCH_VARIANT (>=2 mathTyped(...) registrations of the same public name \u2014 distinct dispatch surfaces, not copy-paste bodies), ALIAS_DELEGATION (a const-alias forward to an imported symbol, not an independent body \u2014 excluded once fewer than 2 real bodies remain), and ALLOWLISTED (matches duplicate-allowlist.json: for example hot-path is* guards, mirrors in another language, per-package VERSION strings). NOT detected: same-file typed-dispatch overload polymorphism for different argument shapes within one registration \u2014 a human still triages TRUE_DUPLICATE entries using the defining files + public flags before merging anything.",
   "summary": {
-    "duplicateCount": 1,
-    "totalSymbols": 322,
-    "runtimeDuplicates": 1,
+    "duplicateCount": 7,
+    "totalSymbols": 367,
+    "runtimeDuplicates": 7,
     "typeDuplicates": 0,
     "runtimeByTag": {
-      "TRUE_DUPLICATE": 1,
+      "TRUE_DUPLICATE": 7,
       "DISPATCH_VARIANT": 0,
       "ALIAS_DELEGATION": 0,
       "ALLOWLISTED": 0
@@ -20,6 +20,26 @@
     }
   },
   "duplicates": {
+    "ExitSignal": [
+      "src/tex/host.ts",
+      "trials/t5-tex-build/runtime/host.mjs"
+    ],
+    "createSpecials": [
+      "src/tex/specials.ts",
+      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
+    ],
+    "dviToSvg": [
+      "src/tex/dvi.ts",
+      "trials/t5-tex-build/runtime/dvi2svg.mjs"
+    ],
+    "readTfm": [
+      "src/tex/tfm.ts",
+      "trials/t5-tex-build/runtime/tfm.mjs"
+    ],
+    "readType1": [
+      "src/tex/type1.ts",
+      "trials/t5-tex-build/runtime/type1.mjs"
+    ],
     "render": [
       "src/browser/backend-pdf.ts",
       "src/browser/backend-png.ts",
@@ -41,7 +61,14 @@
       "src/plot/backend-svg.ts",
       "src/sysml/backend-pdf.ts",
       "src/sysml/backend-png.ts",
-      "src/sysml/backend-svg.ts"
+      "src/sysml/backend-svg.ts",
+      "src/tex/backend-pdf.ts",
+      "src/tex/backend-png.ts",
+      "src/tex/backend-svg.ts"
+    ],
+    "runProgram": [
+      "src/tex/run.ts",
+      "trials/t5-tex-build/runtime/run.mjs"
     ]
   },
   "runtime": [
@@ -186,9 +213,147 @@
           "package": "unknown",
           "public": true,
           "tag": "PLAIN"
+        },
+        {
+          "file": "src/tex/backend-pdf.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "src/tex/backend-png.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "src/tex/backend-svg.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
         }
       ],
       "canonicalHint": "AMBIGUOUS",
+      "tag": "TRUE_DUPLICATE"
+    },
+    {
+      "name": "ExitSignal",
+      "category": "class",
+      "definers": [
+        {
+          "file": "src/tex/host.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "trials/t5-tex-build/runtime/host.mjs",
+          "package": "unknown",
+          "public": false,
+          "tag": "PLAIN"
+        }
+      ],
+      "canonicalHint": "src/tex/host.ts",
+      "tag": "TRUE_DUPLICATE"
+    },
+    {
+      "name": "createSpecials",
+      "category": "function",
+      "definers": [
+        {
+          "file": "src/tex/specials.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
+          "package": "unknown",
+          "public": false,
+          "tag": "PLAIN"
+        }
+      ],
+      "canonicalHint": "src/tex/specials.ts",
+      "tag": "TRUE_DUPLICATE"
+    },
+    {
+      "name": "dviToSvg",
+      "category": "function",
+      "definers": [
+        {
+          "file": "src/tex/dvi.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "trials/t5-tex-build/runtime/dvi2svg.mjs",
+          "package": "unknown",
+          "public": false,
+          "tag": "PLAIN"
+        }
+      ],
+      "canonicalHint": "src/tex/dvi.ts",
+      "tag": "TRUE_DUPLICATE"
+    },
+    {
+      "name": "readTfm",
+      "category": "function",
+      "definers": [
+        {
+          "file": "src/tex/tfm.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "trials/t5-tex-build/runtime/tfm.mjs",
+          "package": "unknown",
+          "public": false,
+          "tag": "PLAIN"
+        }
+      ],
+      "canonicalHint": "src/tex/tfm.ts",
+      "tag": "TRUE_DUPLICATE"
+    },
+    {
+      "name": "readType1",
+      "category": "function",
+      "definers": [
+        {
+          "file": "src/tex/type1.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "trials/t5-tex-build/runtime/type1.mjs",
+          "package": "unknown",
+          "public": false,
+          "tag": "PLAIN"
+        }
+      ],
+      "canonicalHint": "src/tex/type1.ts",
+      "tag": "TRUE_DUPLICATE"
+    },
+    {
+      "name": "runProgram",
+      "category": "function",
+      "definers": [
+        {
+          "file": "src/tex/run.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "trials/t5-tex-build/runtime/run.mjs",
+          "package": "unknown",
+          "public": false,
+          "tag": "PLAIN"
+        }
+      ],
+      "canonicalHint": "src/tex/run.ts",
       "tag": "TRUE_DUPLICATE"
     }
   ],

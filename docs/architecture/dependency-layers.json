@@ -3916,6 +3916,826 @@
         ]
       }
     },
+    "tex": {
+      "src/tex/backend-pdf.ts": {
+        "description": "backend-pdf module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "../mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./stage.ts",
+            "imports": [
+              "renderTikzSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/tex/backend-png.ts": {
+        "description": "Renders one tikz source to PNG: the SVG of the tex stage, then the raster stage. The option scale multiplies the pixel",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../browser/input.ts",
+            "imports": [
+              "MAX_SCALE"
+            ]
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../graph/backend-png.ts",
+            "imports": [
+              "readScale",
+              "svgDocumentToPng"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./stage.ts",
+            "imports": [
+              "renderTikzSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/tex/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./stage.ts",
+            "imports": [
+              "renderTikzSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/tex/bundles.ts": {
+        "description": "Returns the verified bytes of a bundle. The order is the cache, then the download.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash",
+              "randomBytes"
+            ]
+          },
+          {
+            "module": "fs/promises",
+            "imports": [
+              "mkdir",
+              "readFile",
+              "rename",
+              "rm",
+              "writeFile"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "default"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          },
+          {
+            "module": "zlib",
+            "imports": [
+              "inflateRawSync"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../config.ts",
+            "imports": [
+              "NetworkPolicy"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./detect.ts",
+            "imports": [
+              "BundleName"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "BUNDLES",
+          "CACHE_SUBFOLDER",
+          "cachePath",
+          "bundleUrl",
+          "findBundle",
+          "loadBundleBytes",
+          "unpackBundle",
+          "loadBundles"
+        ],
+        "interfaces": [
+          "BundleEntry",
+          "BundleSettings"
+        ],
+        "functions": [
+          "cachePath",
+          "bundleUrl",
+          "findBundle",
+          "loadBundleBytes",
+          "unpackBundle",
+          "loadBundles"
+        ],
+        "constants": [
+          "BUNDLES",
+          "CACHE_SUBFOLDER"
+        ]
+      },
+      "src/tex/detect.ts": {
+        "description": "Package detection of the TeX stage.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "detectBundles"
+        ],
+        "interfaces": [
+          "Detection"
+        ],
+        "functions": [
+          "detectBundles"
+        ]
+      },
+      "src/tex/dvi.ts": {
+        "description": "Converts a DVI file to SVG.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./tfm.ts",
+            "imports": [
+              "readTfm",
+              "Tfm"
+            ]
+          },
+          {
+            "file": "./type1.ts",
+            "imports": [
+              "readType1",
+              "Type1Font"
+            ]
+          },
+          {
+            "file": "./specials.ts",
+            "imports": [
+              "SpecialPosition",
+              "SpecialResult"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "dviToSvg"
+        ],
+        "interfaces": [
+          "FontFiles",
+          "DviOptions",
+          "DviSvg"
+        ],
+        "functions": [
+          "dviToSvg"
+        ]
+      },
+      "src/tex/host.ts": {
+        "description": "The default bound on the bytes that one run writes, in the terminal output and in the output files together.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "isRenderError"
+            ]
+          },
+          {
+            "file": "./wasm.ts",
+            "imports": [
+              "EngineImports",
+              "WasmInstance",
+              "WasmMemory"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./vfs.ts",
+            "imports": [
+              "treeName",
+              "TexTree"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "DEFAULT_MAX_OUTPUT_BYTES",
+          "ExitSignal",
+          "TexHost"
+        ],
+        "classes": [
+          "ExitSignal",
+          "TexHost"
+        ],
+        "interfaces": [
+          "HostOptions"
+        ],
+        "constants": [
+          "DEFAULT_MAX_OUTPUT_BYTES"
+        ]
+      },
+      "src/tex/index.ts": {
+        "description": "The runtime of the TeX stage: the virtual file tree, the host functions of the WASM engine, the run function,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./vfs.ts",
+            "imports": [
+              "TexTree",
+              "treeName",
+              "TreeFile"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./host.ts",
+            "imports": [
+              "TexHost",
+              "ExitSignal",
+              "DEFAULT_MAX_OUTPUT_BYTES",
+              "HostOptions"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./run.ts",
+            "imports": [
+              "runProgram",
+              "RunOptions",
+              "RunResult",
+              "EngineSymbols"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./tfm.ts",
+            "imports": [
+              "readTfm",
+              "Tfm"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./type1.ts",
+            "imports": [
+              "readType1",
+              "decryptType1",
+              "Type1Font",
+              "Type1Glyph"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dvi.ts",
+            "imports": [
+              "dviToSvg",
+              "DviOptions",
+              "DviSvg",
+              "FontFiles"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./specials.ts",
+            "imports": [
+              "createSpecials",
+              "SPECIAL_UNIT_PER_PT",
+              "Specials",
+              "SpecialPosition",
+              "SpecialResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderTex",
+              "TexEngine",
+              "RenderTexOptions",
+              "RenderTexResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bundles.ts",
+            "imports": [
+              "BUNDLES",
+              "CACHE_SUBFOLDER",
+              "bundleUrl",
+              "cachePath",
+              "findBundle",
+              "loadBundleBytes",
+              "loadBundles",
+              "unpackBundle",
+              "BundleEntry",
+              "BundleSettings"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./detect.ts",
+            "imports": [
+              "detectBundles",
+              "BundleName",
+              "Detection"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./stage.ts",
+            "imports": [
+              "renderTikzSvg",
+              "wrapSource",
+              "TikzSvg"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "TexTree",
+          "treeName",
+          "TreeFile",
+          "TexHost",
+          "ExitSignal",
+          "DEFAULT_MAX_OUTPUT_BYTES",
+          "HostOptions",
+          "runProgram",
+          "RunOptions",
+          "RunResult",
+          "EngineSymbols",
+          "readTfm",
+          "Tfm",
+          "readType1",
+          "decryptType1",
+          "Type1Font",
+          "Type1Glyph",
+          "dviToSvg",
+          "DviOptions",
+          "DviSvg",
+          "FontFiles",
+          "createSpecials",
+          "SPECIAL_UNIT_PER_PT",
+          "Specials",
+          "SpecialPosition",
+          "SpecialResult",
+          "renderTex",
+          "TexEngine",
+          "RenderTexOptions",
+          "RenderTexResult",
+          "BUNDLES",
+          "CACHE_SUBFOLDER",
+          "bundleUrl",
+          "cachePath",
+          "findBundle",
+          "loadBundleBytes",
+          "loadBundles",
+          "unpackBundle",
+          "BundleEntry",
+          "BundleSettings",
+          "detectBundles",
+          "BundleName",
+          "Detection",
+          "renderTikzSvg",
+          "wrapSource",
+          "TikzSvg"
+        ],
+        "reExported": [
+          "TexTree",
+          "treeName",
+          "TreeFile",
+          "TexHost",
+          "ExitSignal",
+          "DEFAULT_MAX_OUTPUT_BYTES",
+          "HostOptions",
+          "runProgram",
+          "RunOptions",
+          "RunResult",
+          "EngineSymbols",
+          "readTfm",
+          "Tfm",
+          "readType1",
+          "decryptType1",
+          "Type1Font",
+          "Type1Glyph",
+          "dviToSvg",
+          "DviOptions",
+          "DviSvg",
+          "FontFiles",
+          "createSpecials",
+          "SPECIAL_UNIT_PER_PT",
+          "Specials",
+          "SpecialPosition",
+          "SpecialResult",
+          "renderTex",
+          "TexEngine",
+          "RenderTexOptions",
+          "RenderTexResult",
+          "BUNDLES",
+          "CACHE_SUBFOLDER",
+          "bundleUrl",
+          "cachePath",
+          "findBundle",
+          "loadBundleBytes",
+          "loadBundles",
+          "unpackBundle",
+          "BundleEntry",
+          "BundleSettings",
+          "detectBundles",
+          "BundleName",
+          "Detection",
+          "renderTikzSvg",
+          "wrapSource",
+          "TikzSvg"
+        ]
+      },
+      "src/tex/render.ts": {
+        "description": "The tree with the bundles: the macro files, the TFM files and the PFB files.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "isRenderError",
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./dvi.ts",
+            "imports": [
+              "dviToSvg",
+              "DviSvg"
+            ]
+          },
+          {
+            "file": "./run.ts",
+            "imports": [
+              "runProgram",
+              "EngineSymbols"
+            ]
+          },
+          {
+            "file": "./specials.ts",
+            "imports": [
+              "createSpecials",
+              "SPECIAL_UNIT_PER_PT"
+            ]
+          },
+          {
+            "file": "./vfs.ts",
+            "imports": [
+              "TexTree"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./wasm.ts",
+            "imports": [
+              "WasmModule"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "renderTex"
+        ],
+        "interfaces": [
+          "TexEngine",
+          "RenderTexOptions",
+          "RenderTexResult"
+        ],
+        "functions": [
+          "renderTex"
+        ]
+      },
+      "src/tex/run.ts": {
+        "description": "The time limit in milliseconds. The host checks the clock at the file calls of the program.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "isRenderError",
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./host.ts",
+            "imports": [
+              "ExitSignal",
+              "TexHost"
+            ]
+          },
+          {
+            "file": "./vfs.ts",
+            "imports": [
+              "TexTree"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./wasm.ts",
+            "imports": [
+              "instantiate",
+              "WasmModule"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "runProgram"
+        ],
+        "interfaces": [
+          "EngineSymbols",
+          "RunOptions",
+          "RunResult"
+        ],
+        "functions": [
+          "runProgram"
+        ]
+      },
+      "src/tex/specials.ts": {
+        "description": "Creates a reader for the `dvisvgm:raw`, `rawdef`, `rawset`, `endrawset`, `rawput` and `bbox` specials",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "SPECIAL_UNIT_PER_PT",
+          "createSpecials"
+        ],
+        "interfaces": [
+          "SpecialPosition",
+          "SpecialResult",
+          "Specials"
+        ],
+        "functions": [
+          "createSpecials"
+        ],
+        "constants": [
+          "SPECIAL_UNIT_PER_PT"
+        ]
+      },
+      "src/tex/stage.ts": {
+        "description": "Makes a standalone document from a TikZ source. A source with a `\\documentclass` is a document: the function only adds",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendSettings"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./bundles.ts",
+            "imports": [
+              "findBundle",
+              "loadBundleBytes",
+              "loadBundles",
+              "unpackBundle",
+              "BundleSettings"
+            ]
+          },
+          {
+            "file": "./detect.ts",
+            "imports": [
+              "detectBundles",
+              "BundleName"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderTex",
+              "RenderTexResult",
+              "TexEngine"
+            ]
+          },
+          {
+            "file": "./vfs.ts",
+            "imports": [
+              "TexTree"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "wrapSource",
+          "renderTikzSvg"
+        ],
+        "interfaces": [
+          "TikzSvg"
+        ],
+        "functions": [
+          "wrapSource",
+          "renderTikzSvg"
+        ]
+      },
+      "src/tex/tfm.ts": {
+        "description": "Reads the character widths and the design size of a TFM file.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "readTfm"
+        ],
+        "interfaces": [
+          "Tfm"
+        ],
+        "functions": [
+          "readTfm"
+        ]
+      },
+      "src/tex/type1.ts": {
+        "description": "Decrypts Type 1 data with the cipher of the font format: `c1 = 52845`, `c2 = 22719`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "decryptType1",
+          "readType1"
+        ],
+        "interfaces": [
+          "Type1Glyph",
+          "Type1Font"
+        ],
+        "functions": [
+          "decryptType1",
+          "readType1"
+        ]
+      },
+      "src/tex/vfs.ts": {
+        "description": "Reduces a file name of TeX to the key of the tree. The tree has one flat name space in lower case.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "treeName",
+          "TexTree"
+        ],
+        "classes": [
+          "TexTree"
+        ],
+        "functions": [
+          "treeName"
+        ]
+      },
+      "src/tex/wasm.ts": {
+        "description": "The WebAssembly types that the TeX runtime needs. The build uses the Node types only, which do not declare",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "instantiate"
+        ],
+        "interfaces": [
+          "WasmInstance",
+          "WasmMemory",
+          "EngineImports"
+        ],
+        "functions": [
+          "instantiate"
+        ]
+      }
+    },
     "worker": {
       "src/worker/entry.ts": {
         "description": "The worker side of a render. The worker loads the backend module, runs one request and posts one message.",
@@ -4525,6 +5345,27 @@
         "src/sysml/render.ts",
         "src/sysml/tokens.ts",
         "src/sysml/views.ts"
+      ]
+    },
+    {
+      "name": "Tex",
+      "files": [
+        "src/tex/backend-pdf.ts",
+        "src/tex/backend-png.ts",
+        "src/tex/backend-svg.ts",
+        "src/tex/bundles.ts",
+        "src/tex/detect.ts",
+        "src/tex/dvi.ts",
+        "src/tex/host.ts",
+        "src/tex/index.ts",
+        "src/tex/render.ts",
+        "src/tex/run.ts",
+        "src/tex/specials.ts",
+        "src/tex/stage.ts",
+        "src/tex/tfm.ts",
+        "src/tex/type1.ts",
+        "src/tex/vfs.ts",
+        "src/tex/wasm.ts"
       ]
     },
     {
