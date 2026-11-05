@@ -109,6 +109,12 @@ if (glb.mime !== "model/gltf-binary" || glbView.getUint32(0, true) !== 0x46546c6
 const viewer = await render({ type: "brep", source: brep, format: "html" }, {});
 const viewerText = new TextDecoder().decode(viewer.bytes);
 if (!viewerText.includes('<script type="importmap">') || !viewerText.includes("https://cdn.jsdelivr.net/npm/three@") || !viewerText.includes("GLB_BASE64")) throw new Error("brep to html returned no viewer page");
+const cadSource = JSON.stringify({ version: 1, model: { type: "difference", children: [{ type: "cube", size: 2, center: true }, { type: "sphere", radius: 1.2 }] } });
+const stl = await render({ type: "cad", source: cadSource, format: "stl" }, {});
+const stlFacets = new DataView(stl.bytes.buffer, stl.bytes.byteOffset, stl.bytes.byteLength).getUint32(80, true);
+if (stlFacets === 0 || stl.bytes.byteLength !== 84 + 50 * stlFacets) throw new Error("cad to stl returned no binary STL");
+const cadGlb = await render({ type: "cad", source: cadSource, format: "glb" }, {});
+if (cadGlb.mime !== "model/gltf-binary") throw new Error("cad to glb returned no glTF binary");
 const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
 const md = await render({ type: "html", source: "<p>a <b>b</b></p>", format: "md" }, {});
@@ -183,7 +189,7 @@ try {
   mathPdfCode = err.code;
 }
 if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes");
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes");
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

@@ -11,6 +11,7 @@ import { renderWithRegistry } from "../../src/core.ts";
 import { DEFAULT_REGISTRY } from "../../src/registry.ts";
 import { ISOLATED_CONFIG_DEPS } from "../support/test-registry.ts";
 import { makeAssetsFolder, noGlyphFont, realFiles, wasmImportingMissingFunction, wasmWhoseStartTraps, wasmWithCustomSection } from "../support/assets-fixture.ts";
+import { testSettings } from "../support/settings.ts";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const SOURCE = 'digraph G { a -> b [label="Hello"] }';
@@ -28,7 +29,7 @@ function request(options: Record<string, unknown> = {}, rasterFont: string | und
     format: "png",
     source: SOURCE,
     options,
-    settings: { maxMemoryMb: 2048, rasterFont, assetsUrl: ASSETS, browser: undefined, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 },
+    settings: testSettings({ rasterFont, assetsUrl: ASSETS }),
   };
 }
 

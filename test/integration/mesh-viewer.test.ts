@@ -82,6 +82,31 @@ describe.skipIf(!haveBrowser)("mesh viewer in the browser", () => {
     }, 90000);
   }
 
+  test("a cad document renders to a png that shows the red cube and the blue cut face", async () => {
+    const source = JSON.stringify({
+      version: 1,
+      model: {
+        type: "difference",
+        children: [
+          { type: "cube", size: 2, center: true, color: [1, 0, 0] },
+          { type: "cylinder", height: 4, radius: 0.6, center: true, color: [0, 0, 1] },
+        ],
+      },
+    });
+    const result = await render({ type: "cad", source, format: "png", options: {} }, { browser: browserPath, assetsUrl: ASSETS });
+    expect(result.mime).toBe("image/png");
+    const { rgba } = decodePng(result.bytes);
+    let red = 0;
+    let blue = 0;
+    for (let i = 0; i < rgba.length; i += 4) {
+      const [r, g, b] = [rgba[i]!, rgba[i + 1]!, rgba[i + 2]!];
+      if (r > g + 60 && r > b + 60) red += 1;
+      if (b > r + 40 && b > g + 20) blue += 1;
+    }
+    expect(red).toBeGreaterThan(500);
+    expect(blue).toBeGreaterThan(100);
+  }, 90000);
+
   test("the png of the step sample shows the red cube and the blue cylinder", async () => {
     const result = await render({ type: "step", source: STEP, format: "png", options: {} }, { browser: browserPath, assetsUrl: ASSETS });
     const { rgba } = decodePng(result.bytes);

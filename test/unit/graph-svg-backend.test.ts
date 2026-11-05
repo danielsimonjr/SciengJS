@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
 import { rejectionOf } from "../support/rejections.ts";
 import { render } from "../../src/graph/backend-svg.ts";
 import { dotSourceText, dotToSvg } from "../../src/graph/dot.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
+import { testSettings } from "../support/settings.ts";
 
 function request(source: string | Uint8Array, options: Record<string, unknown> = {}): WorkerJob["request"] {
-  return { type: "dot", format: "svg", source, options, settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL, browser: undefined, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 } };
+  return { type: "dot", format: "svg", source, options, settings: testSettings() };
 }
 
 describe("dot to svg backend", () => {

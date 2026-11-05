@@ -251,6 +251,51 @@ export function render(request: WorkerJob["request"]): Promise<BackendOutput>;
 
 Purpose: the public entry of the `./mermaid` subpath. It re-exports the functions and the types of the Mermaid stage.
 
+## `src/mesh/cad-document.ts`
+
+Purpose: the reader of a CAD document. The reader checks the JSON value against the node types and gives the JSON path of a bad value with `E_INPUT`. The reader counts the nodes and estimates the facets of each primitive before any solid operation. A count over a limit rejects with `E_LIMIT`. The reader accepts a 2D profile only as the child of `extrude` or `revolve`.
+
+```ts
+export function parseCadDocument(text: string, limits: CadLimits): CheckedCadDocument;
+export function checkCadDocument(value: unknown, limits: CadLimits): CheckedCadDocument;
+export function sphereFacets(segments: number): number;
+```
+
+## `src/mesh/cad-build.ts`
+
+Purpose: the solid operations of a checked document through manifold-3d. The WASM module loads once for each process. Each primitive becomes an original solid with its colour. Each run of output triangles keeps the colour of the primitive that made the run. The build frees every WASM object in a `finally` block. A result over the facet limit rejects with `E_LIMIT`.
+
+```ts
+export function loadManifold(): Promise<ManifoldModule>;
+export function buildCad(document: CadDocument, maxFacets: number): Promise<CadBuildResult>;
+```
+
+## `src/mesh/cad-builder.ts`
+
+Purpose: the builder functions. Each function returns a plain node object with only the keys that the caller gives. `cadDocument` wraps the model in a document. The `./mesh` subpath exports the module as `cad`.
+
+## `src/mesh/stl.ts`
+
+Purpose: the binary STL writer: an 80-byte header, a 32-bit facet count, and 50 bytes for each facet, little-endian. The facet normal comes from the vertex order. STL holds no colour and no name.
+
+```ts
+export function writeStl(meshes: CadMesh[]): Uint8Array;
+export function stlByteLength(meshes: CadMesh[]): number;
+```
+
+## `src/mesh/backend-glb.ts`
+
+Purpose: the backend of `step`, `iges`, `brep` and `cad` to `glb`. `readMeshes` reads the meshes of a mesh render: a CAD document through the reader and the build, a STEP, IGES or BREP file through occt-import-js. The html and png backends also call `readMeshes` through this render. An output over `maxMemoryMb` rejects with `E_LIMIT`.
+
+```ts
+export function readMeshes(request: WorkerJob["request"], deps?: Partial<GlbDeps>): Promise<CadMesh[]>;
+export function render(request: WorkerJob["request"], deps?: Partial<GlbDeps>): Promise<BackendOutput>;
+```
+
+## `src/mesh/backend-stl.ts`
+
+Purpose: the backend of `cad` to `stl`. A model with a colour gives a warning, because STL holds no colour. An output over `maxMemoryMb` rejects with `E_LIMIT`.
+
 ## `src/types.ts`
 
 Purpose: the public types. It exports `INPUT_TYPES`, `OUTPUT_FORMATS`, `BINARY_INPUT_TYPES`, `RenderRequest`, `RenderResult`, `RenderAsset`, `Capability` and `RenderOptions`.

@@ -7,9 +7,9 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 43,
+    "unusedExportCount": 46,
     "unreferencedAnywhereCount": 5,
-    "referencedInModuleCount": 38,
+    "referencedInModuleCount": 41,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 8
   },
@@ -106,6 +106,18 @@
     "src/mesh/backend-glb.ts": [
       "GlbDeps"
     ],
+    "src/mesh/cad-build.ts": [
+      "loadManifold"
+    ],
+    "src/mesh/cad-document.ts": [
+      "CadNode"
+    ],
+    "src/mesh/index.ts": [
+      "cad"
+    ],
+    "src/mesh/stl.ts": [
+      "stlFacetCount"
+    ],
     "src/mesh/viewer.ts": [
       "ViewerOptions"
     ],
@@ -128,9 +140,6 @@
     ],
     "src/registry.ts": [
       "BackendEntry"
-    ],
-    "src/worker/protocol.ts": [
-      "BackendSettings"
     ],
     "src/worker/run.ts": [
       "WorkerExit",

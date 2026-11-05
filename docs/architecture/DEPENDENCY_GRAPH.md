@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
-- **mesh**: 10 files
+- **mesh**: 15 files
 - **plot**: 8 files
 - **raster**: 2 files
 - **worker**: 3 files
@@ -921,11 +921,13 @@ The codebase is organized into the following modules:
 | `../errors.ts` | `RenderError` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
 | `./glb.ts` | `writeGlb` | Import |
+| `./cad-build.ts` | `buildCad` | Import |
+| `./cad-document.ts` | `parseCadDocument` | Import |
 | `./read.ts` | `readCad, CadFormat, CadMesh, LinearUnit` | Import |
 
 **Exports:**
 - Interfaces: `GlbDeps`
-- Functions: `estimateGlbBytes`, `readMeshOptions`, `render`
+- Functions: `estimateGlbBytes`, `readMeshOptions`, `readMeshes`, `render`
 - Constants: `GLB_COPIES`
 
 ---
@@ -961,6 +963,78 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/mesh/backend-stl.ts` - Renders a CAD document to a binary STL file. The worker calls this function. STL holds no colour and no name,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./backend-glb.ts` | `readMeshes` | Import |
+| `./stl.ts` | `stlByteLength, writeStl` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/mesh/cad-build.ts` - Builds the solid of a checked document and returns one mesh with flat normals at sharp edges.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `./cad-document.ts` | `CadDocument, ProfileNode, Rgb, SolidNode` | Import (type-only) |
+| `./cad-document.ts` | `DEFAULT_SEGMENTS` | Import |
+| `./read.ts` | `CadFace, CadMesh` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `CadBuildResult`
+- Functions: `loadManifold`, `buildCad`
+
+---
+
+### `src/mesh/cad-builder.ts` - The builder API: functions that write the nodes of a CAD document. A program that uses the builder functions runs in the
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./cad-document.ts` | `BooleanNode, CadDocument, CadStyle, CircleNode, CubeNode, CylinderNode, ExtrudeNode, MirrorNode, PolygonNode, PolyhedronNode, ProfileNode, RectangleNode, RevolveNode, RotateNode, ScaleNode, SolidNode, SphereNode, TranslateNode, Vec2, Vec3` | Import (type-only) |
+
+**Exports:**
+- Types: `CubeOptions`, `RoundOptions`, `ExtrudeOptions`
+- Functions:
+
+  ```text
+  cube, cylinder, sphere, polyhedron, rectangle, circle, polygon, extrude, revolve, union, difference,
+  intersection, translate, rotate, scale, mirror, cadDocument
+  ```
+
+
+---
+
+### `src/mesh/cad-document.ts` - cad-document module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+
+**Exports:**
+- Interfaces:
+
+  ```text
+  CadStyle, CubeNode, CylinderNode, SphereNode, PolyhedronNode, RectangleNode, CircleNode,
+  PolygonNode, ExtrudeNode, RevolveNode, BooleanNode, TranslateNode, RotateNode, ScaleNode,
+  MirrorNode, CadDocument, CadLimits, CheckedCadDocument
+  ```
+
+- Types: `Vec2`, `Vec3`, `Rgb`, `ProfileNode`, `SolidNode`, `CadNode`
+- Functions: `sphereFacets`, `checkCadDocument`, `parseCadDocument`
+- Constants: `DEFAULT_SEGMENTS`, `MIN_SEGMENTS`, `MAX_SEGMENTS`
+
+---
+
 ### `src/mesh/glb.ts` - Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped
 
 **Internal Dependencies:**
@@ -974,7 +1048,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/mesh/index.ts` - Package entry point for mesh (re-exports 7 symbols)
+### `src/mesh/index.ts` - Package entry point for mesh (re-exports 17 symbols)
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -983,9 +1057,22 @@ The codebase is organized into the following modules:
 | `./read.ts` | `CadFormat, CadFace, CadMesh, LinearUnit` | Re-export (type-only) |
 | `./glb.ts` | `writeGlb` | Re-export |
 | `./backend-glb.ts` | `readMeshOptions` | Re-export |
+| `./stl.ts` | `writeStl` | Re-export |
+| `./cad-document.ts` | `checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS` | Re-export |
+| `./cad-document.ts` | `*` | Re-export (type-only) |
+| `./cad-build.ts` | `buildCad` | Re-export |
+| `./cad-build.ts` | `CadBuildResult` | Re-export (type-only) |
+| `./cad-builder.ts` | `*` | Re-export |
 
 **Exports:**
-- Re-exports: `readCad`, `CadFormat`, `CadFace`, `CadMesh`, `LinearUnit`, `writeGlb`, `readMeshOptions`
+- Re-exports:
+
+  ```text
+  readCad, CadFormat, CadFace, CadMesh, LinearUnit, writeGlb, readMeshOptions, writeStl,
+  checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS,
+  type * from ./cad-document.ts, buildCad, CadBuildResult, cad
+  ```
+
 
 ---
 
@@ -1027,6 +1114,18 @@ The codebase is organized into the following modules:
 - Interfaces: `CadFace`, `CadMesh`
 - Types: `CadFormat`, `LinearUnit`
 - Functions: `readCad`
+
+---
+
+### `src/mesh/stl.ts` - Writes the meshes as one binary STL file, little-endian. Each facet normal comes from the vertices of the facet
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./read.ts` | `CadMesh` | Import (type-only) |
+
+**Exports:**
+- Functions: `stlFacetCount`, `stlByteLength`, `writeStl`
 
 ---
 
@@ -1437,27 +1536,31 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 32 files |
-| `src/worker/protocol` | 2 files | 20 files |
+| `src/errors` | 0 files | 35 files |
+| `src/worker/protocol` | 2 files | 21 files |
 | `src/browser/render` | 6 files | 7 files |
 | `src/mermaid/browser` | 6 files | 5 files |
 | `src/mermaid/common` | 1 file | 9 files |
 | `src/mermaid/render` | 6 files | 4 files |
+| `src/mesh/backend-glb` | 6 files | 4 files |
 | `src/graph/backend-png` | 6 files | 3 files |
 | `src/browser/input` | 1 file | 7 files |
 | `src/config` | 3 files | 5 files |
 | `src/core` | 6 files | 1 file |
 | `src/graph/dot` | 2 files | 5 files |
 | `src/mermaid/backend-png` | 7 files | 0 files |
-| `src/mesh/backend-glb` | 4 files | 3 files |
+| `src/mesh/index` | 7 files | 0 files |
 | `src/assets` | 1 file | 5 files |
 | `src/html/backend-md` | 6 files | 0 files |
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/mesh/backend-png` | 6 files | 0 files |
+| `src/mesh/read` | 1 file | 5 files |
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/html/md` | 4 files | 1 file |
 | `src/index` | 5 files | 0 files |
+| `src/mesh/cad-build` | 3 files | 2 files |
+| `src/mesh/cad-document` | 1 file | 4 files |
 | `src/mesh/pinned-three` | 4 files | 1 file |
 | `src/plot/backend-html` | 5 files | 0 files |
 | `src/plot/backend-svg` | 3 files | 2 files |
@@ -1471,12 +1574,8 @@ The codebase is organized into the following modules:
 | `src/mermaid/backend-svg` | 4 files | 0 files |
 | `src/mermaid/sequence-layout` | 2 files | 2 files |
 | `src/mermaid/sequence` | 1 file | 3 files |
+| `src/mesh/backend-stl` | 4 files | 0 files |
 | `src/mesh/glb` | 2 files | 2 files |
-| `src/mesh/read` | 1 file | 3 files |
-| `src/mesh/viewer` | 2 files | 2 files |
-| `src/plot/backend-png` | 4 files | 0 files |
-| `src/plot/index` | 4 files | 0 files |
-| `src/plot/reader` | 1 file | 3 files |
 
 ---
 
@@ -1565,73 +1664,74 @@ graph TD
         N49[backend-glb]
         N50[backend-html]
         N51[backend-png]
-        N52[glb]
-        N53[index]
-        N54[occt-import-js.d]
-        N55[pinned-three]
-        N56[read]
-        N57[viewer-script]
-        N58[viewer]
+        N52[backend-stl]
+        N53[cad-build]
+        N54[cad-builder]
+        N55[cad-document]
+        N56[glb]
+        N57[index]
+        N58[occt-import-js.d]
+        N59[...5 more]
     end
 
     subgraph Plot
-        N59[backend-html]
-        N60[backend-png]
-        N61[backend-svg]
-        N62[control]
-        N63[index]
-        N64[plotter]
-        N65[reader]
-        N66[ticks]
+        N60[backend-html]
+        N61[backend-png]
+        N62[backend-svg]
+        N63[control]
+        N64[index]
+        N65[plotter]
+        N66[reader]
+        N67[ticks]
     end
 
     subgraph Raster
-        N67[index]
-        N68[warnings]
+        N68[index]
+        N69[warnings]
     end
 
     subgraph Worker
-        N69[entry]
-        N70[protocol]
-        N71[run]
+        N70[entry]
+        N71[protocol]
+        N72[run]
     end
 
     subgraph Trials/t1-graph
-        N72[compare-layout.mjs]
-        N73[make-sources.mjs]
-        N74[measure.mjs]
-    end
-
-    subgraph Trials/t2-mesh
+        N73[compare-layout.mjs]
+        N74[make-sources.mjs]
         N75[measure.mjs]
     end
 
+    subgraph Trials/t2-mesh
+        N76[measure.mjs]
+    end
+
     subgraph Trials/t3-tex
-        N76[index.cjs]
+        N77[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N77[pinned.js]
-        N78[measure.mjs]
+        N78[pinned.js]
+        N79[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N79[dvi2svg.mjs]
-        N80[host.mjs]
-        N81[run.mjs]
-        N82[tfm.mjs]
-        N83[type1.mjs]
-        N84[vfs.mjs]
+        N80[dvi2svg.mjs]
+        N81[host.mjs]
+        N82[run.mjs]
+        N83[tfm.mjs]
+        N84[type1.mjs]
+        N85[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N85[dvisvgm-specials.mjs]
+        N86[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N70
+    N8 --> N71
     N8 --> N13
-    N9 --> N70
+    N9 --> N71
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1646,25 +1746,25 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N71
+    N2 --> N72
     N2 --> N6
     N19 --> N3
-    N19 --> N70
+    N19 --> N71
     N19 --> N41
     N19 --> N22
     N20 --> N3
     N20 --> N0
-    N20 --> N70
+    N20 --> N71
     N20 --> N22
-    N20 --> N67
     N20 --> N68
+    N20 --> N69
     N21 --> N3
-    N21 --> N70
+    N21 --> N71
     N21 --> N22
     N22 --> N3
     N22 --> N23
     N24 --> N22
-    N25 --> N70
+    N25 --> N71
     N25 --> N3
     N25 --> N13
     N25 --> N30
@@ -1682,26 +1782,26 @@ graph TD
     N31 --> N3
     N32 --> N3
     N32 --> N41
-    N32 --> N70
+    N32 --> N71
     N32 --> N37
     N33 --> N3
     N33 --> N20
-    N33 --> N70
+    N33 --> N71
     N33 --> N37
     N34 --> N3
-    N34 --> N70
+    N34 --> N71
     N34 --> N37
     N36 --> N37
     N37 --> N3
     N37 --> N35
-    N38 --> N70
+    N38 --> N71
     N38 --> N43
     N38 --> N41
     N38 --> N45
     N39 --> N13
     N39 --> N3
     N39 --> N20
-    N39 --> N70
+    N39 --> N71
     N39 --> N43
 ```
 
@@ -1712,17 +1812,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 224 |
+| Total Source Files | 232 |
 | Subsystems | 17 |
-| Total Lines of Code | 25572 |
-| Total Exports | 458 |
-| Total Re-exports | 89 |
+| Total Lines of Code | 27024 |
+| Total Exports | 526 |
+| Total Re-exports | 99 |
 | Total Classes | 6 |
-| Total Interfaces | 81 |
-| Total Functions | 201 |
+| Total Interfaces | 100 |
+| Total Functions | 229 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 48 |
+| Type-only Imports | 57 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

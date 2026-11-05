@@ -2379,6 +2379,18 @@
             ]
           },
           {
+            "file": "./cad-build.ts",
+            "imports": [
+              "buildCad"
+            ]
+          },
+          {
+            "file": "./cad-document.ts",
+            "imports": [
+              "parseCadDocument"
+            ]
+          },
+          {
             "file": "./read.ts",
             "imports": [
               "readCad",
@@ -2393,6 +2405,7 @@
           "GLB_COPIES",
           "estimateGlbBytes",
           "readMeshOptions",
+          "readMeshes",
           "render"
         ],
         "interfaces": [
@@ -2401,6 +2414,7 @@
         "functions": [
           "estimateGlbBytes",
           "readMeshOptions",
+          "readMeshes",
           "render"
         ],
         "constants": [
@@ -2495,6 +2509,220 @@
           "render"
         ]
       },
+      "src/mesh/backend-stl.ts": {
+        "description": "Renders a CAD document to a binary STL file. The worker calls this function. STL holds no colour and no name,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "readMeshes"
+            ]
+          },
+          {
+            "file": "./stl.ts",
+            "imports": [
+              "stlByteLength",
+              "writeStl"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/mesh/cad-build.ts": {
+        "description": "Builds the solid of a checked document and returns one mesh with flat normals at sharp edges.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./cad-document.ts",
+            "imports": [
+              "CadDocument",
+              "ProfileNode",
+              "Rgb",
+              "SolidNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./cad-document.ts",
+            "imports": [
+              "DEFAULT_SEGMENTS"
+            ]
+          },
+          {
+            "file": "./read.ts",
+            "imports": [
+              "CadFace",
+              "CadMesh"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "loadManifold",
+          "buildCad"
+        ],
+        "interfaces": [
+          "CadBuildResult"
+        ],
+        "functions": [
+          "loadManifold",
+          "buildCad"
+        ]
+      },
+      "src/mesh/cad-builder.ts": {
+        "description": "The builder API: functions that write the nodes of a CAD document. A program that uses the builder functions runs in the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./cad-document.ts",
+            "imports": [
+              "BooleanNode",
+              "CadDocument",
+              "CadStyle",
+              "CircleNode",
+              "CubeNode",
+              "CylinderNode",
+              "ExtrudeNode",
+              "MirrorNode",
+              "PolygonNode",
+              "PolyhedronNode",
+              "ProfileNode",
+              "RectangleNode",
+              "RevolveNode",
+              "RotateNode",
+              "ScaleNode",
+              "SolidNode",
+              "SphereNode",
+              "TranslateNode",
+              "Vec2",
+              "Vec3"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "cube",
+          "cylinder",
+          "sphere",
+          "polyhedron",
+          "rectangle",
+          "circle",
+          "polygon",
+          "extrude",
+          "revolve",
+          "union",
+          "difference",
+          "intersection",
+          "translate",
+          "rotate",
+          "scale",
+          "mirror",
+          "cadDocument"
+        ],
+        "functions": [
+          "cube",
+          "cylinder",
+          "sphere",
+          "polyhedron",
+          "rectangle",
+          "circle",
+          "polygon",
+          "extrude",
+          "revolve",
+          "union",
+          "difference",
+          "intersection",
+          "translate",
+          "rotate",
+          "scale",
+          "mirror",
+          "cadDocument"
+        ]
+      },
+      "src/mesh/cad-document.ts": {
+        "description": "cad-document module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "DEFAULT_SEGMENTS",
+          "MIN_SEGMENTS",
+          "MAX_SEGMENTS",
+          "sphereFacets",
+          "checkCadDocument",
+          "parseCadDocument"
+        ],
+        "interfaces": [
+          "CadStyle",
+          "CubeNode",
+          "CylinderNode",
+          "SphereNode",
+          "PolyhedronNode",
+          "RectangleNode",
+          "CircleNode",
+          "PolygonNode",
+          "ExtrudeNode",
+          "RevolveNode",
+          "BooleanNode",
+          "TranslateNode",
+          "RotateNode",
+          "ScaleNode",
+          "MirrorNode",
+          "CadDocument",
+          "CadLimits",
+          "CheckedCadDocument"
+        ],
+        "functions": [
+          "sphereFacets",
+          "checkCadDocument",
+          "parseCadDocument"
+        ],
+        "constants": [
+          "DEFAULT_SEGMENTS",
+          "MIN_SEGMENTS",
+          "MAX_SEGMENTS"
+        ]
+      },
       "src/mesh/glb.ts": {
         "description": "Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped",
         "externalDependencies": [],
@@ -2524,7 +2752,7 @@
         ]
       },
       "src/mesh/index.ts": {
-        "description": "Package entry point for mesh (re-exports 7 symbols)",
+        "description": "Package entry point for mesh (re-exports 17 symbols)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -2559,6 +2787,54 @@
               "readMeshOptions"
             ],
             "reExport": true
+          },
+          {
+            "file": "./stl.ts",
+            "imports": [
+              "writeStl"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./cad-document.ts",
+            "imports": [
+              "checkCadDocument",
+              "parseCadDocument",
+              "DEFAULT_SEGMENTS",
+              "MAX_SEGMENTS",
+              "MIN_SEGMENTS"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./cad-document.ts",
+            "imports": [
+              "*"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          },
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "buildCad"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "CadBuildResult"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          },
+          {
+            "file": "./cad-builder.ts",
+            "imports": [
+              "*"
+            ],
+            "reExport": true
           }
         ],
         "workspaceDependencies": [],
@@ -2569,7 +2845,16 @@
           "CadMesh",
           "LinearUnit",
           "writeGlb",
-          "readMeshOptions"
+          "readMeshOptions",
+          "writeStl",
+          "checkCadDocument",
+          "parseCadDocument",
+          "DEFAULT_SEGMENTS",
+          "MAX_SEGMENTS",
+          "MIN_SEGMENTS",
+          "buildCad",
+          "CadBuildResult",
+          "cad"
         ],
         "reExported": [
           "readCad",
@@ -2578,7 +2863,17 @@
           "CadMesh",
           "LinearUnit",
           "writeGlb",
-          "readMeshOptions"
+          "readMeshOptions",
+          "writeStl",
+          "checkCadDocument",
+          "parseCadDocument",
+          "DEFAULT_SEGMENTS",
+          "MAX_SEGMENTS",
+          "MIN_SEGMENTS",
+          "type * from ./cad-document.ts",
+          "buildCad",
+          "CadBuildResult",
+          "cad"
         ]
       },
       "src/mesh/occt-import-js.d.ts": {
@@ -2657,6 +2952,31 @@
         ],
         "functions": [
           "readCad"
+        ]
+      },
+      "src/mesh/stl.ts": {
+        "description": "Writes the meshes as one binary STL file, little-endian. Each facet normal comes from the vertices of the facet",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./read.ts",
+            "imports": [
+              "CadMesh"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "stlFacetCount",
+          "stlByteLength",
+          "writeStl"
+        ],
+        "functions": [
+          "stlFacetCount",
+          "stlByteLength",
+          "writeStl"
         ]
       },
       "src/mesh/viewer-script.ts": {
@@ -3706,11 +4026,16 @@
         "src/mesh/backend-glb.ts",
         "src/mesh/backend-html.ts",
         "src/mesh/backend-png.ts",
+        "src/mesh/backend-stl.ts",
+        "src/mesh/cad-build.ts",
+        "src/mesh/cad-builder.ts",
+        "src/mesh/cad-document.ts",
         "src/mesh/glb.ts",
         "src/mesh/index.ts",
         "src/mesh/occt-import-js.d.ts",
         "src/mesh/pinned-three.ts",
         "src/mesh/read.ts",
+        "src/mesh/stl.ts",
         "src/mesh/viewer-script.ts",
         "src/mesh/viewer.ts"
       ]

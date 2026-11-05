@@ -12,6 +12,7 @@ import { render as renderPng } from "../../src/math/backend-png.ts";
 import { render as renderPdf } from "../../src/math/backend-pdf.ts";
 import { mathToSvg } from "../../src/math/index.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
+import { testSettings } from "../support/settings.ts";
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const SOURCE = "\\frac{a+b}{c-d}";
@@ -33,7 +34,7 @@ function job(format: "svg" | "png" | "pdf", options: Record<string, unknown> = {
     format,
     source: SOURCE,
     options,
-    settings: { maxMemoryMb: 2048, rasterFont: undefined, assetsUrl: ASSETS_DIR, browser: haveBrowser ? BROWSER : undefined, timeoutMs: 60000, allowNetwork: "tex-bundles", imageTimeoutMs: 15000, maxImageBytes: 10485760 },
+    settings: testSettings({ assetsUrl: ASSETS_DIR, browser: haveBrowser ? BROWSER : undefined }),
   };
 }
 

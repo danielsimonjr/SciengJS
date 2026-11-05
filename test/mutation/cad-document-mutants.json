@@ -1,0 +1,236 @@
+{
+ "mutants": [
+  {
+   "id": "cad-1",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (walk.nodes > walk.limits.maxNodes)",
+   "replacement": "if (walk.nodes >= walk.limits.maxNodes)",
+   "equivalent": null
+  },
+  {
+   "id": "cad-2",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (walk.facets > walk.limits.maxFacets)",
+   "replacement": "if (walk.facets >= walk.limits.maxFacets)",
+   "equivalent": null
+  },
+  {
+   "id": "cad-3",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "walk.nodes += 1;",
+   "replacement": "walk.nodes += 2;",
+   "equivalent": null
+  },
+  {
+   "id": "cad-4",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "const k = Math.ceil(segments / 4);",
+   "replacement": "const k = Math.floor(segments / 4);",
+   "equivalent": null
+  },
+  {
+   "id": "cad-5",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "return 8 * k * k;",
+   "replacement": "return 4 * k * k;",
+   "equivalent": null
+  },
+  {
+   "id": "cad-6",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (n <= 0) fail(path, \"must be greater than 0\");",
+   "replacement": "if (n < 0) fail(path, \"must be greater than 0\");",
+   "equivalent": null
+  },
+  {
+   "id": "cad-7",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (n < 0) fail(path, \"must not be negative\");",
+   "replacement": "if (n <= 0) fail(path, \"must not be negative\");",
+   "equivalent": null
+  },
+  {
+   "id": "cad-8",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "!Number.isInteger(n) || n < MIN_SEGMENTS || n > MAX_SEGMENTS",
+   "replacement": "n < MIN_SEGMENTS || n > MAX_SEGMENTS",
+   "equivalent": null
+  },
+  {
+   "id": "cad-9",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "export const MIN_SEGMENTS = 3;",
+   "replacement": "export const MIN_SEGMENTS = 2;",
+   "equivalent": null
+  },
+  {
+   "id": "cad-10",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "export const MAX_SEGMENTS = 1024;",
+   "replacement": "export const MAX_SEGMENTS = 1025;",
+   "equivalent": null
+  },
+  {
+   "id": "cad-11",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (!Array.isArray(value) || value.length < min)",
+   "replacement": "if (!Array.isArray(value) || value.length < min - 1)",
+   "equivalent": null
+  },
+  {
+   "id": "cad-12",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (n < 0 || n > 1) fail(p, \"must be from 0 to 1\");",
+   "replacement": "if (n < 0 || n > 2) fail(p, \"must be from 0 to 1\");",
+   "equivalent": null
+  },
+  {
+   "id": "cad-13",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (!allowed.includes(key)) fail(",
+   "replacement": "if (false) fail(",
+   "equivalent": null
+  },
+  {
+   "id": "cad-14",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "      return 4;\n",
+   "replacement": "      return 3;\n",
+   "equivalent": null
+  },
+  {
+   "id": "cad-15",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "      return points.length;",
+   "replacement": "      return points.length - 1;",
+   "equivalent": null
+  },
+  {
+   "id": "cad-16",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "addFacets(walk, 12);",
+   "replacement": "addFacets(walk, 6);",
+   "equivalent": null
+  },
+  {
+   "id": "cad-17",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "addFacets(walk, 4 * nodeSegments(value, path, walk));",
+   "replacement": "addFacets(walk, 2 * nodeSegments(value, path, walk));",
+   "equivalent": null
+  },
+  {
+   "id": "cad-18",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (r1 === 0 && r2 === 0)",
+   "replacement": "if (r1 === 0 || r2 === 0)",
+   "equivalent": null
+  },
+  {
+   "id": "cad-19",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "facets += face.length - 2;",
+   "replacement": "facets += face.length - 3;",
+   "equivalent": null
+  },
+  {
+   "id": "cad-20",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "(v as number) >= points.length",
+   "replacement": "(v as number) > points.length",
+   "equivalent": null
+  },
+  {
+   "id": "cad-21",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "2 * edges * (divisions + 1) + 2 * edges",
+   "replacement": "2 * edges * divisions + 2 * edges",
+   "equivalent": null
+  },
+  {
+   "id": "cad-22",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "2 * edges * segments + 2 * edges",
+   "replacement": "2 * edges * segments",
+   "equivalent": null
+  },
+  {
+   "id": "cad-23",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (d > 360)",
+   "replacement": "if (d >= 360)",
+   "equivalent": null
+  },
+  {
+   "id": "cad-24",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "divisions > MAX_DIVISIONS",
+   "replacement": "divisions > MAX_DIVISIONS + 1",
+   "equivalent": null
+  },
+  {
+   "id": "cad-25",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (n.every((c) => c === 0))",
+   "replacement": "if (n.some((c) => c === 0))",
+   "equivalent": null
+  },
+  {
+   "id": "cad-26",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (PROFILE_TYPES.includes(type)) return fail(",
+   "replacement": "if (false) return fail(",
+   "equivalent": null
+  },
+  {
+   "id": "cad-27",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (value.version !== 1)",
+   "replacement": "if (value.version === 0)",
+   "equivalent": null
+  },
+  {
+   "id": "cad-28",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "return node.segments === undefined ? walk.segments : segmentsOf",
+   "replacement": "return node.segments !== undefined ? walk.segments : segmentsOf",
+   "equivalent": null
+  },
+  {
+   "id": "cad-29",
+   "file": "src/mesh/cad-document.ts",
+   "test": "test/unit/cad-document.test.ts",
+   "original": "if (value.segments !== undefined) walk.segments = segmentsOf(value.segments, \"segments\");",
+   "replacement": "",
+   "equivalent": null
+  }
+ ]
+}

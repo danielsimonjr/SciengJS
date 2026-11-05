@@ -10,9 +10,9 @@
 - **Dormant files**: 15
   - **Orphaned (reachable from nothing)**: 12
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 43
+- **Potentially unused exports**: 46
   - **Unreferenced anywhere**: 5
-  - **Referenced in their own module**: 38
+  - **Referenced in their own module**: 41
   - **Not classified**: 0
 
 ## Caveats
@@ -99,6 +99,10 @@ No other file imports these names, but their own module uses them.
 - `src/mermaid/backend-svg.ts`: `render`
 - `src/mermaid/common.ts`: `Context`, `DiagramKind`
 - `src/mesh/backend-glb.ts`: `GlbDeps`
+- `src/mesh/cad-build.ts`: `loadManifold`
+- `src/mesh/cad-document.ts`: `CadNode`
+- `src/mesh/index.ts`: `cad`
+- `src/mesh/stl.ts`: `stlFacetCount`
 - `src/mesh/viewer.ts`: `ViewerOptions`
 - `src/pairs.ts`: `PairSpec`
 - `src/plot/control.ts`: `FrequencyOptions`, `RootLocusOptions`, `TimeOptions`
@@ -106,7 +110,6 @@ No other file imports these names, but their own module uses them.
 - `src/raster/index.ts`: `SvgToPngOptions`
 - `src/raster/warnings.ts`: `CoverageTest`
 - `src/registry.ts`: `BackendEntry`
-- `src/worker/protocol.ts`: `BackendSettings`
 - `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`
 
 ## Exports not classified

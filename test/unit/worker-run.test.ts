@@ -4,10 +4,10 @@ import type { Worker } from "node:worker_threads";
 import { runInWorker } from "../../src/worker/run.ts";
 import { RenderError } from "../../src/errors.ts";
 import { TEST_REGISTRY } from "../support/test-registry.ts";
-import { DEFAULT_ASSETS_URL } from "../../src/config.ts";
+import { testSettings } from "../support/settings.ts";
 
 const moduleUrl = TEST_REGISTRY["dot:svg"]!.moduleUrl;
-const SETTINGS = { maxMemoryMb: 512, rasterFont: undefined, assetsUrl: DEFAULT_ASSETS_URL, browser: undefined, timeoutMs: 60000, allowNetwork: "tex-bundles" as const, imageTimeoutMs: 15000, maxImageBytes: 10485760 };
+const SETTINGS = testSettings({ maxMemoryMb: 512 });
 const OK_JOB = { moduleUrl, backend: "test/fixed", request: { type: "dot" as const, format: "svg" as const, source: "ok", options: {}, settings: SETTINGS } };
 const FOREIGN_MODULE_URL = new URL("../support/stubs/stub-foreign-error.ts", import.meta.url).href;
 

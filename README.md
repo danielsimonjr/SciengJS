@@ -10,7 +10,7 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.7.1 holds eight input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, and to PNG. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
+Release 0.7.1 holds eight input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, and to PNG. A **CAD document** (a CSG model in JSON) goes to GLB, STL, HTML and PNG. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
 
 | Input | Output | Engine |
 |---|---|---|
@@ -21,13 +21,15 @@ Release 0.7.1 holds eight input types. They are **Graphviz DOT**, **Mermaid** (e
 | Mermaid (all other types) | SVG, PNG, PDF | The pinned Mermaid 11.17.2 build in the browser stage. The engine serves the build from the package. |
 | DOT, Mermaid | PDF | The SVG, printed by the browser stage |
 | HTML | PNG, PDF | The browser stage |
+| STEP, IGES, BREP | GLB, HTML, PNG | OpenCascade, compiled to WASM (`occt-import-js`); a Three.js viewer page |
+| CAD document | GLB, STL, HTML, PNG | The engine's own reader; the solid operations through `manifold-3d` (WASM) |
 
 - **No network.** The DOT and Mermaid paths make no network request. The browser stage starts Chrome or Chromium from `SCIENG_BROWSER` with a new profile. Its flags stop every connection out of the host. The client refuses every request except the page and the pinned Mermaid build. CI checks the browser process tree on Linux, macOS and Windows.
 - **Unsafe attributes are removed.** The engine removes each `image` and `stylesheet` attribute before the layout and gives a warning for each one. A DOT file cannot make the engine or a browser fetch a file or a URL. A `URL` attribute stays as a link in the SVG.
 - **The same text on every machine.** PNG text uses the bundled Liberation Serif font, not the fonts of the host. The engine gives a warning when the drawing asks for bold, italic or a character that the font does not have.
 - **Limits.** Each render has a time limit, a source size limit and a heap limit. A PNG has a pixel limit of 1024 MB.
 - **Typed errors.** A failed render rejects with a `RenderError` that has a code. The engine never falls back to another format.
-- **Two runtime dependencies**, both pinned: `@viz-js/viz` and `@resvg/resvg-wasm`. No native module and no Python.
+- **Pinned runtime dependencies** only: `@viz-js/viz`, `@resvg/resvg-wasm`, `@mathjax/src`, `parse5`, `occt-import-js` and `manifold-3d`. No native module and no Python.
 
 Each later release adds one input type. The [Roadmap](#roadmap) lists them.
 
@@ -119,6 +121,8 @@ Each render takes an optional configuration as its second argument. An environme
 | `rasterFont` | `SCIENG_RASTER_FONT` | the bundled Liberation Serif |
 | `assetsUrl` | `SCIENG_ASSETS_URL` | the `assets/` folder of the package, which holds the font and `index_bg.wasm`. A `file:` URL with a host other than `localhost` rejects with `E_CONFIG`. |
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` (the DOT path makes no request) |
+| `maxCadNodes` | `SCIENG_MAX_CAD_NODES` | 10000 |
+| `maxCadFacets` | `SCIENG_MAX_CAD_FACETS` | 2000000 |
 
 `SCIENG_CONFIG` names a JSON configuration file. `loadConfig` returns the resolved configuration.
 
@@ -271,6 +275,36 @@ const { figure } = bode({ num: [10], den: [1, 1, 0] });
 const { bytes } = await render({ type: "plot", source: JSON.stringify(figure), format: "html" }, {});
 ```
 
+## CAD
+
+A CAD document is a CSG model in JSON. The engine reads the document as data. The engine runs no code from the document. The node types are:
+
+- the primitives `cube`, `cylinder`, `sphere` and `polyhedron`;
+- the 2D profiles `rectangle`, `circle` and `polygon`, only as the child of `extrude` or `revolve`;
+- the operations `union`, `difference` and `intersection`;
+- the transforms `translate`, `rotate`, `scale` and `mirror`.
+
+Each node can have a `name` and a `color`.
+
+The builder functions of the `./mesh` subpath write the same document from a TypeScript program:
+
+```js
+import { cad } from "@danielsimonjr/sciengjs/mesh";
+import { render } from "@danielsimonjr/sciengjs";
+
+const plate = cad.difference([
+  cad.cube([40, 20, 4], { color: [0.7, 0.7, 0.7] }),
+  cad.translate([10, 10, -1], cad.cylinder(6, 3, { color: [0.2, 0.4, 1] })),
+]);
+const source = JSON.stringify(cad.cadDocument(plate, { segments: 48 }));
+const { bytes } = await render({ type: "cad", source, format: "stl" }, {});
+```
+
+- The faces keep the colour of the primitive that made them. The cut face of a `difference` has the colour of the cutter.
+- STL holds no colour and no name. A coloured model gives a warning in STL.
+- A document with more than `maxCadNodes` nodes rejects with `E_LIMIT` before the solid operations start. A model with more than `maxCadFacets` facets also rejects with `E_LIMIT`.
+- A bad value rejects with `E_INPUT`. The message gives the JSON path, for example `model.children[1].radius`.
+
 ## Roadmap
 
 The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives the order of the increments. Each increment adds one input type, its tests and one release. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the API, the stages, the security controls and the licence of each engine.
@@ -283,7 +317,8 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml | planned |
-| STEP, IGES, BREP | mesh (OpenCascade WASM) | trial build passes |
+| STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
+| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: built |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent
