@@ -157,13 +157,20 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - Build:
   - `tangle` writes Pascal from `tex.web` and a stack of change files, applied in this order: `etex.ch`, then the change files of the engine. `tangle` is a build tool. The engine package does not hold `tangle`.
   - Each change file of the engine holds one concern: the system interface, the trip settings, the production settings, the utility primitives. A new extension is a new change file in the stack, not an edit of an old one.
-  - The utility primitives are the primitives that the LaTeX kernel tests for at format build time and that `etex.ch` does not give, for example `\expanded`. The build plan names the set. The engine writes each primitive from the published description of its behaviour. The engine uses no part of the source of pdfTeX.
+  - The utility primitives are the primitives that the LaTeX kernel needs and that `etex.ch` does not give. The kernel tests for three of them at format build time. The `\everyjob` code of the L3 kernel uses two more at the start of each document, with no test. The set is `\expanded`, `\filesize`, `\pdfstrcmp`, `\creationdate` and `\shellescape`. `\shellescape` is always 0. The engine writes each primitive from the published description of its behaviour. The engine uses no part of the source of pdfTeX.
   - The format builds in the extended mode of e-TeX.
   - The engine compiler (in `tools/`, build time only) compiles the Pascal to WASM. The compiler accepts the Pascal subset that `tex.web` and `etex.ch` use.
   - The build uses no part of another TeX to WASM toolchain.
 - Name: the build is a changed program, so it never uses the name TeX or e-TeX. Its banner names the engine. The primitives `\eTeXversion` and `\eTeXrevision` keep the values of `etex.ch`. The engine does not define `\pdftexversion`, so packages do not take the build for pdfTeX.
-- Compatibility gates: CI runs the trip test of `tex.web` and the e-TRIP test of `etex.ch` on each WASM build. Each log may differ from the reference only in the banner line. A build that fails a gate does not ship.
-- The format selects the pgf driver for DVI output that the DVI to SVG converter reads. The build plan names the driver file.
+- Compatibility gates: CI runs the trip test of `tex.web` and the e-TRIP test of `etex.ch` on each WASM build. A log may differ from the reference only in these classes:
+  - the differences of a correct build in `etripman.tex` (Appendices A.3, A.4 and B.9); the control sequence count adds the utility primitives;
+  - the hunks of `etrip.diffs`, each one time only;
+  - the build stamps: the banner, the dates and times, the `./` prefix of file names and the version string of DVItype;
+  - the echo of the terminal input in the `.fot` files;
+  - the start message of the pinned `etrip.tex`.
+
+  The gate also fails when a statistic that must change stays the same. A build that fails a gate does not ship.
+- The format passes the option `dvisvgm` to the graphics and color packages, so pgf selects the driver file `pgfsys-dvisvgm.def`. The DVI to SVG converter reads the `dvisvgm:raw`, `dvisvgm:bbox` and `color` specials of that driver.
 - Runtime: the engine writes the host functions of the WASM module: file open, read and write on the virtual file system, and the terminal output.
 - The format holds LaTeX, `standalone`, `xcolor`, `tikz` and `circuitikz`. The text language is English only. No bundle holds `latex.fmt`.
 - The format and the bundles build from the packages of one pinned TeX Live year.
