@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 232
+  totalFiles: 247
   totalModules: 3
-  totalExports: 526
+  totalExports: 577
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -705,6 +705,7 @@ modules:
         - RenderErrorPosition
         - RenderError
         - isRenderError
+        - inputError
     src/graph/backend-pdf.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -724,8 +725,11 @@ modules:
           typeOnly: false
         - file: src/graph/dot.ts
           imports:
-            - dotSourceText
             - dotToSvg
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
           typeOnly: false
       exports:
         - render
@@ -749,8 +753,11 @@ modules:
           typeOnly: true
         - file: src/graph/dot.ts
           imports:
-            - dotSourceText
             - dotToSvg
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
           typeOnly: false
         - file: src/raster/index.ts
           imports:
@@ -781,8 +788,11 @@ modules:
           typeOnly: true
         - file: src/graph/dot.ts
           imports:
-            - dotSourceText
             - dotToSvg
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
           typeOnly: false
       exports:
         - render
@@ -803,7 +813,6 @@ modules:
       exports:
         - DotSvgResult
         - dotToSvg
-        - dotSourceText
     src/graph/image.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -829,6 +838,15 @@ modules:
       exports:
         - dotToSvg
         - DotSvgResult
+    src/graph/text.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - sourceText
+        - xmlSafe
+        - escapeDot
+        - escapeRecord
     src/html/backend-md.ts:
       externalDependencies: []
       nodeDependencies:
@@ -1176,11 +1194,14 @@ modules:
             - BackendOutput
             - WorkerJob
           typeOnly: true
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
         - file: src/mermaid/common.ts
           imports:
             - readLenient
             - routesToBrowser
-            - sourceText
           typeOnly: false
         - file: src/mermaid/browser.ts
           imports:
@@ -1216,11 +1237,14 @@ modules:
             - BackendOutput
             - WorkerJob
           typeOnly: true
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
         - file: src/mermaid/common.ts
           imports:
             - readLenient
             - routesToBrowser
-            - sourceText
           typeOnly: false
         - file: src/mermaid/browser.ts
           imports:
@@ -1241,11 +1265,14 @@ modules:
             - BackendOutput
             - WorkerJob
           typeOnly: true
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
         - file: src/mermaid/common.ts
           imports:
             - readLenient
             - routesToBrowser
-            - sourceText
           typeOnly: false
         - file: src/mermaid/browser.ts
           imports:
@@ -1305,11 +1332,18 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: src/mermaid/common.ts
+        - file: src/errors.ts
           imports:
             - inputError
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - escapeDot
+            - escapeRecord
+          typeOnly: false
+        - file: src/mermaid/common.ts
+          imports:
             - outside
-            - xmlSafe
             - ContentLine
             - Source
           typeOnly: false
@@ -1327,7 +1361,12 @@ modules:
       internalDependencies:
         - file: src/errors.ts
           imports:
+            - inputError
             - RenderError
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - xmlSafe
           typeOnly: false
       exports:
         - DiagramKind
@@ -1335,9 +1374,6 @@ modules:
         - Context
         - Source
         - readLenient
-        - sourceText
-        - xmlSafe
-        - inputError
         - outside
         - prepare
         - routesToBrowser
@@ -1455,7 +1491,7 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: src/mermaid/common.ts
+        - file: src/graph/text.ts
           imports:
             - xmlSafe
           typeOnly: false
@@ -1473,9 +1509,12 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: src/mermaid/common.ts
+        - file: src/errors.ts
           imports:
             - inputError
+          typeOnly: false
+        - file: src/mermaid/common.ts
+          imports:
             - outside
             - Source
           typeOnly: false
@@ -1494,11 +1533,17 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: src/mermaid/common.ts
+        - file: src/errors.ts
           imports:
             - inputError
-            - outside
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
             - xmlSafe
+          typeOnly: false
+        - file: src/mermaid/common.ts
+          imports:
+            - outside
             - ContentLine
             - Source
           typeOnly: false
@@ -2164,6 +2209,229 @@ modules:
         - Registry
         - DEFAULT_REGISTRY
         - registryKey
+    src/sysml/backend-pdf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mermaid/browser.ts
+          imports:
+            - drawSvgToPdf
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+          typeOnly: false
+      exports:
+        - render
+    src/sysml/backend-png.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/input.ts
+          imports:
+            - MAX_SCALE
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/backend-png.ts
+          imports:
+            - readScale
+            - svgDocumentToPng
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+          typeOnly: false
+      exports:
+        - render
+    src/sysml/backend-svg.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
+          typeOnly: false
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+          typeOnly: false
+      exports:
+        - render
+    src/sysml/index.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/sysml/tokens.ts
+          imports:
+            - tokenize
+            - Token
+            - TokenKind
+          typeOnly: false
+        - file: src/sysml/parse.ts
+          imports:
+            - parseSysml
+            - baseChain
+            - SysmlModel
+            - PartDef
+            - PlainDef
+            - PartUsage
+            - PortUsage
+            - Attribute
+            - Connection
+            - End
+            - Requirement
+            - RequirementDef
+            - Satisfy
+          typeOnly: false
+        - file: src/sysml/views.ts
+          imports:
+            - readSysmlOptions
+            - sysmlToDot
+            - SysmlOptions
+            - SysmlView
+          typeOnly: false
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+            - SysmlSvg
+          typeOnly: false
+      exports:
+        - tokenize
+        - Token
+        - TokenKind
+        - parseSysml
+        - baseChain
+        - SysmlModel
+        - PartDef
+        - PlainDef
+        - PartUsage
+        - PortUsage
+        - Attribute
+        - Connection
+        - End
+        - Requirement
+        - RequirementDef
+        - Satisfy
+        - readSysmlOptions
+        - sysmlToDot
+        - SysmlOptions
+        - SysmlView
+        - renderSysmlSvg
+        - SysmlSvg
+    src/sysml/parse.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - inputError
+          typeOnly: false
+        - file: src/sysml/tokens.ts
+          imports:
+            - tokenize
+            - Token
+          typeOnly: false
+      exports:
+        - Attribute
+        - PartUsage
+        - PortUsage
+        - End
+        - Connection
+        - PartDef
+        - PlainDef
+        - Requirement
+        - RequirementDef
+        - Satisfy
+        - SysmlModel
+        - parseSysml
+        - Specializable
+        - baseChain
+    src/sysml/render.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/graph/dot.ts
+          imports:
+            - dotToSvg
+          typeOnly: false
+        - file: src/sysml/parse.ts
+          imports:
+            - parseSysml
+          typeOnly: false
+        - file: src/sysml/views.ts
+          imports:
+            - readSysmlOptions
+            - sysmlToDot
+          typeOnly: false
+      exports:
+        - SysmlSvg
+        - renderSysmlSvg
+    src/sysml/tokens.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - inputError
+          typeOnly: false
+      exports:
+        - TokenKind
+        - Token
+        - tokenize
+    src/sysml/views.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - escapeDot
+            - escapeRecord
+          typeOnly: false
+        - file: src/sysml/parse.ts
+          imports:
+            - baseChain
+            - Attribute
+            - PartDef
+            - PlainDef
+            - Requirement
+            - RequirementDef
+            - SysmlModel
+          typeOnly: false
+      exports:
+        - SysmlView
+        - SysmlOptions
+        - readSysmlOptions
+        - sysmlToDot
     src/types.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -2381,6 +2649,23 @@ modules:
         - file: src/mermaid/render.ts
           imports:
             - renderMermaidSvg
+          typeOnly: false
+      exports: []
+    test/corpus/regenerate-sysml.ts:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+          typeOnly: false
+        - file: test/support/sysml-corpus.ts
+          imports:
+            - svgProperties
+            - SysmlApproval
           typeOnly: false
       exports: []
     test/integration/browser-render.test.ts:
@@ -2843,6 +3128,13 @@ modules:
         - normalizeSvg
         - SvgComparison
         - compareSvg
+    test/support/sysml-corpus.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - SysmlApproval
+        - svgProperties
     test/support/test-registry.ts:
       externalDependencies: []
       nodeDependencies:
@@ -3380,8 +3672,11 @@ modules:
           typeOnly: false
         - file: src/graph/dot.ts
           imports:
-            - dotSourceText
             - dotToSvg
+          typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - sourceText
           typeOnly: false
         - file: src/worker/protocol.ts
           imports:
@@ -3580,10 +3875,6 @@ modules:
         - bun:test
       nodeDependencies: []
       internalDependencies:
-        - file: src/errors.ts
-          imports:
-            - RenderError
-          typeOnly: false
         - file: src/mermaid/common.ts
           imports:
             - prepare
@@ -3599,20 +3890,24 @@ modules:
           imports:
             - dotToSvg
           typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+          typeOnly: false
       exports: []
     test/unit/mermaid-common.test.ts:
       externalDependencies:
         - bun:test
       nodeDependencies: []
       internalDependencies:
-        - file: src/errors.ts
-          imports:
-            - RenderError
-          typeOnly: false
         - file: src/mermaid/common.ts
           imports:
             - prepare
             - readLenient
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
           typeOnly: false
       exports: []
     test/unit/mermaid-corpus.test.ts:
@@ -3798,10 +4093,13 @@ modules:
             - parseClassDiagram
             - ClassModel
           typeOnly: false
+        - file: src/graph/text.ts
+          imports:
+            - xmlSafe
+          typeOnly: false
         - file: src/mermaid/common.ts
           imports:
             - prepare
-            - xmlSafe
           typeOnly: false
         - file: src/mermaid/render.ts
           imports:
@@ -4277,6 +4575,92 @@ modules:
             - normalizeSvg
           typeOnly: false
       exports: []
+    test/unit/sysml-backends.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+      internalDependencies:
+        - file: test/support/assets-fixture.ts
+          imports:
+            - makeAssetsFolder
+            - makeScratch
+            - realFiles
+            - removeScratch
+          typeOnly: false
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/test-registry.ts
+          imports:
+            - renderIsolated
+          typeOnly: false
+      exports: []
+    test/unit/sysml-corpus.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:fs
+        - node:path
+        - node:url
+      internalDependencies:
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+          typeOnly: false
+        - file: test/support/svg-compare.ts
+          imports:
+            - compareSvg
+          typeOnly: false
+        - file: test/support/sysml-corpus.ts
+          imports:
+            - svgProperties
+            - SysmlApproval
+          typeOnly: false
+      exports: []
+    test/unit/sysml-parse.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+          typeOnly: false
+        - file: src/sysml/tokens.ts
+          imports:
+            - tokenize
+          typeOnly: false
+        - file: src/sysml/parse.ts
+          imports:
+            - parseSysml
+            - SysmlModel
+          typeOnly: false
+      exports: []
+    test/unit/sysml-views.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: test/support/rejections.ts
+          imports:
+            - rejection
+          typeOnly: false
+        - file: src/sysml/parse.ts
+          imports:
+            - parseSysml
+          typeOnly: false
+        - file: src/sysml/views.ts
+          imports:
+            - readSysmlOptions
+            - sysmlToDot
+          typeOnly: false
+        - file: src/sysml/render.ts
+          imports:
+            - renderSysmlSvg
+          typeOnly: false
+      exports: []
     test/unit/teardown.test.ts:
       externalDependencies:
         - bun:test
@@ -4440,33 +4824,33 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 232
-  totalSourceFiles: 232
+  totalTypeScriptFiles: 247
+  totalSourceFiles: 247
   totalModules: 3
-  totalLinesOfCode: 27024
-  totalExports: 526
-  entryRoots: 76
-  reachableFiles: 76
+  totalLinesOfCode: 28611
+  totalExports: 577
+  entryRoots: 85
+  reachableFiles: 85
   dormantFiles: 15
   orphanedFiles: 12
   testOnlyFiles: 3
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 57
+  totalTypeOnlyImports: 60
   noImporterFileCount: 8
-  unusedExportsCount: 46
+  unusedExportsCount: 50
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 6
-  totalInterfaces: 100
-  totalFunctions: 229
+  totalInterfaces: 116
+  totalFunctions: 240
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 66
-  totalReExports: 99
+  totalReExports: 121
 reachability:
   roots:
     - src/index.ts
@@ -4478,6 +4862,7 @@ reachability:
     - src/plot/index.ts
     - src/html/index.ts
     - src/mesh/index.ts
+    - src/sysml/index.ts
     - src/assets.ts
     - src/browser/backend-pdf.ts
     - src/browser/backend-png.ts
@@ -4497,6 +4882,7 @@ reachability:
     - src/graph/backend-svg.ts
     - src/graph/dot.ts
     - src/graph/image.ts
+    - src/graph/text.ts
     - src/html/backend-md.ts
     - src/html/convert.ts
     - src/html/fetch-image.ts
@@ -4540,12 +4926,19 @@ reachability:
     - src/plot/ticks.ts
     - src/raster/warnings.ts
     - src/registry.ts
+    - src/sysml/backend-pdf.ts
+    - src/sysml/backend-png.ts
+    - src/sysml/backend-svg.ts
+    - src/sysml/parse.ts
+    - src/sysml/render.ts
+    - src/sysml/tokens.ts
+    - src/sysml/views.ts
     - src/types.ts
     - src/version.ts
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 76
+  reachableCount: 85
   dormantCount: 15
   orphaned:
     - src/mesh/occt-import-js.d.ts

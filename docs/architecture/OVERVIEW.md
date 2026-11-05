@@ -26,11 +26,12 @@ Status: the graph, raster and Mermaid stages exist. The package renders DOT to S
 | `src/registry.ts` | The stage registry: a map from `type:format` to a backend module. |
 | `src/pairs.ts` | The table of supported pairs and their stages. |
 | `src/worker/` | The worker runner and the worker entry. |
-| `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner and the two backends (SVG and PNG). |
+| `src/graph/` | The graph stage: the DOT to SVG wrapper, the image attribute scanner, the text helpers of the DOT adapters and the backends (SVG, PNG and PDF). |
 | `src/raster/` | The raster stage: SVG to PNG through resvg, and the font check. |
 | `src/mermaid/` | The Mermaid stage: the header and option reader, the parsers of the class, state and sequence diagrams, the DOT builders, the sequence layout and the SVG render. |
 | `src/math/` | The math stage: LaTeX math to SVG through MathJax, and the SVG, PNG and PDF backends. |
 | `src/plot/` | The plot stage: the reader of the Plotly JSON subset, the tick algorithm, the control plots, and the SVG, PNG and HTML backends. |
+| `src/sysml/` | The SysML stage: the tokenizer and parser of the SysML v2 subset, the bdd, ibd and requirements views to DOT, the SVG render, and the SVG, PNG and PDF backends. |
 | `src/browser/` | The browser stage: the Chrome DevTools Protocol client, the browser flags and profile, the page render, and the PNG and PDF backends. |
 | `src/html/` | The html stage: HTML to Markdown through parse5, the image download, and the md backend. |
 | `src/mesh/` | The mesh stage. It holds the STEP, IGES and BREP reader through occt-import-js, the CAD document reader, the builder functions and the solid operations through manifold-3d. It also holds the glTF binary and STL writers, and the glb, stl, html and png backends with their output limits. |
@@ -56,9 +57,9 @@ The table lists `repo-tools map` metrics. `repo-tools map` parses each source fi
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 232 | repo-tools map |
-| totalLinesOfCode | 27024 | repo-tools map |
-| totalExports | 526 | repo-tools map |
-| totalTypeOnlyImports | 57 | repo-tools map |
+| totalSourceFiles | 247 | repo-tools map |
+| totalLinesOfCode | 28611 | repo-tools map |
+| totalExports | 577 | repo-tools map |
+| totalTypeOnlyImports | 60 | repo-tools map |
 | totalModules | 3 | repo-tools map |
-| entryRoots | 76 | repo-tools map |
+| entryRoots | 85 | repo-tools map |

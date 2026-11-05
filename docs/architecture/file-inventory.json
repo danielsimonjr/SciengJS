@@ -1,11 +1,11 @@
 {
-  "totalFiles": 232,
+  "totalFiles": 247,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 76,
+    "build-entry": 85,
     "test-only": 3,
     "orphan": 12,
-    "test": 113,
+    "test": 119,
     "tool": 28,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 28,
-    "src": 91,
-    "tests": 113
+    "src": 100,
+    "tests": 119
   },
   "byPackage": {
-    "(root)": 155,
-    "@danielsimonjr/sciengjs": 77
+    "(root)": 161,
+    "@danielsimonjr/sciengjs": 86
   },
   "files": [
     {
@@ -138,35 +138,35 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 53
+      "loc": 58
     },
     {
       "file": "src/graph/backend-pdf.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 15
+      "loc": 16
     },
     {
       "file": "src/graph/backend-png.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 80
+      "loc": 81
     },
     {
       "file": "src/graph/backend-svg.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 13
+      "loc": 14
     },
     {
       "file": "src/graph/dot.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 71
+      "loc": 66
     },
     {
       "file": "src/graph/image.ts",
@@ -181,6 +181,13 @@
       "area": "src",
       "disposition": "build-entry",
       "loc": 3
+    },
+    {
+      "file": "src/graph/text.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 27
     },
     {
       "file": "src/html/backend-md.ts",
@@ -278,21 +285,21 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 20
+      "loc": 21
     },
     {
       "file": "src/mermaid/backend-png.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 27
+      "loc": 28
     },
     {
       "file": "src/mermaid/backend-svg.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 19
+      "loc": 20
     },
     {
       "file": "src/mermaid/browser.ts",
@@ -306,14 +313,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 253
+      "loc": 247
     },
     {
       "file": "src/mermaid/common.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 178
+      "loc": 158
     },
     {
       "file": "src/mermaid/index.ts",
@@ -341,14 +348,14 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 275
+      "loc": 276
     },
     {
       "file": "src/mermaid/state.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 176
+      "loc": 178
     },
     {
       "file": "src/mesh/backend-glb.ts",
@@ -537,7 +544,63 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 56
+      "loc": 59
+    },
+    {
+      "file": "src/sysml/backend-pdf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 12
+    },
+    {
+      "file": "src/sysml/backend-png.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 19
+    },
+    {
+      "file": "src/sysml/backend-svg.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 9
+    },
+    {
+      "file": "src/sysml/index.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 22
+    },
+    {
+      "file": "src/sysml/parse.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 599
+    },
+    {
+      "file": "src/sysml/render.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 17
+    },
+    {
+      "file": "src/sysml/tokens.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 105
+    },
+    {
+      "file": "src/sysml/views.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 155
     },
     {
       "file": "src/types.ts",
@@ -587,6 +650,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 63
+    },
+    {
+      "file": "test/corpus/regenerate-sysml.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 64
     },
     {
       "file": "test/integration/browser-render.test.ts",
@@ -726,7 +796,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 199
+      "loc": 203
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -811,6 +881,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 74
+    },
+    {
+      "file": "test/support/sysml-corpus.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 11
     },
     {
       "file": "test/support/test-registry.ts",
@@ -985,7 +1062,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 54
+      "loc": 55
     },
     {
       "file": "test/unit/html-convert-escape.test.ts",
@@ -1055,14 +1132,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 279
+      "loc": 268
     },
     {
       "file": "test/unit/mermaid-common.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 131
+      "loc": 120
     },
     {
       "file": "test/unit/mermaid-corpus.test.ts",
@@ -1132,7 +1209,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 190
+      "loc": 191
     },
     {
       "file": "test/unit/mesh-glb.test.ts",
@@ -1280,6 +1357,34 @@
       "area": "tests",
       "disposition": "test",
       "loc": 74
+    },
+    {
+      "file": "test/unit/sysml-backends.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 51
+    },
+    {
+      "file": "test/unit/sysml-corpus.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 69
+    },
+    {
+      "file": "test/unit/sysml-parse.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 288
+    },
+    {
+      "file": "test/unit/sysml-views.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 169
     },
     {
       "file": "test/unit/teardown.test.ts",

@@ -10,9 +10,9 @@
 - **Dormant files**: 15
   - **Orphaned (reachable from nothing)**: 12
   - **Test-only (only a test reaches them)**: 3
-- **Potentially unused exports**: 46
+- **Potentially unused exports**: 50
   - **Unreferenced anywhere**: 5
-  - **Referenced in their own module**: 41
+  - **Referenced in their own module**: 45
   - **Not classified**: 0
 
 ## Caveats
@@ -110,6 +110,10 @@ No other file imports these names, but their own module uses them.
 - `src/raster/index.ts`: `SvgToPngOptions`
 - `src/raster/warnings.ts`: `CoverageTest`
 - `src/registry.ts`: `BackendEntry`
+- `src/sysml/backend-pdf.ts`: `render`
+- `src/sysml/backend-png.ts`: `render`
+- `src/sysml/backend-svg.ts`: `render`
+- `src/sysml/parse.ts`: `Specializable`
 - `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`
 
 ## Exports not classified

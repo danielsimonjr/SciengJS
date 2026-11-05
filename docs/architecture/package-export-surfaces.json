@@ -72,15 +72,18 @@
     ],
     "graph": [
       "DotSvgResult",
-      "dotSourceText",
       "dotToSvg",
       "dropImageElements",
       "dropStylesheetInstructions",
+      "escapeDot",
+      "escapeRecord",
       "readScale",
       "render",
       "renderPng",
+      "sourceText",
       "stripImageAttributes",
-      "svgDocumentToPng"
+      "svgDocumentToPng",
+      "xmlSafe"
     ],
     "html": [
       "convertHtml",
@@ -131,7 +134,6 @@
       "classToDot",
       "drawMermaidInBrowser",
       "drawSvgToPdf",
-      "inputError",
       "layoutSequence",
       "outside",
       "parseClassDiagram",
@@ -143,9 +145,7 @@
       "render",
       "renderMermaidSvg",
       "routesToBrowser",
-      "sourceText",
-      "stateToDot",
-      "xmlSafe"
+      "stateToDot"
     ],
     "mesh": [
       "CadBuildResult",
@@ -245,11 +245,37 @@
       "capabilitiesWithRegistry",
       "checkAssetsUrl",
       "findPair",
+      "inputError",
       "isRenderError",
       "loadConfig",
       "readAsset",
       "registryKey",
       "renderWithRegistry"
+    ],
+    "sysml": [
+      "Attribute",
+      "Connection",
+      "End",
+      "PartDef",
+      "PartUsage",
+      "PlainDef",
+      "PortUsage",
+      "Requirement",
+      "RequirementDef",
+      "Satisfy",
+      "SysmlModel",
+      "SysmlOptions",
+      "SysmlSvg",
+      "SysmlView",
+      "Token",
+      "TokenKind",
+      "baseChain",
+      "parseSysml",
+      "readSysmlOptions",
+      "render",
+      "renderSysmlSvg",
+      "sysmlToDot",
+      "tokenize"
     ],
     "trials": [],
     "worker": [
