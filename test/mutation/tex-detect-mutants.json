@@ -13,7 +13,7 @@
   {"id": "det-11", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "(verbatim\\*?|lstlisting|minted)", "replacement": "(verbatim|lstlisting|minted)", "equivalent": null},
   {"id": "det-12", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "(verbatim\\*?|lstlisting|minted)", "replacement": "(verbatim\\*?|minted)", "equivalent": null},
   {"id": "det-13", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "RequirePackage(?:WithOptions)?", "replacement": "RequirePackage", "equivalent": null},
-  {"id": "det-14", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "\\s*(?:\\[[^\\]]*\\])?\\s*\\{([^}]*)\\}/g;\nconst LIBRARY_LINE", "replacement": "\\s*\\{([^}]*)\\}/g;\nconst LIBRARY_LINE", "equivalent": null},
+  {"id": "det-14", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "\\s*(?:\\[([^\\]]*)\\])?\\s*\\{([^}]*)\\}/g;\nconst LIBRARY_LINE", "replacement": "\\s*\\{([^}]*)\\}/g;\nconst LIBRARY_LINE", "equivalent": null},
   {"id": "det-15", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "const name = part.trim();\n      if (name !== \"\") {", "replacement": "const name = part;\n      if (name !== \"\") {", "equivalent": null},
   {"id": "det-16", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "if (DIAGRAM_LIBRARIES.includes(part.trim())) {", "replacement": "if (DIAGRAM_LIBRARIES.includes(part)) {", "equivalent": null},
   {"id": "det-17", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "const DIAGRAM_LIBRARIES: readonly string[] = [\"hobby\", \"cd\"];", "replacement": "const DIAGRAM_LIBRARIES: readonly string[] = [\"hobby\"];", "equivalent": null},
@@ -29,6 +29,16 @@
   {"id": "det-27", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "if (chars[k] !== \"\\n\") {", "replacement": "if (true) {", "equivalent": null},
   {"id": "det-28", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "[\"ce\", \"mhchem\"],", "replacement": "[\"ce\", \"chemfig\"],", "equivalent": null},
   {"id": "det-29", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "esvect: \"\\\\vec or \\\\overrightarrow\",", "replacement": "esvect: \"\",", "equivalent": null},
-  {"id": "det-30", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "if (bundle === undefined) {", "replacement": "if (false) {", "equivalent": null}
+  {"id": "det-30", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "if (bundle === undefined) {", "replacement": "if (false) {", "equivalent": null},
+  {"id": "det-31", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "name === \"fontenc\" ? foreignEncoding(m[1]) : undefined", "replacement": "name !== \"fontenc\" ? foreignEncoding(m[1]) : undefined", "equivalent": null},
+  {"id": "det-32", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "option !== \"\" && option !== BUNDLED_ENCODING", "replacement": "option !== BUNDLED_ENCODING", "equivalent": null},
+  {"id": "det-33", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": ".map((option) => option.trim())", "replacement": ".map((option) => option)", "equivalent": null},
+  {"id": "det-34", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": ".find((option)", "replacement": ".findLast((option)", "equivalent": null},
+  {"id": "det-35", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "const BUNDLED_ENCODING = \"OT1\";", "replacement": "const BUNDLED_ENCODING = \"T1\";", "equivalent": null},
+  {"id": "det-36", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "return (options ?? \"\")", "replacement": "return (options ?? \"T1\")", "equivalent": null},
+  {"id": "det-37", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "    .split(\",\")\n    .map((option)", "replacement": "    .split(\";\")\n    .map((option)", "equivalent": null},
+  {"id": "det-38", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "if (encoding !== undefined) {", "replacement": "if (false) {", "equivalent": null},
+  {"id": "det-39", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "only the OT1 encoding is bundled", "replacement": "only the OT2 encoding is bundled", "equivalent": null},
+  {"id": "det-40", "file": "src/tex/detect.ts", "test": "test/unit/tex-detect.test.ts", "original": "(m[2] as string).split", "replacement": "(m[1] as string).split", "equivalent": null}
  ]
 }
