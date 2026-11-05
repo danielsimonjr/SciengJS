@@ -6,6 +6,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Changed
 
+- The TeX tools `tex-run`, `render`, `run-texware` and `trip-steps` in `tools/tex/` use the runtime of `src/tex/`. Node 22.18 and later and Bun load the TypeScript source. The trial copies of the runtime are deleted, with the trial tests that covered only them. The trip test, the e-TRIP gate and the sha256 of `scieng.fmt` do not change.
+- `TexHost` and `runProgram` take the options `nameKey` (the key of a file name in the tree) and `ttyNames` (the file names that mean the terminal). The format build and the trip test use a key that keeps the folder part of a name, as they did before.
+- A `fontenc` option other than OT1 (for example `\usepackage[T1]{fontenc}`) rejects with `E_UNSUPPORTED` before TeX runs. The message says that only the OT1 encoding is bundled.
+- `THIRD_PARTY_NOTICES.md` quotes the licence lines of `cmbase.mf` and `hyphen.tex`.
 - The TeX build tools of the trials T5 and T6 move to `tools/tex/`. The folder holds the tangler, the Pascal to WASM compiler, the trip and e-TRIP runners and gates, the change files and the format files.
 - One `build.mjs` builds the six programs (textrip, etextrip, setprod, pltotf, tftopl, dvitype) and the format.
 - The npm package does not ship `tools/`.

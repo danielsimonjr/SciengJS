@@ -1,23 +1,23 @@
 {
-  "totalFiles": 284,
+  "totalFiles": 277,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 101,
-    "test-only": 3,
-    "orphan": 12,
-    "test": 134,
-    "tool": 34,
+    "test-only": 0,
+    "orphan": 8,
+    "test": 133,
+    "tool": 35,
     "config": 0,
     "bench": 0,
     "example": 0
   },
   "byArea": {
-    "tools": 34,
-    "src": 116,
-    "tests": 134
+    "tools": 35,
+    "src": 109,
+    "tests": 133
   },
   "byPackage": {
-    "(root)": 182,
+    "(root)": 175,
     "@danielsimonjr/sciengjs": 102
   },
   "files": [
@@ -635,7 +635,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 241
+      "loc": 263
     },
     {
       "file": "src/tex/dvi.ts",
@@ -649,7 +649,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 331
+      "loc": 338
     },
     {
       "file": "src/tex/index.ts",
@@ -670,7 +670,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 87
+      "loc": 93
     },
     {
       "file": "src/tex/specials.ts",
@@ -1587,7 +1587,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 257
+      "loc": 309
     },
     {
       "file": "test/unit/tex-dvi.test.ts",
@@ -1595,6 +1595,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 214
+    },
+    {
+      "file": "test/unit/tex-host-names.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 28
     },
     {
       "file": "test/unit/tex-limits.test.ts",
@@ -1748,7 +1755,7 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 85
+      "loc": 86
     },
     {
       "file": "tools/tex/linediff.mjs",
@@ -1783,14 +1790,14 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 88
+      "loc": 84
     },
     {
       "file": "tools/tex/run-texware.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 32
+      "loc": 29
     },
     {
       "file": "tools/tex/set-bundle-includes.mjs",
@@ -1825,7 +1832,14 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 38
+      "loc": 36
+    },
+    {
+      "file": "tools/tex/tree.mjs",
+      "package": "(root)",
+      "area": "tools",
+      "disposition": "tool",
+      "loc": 46
     },
     {
       "file": "tools/tex/trip-gate.mjs",
@@ -1839,14 +1853,14 @@
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 55
+      "loc": 49
     },
     {
       "file": "tools/tex/trip.mjs",
       "package": "(root)",
       "area": "tools",
       "disposition": "tool",
-      "loc": 92
+      "loc": 93
     },
     {
       "file": "tools/tex/wasm.mjs",
@@ -1945,69 +1959,6 @@
       "area": "src",
       "disposition": "orphan",
       "loc": 912
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/dvi2svg.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "orphan",
-      "loc": 133
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/host.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "orphan",
-      "loc": 212
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/run.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "orphan",
-      "loc": 41
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/tfm.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "test-only",
-      "loc": 23
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/type1.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "test-only",
-      "loc": 236
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/vfs.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "orphan",
-      "loc": 46
-    },
-    {
-      "file": "trials/t5-tex-build/test/type1.test.mjs",
-      "package": "(root)",
-      "area": "tests",
-      "disposition": "test",
-      "loc": 43
-    },
-    {
-      "file": "trials/t6-etex-build/runtime/dvisvgm-specials.mjs",
-      "package": "(root)",
-      "area": "src",
-      "disposition": "test-only",
-      "loc": 160
-    },
-    {
-      "file": "trials/t6-etex-build/test/dvisvgm-specials.test.mjs",
-      "package": "(root)",
-      "area": "tests",
-      "disposition": "test",
-      "loc": 52
     }
   ],
   "skippedLinks": [],

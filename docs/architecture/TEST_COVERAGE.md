@@ -8,16 +8,16 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 115 |
-| Total Test Files | 98 |
-| Source Files with Tests | 78 |
-| Source Files without Tests | 37 |
-| Coverage (raw, direct-import) | **67.8%** |
+| Total Source Files | 108 |
+| Total Test Files | 97 |
+| Source Files with Tests | 75 |
+| Source Files without Tests | 33 |
+| Coverage (raw, direct-import) | **69.4%** |
 ---
 
 ## Source Files Not Imported By A Test
 
-The following 37 source files are not directly imported by any test file:
+The following 33 source files are not directly imported by any test file:
 
 ### browser/
 
@@ -94,13 +94,6 @@ The following 37 source files are not directly imported by any test file:
 - `trials/t4-browser/assets/pinned.js`
 - `trials/t4-browser/measure.mjs`
 
-### t5-tex-build/
-
-- `trials/t5-tex-build/runtime/dvi2svg.mjs`
-- `trials/t5-tex-build/runtime/host.mjs`
-- `trials/t5-tex-build/runtime/run.mjs`
-- `trials/t5-tex-build/runtime/vfs.mjs`
-
 ---
 
 ## Source Files Imported By A Test
@@ -171,20 +164,17 @@ The following 37 source files are not directly imported by any test file:
 | `tex/bundles.ts` | `tex-bundles.test.ts` |
 | `tex/detect.ts` | `tex-detect.test.ts` |
 | `tex/dvi.ts` | `tex-dvi.test.ts` |
-| `tex/host.ts` | `tex-limits.test.ts` |
+| `tex/host.ts` | `tex-host-names.test.ts`, `tex-limits.test.ts` |
 | `tex/render.ts` | `tex-render.test.ts`, `tex-limits.test.ts` |
 | `tex/specials.ts` | `tex-specials.test.ts` |
 | `tex/stage.ts` | `tex-wiring.test.ts` |
 | `tex/tfm.ts` | `tex-tfm.test.ts` |
 | `tex/type1.ts` | `tex-type1.test.ts` |
-| `tex/vfs.ts` | `tex-vfs.test.ts` |
+| `tex/vfs.ts` | `tex-host-names.test.ts`, `tex-vfs.test.ts` |
 | `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `render.test.ts` |
 | `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
 | `worker/protocol.ts` | `browser-stage.test.ts`, `cad-build.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `math-backends.test.ts`, `mesh-limit.test.ts` |
 | `worker/run.ts` | `worker-exec-argv.test.ts`, `worker-run.test.ts` |
-| `runtime/tfm.mjs` | `type1.test.mjs` |
-| `runtime/type1.mjs` | `type1.test.mjs` |
-| `runtime/dvisvgm-specials.mjs` | `dvisvgm-specials.test.mjs` |
 
 ---
 
@@ -277,6 +267,7 @@ The following 37 source files are not directly imported by any test file:
 | `unit/tex-bundles.test.ts` | 1 files |
 | `unit/tex-detect.test.ts` | 1 files |
 | `unit/tex-dvi.test.ts` | 1 files |
+| `unit/tex-host-names.test.ts` | 2 files |
 | `unit/tex-limits.test.ts` | 2 files |
 | `unit/tex-specials.test.ts` | 1 files |
 | `unit/tex-tfm.test.ts` | 1 files |
@@ -288,5 +279,3 @@ The following 37 source files are not directly imported by any test file:
 | `unit/version.test.ts` | 1 files |
 | `unit/worker-exec-argv.test.ts` | 1 files |
 | `unit/worker-run.test.ts` | 2 files |
-| `test/type1.test.mjs` | 2 files |
-| `test/dvisvgm-specials.test.mjs` | 1 files |

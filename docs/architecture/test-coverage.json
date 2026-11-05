@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 115,
-    "totalTestFiles": 98,
-    "testedCount": 78,
-    "untestedCount": 37,
-    "coveragePercent": "67.8",
+    "totalSourceFiles": 108,
+    "totalTestFiles": 97,
+    "testedCount": 75,
+    "untestedCount": 33,
+    "coveragePercent": "69.4",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 115,
-      "testedActive": 78,
-      "activeUntested": 37,
+      "activeFiles": 108,
+      "testedActive": 75,
+      "activeUntested": 33,
       "excludedTotal": 0,
-      "percent": "67.8",
+      "percent": "69.4",
       "breakdown": {
-        "active_untested": 37
+        "active_untested": 33
       }
     }
   },
@@ -50,11 +50,7 @@
     "trials/t2-mesh/measure.mjs",
     "trials/t3-tex/shim/index.cjs",
     "trials/t4-browser/assets/pinned.js",
-    "trials/t4-browser/measure.mjs",
-    "trials/t5-tex-build/runtime/dvi2svg.mjs",
-    "trials/t5-tex-build/runtime/host.mjs",
-    "trials/t5-tex-build/runtime/run.mjs",
-    "trials/t5-tex-build/runtime/vfs.mjs"
+    "trials/t4-browser/measure.mjs"
   ],
   "testedFiles": [
     "src/assets.ts",
@@ -131,10 +127,7 @@
     "src/types.ts",
     "src/version.ts",
     "src/worker/protocol.ts",
-    "src/worker/run.ts",
-    "trials/t5-tex-build/runtime/tfm.mjs",
-    "trials/t5-tex-build/runtime/type1.mjs",
-    "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
+    "src/worker/run.ts"
   ],
   "coverageMap": {
     "src/assets.ts": [
@@ -462,6 +455,7 @@
       "test/unit/tex-dvi.test.ts"
     ],
     "src/tex/host.ts": [
+      "test/unit/tex-host-names.test.ts",
       "test/unit/tex-limits.test.ts"
     ],
     "src/tex/index.ts": [],
@@ -483,6 +477,7 @@
       "test/unit/tex-type1.test.ts"
     ],
     "src/tex/vfs.ts": [
+      "test/unit/tex-host-names.test.ts",
       "test/unit/tex-vfs.test.ts"
     ],
     "src/tex/wasm.ts": [],
@@ -520,20 +515,7 @@
     "trials/t2-mesh/measure.mjs": [],
     "trials/t3-tex/shim/index.cjs": [],
     "trials/t4-browser/assets/pinned.js": [],
-    "trials/t4-browser/measure.mjs": [],
-    "trials/t5-tex-build/runtime/dvi2svg.mjs": [],
-    "trials/t5-tex-build/runtime/host.mjs": [],
-    "trials/t5-tex-build/runtime/run.mjs": [],
-    "trials/t5-tex-build/runtime/tfm.mjs": [
-      "trials/t5-tex-build/test/type1.test.mjs"
-    ],
-    "trials/t5-tex-build/runtime/type1.mjs": [
-      "trials/t5-tex-build/test/type1.test.mjs"
-    ],
-    "trials/t5-tex-build/runtime/vfs.mjs": [],
-    "trials/t6-etex-build/runtime/dvisvgm-specials.mjs": [
-      "trials/t6-etex-build/test/dvisvgm-specials.test.mjs"
-    ]
+    "trials/t4-browser/measure.mjs": []
   },
   "testToSourceMap": {
     "test/integration/browser-render.test.ts": [
@@ -873,6 +855,10 @@
     "test/unit/tex-dvi.test.ts": [
       "src/tex/dvi.ts"
     ],
+    "test/unit/tex-host-names.test.ts": [
+      "src/tex/host.ts",
+      "src/tex/vfs.ts"
+    ],
     "test/unit/tex-limits.test.ts": [
       "src/tex/host.ts",
       "src/tex/render.ts"
@@ -908,13 +894,6 @@
     "test/unit/worker-run.test.ts": [
       "src/worker/run.ts",
       "src/errors.ts"
-    ],
-    "trials/t5-tex-build/test/type1.test.mjs": [
-      "trials/t5-tex-build/runtime/type1.mjs",
-      "trials/t5-tex-build/runtime/tfm.mjs"
-    ],
-    "trials/t6-etex-build/test/dvisvgm-specials.test.mjs": [
-      "trials/t6-etex-build/runtime/dvisvgm-specials.mjs"
     ]
   },
   "classifiedUntested": [
@@ -1048,22 +1027,6 @@
     },
     {
       "file": "trials/t4-browser/measure.mjs",
-      "category": null
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/dvi2svg.mjs",
-      "category": null
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/host.mjs",
-      "category": null
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/run.mjs",
-      "category": null
-    },
-    {
-      "file": "trials/t5-tex-build/runtime/vfs.mjs",
       "category": null
     }
   ]
