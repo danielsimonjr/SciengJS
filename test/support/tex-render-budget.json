@@ -1,0 +1,14 @@
+{
+  "sample": "circuit-divider.tex",
+  "warmRuns": 20,
+  "marginRatio": 1.5,
+  "marginMs": 50,
+  "runtimes": {
+    "linux-node": { "warmTexMs": 245.6, "warmSvgMs": 5.7 },
+    "win32-node": { "warmTexMs": 143.5, "warmSvgMs": 3.9 },
+    "darwin-node": { "warmTexMs": 330.9, "warmSvgMs": 7.5 },
+    "linux-bun": { "warmTexMs": 168.7, "warmSvgMs": 3.4 },
+    "win32-bun": { "warmTexMs": 185.9, "warmSvgMs": 4.3 },
+    "darwin-bun": { "warmTexMs": 271.3, "warmSvgMs": 3.9 }
+  }
+}
