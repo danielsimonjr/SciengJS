@@ -698,14 +698,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 250
+      "loc": 254
     },
     {
       "file": "test/mutation/run-mutants.test.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 292
+      "loc": 309
     },
     {
       "file": "test/node/backends/heap.mjs",

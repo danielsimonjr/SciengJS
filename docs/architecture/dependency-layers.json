@@ -1,7 +1,7 @@
 {
   "metadata": {
     "name": "@danielsimonjr/sciengjs",
-    "version": "0.8.0",
+    "version": "0.9.0",
     "schemaVersion": "2.0.0",
     "language": "typescript"
   },
@@ -3668,7 +3668,7 @@
         ]
       },
       "src/sysml/index.ts": {
-        "description": "The public surface of the SysML stage. It holds the tokenizer, the parser of the design subset, the option reader,",
+        "description": "The public surface of the SysML stage. The surface holds the tokenizer, the parser of the design subset, the option read",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -3849,7 +3849,7 @@
         ]
       },
       "src/sysml/tokens.ts": {
-        "description": "Splits a SysML source into tokens. Comments and white space are skipped. An unclosed comment, an unclosed string",
+        "description": "Splits a SysML source into tokens. The function skips comments and white space. An unclosed comment, an unclosed string",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [

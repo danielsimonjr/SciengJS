@@ -4,7 +4,7 @@
 
 # @danielsimonjr/sciengjs - Dependency Graph
 
-**Version**: 0.8.0
+**Version**: 0.9.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -1387,7 +1387,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/sysml/index.ts` - The public surface of the SysML stage. It holds the tokenizer, the parser of the design subset, the option reader,
+### `src/sysml/index.ts` - The public surface of the SysML stage. The surface holds the tokenizer, the parser of the design subset, the option read
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1444,7 +1444,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/sysml/tokens.ts` - Splits a SysML source into tokens. Comments and white space are skipped. An unclosed comment, an unclosed string
+### `src/sysml/tokens.ts` - Splits a SysML source into tokens. The function skips comments and white space. An unclosed comment, an unclosed string
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1984,7 +1984,7 @@ graph TD
 |----------|-------|
 | Total Source Files | 247 |
 | Subsystems | 18 |
-| Total Lines of Code | 28611 |
+| Total Lines of Code | 28632 |
 | Total Exports | 577 |
 | Total Re-exports | 121 |
 | Total Classes | 6 |
@@ -2000,4 +2000,4 @@ graph TD
 
 ---
 
-*Version*: 0.8.0
+*Version*: 0.9.0

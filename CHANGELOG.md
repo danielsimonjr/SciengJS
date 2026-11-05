@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-05
+
 ### Added
 
 - The input type `sysml` reads a subset of the SysML v2 text notation. The subset holds `package`, `part def`, `part`, `attribute`, `port def`, `port`, `connect`, `interface def`, `interface`, `requirement def`, `requirement`, `satisfy`, `:>` and comments. The pairs `sysml` to `svg`, `png` and `pdf` render through `render()`.

@@ -140,8 +140,8 @@ This report lists each source file that the map census finds, with a disposition
 | `test/integration/mermaid-browser.test.ts` | (root) | tests | test | 85 |
 | `test/integration/mesh-viewer.test.ts` | (root) | tests | test | 162 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 124 |
-| `test/mutation/run-mutants.mjs` | (root) | tests | test | 250 |
-| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 292 |
+| `test/mutation/run-mutants.mjs` | (root) | tests | test | 254 |
+| `test/mutation/run-mutants.test.ts` | (root) | tests | test | 309 |
 | `test/node/backends/heap.mjs` | (root) | tests | test | 5 |
 | `test/node/backends/loop.mjs` | (root) | tests | test | 6 |
 | `test/node/backends/ok.mjs` | (root) | tests | test | 4 |
