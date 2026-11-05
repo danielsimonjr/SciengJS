@@ -31,12 +31,10 @@ This document provides a comprehensive dependency graph of all files, components
 17. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
 18. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
 19. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-20. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-21. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-22. [Dependency Matrix](#dependency-matrix)
-23. [Circular Dependency Analysis](#circular-dependency-analysis)
-24. [Visual Dependency Graph](#visual-dependency-graph)
-25. [Summary Statistics](#summary-statistics)
+20. [Dependency Matrix](#dependency-matrix)
+21. [Circular Dependency Analysis](#circular-dependency-analysis)
+22. [Visual Dependency Graph](#visual-dependency-graph)
+23. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -62,8 +60,6 @@ The codebase is organized into the following modules:
 - **trials/t2-mesh**: 1 file
 - **trials/t3-tex**: 1 file
 - **trials/t4-browser**: 2 files
-- **trials/t5-tex-build**: 6 files
-- **trials/t6-etex-build**: 1 file
 
 ---
 
@@ -1867,82 +1863,6 @@ The codebase is organized into the following modules:
 
 ---
 
-<a id="trials-t5-tex-build-dependencies"></a>
-
-## Trials/t5 tex build Dependencies
-
-### `trials/t5-tex-build/runtime/dvi2svg.mjs` - a font with no PFB keeps its TFM advances, and each of its glyphs goes in the missing list
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./tfm.mjs` | `readTfm` | Import |
-| `./type1.mjs` | `readType1` | Import |
-
-**Exports:**
-- Functions: `dviToSvg`
-
----
-
-### `trials/t5-tex-build/runtime/host.mjs` - Host functions of the T5 trial: the Pascal file model on a virtual file system.
-
-**Exports:**
-- Classes: `ExitSignal`, `Host`
-
----
-
-### `trials/t5-tex-build/runtime/run.mjs` - Run one compiled Pascal program on the virtual file system.
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./host.mjs` | `Host, ExitSignal` | Import |
-
-**Exports:**
-- Functions: `runProgram`
-
----
-
-### `trials/t5-tex-build/runtime/tfm.mjs` - TFM reader of the trial: the character widths and the design size.
-
-**Exports:**
-- Functions: `readTfm`
-
----
-
-### `trials/t5-tex-build/runtime/type1.mjs` - Type 1 font reader of the trial: PFB (or PFA) to SVG path data for each glyph.
-
-**Exports:**
-- Functions: `readType1`
-
----
-
-### `trials/t5-tex-build/runtime/vfs.mjs` - A virtual file system for the TeX runs of the trial. Reads come from an
-
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `fs` | `default` |
-| `path` | `default` |
-
-**Exports:**
-- Classes: `TreeFS`
-- Constants: `flatName`
-
----
-
-<a id="trials-t6-etex-build-dependencies"></a>
-
-## Trials/t6 etex build Dependencies
-
-### `trials/t6-etex-build/runtime/dvisvgm-specials.mjs` - The SVG unit of the specials of dvisvgm: the big point (72 bp = 72.27 pt).
-
-**Exports:**
-- Functions: `createSpecials`
-- Constants: `unitPerPt`
-
----
-
 <a id="dependency-matrix"></a>
 ## Dependency Matrix
 
@@ -2155,19 +2075,6 @@ graph TD
         N99[measure.mjs]
     end
 
-    subgraph Trials/t5-tex-build
-        N100[dvi2svg.mjs]
-        N101[host.mjs]
-        N102[run.mjs]
-        N103[tfm.mjs]
-        N104[type1.mjs]
-        N105[vfs.mjs]
-    end
-
-    subgraph Trials/t6-etex-build
-        N106[dvisvgm-specials.mjs]
-    end
-
     N0 --> N3
     N8 --> N91
     N8 --> N13
@@ -2252,14 +2159,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 284 |
-| Subsystems | 19 |
-| Total Lines of Code | 32884 |
-| Total Exports | 693 |
+| Total Source Files | 277 |
+| Subsystems | 17 |
+| Total Lines of Code | 32086 |
+| Total Exports | 685 |
 | Total Re-exports | 167 |
-| Total Classes | 10 |
+| Total Classes | 7 |
 | Total Interfaces | 141 |
-| Total Functions | 272 |
+| Total Functions | 269 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 72 |

@@ -19,3 +19,6 @@ test/corpus-large/
 
 # TeX build output of tools/tex
 .tex-build/
+
+# Worktrees and settings of the agent harness
+.claude/

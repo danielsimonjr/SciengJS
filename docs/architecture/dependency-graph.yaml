@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 284
+  totalFiles: 277
   totalModules: 3
-  totalExports: 693
+  totalExports: 685
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -168,6 +168,10 @@ modules:
             - texRun
             - dvitypeRun
           typeOnly: false
+        - file: tools/tex/tree.mjs
+          imports:
+            - treeOf
+          typeOnly: false
         - file: tools/tex/etrip-gate.mjs
           imports:
             - etripGate
@@ -228,24 +232,24 @@ modules:
       nodeDependencies:
         - node:fs
         - node:path
-        - node:url
       internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
+        - file: src/tex/run.ts
           imports:
             - runProgram
           typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/vfs.mjs
-          imports:
-            - TreeFS
-            - flatName
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/dvi2svg.mjs
+        - file: src/tex/dvi.ts
           imports:
             - dviToSvg
+          typeOnly: false
+        - file: src/tex/specials.ts
+          imports:
+            - createSpecials
+            - SPECIAL_UNIT_PER_PT
+          typeOnly: false
+        - file: tools/tex/tree.mjs
+          imports:
+            - flatKey
+            - treeFromRoots
           typeOnly: false
       exports: []
     tools/tex/run-texware.mjs:
@@ -253,9 +257,13 @@ modules:
       nodeDependencies:
         - node:fs
       internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
+        - file: src/tex/run.ts
           imports:
             - runProgram
+          typeOnly: false
+        - file: tools/tex/tree.mjs
+          imports:
+            - treeOf
           typeOnly: false
       exports: []
     tools/tex/set-bundle-includes.mjs:
@@ -300,20 +308,30 @@ modules:
         - node:fs
         - node:path
       internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
+        - file: src/tex/run.ts
           imports:
             - runProgram
           typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
+        - file: tools/tex/tree.mjs
           imports:
-            - ExitSignal
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/vfs.mjs
-          imports:
-            - TreeFS
-            - flatName
+            - flatKey
+            - treeFromRoots
           typeOnly: false
       exports: []
+    tools/tex/tree.mjs:
+      externalDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:path
+      internalDependencies:
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: false
+      exports:
+        - treeFromRoots
+        - treeOf
+        - flatKey
     tools/tex/trip-gate.mjs:
       externalDependencies: []
       nodeDependencies:
@@ -335,13 +353,14 @@ modules:
         - node:fs
         - node:path
       internalDependencies:
-        - file: trials/t5-tex-build/runtime/run.mjs
+        - file: src/tex/run.ts
           imports:
             - runProgram
           typeOnly: false
-        - file: trials/t5-tex-build/runtime/host.mjs
+        - file: tools/tex/tree.mjs
           imports:
-            - ExitSignal
+            - flatKey
+            - treeOf
           typeOnly: false
         - file: tools/tex/linediff.mjs
           imports:
@@ -349,7 +368,6 @@ modules:
           typeOnly: false
       exports:
         - latin
-        - flatName
         - loadProgram
         - plRoundTrip
         - texRun
@@ -376,6 +394,10 @@ modules:
             - plRoundTrip
             - texRun
             - dvitypeRun
+          typeOnly: false
+        - file: tools/tex/tree.mjs
+          imports:
+            - treeOf
           typeOnly: false
       exports: []
     tools/tex/wasm.mjs:
@@ -3089,66 +3111,6 @@ modules:
         - node:zlib
       internalDependencies: []
       exports: []
-    trials/t5-tex-build/runtime/dvi2svg.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/tfm.mjs
-          imports:
-            - readTfm
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/type1.mjs
-          imports:
-            - readType1
-          typeOnly: false
-      exports:
-        - dviToSvg
-    trials/t5-tex-build/runtime/host.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - ExitSignal
-        - Host
-    trials/t5-tex-build/runtime/run.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/host.mjs
-          imports:
-            - Host
-            - ExitSignal
-          typeOnly: false
-      exports:
-        - runProgram
-    trials/t5-tex-build/runtime/tfm.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - readTfm
-    trials/t5-tex-build/runtime/type1.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - readType1
-    trials/t5-tex-build/runtime/vfs.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:fs
-        - node:path
-      internalDependencies: []
-      exports:
-        - TreeFS
-        - flatName
-    trials/t6-etex-build/runtime/dvisvgm-specials.mjs:
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - unitPerPt
-        - createSpecials
   tests:
     test/corpus/regenerate-dot.ts:
       externalDependencies:
@@ -5393,6 +5355,20 @@ modules:
             - DviBuilder
           typeOnly: false
       exports: []
+    test/unit/tex-host-names.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/tex/host.ts
+          imports:
+            - TexHost
+          typeOnly: false
+        - file: src/tex/vfs.ts
+          imports:
+            - TexTree
+          typeOnly: false
+      exports: []
     test/unit/tex-limits.test.ts:
       externalDependencies:
         - bun:test
@@ -5586,61 +5562,33 @@ modules:
             - testSettings
           typeOnly: false
       exports: []
-    trials/t5-tex-build/test/type1.test.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:assert/strict
-        - node:fs
-        - node:path
-        - node:test
-      internalDependencies:
-        - file: trials/t5-tex-build/runtime/type1.mjs
-          imports:
-            - readType1
-          typeOnly: false
-        - file: trials/t5-tex-build/runtime/tfm.mjs
-          imports:
-            - readTfm
-          typeOnly: false
-      exports: []
-    trials/t6-etex-build/test/dvisvgm-specials.test.mjs:
-      externalDependencies: []
-      nodeDependencies:
-        - node:assert/strict
-        - node:test
-      internalDependencies:
-        - file: trials/t6-etex-build/runtime/dvisvgm-specials.mjs
-          imports:
-            - createSpecials
-          typeOnly: false
-      exports: []
 statistics:
-  totalTypeScriptFiles: 284
-  totalSourceFiles: 284
+  totalTypeScriptFiles: 277
+  totalSourceFiles: 277
   totalModules: 3
-  totalLinesOfCode: 32884
-  totalExports: 693
+  totalLinesOfCode: 32086
+  totalExports: 685
   entryRoots: 101
   reachableFiles: 101
-  dormantFiles: 15
-  orphanedFiles: 12
-  testOnlyFiles: 3
+  dormantFiles: 8
+  orphanedFiles: 8
+  testOnlyFiles: 0
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 72
   noImporterFileCount: 8
-  unusedExportsCount: 52
+  unusedExportsCount: 51
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
-  totalClasses: 10
+  totalClasses: 7
   totalInterfaces: 141
-  totalFunctions: 272
+  totalFunctions: 269
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 72
+  totalConstants: 70
   totalReExports: 167
 reachability:
   roots:
@@ -5746,7 +5694,7 @@ reachability:
     - src/worker/protocol.ts
     - src/worker/run.ts
   reachableCount: 101
-  dormantCount: 15
+  dormantCount: 8
   orphaned:
     - src/mesh/occt-import-js.d.ts
     - trials/t1-graph/compare-layout.mjs
@@ -5756,12 +5704,5 @@ reachability:
     - trials/t3-tex/shim/index.cjs
     - trials/t4-browser/assets/pinned.js
     - trials/t4-browser/measure.mjs
-    - trials/t5-tex-build/runtime/dvi2svg.mjs
-    - trials/t5-tex-build/runtime/host.mjs
-    - trials/t5-tex-build/runtime/run.mjs
-    - trials/t5-tex-build/runtime/vfs.mjs
-  testOnly:
-    - trials/t5-tex-build/runtime/tfm.mjs
-    - trials/t5-tex-build/runtime/type1.mjs
-    - trials/t6-etex-build/runtime/dvisvgm-specials.mjs
+  testOnly: []
 warnings: []
