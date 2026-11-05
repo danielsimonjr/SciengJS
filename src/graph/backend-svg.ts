@@ -1,6 +1,7 @@
 import { RenderError } from "../errors.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
-import { dotSourceText, dotToSvg } from "./dot.ts";
+import { dotToSvg } from "./dot.ts";
+import { sourceText } from "./text.ts";
 
 /** Renders dot to svg. The backend takes no options, so any option is an input error. */
 export async function render(request: WorkerJob["request"]): Promise<BackendOutput> {
@@ -8,6 +9,6 @@ export async function render(request: WorkerJob["request"]): Promise<BackendOutp
   if (names.length > 0) {
     throw new RenderError("E_INPUT", `dot to svg takes no options; got ${names.join(", ")}`);
   }
-  const result = await dotToSvg(dotSourceText(request.source));
+  const result = await dotToSvg(sourceText(request.source));
   return { bytes: new TextEncoder().encode(result.svg), warnings: result.warnings };
 }

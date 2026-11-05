@@ -1,17 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { RenderError } from "../../src/errors.ts";
 import { prepare, readLenient } from "../../src/mermaid/common.ts";
-
-/** Runs a function that must throw a RenderError, and returns that error. */
-function rejection(fn: () => unknown): RenderError {
-  try {
-    fn();
-  } catch (err) {
-    if (err instanceof RenderError) return err;
-    throw err;
-  }
-  throw new Error("expected a RenderError, but the call returned");
-}
+import { rejection } from "../support/rejections.ts";
 
 describe("Mermaid header detection", () => {
   test("classDiagram, classDiagram-v2, stateDiagram-v2 and sequenceDiagram name their kind", () => {

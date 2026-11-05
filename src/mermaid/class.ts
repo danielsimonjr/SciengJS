@@ -1,4 +1,6 @@
-import { escapeDot, escapeRecord, inputError, outside, type ContentLine, type Source } from "./common.ts";
+import { inputError } from "../errors.ts";
+import { escapeDot, escapeRecord } from "../graph/text.ts";
+import { outside, type ContentLine, type Source } from "./common.ts";
 
 /** The shape at one end of a class relation: none, an open arrow, a triangle, or a diamond that is filled or open. */
 export type Marker = "none" | "arrow" | "triangle" | "diamond" | "filled-diamond";

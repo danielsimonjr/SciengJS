@@ -1,4 +1,4 @@
-import { xmlSafe } from "./common.ts";
+import { xmlSafe } from "../graph/text.ts";
 import type { BlockEvent, Branch, MessageEvent, SeqEvent, SequenceModel } from "./sequence.ts";
 
 const MARGIN = 20;

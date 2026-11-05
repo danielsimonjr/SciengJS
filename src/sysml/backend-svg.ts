@@ -1,5 +1,5 @@
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
-import { sourceText } from "../mermaid/common.ts";
+import { sourceText } from "../graph/text.ts";
 import { renderSysmlSvg } from "./render.ts";
 
 /** Renders one SysML source to SVG through the graph stage. The worker calls this function for the sysml:svg pair. */

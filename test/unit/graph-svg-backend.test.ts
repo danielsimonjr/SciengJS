@@ -1,7 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { rejectionOf } from "../support/rejections.ts";
 import { render } from "../../src/graph/backend-svg.ts";
-import { dotSourceText, dotToSvg } from "../../src/graph/dot.ts";
+import { dotToSvg } from "../../src/graph/dot.ts";
+import { sourceText } from "../../src/graph/text.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 import { testSettings } from "../support/settings.ts";
 
@@ -30,10 +31,10 @@ describe("dot to svg backend", () => {
   });
 });
 
-describe("dotSourceText", () => {
+describe("sourceText", () => {
   test("passes text through and decodes bytes as UTF-8", () => {
-    expect(dotSourceText("digraph {}")).toBe("digraph {}");
-    expect(dotSourceText(new TextEncoder().encode("digraph { é }"))).toBe("digraph { é }");
+    expect(sourceText("digraph {}")).toBe("digraph {}");
+    expect(sourceText(new TextEncoder().encode("digraph { é }"))).toBe("digraph { é }");
   });
 });
 

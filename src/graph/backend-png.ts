@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { RenderError } from "../errors.ts";
 import { bundledFontPathIn } from "../assets.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
-import { dotSourceText, dotToSvg } from "./dot.ts";
+import { dotToSvg } from "./dot.ts";
+import { sourceText } from "./text.ts";
 import { isFontFile, svgToPng } from "../raster/index.ts";
 import { rasterWarnings } from "../raster/warnings.ts";
 
@@ -54,7 +55,7 @@ export async function renderPng(request: WorkerJob["request"], bundledFontPath: 
 
   const font = fontOf(request.settings, bundledFontPath);
 
-  const dot = await dotToSvg(dotSourceText(request.source));
+  const dot = await dotToSvg(sourceText(request.source));
   const bytes = await svgToPng(dot.svg, {
     scale,
     maxMemoryMb: request.settings.maxMemoryMb,

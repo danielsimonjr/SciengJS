@@ -1,4 +1,4 @@
-import { inputError } from "../mermaid/common.ts";
+import { inputError } from "../errors.ts";
 import { tokenize, type Token } from "./tokens.ts";
 
 /** An attribute: its name, its type name, its literal value as written, and its line. */
@@ -490,13 +490,8 @@ class Resolver {
     if (this.names.get(name) !== kind) throw inputError(line, `${name} names no ${kind}`);
   }
 
-  /** The chain of a part def and its bases. */
   private chain(def: PartDef): PartDef[] {
-    const out: PartDef[] = [];
-    for (let at: PartDef | undefined = def; at !== undefined; at = at.base === undefined ? undefined : this.partDefs.get(at.base)) {
-      out.push(at);
-    }
-    return out;
+    return baseChain(this.model.partDefs, def);
   }
 
   private partOf(def: PartDef, name: string): PartUsage | undefined {
@@ -585,4 +580,16 @@ class Resolver {
     }
     return { requirement, path: `${first}.${second}`, line: raw.line };
   }
+}
+
+/**
+ * The chain of a part def and its bases, the part def first. The chain stops at a base that names no part def, and
+ * at a base that is already in the chain, so a cycle cannot loop.
+ */
+export function baseChain(partDefs: readonly PartDef[], def: PartDef): PartDef[] {
+  const out: PartDef[] = [];
+  for (let at: PartDef | undefined = def; at !== undefined && !out.includes(at); at = partDefs.find((d) => d.name === at!.base)) {
+    out.push(at);
+  }
+  return out;
 }

@@ -5,6 +5,7 @@
 export { tokenize, type Token, type TokenKind } from "./tokens.ts";
 export {
   parseSysml,
+  baseChain,
   type SysmlModel,
   type PartDef,
   type PlainDef,
