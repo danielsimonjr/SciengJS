@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 108,
-    "totalTestFiles": 97,
+    "totalTestFiles": 98,
     "testedCount": 75,
     "untestedCount": 33,
     "coveragePercent": "69.4",
@@ -564,6 +564,7 @@
     "test/integration/tex-render.test.ts": [
       "src/tex/render.ts"
     ],
+    "test/integration/tikz-corpus.test.ts": [],
     "test/integration/tikz-render.test.ts": [
       "src/index.ts",
       "src/errors.ts",

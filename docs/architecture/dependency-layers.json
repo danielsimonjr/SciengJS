@@ -4158,7 +4158,7 @@
         ]
       },
       "src/tex/dvi.ts": {
-        "description": "Converts a DVI file to SVG.",
+        "description": "Tells whether the page is inside a transformed group. While it gives true, the boxes of glyphs and rules do not",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -4574,7 +4574,7 @@
         ]
       },
       "src/tex/specials.ts": {
-        "description": "Creates a reader for the `dvisvgm:raw`, `rawdef`, `rawset`, `endrawset`, `rawput` and `bbox` specials",
+        "description": "Tells whether the page is inside a raw group with a `transform` attribute. A pgf picture moves its text",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
