@@ -26,6 +26,8 @@ export interface RunOptions {
   timeoutMs?: number;
   /** Echo the terminal input to the terminal output. The default is true. */
   echo?: boolean;
+  /** The bound on the bytes that the run writes. A run over it ends with `E_LIMIT`. The default is `DEFAULT_MAX_OUTPUT_BYTES` (64 MiB). */
+  maxOutputBytes?: number;
 }
 
 /** The result of one run. */
@@ -44,7 +46,7 @@ export interface RunResult {
 
 /**
  * Runs the engine once. The host gives the engine the files of the tree and the terminal, and nothing else.
- * A run that passes `timeoutMs` ends with `E_TIMEOUT`. An open of a name that escapes the tree fails like a missing file, and `refused` lists the name.
+ * A run that writes more than `maxOutputBytes` ends with `E_LIMIT`. A run that passes `timeoutMs` ends with `E_TIMEOUT`. An open of a name that escapes the tree fails like a missing file, and `refused` lists the name.
  * Any other failure of the program ends with `E_INTERNAL`.
  */
 export async function runProgram(o: RunOptions): Promise<RunResult> {
@@ -58,6 +60,7 @@ export async function runProgram(o: RunOptions): Promise<RunResult> {
     terminal: o.terminal,
     std: { input: std.input, output: std.output },
     echo: o.echo,
+    ...(o.maxOutputBytes === undefined ? {} : { maxOutputBytes: o.maxOutputBytes }),
     extra: {
       hostexit: (code) => {
         throw new ExitSignal(code);

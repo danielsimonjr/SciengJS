@@ -12,6 +12,13 @@ const NL = 10;
 /** The number of host calls between two reads of the clock. */
 const TICK_EVERY = 256;
 
+/**
+ * The default bound on the bytes that one run writes, in the terminal output and in the output files together.
+ * It is 64 MiB: the log, the DVI and the terminal of a render hold well under 1 MiB, and the format build writes about 24 MB.
+ * A caller sets another bound with `maxOutputBytes`, for example from the `maxMemoryMb` key of the configuration.
+ */
+export const DEFAULT_MAX_OUTPUT_BYTES = 64 * 1024 * 1024;
+
 /** Thrown by the `hostexit` import to leave the program with an exit code. */
 export class ExitSignal extends Error {
   readonly code: number;
@@ -53,6 +60,8 @@ export interface HostOptions {
   deadline?: number;
   /** The time limit in milliseconds, for the message of the timeout. */
   timeoutMs?: number;
+  /** The bound on the bytes that the run writes to the terminal and to files. The default is `DEFAULT_MAX_OUTPUT_BYTES`. */
+  maxOutputBytes?: number;
 }
 
 /** The host of one run. */
@@ -68,6 +77,8 @@ export class TexHost {
   private mem!: Uint8Array;
   private dv!: DataView;
   private ticks = 0;
+  private outputBytes = 0;
+  private readonly maxOutputBytes: number;
   private readonly refusedNames: string[] = [];
   private readonly deadline: number | undefined;
   private readonly timeoutMs: number | undefined;
@@ -80,6 +91,7 @@ export class TexHost {
     this.echoInput = o.echo ?? true;
     this.deadline = o.deadline;
     this.timeoutMs = o.timeoutMs;
+    this.maxOutputBytes = o.maxOutputBytes ?? DEFAULT_MAX_OUTPUT_BYTES;
     const term = "\n" + (o.terminal ?? []).map((l) => l + "\n").join("");
     this.termIn = { data: latin1Bytes(term), pos: 0, text: true, es: 1, reading: true, tty: true, out: [], err: 0 };
   }
@@ -112,6 +124,14 @@ export class TexHost {
     // Pascal ends an incomplete last line of a text file
     if (h.text && h.out.length && h.out[h.out.length - 1] !== NL) h.out.push(NL);
     if (h.name !== undefined) this.files.put(h.name, Uint8Array.from(h.out));
+  }
+
+  // Counts n bytes that the program writes. A run over the bound ends with E_LIMIT.
+  private charge(n: number): void {
+    this.outputBytes += n;
+    if (this.outputBytes > this.maxOutputBytes) {
+      throw new RenderError("E_LIMIT", `the TeX run wrote more than ${this.maxOutputBytes} bytes`);
+    }
   }
 
   private tick(): void {
@@ -165,6 +185,7 @@ export class TexHost {
     if (!this.echoInput || !h.tty || h.data[h.pos] !== NL || h.pos + 1 >= h.data.length) return;
     let e = h.pos + 1;
     while (e < h.data.length && h.data[e] !== NL) e++;
+    this.charge(e - h.pos);
     for (let k = h.pos + 1; k <= e; k++) this.termOut.push(h.data[k]!);
   }
 
@@ -220,6 +241,7 @@ export class TexHost {
       f_put: (slot) => {
         const h = this.handleOf(slot);
         const b = slot + FILE_SLOT;
+        this.charge(h.es);
         for (let k = 0; k < h.es; k++) h.out.push(this.mem[b + k]!);
       },
       f_eof: (slot) => (this.eofOf(this.handleOf(slot)) ? 1 : 0),
@@ -229,16 +251,19 @@ export class TexHost {
       },
       f_wstr: (slot, addr, len, width) => {
         const h = this.handleOf(slot);
+        this.charge(Math.max(len, width));
         for (let k = len; k < width; k++) h.out.push(32);
         for (let k = 0; k < len; k++) h.out.push(this.mem[addr + k]!);
       },
       f_wint: (slot, v, width) => {
         const h = this.handleOf(slot);
         const s = String(v).padStart(width, " ");
+        this.charge(s.length);
         for (let k = 0; k < s.length; k++) h.out.push(s.charCodeAt(k));
       },
       f_wchar: (slot, c, width) => {
         const h = this.handleOf(slot);
+        this.charge(Math.max(1, width));
         for (let k = 1; k < width; k++) h.out.push(32);
         h.out.push(c & 255);
       },
@@ -251,10 +276,13 @@ export class TexHost {
           s = (v < 0 ? "" : " ") + e.toUpperCase();
         }
         s = s.padStart(width, " ");
+        this.charge(s.length);
         for (let k = 0; k < s.length; k++) h.out.push(s.charCodeAt(k));
       },
       f_wln: (slot) => {
-        this.handleOf(slot).out.push(NL);
+        const h = this.handleOf(slot);
+        this.charge(1);
+        h.out.push(NL);
       },
       f_break: () => {},
       f_rint: (slot) => {

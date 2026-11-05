@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { decryptType1, readType1 } from "../../src/tex/type1.ts";
+import { returned } from "../support/rejections.ts";
 import { buildType1, charstring as cs, csNumber, t1Encrypt, type TestFont } from "../support/tex-fixtures.ts";
 
 const ENCODING = { 65: "A", 66: "B", 67: "C", 68: "D", 69: "E", 70: "F", 71: "G", 72: "Aacute", 73: "acute", 74: "empty", 75: "K", 76: "L", 77: "N", 78: "O", 79: "P", 80: "Q", 81: "Agrave" };
@@ -167,7 +168,7 @@ describe("tex type1 font", () => {
   });
 
   test("an entry that ends exactly at the end of the private part reads, one that runs past it is refused", () => {
-    const f = readType1(buildType1({ cut: "exact", encoding: { 65: "A" }, glyphs: { A: GLYPHS.A! } }));
+    const f = returned(() => readType1(buildType1({ cut: "exact", encoding: { 65: "A" }, glyphs: { A: GLYPHS.A! } })));
     expect(f.glyph(65)!.advance).toBe(500);
     expect(() => readType1(buildType1({ cut: "short", encoding: { 65: "A" }, glyphs: { A: GLYPHS.A! } }))).toThrow("beyond the private part");
   });
@@ -194,7 +195,7 @@ describe("tex type1 font", () => {
   });
 
   test("a PFB without the end marker reads when its last segment ends at the end of the file", () => {
-    expect(readType1(buildType1({ noTrailer: true, encoding: { 65: "A" }, glyphs: { A: GLYPHS.A! } })).glyph(65)!.advance).toBe(500);
+    expect(returned(() => readType1(buildType1({ noTrailer: true, encoding: { 65: "A" }, glyphs: { A: GLYPHS.A! } })).glyph(65))!.advance).toBe(500);
   });
 
   test("subrs may nest 20 deep and no deeper", () => {
@@ -205,12 +206,12 @@ describe("tex type1 font", () => {
     };
     const glyph = cs(0, 500, "hsbw", 0, 0, "rmoveto", 0, "callsubr", "endchar");
     const make = (n: number) => readType1(buildType1({ encoding: { 65: "A" }, glyphs: { A: glyph }, subrs: chain(n) }));
-    expect(make(20).glyph(65)!.d).toBe("M 0 0 L 10 0 Z");
+    expect(returned(() => make(20).glyph(65))!.d).toBe("M 0 0 L 10 0 Z");
     expect(() => make(21).glyph(65)).toThrow("nesting too deep");
   });
 
   test("a PFA file reads like the PFB file", () => {
-    expect(font({ pfa: true }).glyph(66)!.d).toBe(font().glyph(66)!.d);
+    expect(returned(() => font({ pfa: true }).glyph(66))!.d).toBe(font().glyph(66)!.d);
   });
 
   test("a font with no subrs reads", () => {

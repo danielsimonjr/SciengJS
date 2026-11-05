@@ -4,7 +4,7 @@
  * The registry, the bundle manager and the package detection are not part of this surface.
  */
 export { TexTree, treeName, type TreeFile } from "./vfs.ts";
-export { TexHost, ExitSignal, type HostOptions } from "./host.ts";
+export { TexHost, ExitSignal, DEFAULT_MAX_OUTPUT_BYTES, type HostOptions } from "./host.ts";
 export { runProgram, type RunOptions, type RunResult, type EngineSymbols } from "./run.ts";
 export { readTfm, type Tfm } from "./tfm.ts";
 export { readType1, decryptType1, type Type1Font, type Type1Glyph } from "./type1.ts";

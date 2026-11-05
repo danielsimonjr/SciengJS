@@ -1,7 +1,7 @@
 /**
  * Loads a TeX build for the tests that need the real engine. The folder in `SCIENG_TEX_BUILD_DIR` holds:
- * `out/setprod.wasm`, `out/setprod.symbols.json`, `out/setprod.pool` (the engine build),
- * `fmt/scieng.fmt` (the format), and `src/texmf/tex` and `src/texmf/fonts` (the macro, TFM and PFB files).
+ * `out/setprod.wasm`, `out/setprod.symbols.json`, `out/setprod.pool` (the engine build; `node tools/tex/build.mjs <dir>/src <dir>/out` writes it),
+ * `out/fmt/scieng.fmt` (the format), and `src/texmf/tex` and `src/texmf/fonts` (the macro, TFM and PFB files).
  * A test that needs the build skips with a printed reason when the variable is not set.
  */
 import { readdirSync, readFileSync } from "node:fs";
@@ -40,7 +40,7 @@ export function loadTexBuild(dir: string): TexBuild {
       symbols: JSON.parse(readFileSync(join(out, "setprod.symbols.json"), "utf8")),
       pool: new Uint8Array(readFileSync(join(out, "setprod.pool"))),
     },
-    format: { name: "scieng.fmt", bytes: new Uint8Array(readFileSync(join(dir, "fmt", "scieng.fmt"))) },
+    format: { name: "scieng.fmt", bytes: new Uint8Array(readFileSync(join(out, "fmt", "scieng.fmt"))) },
     tree,
   };
 }
