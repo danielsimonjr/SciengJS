@@ -11,10 +11,10 @@ section { margin-bottom: 32px; }
 </head>
 <body>
 <h1>SysML views: corpus review</h1>
-<p>Approval status: 0 of 8 sources approved. The reviewer approves each source in test/corpus/sysml/approval.json.</p>
+<p>Approval status: 8 of 8 sources approved. The reviewer approves each source in test/corpus/sysml/approval.json.</p>
 <section>
 <h2>bdd-packages.sysml</h2>
-<p>Status: not approved. Options: <code>{}</code>.</p>
+<p>Status: approved. Options: <code>{}</code>.</p>
 <pre>// Nested packages and a reference before its definition.
 package Plant {
   package Control {
@@ -83,7 +83,7 @@ package Plant {
 </section>
 <section>
 <h2>bdd-ports-interfaces.sysml</h2>
-<p>Status: not approved. Options: <code>{}</code>.</p>
+<p>Status: approved. Options: <code>{}</code>.</p>
 <pre>port def FuelPort { attribute rate : Real; }
 port def PowerPort { attribute voltage : Real = 12; }
 interface def FuelLine { attribute length : Real; }
@@ -180,7 +180,7 @@ part def Drivetrain {
 </section>
 <section>
 <h2>bdd-specialization.sysml</h2>
-<p>Status: not approved. Options: <code>{}</code>.</p>
+<p>Status: approved. Options: <code>{}</code>.</p>
 <pre>/* A family of vehicles.
    Each kind specializes Vehicle. */
 part def Vehicle { attribute mass : Real; }
@@ -258,7 +258,7 @@ part def Pickup :&gt; Truck;
 </section>
 <section>
 <h2>bdd-vehicle.sysml</h2>
-<p>Status: not approved. Options: <code>{}</code>.</p>
+<p>Status: approved. Options: <code>{}</code>.</p>
 <pre>// The blocks of a vehicle and their composition.
 package Vehicles {
   part def Vehicle {
@@ -345,7 +345,7 @@ package Vehicles {
 </section>
 <section>
 <h2>ibd-inherited.sysml</h2>
-<p>Status: not approved. Options: <code>{&quot;view&quot;:&quot;ibd&quot;,&quot;root&quot;:&quot;RemoteStation&quot;}</code>.</p>
+<p>Status: approved. Options: <code>{&quot;view&quot;:&quot;ibd&quot;,&quot;root&quot;:&quot;RemoteStation&quot;}</code>.</p>
 <pre>// A specialized block inherits the parts, ports and connections of its base.
 port def SignalPort;
 part def Sensor { port signal : SignalPort; }
@@ -415,7 +415,7 @@ part def RemoteStation :&gt; Station {
 </section>
 <section>
 <h2>ibd-vehicle.sysml</h2>
-<p>Status: not approved. Options: <code>{&quot;view&quot;:&quot;ibd&quot;,&quot;root&quot;:&quot;Vehicle&quot;}</code>.</p>
+<p>Status: approved. Options: <code>{&quot;view&quot;:&quot;ibd&quot;,&quot;root&quot;:&quot;Vehicle&quot;}</code>.</p>
 <pre>port def FuelPort;
 port def DrivePort;
 interface def FuelLine;
@@ -518,7 +518,7 @@ part def Vehicle {
 </section>
 <section>
 <h2>requirements-basic.sysml</h2>
-<p>Status: not approved. Options: <code>{&quot;view&quot;:&quot;requirements&quot;}</code>.</p>
+<p>Status: approved. Options: <code>{&quot;view&quot;:&quot;requirements&quot;}</code>.</p>
 <pre>requirement def MassLimit { attribute maxKg = 1500; }
 requirement def RangeTarget { attribute km = 500; }
 requirement vehicleMass : MassLimit;
@@ -610,7 +610,7 @@ satisfy vehicleRange by Vehicle;
 </section>
 <section>
 <h2>requirements-nested.sysml</h2>
-<p>Status: not approved. Options: <code>{&quot;view&quot;:&quot;requirements&quot;}</code>.</p>
+<p>Status: approved. Options: <code>{&quot;view&quot;:&quot;requirements&quot;}</code>.</p>
 <pre>// Nested requirements and satisfy relations to parts.
 requirement def Safety { attribute level = &quot;ASIL B&quot;; }
 requirement def BrakeSafety :&gt; Safety;
