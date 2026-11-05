@@ -1,11 +1,11 @@
 {
-  "totalFiles": 281,
+  "totalFiles": 282,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 101,
     "test-only": 0,
     "orphan": 8,
-    "test": 137,
+    "test": 138,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 35,
     "src": 109,
-    "tests": 137
+    "tests": 138
   },
   "byPackage": {
-    "(root)": 179,
+    "(root)": 180,
     "@danielsimonjr/sciengjs": 102
   },
   "files": [
@@ -117,7 +117,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 530
+      "loc": 537
     },
     {
       "file": "src/config.ts",
@@ -1609,6 +1609,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 177
+    },
+    {
+      "file": "test/unit/tex-core-preload.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 76
     },
     {
       "file": "test/unit/tex-detect.test.ts",

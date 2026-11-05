@@ -444,20 +444,27 @@ async function waitForExit(child: ChildProcess, deadline: number): Promise<boole
  * Kills the browser and every process that it started. On POSIX the browser leads its own process group, so the
  * group dies with one signal, also after the browser itself exited. On Windows `taskkill /T` walks the tree of a
  * live process id. After the browser exited, Windows can give its id to an unrelated process, so the call is
- * skipped then. A process that is already gone is not an error.
+ * skipped then. A process that is already gone is not an error. macOS refuses the group signal with EPERM when only
+ * zombies are left in the group. After the browser exited, EPERM also means that no process is left to kill.
+ * `deps` holds the platform and the kill function, so that tests drive the POSIX branch on every platform.
  */
-function killTree(child: ChildProcess): void {
+export function killTree(
+  child: ChildProcess,
+  deps: { windows: boolean; kill: (pid: number, signal: NodeJS.Signals) => boolean } = { windows: IS_WINDOWS, kill: process.kill.bind(process) },
+): void {
   const pid = child.pid;
   if (pid === undefined) return;
-  if (IS_WINDOWS) {
+  if (deps.windows) {
     if (hasExited(child)) return;
     spawnSync("taskkill", ["/PID", String(pid), "/T", "/F"], { stdio: "ignore", windowsHide: true });
     return;
   }
   try {
-    process.kill(-pid, "SIGKILL");
+    deps.kill(-pid, "SIGKILL");
   } catch (err) {
-    if ((err as NodeJS.ErrnoException).code !== "ESRCH") throw err;
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code === "ESRCH" || (code === "EPERM" && hasExited(child))) return;
+    throw err;
   }
 }
 

@@ -62,7 +62,8 @@
     ],
     "src/browser/render.ts": [
       "PAGE_URL",
-      "capturePage"
+      "capturePage",
+      "killTree"
     ],
     "src/errors.ts": [
       "RenderErrorPosition"
@@ -160,8 +161,7 @@
       "Specializable"
     ],
     "src/tex/stage.ts": [
-      "LoadedCore",
-      "loadCore"
+      "LoadedCore"
     ],
     "src/worker/run.ts": [
       "WorkerExit",

@@ -782,6 +782,7 @@
         "exports": [
           "PAGE_URL",
           "capturePage",
+          "killTree",
           "renderHtmlPage"
         ],
         "interfaces": [
@@ -790,6 +791,7 @@
         ],
         "functions": [
           "capturePage",
+          "killTree",
           "renderHtmlPage"
         ],
         "constants": [

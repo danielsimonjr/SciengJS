@@ -360,7 +360,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `PinnedBytes`, `HtmlPageResult`
 - Types: `HtmlFormat`, `HtmlPageRequest`
-- Functions: `capturePage`, `renderHtmlPage`
+- Functions: `capturePage`, `killTree`, `renderHtmlPage`
 - Constants: `PAGE_URL`
 
 ---
@@ -2166,14 +2166,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 281 |
+| Total Source Files | 282 |
 | Subsystems | 17 |
-| Total Lines of Code | 32501 |
-| Total Exports | 693 |
+| Total Lines of Code | 32584 |
+| Total Exports | 694 |
 | Total Re-exports | 167 |
 | Total Classes | 7 |
 | Total Interfaces | 143 |
-| Total Functions | 274 |
+| Total Functions | 275 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 73 |
