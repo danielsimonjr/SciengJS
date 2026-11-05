@@ -85,7 +85,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mermaid/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 28 |
 | `src/mermaid/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 20 |
 | `src/mermaid/browser.ts` | @danielsimonjr/sciengjs | src | build-entry | 75 |
-| `src/mermaid/class.ts` | @danielsimonjr/sciengjs | src | build-entry | 247 |
+| `src/mermaid/class.ts` | @danielsimonjr/sciengjs | src | build-entry | 252 |
 | `src/mermaid/common.ts` | @danielsimonjr/sciengjs | src | build-entry | 158 |
 | `src/mermaid/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 29 |
 | `src/mermaid/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 30 |
@@ -233,7 +233,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/math-registry.test.ts` | (root) | tests | test | 34 |
 | `test/unit/math-svg.test.ts` | (root) | tests | test | 134 |
 | `test/unit/mermaid-browser-route.test.ts` | (root) | tests | test | 22 |
-| `test/unit/mermaid-class.test.ts` | (root) | tests | test | 268 |
+| `test/unit/mermaid-class.test.ts` | (root) | tests | test | 283 |
 | `test/unit/mermaid-common.test.ts` | (root) | tests | test | 120 |
 | `test/unit/mermaid-corpus.test.ts` | (root) | tests | test | 48 |
 | `test/unit/mermaid-network.test.ts` | (root) | tests | test | 33 |
