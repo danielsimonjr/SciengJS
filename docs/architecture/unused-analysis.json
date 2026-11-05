@@ -7,9 +7,9 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 53,
+    "unusedExportCount": 52,
     "unreferencedAnywhereCount": 6,
-    "referencedInModuleCount": 47,
+    "referencedInModuleCount": 46,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 8
   },
@@ -62,8 +62,7 @@
     ],
     "src/browser/render.ts": [
       "PAGE_URL",
-      "capturePage",
-      "killTree"
+      "capturePage"
     ],
     "src/errors.ts": [
       "RenderErrorPosition"
