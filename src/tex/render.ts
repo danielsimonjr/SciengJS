@@ -111,7 +111,7 @@ export async function renderTex(o: RenderTexOptions): Promise<RenderTexResult> {
         const tfm = run.get(`${name}.tfm`);
         return tfm ? { tfm, pfb: run.get(`${name}.pfb`) ?? null } : null;
       },
-      { special: specials.special, unitPerPt: SPECIAL_UNIT_PER_PT, ...(o.margin === undefined ? {} : { margin: o.margin }) },
+      { special: specials.special, transformed: specials.transformed, unitPerPt: SPECIAL_UNIT_PER_PT, ...(o.margin === undefined ? {} : { margin: o.margin }) },
     );
   } catch (e) {
     if (isRenderError(e)) throw e;
