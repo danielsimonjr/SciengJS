@@ -243,7 +243,14 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - Input: a CSG document in JSON. The document is data. The engine executes no code from it.
 - Nodes: primitives (`cube`, `cylinder`, `sphere`, `polyhedron`), 2D profiles (`rectangle`, `circle`, `polygon`), `extrude`, `revolve`, the operations `union`, `difference`, `intersection`, and the transforms `translate`, `rotate`, `scale`, `mirror`. Each node can carry a `name` and a `color`.
 - The engine exports a TypeScript builder API that writes the document. A caller can write the model as a TypeScript program. The program runs in the caller's process, under the caller's trust, never inside the engine.
-- Limits: the node count, the facet count and the time of the solid operations.
+- Limits: the node count (`maxCadNodes`), the facet count (`maxCadFacets`) and the time of the solid operations (`timeoutMs`).
+- The document is one JSON object: `version` (the number 1), `model` (the root node) and an optional `segments`. `segments` is the default number of segments of a full circle, a whole number from 3 to 1024. A node with `segments` overrides the default for its own shape.
+- A node is one JSON object with a `type`. `extrude`, `revolve` and the transforms take one `child`. The operations take a `children` list of one node or more. `difference` subtracts the second and later children from the first.
+- A 2D profile is allowed only as the `child` of `extrude` or `revolve`. A 3D node is not allowed there.
+- An unknown key, a missing key, a wrong type, a number that is not finite, or a size that is not positive rejects with `E_INPUT`. The message gives the JSON path of the value, for example `model.children[1].radius`.
+- The reader counts the nodes before the solid operations start. A document with more than `maxCadNodes` nodes rejects with `E_LIMIT`.
+- The reader estimates the facets of each primitive from its segments before the solid operations start. An estimate over `maxCadFacets` rejects with `E_LIMIT`. The result of the solid operations is checked again, because an operation can add facets.
+- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with one. A face of the result keeps the colour of the primitive that made it, so the cut face of a `difference` has the colour of the solid that cut it. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name.
 
 ### STEP, IGES, BREP
 
@@ -278,6 +285,8 @@ One loader reads the configuration. Each key has one default, in the loader. An 
 | `allowNetwork` | `SCIENG_ALLOW_NETWORK` | `tex-bundles` | the network uses that are allowed: `none`, `tex-bundles`, or `tex-bundles,images` |
 | `imageTimeoutMs` | `SCIENG_IMAGE_TIMEOUT_MS` | 15000 | the time limit of one remote image download, for all its redirects |
 | `maxImageBytes` | `SCIENG_MAX_IMAGE_BYTES` | 10485760 | the size limit of the body of one remote image |
+| `maxCadNodes` | `SCIENG_MAX_CAD_NODES` | 10000 | the node limit of one CAD document |
+| `maxCadFacets` | `SCIENG_MAX_CAD_FACETS` | 2000000 | the facet (triangle) limit of one CAD model, estimated before and checked after the solid operations |
 | `rasterFont` | `SCIENG_RASTER_FONT` | none (the bundled font of the raster stage) | the path of a TrueType or OpenType font for the raster stage |
 | `assetsUrl` | `SCIENG_ASSETS_URL` | the `assets/` folder of the package, resolved from `dist/config.js` | the `file:` URL of the folder that holds `fonts/` and the resvg WASM file `index_bg.wasm`. The build copies the WASM file into that folder. A value without a trailing slash gets a trailing slash. A value that is not a `file:` URL rejects with `E_CONFIG`. A `file:` URL with a host other than `localhost` rejects with `E_CONFIG`. On Windows, such a URL names a network share. A value with a query or a fragment rejects with `E_CONFIG`. A value with an encoded slash or backslash in its path rejects with `E_CONFIG`. A value that the operating system cannot open as a folder path rejects the render with `E_CONFIG`. A missing or unusable file under the folder rejects the render with `E_STAGE_MISSING`. |
 
