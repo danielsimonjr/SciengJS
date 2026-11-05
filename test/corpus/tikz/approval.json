@@ -1,9 +1,9 @@
 {
   "entries": [
-    { "source": "chemfig-phenol.tex", "options": {}, "approved": false },
-    { "source": "circuit-divider.tex", "options": {}, "approved": false },
-    { "source": "mhchem-reaction.tex", "options": {}, "approved": false },
-    { "source": "tikz-triangle.tex", "options": {}, "approved": false },
-    { "source": "tikzcd-square.tex", "options": {}, "approved": false }
+    { "source": "chemfig-phenol.tex", "options": {}, "approved": true },
+    { "source": "circuit-divider.tex", "options": {}, "approved": true },
+    { "source": "mhchem-reaction.tex", "options": {}, "approved": true },
+    { "source": "tikz-triangle.tex", "options": {}, "approved": true },
+    { "source": "tikzcd-square.tex", "options": {}, "approved": true }
   ]
 }
