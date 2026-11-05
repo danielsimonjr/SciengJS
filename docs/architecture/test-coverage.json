@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 108,
-    "totalTestFiles": 99,
+    "totalTestFiles": 100,
     "testedCount": 75,
     "untestedCount": 33,
     "coveragePercent": "69.4",
@@ -170,7 +170,8 @@
     "src/browser/render.ts": [
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
-      "test/integration/mesh-viewer.test.ts"
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/browser-kill-tree.test.ts"
     ],
     "src/config.ts": [
       "test/integration/browser-render.test.ts",
@@ -593,6 +594,9 @@
     ],
     "test/unit/browser-input.test.ts": [
       "src/browser/input.ts"
+    ],
+    "test/unit/browser-kill-tree.test.ts": [
+      "src/browser/render.ts"
     ],
     "test/unit/browser-page.test.ts": [
       "src/browser/page.ts"

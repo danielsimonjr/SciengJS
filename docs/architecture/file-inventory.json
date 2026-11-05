@@ -1,11 +1,11 @@
 {
-  "totalFiles": 282,
+  "totalFiles": 283,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 101,
     "test-only": 0,
     "orphan": 8,
-    "test": 138,
+    "test": 139,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 35,
     "src": 109,
-    "tests": 138
+    "tests": 139
   },
   "byPackage": {
-    "(root)": 180,
+    "(root)": 181,
     "@danielsimonjr/sciengjs": 102
   },
   "files": [
@@ -1140,6 +1140,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 109
+    },
+    {
+      "file": "test/unit/browser-kill-tree.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 28
     },
     {
       "file": "test/unit/browser-page.test.ts",

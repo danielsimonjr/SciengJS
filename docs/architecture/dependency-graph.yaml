@@ -2,7 +2,7 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 282
+  totalFiles: 283
   totalModules: 3
   totalExports: 694
 modules:
@@ -3948,6 +3948,17 @@ modules:
             - parsePngOptions
           typeOnly: false
       exports: []
+    test/unit/browser-kill-tree.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies:
+        - node:child_process
+      internalDependencies:
+        - file: src/browser/render.ts
+          imports:
+            - killTree
+          typeOnly: false
+      exports: []
     test/unit/browser-page.test.ts:
       externalDependencies:
         - bun:test
@@ -5680,10 +5691,10 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 282
-  totalSourceFiles: 282
+  totalTypeScriptFiles: 283
+  totalSourceFiles: 283
   totalModules: 3
-  totalLinesOfCode: 32584
+  totalLinesOfCode: 32612
   totalExports: 694
   entryRoots: 101
   reachableFiles: 101
@@ -5694,7 +5705,7 @@ statistics:
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 73
   noImporterFileCount: 8
-  unusedExportsCount: 53
+  unusedExportsCount: 52
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0

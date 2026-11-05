@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 108 |
-| Total Test Files | 99 |
+| Total Test Files | 100 |
 | Source Files with Tests | 75 |
 | Source Files without Tests | 33 |
 | Coverage (raw, direct-import) | **69.4%** |
@@ -110,7 +110,7 @@ The following 33 source files are not directly imported by any test file:
 | `browser/pinned.ts` | `mermaid-browser-capture.test.ts`, `mesh-viewer.test.ts`, `browser-pinned.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `three-pinned.test.ts` |
 | `browser/profile.ts` | `browser-render.test.ts` |
 | `browser/proxy.ts` | `browser-proxy.test.ts` |
-| `browser/render.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mesh-viewer.test.ts` |
+| `browser/render.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mesh-viewer.test.ts`, `browser-kill-tree.test.ts` |
 | `src/config.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `assets.test.ts`, `config-assets.test.ts`, `config.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `mesh-large.test.ts`, `render.test.ts` |
 | `src/core.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-glb.test.ts`, `mesh-large.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `render.test.ts`, `tex-core-preload.test.ts` |
 | `src/errors.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `cad-document.test.ts`, `config-assets.test.ts`, `errors.test.ts`, `graph-dot.test.ts`, `graph-png.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `plot-control.test.ts`, `plot-reader.test.ts`, `plot-svg.test.ts`, `plot-ticks.test.ts`, `render.test.ts`, `tex-core-preload.test.ts`, `worker-run.test.ts` |
@@ -199,6 +199,7 @@ The following 33 source files are not directly imported by any test file:
 | `unit/browser-cdp.test.ts` | 1 files |
 | `unit/browser-flags.test.ts` | 1 files |
 | `unit/browser-input.test.ts` | 1 files |
+| `unit/browser-kill-tree.test.ts` | 1 files |
 | `unit/browser-page.test.ts` | 1 files |
 | `unit/browser-pdf-pairs.test.ts` | 3 files |
 | `unit/browser-pinned.test.ts` | 2 files |

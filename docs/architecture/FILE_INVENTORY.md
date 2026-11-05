@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 282
+**Total files**: 283
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 101 | A `src`-area file that is an entry root. |
 | `test-only` | 0 | A `src`-area file that only a test reaches. |
 | `orphan` | 8 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 138 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 139 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 35 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **282** | |
+| **Total** | **283** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 109 |
-| `tests` | 138 |
+| `tests` | 139 |
 | `tools` | 35 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 180 |
+| `(root)` | 181 |
 | `@danielsimonjr/sciengjs` | 102 |
 
 ## All files
@@ -204,6 +204,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/browser-cdp.test.ts` | (root) | tests | test | 147 |
 | `test/unit/browser-flags.test.ts` | (root) | tests | test | 32 |
 | `test/unit/browser-input.test.ts` | (root) | tests | test | 109 |
+| `test/unit/browser-kill-tree.test.ts` | (root) | tests | test | 28 |
 | `test/unit/browser-page.test.ts` | (root) | tests | test | 46 |
 | `test/unit/browser-pdf-pairs.test.ts` | (root) | tests | test | 33 |
 | `test/unit/browser-pinned.test.ts` | (root) | tests | test | 66 |
