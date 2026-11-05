@@ -4,7 +4,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { lineDiff } from '../../t5-tex-build/tools/linediff.mjs';
+import { lineDiff } from './linediff.mjs';
 
 // The comparisons of the gate: reference directory, reference file, output file.
 // An output name that starts with 'c' belongs to part 1, 'x' to part 2, 'e' to

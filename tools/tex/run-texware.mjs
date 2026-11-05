@@ -2,7 +2,7 @@
 // node run-texware.mjs <build-dir> <program> <in-name=host-path>... [--term line]... [--out name=host-path]...
 // The program names its files by its Pascal variable names, for example plfile and tfmfile.
 import fs from 'node:fs';
-import { runProgram } from '../runtime/run.mjs';
+import { runProgram } from '../../trials/t5-tex-build/runtime/run.mjs';
 
 const [dir, prog, ...rest] = process.argv.slice(2);
 const files = new Map();

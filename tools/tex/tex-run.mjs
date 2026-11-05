@@ -5,9 +5,9 @@
 // and run.json with the times and the list of files that the run read.
 import fs from 'node:fs';
 import path from 'node:path';
-import { runProgram } from '../runtime/run.mjs';
-import { ExitSignal } from '../runtime/host.mjs';
-import { TreeFS, flatName } from '../runtime/vfs.mjs';
+import { runProgram } from '../../trials/t5-tex-build/runtime/run.mjs';
+import { ExitSignal } from '../../trials/t5-tex-build/runtime/host.mjs';
+import { TreeFS, flatName } from '../../trials/t5-tex-build/runtime/vfs.mjs';
 
 const program = process.env.TEX_PROGRAM || 'texprod';
 

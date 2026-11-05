@@ -1,9 +1,9 @@
 import { test, expect } from 'bun:test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { addedPrimitives } from '../tools/primitives.mjs';
+import { addedPrimitives } from '../../tools/tex/primitives.mjs';
 
-const trial = path.resolve(import.meta.dir, '..');
+const trial = path.resolve(import.meta.dir, '../../tools/tex');
 
 test('a primitive in the match text and in the replacement text is not new', () => {
   const ch = ['@x', 'primitive("unless",expand_after,1);@/', '@y', 'primitive("unless",expand_after,1);@/',

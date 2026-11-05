@@ -1,0 +1,95 @@
+# Builds the TeX programs and the LaTeX format from the pinned sources, runs the trip test
+# and the e-TRIP gate, and checks the sha256 of the format. No secret, no publish.
+# Every action is pinned to a commit. The pinned TeX Live 2023 archives give only source,
+# package and font files. No TeX binary runs.
+name: tex
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The format sha256 that the pinned sources give. A change of a source, a change file or
+  # the compiler changes this value on purpose, in the same commit.
+  FORMAT_SHA256: cec00440913c954c95d2261af192f004e7bd7ec0b121078af028855e4b23f9aa
+  FORMAT_PGF_DRIVER: pgfsys-dvisvgm.def
+
+jobs:
+  tex-build:
+    name: tex build (${{ matrix.os }}, ${{ matrix.runtime }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, runtime: node }
+          - { os: windows-latest, runtime: node }
+          - { os: macos-latest, runtime: node }
+          - { os: ubuntu-latest, runtime: bun }
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Set up Bun 1.4.4
+        if: matrix.runtime == 'bun'
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: "1.4.4"
+
+      - name: Cache the pinned downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .tex-build/src
+          key: tex-src-${{ runner.os }}-${{ hashFiles('tools/tex/config.json') }}
+
+      - name: Build the programs and the format
+        run: |
+          set -euo pipefail
+          if [ "${{ matrix.runtime }}" = "bun" ]; then RUN=bun; else RUN=node; fi
+          echo "RUN=$RUN" >> "$GITHUB_ENV"
+          mkdir -p .tex-build
+          $RUN tools/tex/build.mjs .tex-build/src .tex-build/out | tee .tex-build/build.log
+
+      - name: Run the trip test (tripman.tex, Appendix A)
+        run: $RUN tools/tex/trip.mjs .tex-build/out .tex-build/src/trip .tex-build/trip
+
+      - name: Run the e-TRIP gate (etripman.tex)
+        run: $RUN tools/tex/etrip.mjs .tex-build/out .tex-build/etrip
+
+      - name: Check the format sha256 and the pgf driver
+        run: |
+          set -euo pipefail
+          $RUN tools/tex/check-format.mjs .tex-build/out/build.json "$FORMAT_SHA256" "$FORMAT_PGF_DRIVER"
+
+      - name: Upload the WASM files and the format
+        if: matrix.os == 'ubuntu-latest' && matrix.runtime == 'node'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: tex-build
+          path: |
+            .tex-build/out/*.wasm
+            .tex-build/out/*.symbols.json
+            .tex-build/out/*.pool
+            .tex-build/out/build.json
+            .tex-build/out/fmt/scieng.fmt
+          if-no-files-found: error
+          retention-days: 14

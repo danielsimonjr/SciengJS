@@ -4,6 +4,21 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- The TeX build tools of the trials T5 and T6 move to `tools/tex/`. The folder holds the tangler, the Pascal to WASM compiler, the trip and e-TRIP runners and gates, the change files and the format files.
+- One `build.mjs` builds the six programs (textrip, etextrip, setprod, pltotf, tftopl, dvitype) and the format.
+- The npm package does not ship `tools/`.
+- The tests of these tools move to `test/tex-tools/`.
+
+### Added
+
+- The workflow `tex.yml` builds the programs, runs the trip test and the e-TRIP gate, builds `scieng.fmt` and checks its sha256 and the pgf driver. It runs on Linux, Windows and macOS with Node 22, and on Linux with Bun 1.4.4. It uploads the artifact `tex-build`.
+
+### Removed
+
+- The workflows `trial-t5.yml` and `trial-t6.yml`.
+
 ## [0.9.0] - 2026-11-05
 
 ### Added

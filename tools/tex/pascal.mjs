@@ -1,4 +1,4 @@
-// Pascal to WASM compiler of the T5 trial.
+// Pascal to WASM compiler.
 // It accepts the Pascal subset of the Knuth WEB programs (tex.web, pltotf.web,
 // tftopl.web, dvitype.web) after the tangler: no sets, no pointers, no `with`,
 // no nested procedures. Files are host imports. Gotos inside a procedure use a

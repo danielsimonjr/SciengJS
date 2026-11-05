@@ -8,8 +8,8 @@
 // etrip-results.json. etrip-gate.mjs applies the pass rule; exit status 1 on a failure.
 import fs from 'node:fs';
 import path from 'node:path';
-import { lineDiff } from '../../t5-tex-build/tools/linediff.mjs';
-import { latin, loadProgram, plRoundTrip, texRun, dvitypeRun } from '../../t5-tex-build/tools/trip-steps.mjs';
+import { lineDiff } from './linediff.mjs';
+import { latin, loadProgram, plRoundTrip, texRun, dvitypeRun } from './trip-steps.mjs';
 import { etripGate, COMPARISONS } from './etrip-gate.mjs';
 
 const [buildDir, outDir] = process.argv.slice(2);

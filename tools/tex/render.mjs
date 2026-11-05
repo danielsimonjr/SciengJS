@@ -7,10 +7,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { runProgram } from '../runtime/run.mjs';
-import { ExitSignal } from '../runtime/host.mjs';
-import { TreeFS, flatName } from '../runtime/vfs.mjs';
-import { dviToSvg } from '../runtime/dvi2svg.mjs';
+import { runProgram } from '../../trials/t5-tex-build/runtime/run.mjs';
+import { ExitSignal } from '../../trials/t5-tex-build/runtime/host.mjs';
+import { TreeFS, flatName } from '../../trials/t5-tex-build/runtime/vfs.mjs';
+import { dviToSvg } from '../../trials/t5-tex-build/runtime/dvi2svg.mjs';
 
 const program = process.env.TEX_PROGRAM || 'texprod';
 const specialsModule = process.env.DVI_SPECIALS ? await import(pathToFileURL(path.resolve(process.env.DVI_SPECIALS)).href) : null;

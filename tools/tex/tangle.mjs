@@ -1,4 +1,4 @@
-// WEB tangler of the T5 trial: reads a WEB file and zero or more change files,
+// WEB tangler: reads a WEB file and zero or more change files,
 // writes the Pascal program text and the string pool file.
 // The rules follow the WEB manual and tangle.web: macros, module names,
 // preprocessed strings, the pool check sum and the change file merge.
