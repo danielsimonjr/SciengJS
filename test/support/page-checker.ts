@@ -60,8 +60,8 @@ export const PROFILE_PREFIX = "sciengjs-page-check-";
  * The flags of the checker on top of the forced flags of the browser stage. The forced flags keep the sandbox on
  * and route every connection to a refusing proxy. The pages under check are local files.
  */
+// The checker does not add --disable-gpu. The engine does not set it, and on macOS it removes WebGL, which the viewer page needs.
 const CHECKER_ARGS = [
-  "--disable-gpu",
   // Chrome writes its own log to stderr, so a start failure shows what the browser did.
   "--enable-logging=stderr",
 ];
