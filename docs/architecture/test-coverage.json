@@ -1,19 +1,19 @@
 {
   "metadata": {
-    "totalSourceFiles": 90,
-    "totalTestFiles": 83,
-    "testedCount": 62,
-    "untestedCount": 28,
-    "coveragePercent": "68.9",
+    "totalSourceFiles": 99,
+    "totalTestFiles": 87,
+    "testedCount": 67,
+    "untestedCount": 32,
+    "coveragePercent": "67.7",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 90,
-      "testedActive": 62,
-      "activeUntested": 28,
+      "activeFiles": 99,
+      "testedActive": 67,
+      "activeUntested": 32,
       "excludedTotal": 0,
-      "percent": "68.9",
+      "percent": "67.7",
       "breakdown": {
-        "active_untested": 28
+        "active_untested": 32
       }
     }
   },
@@ -34,6 +34,10 @@
     "src/plot/backend-png.ts",
     "src/plot/backend-svg.ts",
     "src/plot/index.ts",
+    "src/sysml/backend-pdf.ts",
+    "src/sysml/backend-png.ts",
+    "src/sysml/backend-svg.ts",
+    "src/sysml/index.ts",
     "src/worker/entry.ts",
     "trials/t1-graph/compare-layout.mjs",
     "trials/t1-graph/make-sources.mjs",
@@ -66,6 +70,7 @@
     "src/graph/backend-svg.ts",
     "src/graph/dot.ts",
     "src/graph/image.ts",
+    "src/graph/text.ts",
     "src/html/convert.ts",
     "src/html/fetch-image.ts",
     "src/html/images.ts",
@@ -103,6 +108,10 @@
     "src/raster/index.ts",
     "src/raster/warnings.ts",
     "src/registry.ts",
+    "src/sysml/parse.ts",
+    "src/sysml/render.ts",
+    "src/sysml/tokens.ts",
+    "src/sysml/views.ts",
     "src/types.ts",
     "src/version.ts",
     "src/worker/protocol.ts",
@@ -194,8 +203,6 @@
       "test/unit/graph-png.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
-      "test/unit/mermaid-class.test.ts",
-      "test/unit/mermaid-common.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/plot-control.test.ts",
       "test/unit/plot-reader.test.ts",
@@ -225,6 +232,10 @@
       "test/unit/graph-image.test.ts"
     ],
     "src/graph/index.ts": [],
+    "src/graph/text.ts": [
+      "test/unit/graph-svg-backend.test.ts",
+      "test/unit/mermaid-xml.test.ts"
+    ],
     "src/html/backend-md.ts": [],
     "src/html/convert.ts": [
       "test/unit/html-convert-escape.test.ts",
@@ -396,6 +407,24 @@
       "test/unit/mesh-viewer.test.ts",
       "test/unit/plot-html.test.ts",
       "test/unit/plot-registry.test.ts"
+    ],
+    "src/sysml/backend-pdf.ts": [],
+    "src/sysml/backend-png.ts": [],
+    "src/sysml/backend-svg.ts": [],
+    "src/sysml/index.ts": [],
+    "src/sysml/parse.ts": [
+      "test/unit/sysml-parse.test.ts",
+      "test/unit/sysml-views.test.ts"
+    ],
+    "src/sysml/render.ts": [
+      "test/unit/sysml-corpus.test.ts",
+      "test/unit/sysml-views.test.ts"
+    ],
+    "src/sysml/tokens.ts": [
+      "test/unit/sysml-parse.test.ts"
+    ],
+    "src/sysml/views.ts": [
+      "test/unit/sysml-views.test.ts"
     ],
     "src/types.ts": [
       "test/integration/browser-render.test.ts",
@@ -582,6 +611,7 @@
     "test/unit/graph-svg-backend.test.ts": [
       "src/graph/backend-svg.ts",
       "src/graph/dot.ts",
+      "src/graph/text.ts",
       "src/worker/protocol.ts"
     ],
     "test/unit/html-convert-escape.test.ts": [
@@ -626,13 +656,11 @@
     ],
     "test/unit/mermaid-browser-route.test.ts": [],
     "test/unit/mermaid-class.test.ts": [
-      "src/errors.ts",
       "src/mermaid/common.ts",
       "src/mermaid/class.ts",
       "src/graph/dot.ts"
     ],
     "test/unit/mermaid-common.test.ts": [
-      "src/errors.ts",
       "src/mermaid/common.ts"
     ],
     "test/unit/mermaid-corpus.test.ts": [
@@ -669,6 +697,7 @@
     "test/unit/mermaid-xml.test.ts": [
       "src/graph/dot.ts",
       "src/mermaid/class.ts",
+      "src/graph/text.ts",
       "src/mermaid/common.ts",
       "src/mermaid/render.ts",
       "src/mermaid/sequence.ts",
@@ -747,6 +776,19 @@
       "src/types.ts"
     ],
     "test/unit/svg-compare.test.ts": [],
+    "test/unit/sysml-backends.test.ts": [],
+    "test/unit/sysml-corpus.test.ts": [
+      "src/sysml/render.ts"
+    ],
+    "test/unit/sysml-parse.test.ts": [
+      "src/sysml/tokens.ts",
+      "src/sysml/parse.ts"
+    ],
+    "test/unit/sysml-views.test.ts": [
+      "src/sysml/parse.ts",
+      "src/sysml/views.ts",
+      "src/sysml/render.ts"
+    ],
     "test/unit/teardown.test.ts": [],
     "test/unit/third-party-notices.test.ts": [],
     "test/unit/three-pinned.test.ts": [
@@ -837,6 +879,22 @@
     },
     {
       "file": "src/plot/index.ts",
+      "category": null
+    },
+    {
+      "file": "src/sysml/backend-pdf.ts",
+      "category": null
+    },
+    {
+      "file": "src/sysml/backend-png.ts",
+      "category": null
+    },
+    {
+      "file": "src/sysml/backend-svg.ts",
+      "category": null
+    },
+    {
+      "file": "src/sysml/index.ts",
       "category": null
     },
     {

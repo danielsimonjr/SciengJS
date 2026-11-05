@@ -10,7 +10,7 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.8.0 holds nine input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, and to PNG. A **CAD document** (a CSG model in JSON) goes to GLB, STL, HTML and PNG. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
+Release 0.9.0 holds ten input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, and to PNG. A **CAD document** (a CSG model in JSON) goes to GLB, STL, HTML and PNG. A **SysML v2** source in a textual subset goes to SVG, PNG and PDF. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
 
 | Input | Output | Engine |
 |---|---|---|
@@ -23,6 +23,7 @@ Release 0.8.0 holds nine input types. They are **Graphviz DOT**, **Mermaid** (ev
 | HTML | PNG, PDF | The browser stage |
 | STEP, IGES, BREP | GLB, HTML, PNG | OpenCascade, compiled to WASM (`occt-import-js`); a Three.js viewer page |
 | CAD document | GLB, STL, HTML, PNG | The engine's own reader; the solid operations through `manifold-3d` (WASM) |
+| SysML v2 (a textual subset) | SVG, PNG, PDF | The engine's own parser and views, then Graphviz; PDF through the browser stage |
 
 - **No network.** The DOT and Mermaid paths make no network request. The browser stage starts Chrome or Chromium from `SCIENG_BROWSER` with a new profile. Its flags stop every connection out of the host. The client refuses every request except the page and the pinned Mermaid build. CI checks the browser process tree on Linux, macOS and Windows.
 - **Unsafe attributes are removed.** The engine removes each `image` and `stylesheet` attribute before the layout and gives a warning for each one. A DOT file cannot make the engine or a browser fetch a file or a URL. A `URL` attribute stays as a link in the SVG.
@@ -305,6 +306,27 @@ const { bytes } = await render({ type: "cad", source, format: "stl" }, {});
 - A document with more than `maxCadNodes` nodes rejects with `E_LIMIT` before the solid operations start. A model with more than `maxCadFacets` facets also rejects with `E_LIMIT`.
 - A bad value rejects with `E_INPUT`. The message gives the JSON path, for example `model.children[1].radius`.
 
+## SysML
+
+The `sysml` input reads a subset of the SysML v2 text notation. The subset holds `package`, `part def`, `part`, `attribute`, `port def`, `port`, `connect`, `interface def`, `interface`, `requirement def`, `requirement`, `satisfy`, `:>` and comments. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the exact grammar.
+
+The option `view` selects the drawing:
+
+- `bdd` (the default): the definitions, the composition and the specialization;
+- `ibd`: the parts, ports and connections of the part def that the option `root` names;
+- `requirements`: the requirements and the `satisfy` relations.
+
+```js
+import { render } from "@danielsimonjr/sciengjs";
+
+const source = "part def Car { part wheels : Wheel [4]; } part def Wheel;";
+const { bytes } = await render({ type: "sysml", source, format: "svg" }, {});
+```
+
+- A construct outside the subset rejects with `E_INPUT`, and the message names the line.
+- Set `lenient` to `true` to skip a statement with an unknown keyword and get a warning.
+- A `png` takes the option `scale`. A `pdf` needs the browser stage.
+
 ## Roadmap
 
 The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives the order of the increments. Each increment adds one input type, its tests and one release. The [design](docs/superpowers/specs/2026-11-01-scieng-engine-design.md) gives the API, the stages, the security controls and the licence of each engine.
@@ -316,9 +338,9 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | LaTeX math | math (MathJax) | svg, png and pdf are built; pdf needs the browser stage |
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | trial builds pass |
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
-| SysML v2 | sysml | planned |
+| SysML v2 | sysml, graph | svg, png and pdf: released in 0.9.0 |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
-| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: built |
+| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0 |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent

@@ -190,7 +190,8 @@
         "exports": [
           "RENDER_ERROR_CODES",
           "RenderError",
-          "isRenderError"
+          "isRenderError",
+          "inputError"
         ],
         "classes": [
           "RenderError"
@@ -199,7 +200,8 @@
           "RenderErrorPosition"
         ],
         "functions": [
-          "isRenderError"
+          "isRenderError",
+          "inputError"
         ],
         "constants": [
           "RENDER_ERROR_CODES"
@@ -803,8 +805,13 @@
           {
             "file": "./dot.ts",
             "imports": [
-              "dotSourceText",
               "dotToSvg"
+            ]
+          },
+          {
+            "file": "./text.ts",
+            "imports": [
+              "sourceText"
             ]
           }
         ],
@@ -851,8 +858,13 @@
           {
             "file": "./dot.ts",
             "imports": [
-              "dotSourceText",
               "dotToSvg"
+            ]
+          },
+          {
+            "file": "./text.ts",
+            "imports": [
+              "sourceText"
             ]
           },
           {
@@ -905,8 +917,13 @@
           {
             "file": "./dot.ts",
             "imports": [
-              "dotSourceText",
               "dotToSvg"
+            ]
+          },
+          {
+            "file": "./text.ts",
+            "imports": [
+              "sourceText"
             ]
           }
         ],
@@ -940,15 +957,13 @@
         ],
         "workspaceDependencies": [],
         "exports": [
-          "dotToSvg",
-          "dotSourceText"
+          "dotToSvg"
         ],
         "interfaces": [
           "DotSvgResult"
         ],
         "functions": [
-          "dotToSvg",
-          "dotSourceText"
+          "dotToSvg"
         ]
       },
       "src/graph/image.ts": {
@@ -1001,6 +1016,25 @@
         "reExported": [
           "dotToSvg",
           "DotSvgResult"
+        ]
+      },
+      "src/graph/text.ts": {
+        "description": "Replaces each code point that XML 1.0 forbids with U+FFFD.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "workspaceDependencies": [],
+        "exports": [
+          "sourceText",
+          "xmlSafe",
+          "escapeDot",
+          "escapeRecord"
+        ],
+        "functions": [
+          "sourceText",
+          "xmlSafe",
+          "escapeDot",
+          "escapeRecord"
         ]
       }
     },
@@ -1793,11 +1827,16 @@
             "typeOnly": true
           },
           {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
             "file": "./common.ts",
             "imports": [
               "readLenient",
-              "routesToBrowser",
-              "sourceText"
+              "routesToBrowser"
             ]
           },
           {
@@ -1856,11 +1895,16 @@
             "typeOnly": true
           },
           {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
             "file": "./common.ts",
             "imports": [
               "readLenient",
-              "routesToBrowser",
-              "sourceText"
+              "routesToBrowser"
             ]
           },
           {
@@ -1898,11 +1942,16 @@
             "typeOnly": true
           },
           {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
             "file": "./common.ts",
             "imports": [
               "readLenient",
-              "routesToBrowser",
-              "sourceText"
+              "routesToBrowser"
             ]
           },
           {
@@ -2010,11 +2059,22 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../errors.ts",
+            "imports": [
+              "inputError"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "escapeDot",
+              "escapeRecord"
+            ]
+          },
+          {
             "file": "./common.ts",
             "imports": [
-              "inputError",
               "outside",
-              "xmlSafe",
               "ContentLine",
               "Source"
             ]
@@ -2044,16 +2104,20 @@
           {
             "file": "../errors.ts",
             "imports": [
+              "inputError",
               "RenderError"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "xmlSafe"
             ]
           }
         ],
         "workspaceDependencies": [],
         "exports": [
           "readLenient",
-          "sourceText",
-          "xmlSafe",
-          "inputError",
           "outside",
           "prepare",
           "routesToBrowser"
@@ -2065,9 +2129,6 @@
         ],
         "functions": [
           "readLenient",
-          "sourceText",
-          "xmlSafe",
-          "inputError",
           "outside",
           "prepare",
           "routesToBrowser"
@@ -2263,7 +2324,7 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./common.ts",
+            "file": "../graph/text.ts",
             "imports": [
               "xmlSafe"
             ]
@@ -2294,9 +2355,14 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../errors.ts",
+            "imports": [
+              "inputError"
+            ]
+          },
+          {
             "file": "./common.ts",
             "imports": [
-              "inputError",
               "outside",
               "Source"
             ]
@@ -2326,11 +2392,21 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../errors.ts",
+            "imports": [
+              "inputError"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "xmlSafe"
+            ]
+          },
+          {
             "file": "./common.ts",
             "imports": [
-              "inputError",
               "outside",
-              "xmlSafe",
               "ContentLine",
               "Source"
             ]
@@ -3463,6 +3539,383 @@
         ]
       }
     },
+    "sysml": {
+      "src/sysml/backend-pdf.ts": {
+        "description": "backend-pdf module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderSysmlSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/sysml/backend-png.ts": {
+        "description": "Renders one SysML source to PNG: the SVG of the view, then the raster stage. The option scale multiplies the pixel",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../browser/input.ts",
+            "imports": [
+              "MAX_SCALE"
+            ]
+          },
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../graph/backend-png.ts",
+            "imports": [
+              "readScale",
+              "svgDocumentToPng"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderSysmlSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/sysml/backend-svg.ts": {
+        "description": "backend-svg module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "sourceText"
+            ]
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderSysmlSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
+      "src/sysml/index.ts": {
+        "description": "The public surface of the SysML stage. It holds the tokenizer, the parser of the design subset, the option reader,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./tokens.ts",
+            "imports": [
+              "tokenize",
+              "Token",
+              "TokenKind"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./parse.ts",
+            "imports": [
+              "parseSysml",
+              "baseChain",
+              "SysmlModel",
+              "PartDef",
+              "PlainDef",
+              "PartUsage",
+              "PortUsage",
+              "Attribute",
+              "Connection",
+              "End",
+              "Requirement",
+              "RequirementDef",
+              "Satisfy"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./views.ts",
+            "imports": [
+              "readSysmlOptions",
+              "sysmlToDot",
+              "SysmlOptions",
+              "SysmlView"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./render.ts",
+            "imports": [
+              "renderSysmlSvg",
+              "SysmlSvg"
+            ],
+            "reExport": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "tokenize",
+          "Token",
+          "TokenKind",
+          "parseSysml",
+          "baseChain",
+          "SysmlModel",
+          "PartDef",
+          "PlainDef",
+          "PartUsage",
+          "PortUsage",
+          "Attribute",
+          "Connection",
+          "End",
+          "Requirement",
+          "RequirementDef",
+          "Satisfy",
+          "readSysmlOptions",
+          "sysmlToDot",
+          "SysmlOptions",
+          "SysmlView",
+          "renderSysmlSvg",
+          "SysmlSvg"
+        ],
+        "reExported": [
+          "tokenize",
+          "Token",
+          "TokenKind",
+          "parseSysml",
+          "baseChain",
+          "SysmlModel",
+          "PartDef",
+          "PlainDef",
+          "PartUsage",
+          "PortUsage",
+          "Attribute",
+          "Connection",
+          "End",
+          "Requirement",
+          "RequirementDef",
+          "Satisfy",
+          "readSysmlOptions",
+          "sysmlToDot",
+          "SysmlOptions",
+          "SysmlView",
+          "renderSysmlSvg",
+          "SysmlSvg"
+        ]
+      },
+      "src/sysml/parse.ts": {
+        "description": "Parses a source of the SysML subset of the design. A construct outside the subset rejects with E_INPUT and the line.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "inputError"
+            ]
+          },
+          {
+            "file": "./tokens.ts",
+            "imports": [
+              "tokenize",
+              "Token"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "parseSysml",
+          "baseChain"
+        ],
+        "interfaces": [
+          "Attribute",
+          "PartUsage",
+          "PortUsage",
+          "End",
+          "Connection",
+          "PartDef",
+          "PlainDef",
+          "Requirement",
+          "RequirementDef",
+          "Satisfy",
+          "SysmlModel",
+          "Specializable"
+        ],
+        "functions": [
+          "parseSysml",
+          "baseChain"
+        ]
+      },
+      "src/sysml/render.ts": {
+        "description": "render module",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../graph/dot.ts",
+            "imports": [
+              "dotToSvg"
+            ]
+          },
+          {
+            "file": "./parse.ts",
+            "imports": [
+              "parseSysml"
+            ]
+          },
+          {
+            "file": "./views.ts",
+            "imports": [
+              "readSysmlOptions",
+              "sysmlToDot"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "renderSysmlSvg"
+        ],
+        "interfaces": [
+          "SysmlSvg"
+        ],
+        "functions": [
+          "renderSysmlSvg"
+        ]
+      },
+      "src/sysml/tokens.ts": {
+        "description": "Splits a SysML source into tokens. Comments and white space are skipped. An unclosed comment, an unclosed string",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "inputError"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "tokenize"
+        ],
+        "interfaces": [
+          "Token"
+        ],
+        "functions": [
+          "tokenize"
+        ]
+      },
+      "src/sysml/views.ts": {
+        "description": "Reads the options `view`, `root` and `lenient`. Another key, an unknown view, `ibd` without `root`, and `root` with",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../graph/text.ts",
+            "imports": [
+              "escapeDot",
+              "escapeRecord"
+            ]
+          },
+          {
+            "file": "./parse.ts",
+            "imports": [
+              "baseChain",
+              "Attribute",
+              "PartDef",
+              "PlainDef",
+              "Requirement",
+              "RequirementDef",
+              "SysmlModel"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "readSysmlOptions",
+          "sysmlToDot"
+        ],
+        "interfaces": [
+          "SysmlOptions"
+        ],
+        "functions": [
+          "readSysmlOptions",
+          "sysmlToDot"
+        ]
+      }
+    },
     "worker": {
       "src/worker/entry.ts": {
         "description": "The worker side of a render. The worker loads the backend module, runs one request and posts one message.",
@@ -3973,7 +4426,8 @@
         "src/graph/backend-svg.ts",
         "src/graph/dot.ts",
         "src/graph/image.ts",
-        "src/graph/index.ts"
+        "src/graph/index.ts",
+        "src/graph/text.ts"
       ]
     },
     {
@@ -4058,6 +4512,19 @@
       "files": [
         "src/raster/index.ts",
         "src/raster/warnings.ts"
+      ]
+    },
+    {
+      "name": "Sysml",
+      "files": [
+        "src/sysml/backend-pdf.ts",
+        "src/sysml/backend-png.ts",
+        "src/sysml/backend-svg.ts",
+        "src/sysml/index.ts",
+        "src/sysml/parse.ts",
+        "src/sysml/render.ts",
+        "src/sysml/tokens.ts",
+        "src/sysml/views.ts"
       ]
     },
     {

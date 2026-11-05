@@ -24,17 +24,18 @@ This document provides a comprehensive dependency graph of all files, components
 10. [Mesh Dependencies](#mesh-dependencies)
 11. [Plot Dependencies](#plot-dependencies)
 12. [Raster Dependencies](#raster-dependencies)
-13. [Worker Dependencies](#worker-dependencies)
-14. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
-15. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
-16. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
-17. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
-18. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
-19. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
-20. [Dependency Matrix](#dependency-matrix)
-21. [Circular Dependency Analysis](#circular-dependency-analysis)
-22. [Visual Dependency Graph](#visual-dependency-graph)
-23. [Summary Statistics](#summary-statistics)
+13. [Sysml Dependencies](#sysml-dependencies)
+14. [Worker Dependencies](#worker-dependencies)
+15. [Trials/t1 graph Dependencies](#trials-t1-graph-dependencies)
+16. [Trials/t2 mesh Dependencies](#trials-t2-mesh-dependencies)
+17. [Trials/t3 tex Dependencies](#trials-t3-tex-dependencies)
+18. [Trials/t4 browser Dependencies](#trials-t4-browser-dependencies)
+19. [Trials/t5 tex build Dependencies](#trials-t5-tex-build-dependencies)
+20. [Trials/t6 etex build Dependencies](#trials-t6-etex-build-dependencies)
+21. [Dependency Matrix](#dependency-matrix)
+22. [Circular Dependency Analysis](#circular-dependency-analysis)
+23. [Visual Dependency Graph](#visual-dependency-graph)
+24. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -45,7 +46,7 @@ The codebase is organized into the following modules:
 
 - **root**: 8 files
 - **browser**: 11 files
-- **graph**: 6 files
+- **graph**: 7 files
 - **html**: 6 files
 - **entry**: 1 file
 - **math**: 6 files
@@ -53,6 +54,7 @@ The codebase is organized into the following modules:
 - **mesh**: 15 files
 - **plot**: 8 files
 - **raster**: 2 files
+- **sysml**: 8 files
 - **worker**: 3 files
 - **trials/t1-graph**: 3 files
 - **trials/t2-mesh**: 1 file
@@ -133,7 +135,7 @@ The codebase is organized into the following modules:
 - Classes: `RenderError`
 - Interfaces: `RenderErrorPosition`
 - Types: `RenderErrorCode`
-- Functions: `isRenderError`
+- Functions: `isRenderError`, `inputError`
 - Constants: `RENDER_ERROR_CODES`
 
 ---
@@ -370,7 +372,8 @@ The codebase is organized into the following modules:
 | `../errors.ts` | `RenderError` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
 | `../mermaid/browser.ts` | `drawSvgToPdf` | Import |
-| `./dot.ts` | `dotSourceText, dotToSvg` | Import |
+| `./dot.ts` | `dotToSvg` | Import |
+| `./text.ts` | `sourceText` | Import |
 
 **Exports:**
 - Functions: `render`
@@ -390,7 +393,8 @@ The codebase is organized into the following modules:
 | `../errors.ts` | `RenderError` | Import |
 | `../assets.ts` | `bundledFontPathIn` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
-| `./dot.ts` | `dotSourceText, dotToSvg` | Import |
+| `./dot.ts` | `dotToSvg` | Import |
+| `./text.ts` | `sourceText` | Import |
 | `../raster/index.ts` | `isFontFile, svgToPng` | Import |
 | `../raster/warnings.ts` | `rasterWarnings` | Import |
 
@@ -406,7 +410,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../errors.ts` | `RenderError` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
-| `./dot.ts` | `dotSourceText, dotToSvg` | Import |
+| `./dot.ts` | `dotToSvg` | Import |
+| `./text.ts` | `sourceText` | Import |
 
 **Exports:**
 - Functions: `render`
@@ -423,7 +428,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `DotSvgResult`
-- Functions: `dotToSvg`, `dotSourceText`
+- Functions: `dotToSvg`
 
 ---
 
@@ -445,6 +450,13 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Re-exports: `dotToSvg`, `DotSvgResult`
+
+---
+
+### `src/graph/text.ts` - Replaces each code point that XML 1.0 forbids with U+FFFD.
+
+**Exports:**
+- Functions: `sourceText`, `xmlSafe`, `escapeDot`, `escapeRecord`
 
 ---
 
@@ -732,7 +744,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
-| `./common.ts` | `readLenient, routesToBrowser, sourceText` | Import |
+| `../graph/text.ts` | `sourceText` | Import |
+| `./common.ts` | `readLenient, routesToBrowser` | Import |
 | `./browser.ts` | `drawMermaidInBrowser, drawSvgToPdf, MERMAID_NATIVE_PDF_BACKEND` | Import |
 | `./render.ts` | `renderMermaidSvg` | Import |
 
@@ -750,7 +763,8 @@ The codebase is organized into the following modules:
 | `../errors.ts` | `RenderError` | Import |
 | `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
-| `./common.ts` | `readLenient, routesToBrowser, sourceText` | Import |
+| `../graph/text.ts` | `sourceText` | Import |
+| `./common.ts` | `readLenient, routesToBrowser` | Import |
 | `./browser.ts` | `drawMermaidInBrowser` | Import |
 | `./render.ts` | `renderMermaidSvg` | Import |
 
@@ -765,7 +779,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
-| `./common.ts` | `readLenient, routesToBrowser, sourceText` | Import |
+| `../graph/text.ts` | `sourceText` | Import |
+| `./common.ts` | `readLenient, routesToBrowser` | Import |
 | `./browser.ts` | `drawMermaidInBrowser` | Import |
 | `./render.ts` | `renderMermaidSvg` | Import |
 
@@ -803,7 +818,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./common.ts` | `inputError, outside, xmlSafe, ContentLine, Source` | Import |
+| `../errors.ts` | `inputError` | Import |
+| `../graph/text.ts` | `escapeDot, escapeRecord` | Import |
+| `./common.ts` | `outside, ContentLine, Source` | Import |
 
 **Exports:**
 - Interfaces: `ClassArrow`, `ClassDef`, `ClassRelation`, `ClassModel`
@@ -817,12 +834,13 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../errors.ts` | `RenderError` | Import |
+| `../errors.ts` | `inputError, RenderError` | Import |
+| `../graph/text.ts` | `xmlSafe` | Import |
 
 **Exports:**
 - Interfaces: `ContentLine`, `Context`, `Source`
 - Types: `DiagramKind`
-- Functions: `readLenient`, `sourceText`, `xmlSafe`, `inputError`, `outside`, `prepare`, `routesToBrowser`
+- Functions: `readLenient`, `outside`, `prepare`, `routesToBrowser`
 
 ---
 
@@ -874,7 +892,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./common.ts` | `xmlSafe` | Import |
+| `../graph/text.ts` | `xmlSafe` | Import |
 | `./sequence.ts` | `BlockEvent, Branch, MessageEvent, SeqEvent, SequenceModel` | Import (type-only) |
 
 **Exports:**
@@ -887,7 +905,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./common.ts` | `inputError, outside, Source` | Import |
+| `../errors.ts` | `inputError` | Import |
+| `./common.ts` | `outside, Source` | Import |
 
 **Exports:**
 - Interfaces: `Participant`, `MessageEvent`, `NoteEvent`, `ActivateEvent`, `DeactivateEvent`, `Branch`, `BlockEvent`, `SequenceModel`
@@ -901,7 +920,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./common.ts` | `inputError, outside, xmlSafe, ContentLine, Source` | Import |
+| `../errors.ts` | `inputError` | Import |
+| `../graph/text.ts` | `xmlSafe` | Import |
+| `./common.ts` | `outside, ContentLine, Source` | Import |
 
 **Exports:**
 - Interfaces: `StateDef`, `StateTransition`, `StateModel`
@@ -1316,6 +1337,143 @@ The codebase is organized into the following modules:
 
 ---
 
+<a id="sysml-dependencies"></a>
+
+## Sysml Dependencies
+
+### `src/sysml/backend-pdf.ts` - backend-pdf module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../mermaid/browser.ts` | `drawSvgToPdf` | Import |
+| `../graph/text.ts` | `sourceText` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./render.ts` | `renderSysmlSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/sysml/backend-png.ts` - Renders one SysML source to PNG: the SVG of the view, then the raster stage. The option scale multiplies the pixel
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../browser/input.ts` | `MAX_SCALE` | Import |
+| `../errors.ts` | `RenderError` | Import |
+| `../graph/backend-png.ts` | `readScale, svgDocumentToPng` | Import |
+| `../graph/text.ts` | `sourceText` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./render.ts` | `renderSysmlSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/sysml/backend-svg.ts` - backend-svg module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `../graph/text.ts` | `sourceText` | Import |
+| `./render.ts` | `renderSysmlSvg` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
+### `src/sysml/index.ts` - The public surface of the SysML stage. It holds the tokenizer, the parser of the design subset, the option reader,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./tokens.ts` | `tokenize, Token, TokenKind` | Re-export |
+| `./parse.ts` | `parseSysml, baseChain, SysmlModel, PartDef, PlainDef, PartUsage, PortUsage, Attribute, Connection, End, Requirement, RequirementDef, Satisfy` | Re-export |
+| `./views.ts` | `readSysmlOptions, sysmlToDot, SysmlOptions, SysmlView` | Re-export |
+| `./render.ts` | `renderSysmlSvg, SysmlSvg` | Re-export |
+
+**Exports:**
+- Re-exports:
+
+  ```text
+  tokenize, Token, TokenKind, parseSysml, baseChain, SysmlModel, PartDef, PlainDef, PartUsage,
+  PortUsage, Attribute, Connection, End, Requirement, RequirementDef, Satisfy, readSysmlOptions,
+  sysmlToDot, SysmlOptions, SysmlView, renderSysmlSvg, SysmlSvg
+  ```
+
+
+---
+
+### `src/sysml/parse.ts` - Parses a source of the SysML subset of the design. A construct outside the subset rejects with E_INPUT and the line.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `inputError` | Import |
+| `./tokens.ts` | `tokenize, Token` | Import |
+
+**Exports:**
+- Interfaces:
+
+  ```text
+  Attribute, PartUsage, PortUsage, End, Connection, PartDef, PlainDef, Requirement, RequirementDef,
+  Satisfy, SysmlModel, Specializable
+  ```
+
+- Functions: `parseSysml`, `baseChain`
+
+---
+
+### `src/sysml/render.ts` - render module
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../graph/dot.ts` | `dotToSvg` | Import |
+| `./parse.ts` | `parseSysml` | Import |
+| `./views.ts` | `readSysmlOptions, sysmlToDot` | Import |
+
+**Exports:**
+- Interfaces: `SysmlSvg`
+- Functions: `renderSysmlSvg`
+
+---
+
+### `src/sysml/tokens.ts` - Splits a SysML source into tokens. Comments and white space are skipped. An unclosed comment, an unclosed string
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `inputError` | Import |
+
+**Exports:**
+- Interfaces: `Token`
+- Types: `TokenKind`
+- Functions: `tokenize`
+
+---
+
+### `src/sysml/views.ts` - Reads the options `view`, `root` and `lenient`. Another key, an unknown view, `ibd` without `root`, and `root` with
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../graph/text.ts` | `escapeDot, escapeRecord` | Import |
+| `./parse.ts` | `baseChain, Attribute, PartDef, PlainDef, Requirement, RequirementDef, SysmlModel` | Import |
+
+**Exports:**
+- Interfaces: `SysmlOptions`
+- Types: `SysmlView`
+- Functions: `readSysmlOptions`, `sysmlToDot`
+
+---
+
 <a id="worker-dependencies"></a>
 
 ## Worker Dependencies
@@ -1536,20 +1694,22 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 35 files |
-| `src/worker/protocol` | 2 files | 21 files |
+| `src/errors` | 0 files | 42 files |
+| `src/worker/protocol` | 2 files | 24 files |
+| `src/graph/text` | 0 files | 14 files |
 | `src/browser/render` | 6 files | 7 files |
-| `src/mermaid/browser` | 6 files | 5 files |
-| `src/mermaid/common` | 1 file | 9 files |
+| `src/mermaid/browser` | 6 files | 6 files |
+| `src/graph/backend-png` | 7 files | 4 files |
+| `src/mermaid/common` | 2 files | 8 files |
 | `src/mermaid/render` | 6 files | 4 files |
 | `src/mesh/backend-glb` | 6 files | 4 files |
-| `src/graph/backend-png` | 6 files | 3 files |
-| `src/browser/input` | 1 file | 7 files |
+| `src/browser/input` | 1 file | 8 files |
 | `src/config` | 3 files | 5 files |
+| `src/graph/dot` | 2 files | 6 files |
+| `src/mermaid/backend-png` | 8 files | 0 files |
 | `src/core` | 6 files | 1 file |
-| `src/graph/dot` | 2 files | 5 files |
-| `src/mermaid/backend-png` | 7 files | 0 files |
 | `src/mesh/index` | 7 files | 0 files |
+| `src/sysml/render` | 3 files | 4 files |
 | `src/assets` | 1 file | 5 files |
 | `src/html/backend-md` | 6 files | 0 files |
 | `src/math/tex` | 2 files | 4 files |
@@ -1557,25 +1717,23 @@ The codebase is organized into the following modules:
 | `src/mesh/backend-png` | 6 files | 0 files |
 | `src/mesh/read` | 1 file | 5 files |
 | `src/plot/plotter` | 3 files | 3 files |
+| `src/sysml/backend-png` | 6 files | 0 files |
+| `src/graph/backend-pdf` | 5 files | 0 files |
 | `src/html/md` | 4 files | 1 file |
 | `src/index` | 5 files | 0 files |
+| `src/mermaid/backend-pdf` | 5 files | 0 files |
+| `src/mermaid/backend-svg` | 5 files | 0 files |
+| `src/mermaid/class` | 3 files | 2 files |
+| `src/mermaid/sequence` | 2 files | 3 files |
+| `src/mermaid/state` | 3 files | 2 files |
 | `src/mesh/cad-build` | 3 files | 2 files |
 | `src/mesh/cad-document` | 1 file | 4 files |
 | `src/mesh/pinned-three` | 4 files | 1 file |
 | `src/plot/backend-html` | 5 files | 0 files |
 | `src/plot/backend-svg` | 3 files | 2 files |
+| `src/sysml/parse` | 2 files | 3 files |
+| `src/sysml/views` | 3 files | 2 files |
 | `src/types` | 0 files | 5 files |
-| `src/browser/index` | 4 files | 0 files |
-| `src/browser/pinned` | 0 files | 4 files |
-| `src/graph/backend-pdf` | 4 files | 0 files |
-| `src/math/backend-pdf` | 4 files | 0 files |
-| `src/math/backend-png` | 4 files | 0 files |
-| `src/mermaid/backend-pdf` | 4 files | 0 files |
-| `src/mermaid/backend-svg` | 4 files | 0 files |
-| `src/mermaid/sequence-layout` | 2 files | 2 files |
-| `src/mermaid/sequence` | 1 file | 3 files |
-| `src/mesh/backend-stl` | 4 files | 0 files |
-| `src/mesh/glb` | 2 files | 2 files |
 
 ---
 
@@ -1622,116 +1780,128 @@ graph TD
         N22[dot]
         N23[image]
         N24[index]
+        N25[text]
     end
 
     subgraph Html
-        N25[backend-md]
-        N26[convert]
-        N27[fetch-image]
-        N28[images]
-        N29[index]
-        N30[md]
+        N26[backend-md]
+        N27[convert]
+        N28[fetch-image]
+        N29[images]
+        N30[index]
+        N31[md]
     end
 
     subgraph Entry
-        N31[index]
+        N32[index]
     end
 
     subgraph Math
-        N32[backend-pdf]
-        N33[backend-png]
-        N34[backend-svg]
-        N35[font-ranges]
-        N36[index]
-        N37[tex]
+        N33[backend-pdf]
+        N34[backend-png]
+        N35[backend-svg]
+        N36[font-ranges]
+        N37[index]
+        N38[tex]
     end
 
     subgraph Mermaid
-        N38[backend-pdf]
-        N39[backend-png]
-        N40[backend-svg]
-        N41[browser]
-        N42[class]
-        N43[common]
-        N44[index]
-        N45[render]
-        N46[sequence-layout]
-        N47[sequence]
-        N48[...1 more]
+        N39[backend-pdf]
+        N40[backend-png]
+        N41[backend-svg]
+        N42[browser]
+        N43[class]
+        N44[common]
+        N45[index]
+        N46[render]
+        N47[sequence-layout]
+        N48[sequence]
+        N49[...1 more]
     end
 
     subgraph Mesh
-        N49[backend-glb]
-        N50[backend-html]
-        N51[backend-png]
-        N52[backend-stl]
-        N53[cad-build]
-        N54[cad-builder]
-        N55[cad-document]
-        N56[glb]
-        N57[index]
-        N58[occt-import-js.d]
-        N59[...5 more]
+        N50[backend-glb]
+        N51[backend-html]
+        N52[backend-png]
+        N53[backend-stl]
+        N54[cad-build]
+        N55[cad-builder]
+        N56[cad-document]
+        N57[glb]
+        N58[index]
+        N59[occt-import-js.d]
+        N60[...5 more]
     end
 
     subgraph Plot
-        N60[backend-html]
-        N61[backend-png]
-        N62[backend-svg]
-        N63[control]
-        N64[index]
-        N65[plotter]
-        N66[reader]
-        N67[ticks]
+        N61[backend-html]
+        N62[backend-png]
+        N63[backend-svg]
+        N64[control]
+        N65[index]
+        N66[plotter]
+        N67[reader]
+        N68[ticks]
     end
 
     subgraph Raster
-        N68[index]
-        N69[warnings]
+        N69[index]
+        N70[warnings]
+    end
+
+    subgraph Sysml
+        N71[backend-pdf]
+        N72[backend-png]
+        N73[backend-svg]
+        N74[index]
+        N75[parse]
+        N76[render]
+        N77[tokens]
+        N78[views]
     end
 
     subgraph Worker
-        N70[entry]
-        N71[protocol]
-        N72[run]
+        N79[entry]
+        N80[protocol]
+        N81[run]
     end
 
     subgraph Trials/t1-graph
-        N73[compare-layout.mjs]
-        N74[make-sources.mjs]
-        N75[measure.mjs]
+        N82[compare-layout.mjs]
+        N83[make-sources.mjs]
+        N84[measure.mjs]
     end
 
     subgraph Trials/t2-mesh
-        N76[measure.mjs]
+        N85[measure.mjs]
     end
 
     subgraph Trials/t3-tex
-        N77[index.cjs]
+        N86[index.cjs]
     end
 
     subgraph Trials/t4-browser
-        N78[pinned.js]
-        N79[measure.mjs]
+        N87[pinned.js]
+        N88[measure.mjs]
     end
 
     subgraph Trials/t5-tex-build
-        N80[dvi2svg.mjs]
-        N81[host.mjs]
-        N82[run.mjs]
-        N83[tfm.mjs]
-        N84[type1.mjs]
-        N85[vfs.mjs]
+        N89[dvi2svg.mjs]
+        N90[host.mjs]
+        N91[run.mjs]
+        N92[tfm.mjs]
+        N93[type1.mjs]
+        N94[vfs.mjs]
     end
 
     subgraph Trials/t6-etex-build
-        N86[dvisvgm-specials.mjs]
+        N95[dvisvgm-specials.mjs]
     end
 
     N0 --> N3
-    N8 --> N71
+    N8 --> N80
     N8 --> N13
-    N9 --> N71
+    N9 --> N80
     N9 --> N13
     N10 --> N3
     N12 --> N10
@@ -1746,63 +1916,63 @@ graph TD
     N2 --> N3
     N2 --> N4
     N2 --> N5
-    N2 --> N72
+    N2 --> N81
     N2 --> N6
     N19 --> N3
-    N19 --> N71
-    N19 --> N41
+    N19 --> N80
+    N19 --> N42
     N19 --> N22
+    N19 --> N25
     N20 --> N3
     N20 --> N0
-    N20 --> N71
+    N20 --> N80
     N20 --> N22
-    N20 --> N68
+    N20 --> N25
     N20 --> N69
+    N20 --> N70
     N21 --> N3
-    N21 --> N71
+    N21 --> N80
     N21 --> N22
+    N21 --> N25
     N22 --> N3
     N22 --> N23
     N24 --> N22
-    N25 --> N71
-    N25 --> N3
-    N25 --> N13
-    N25 --> N30
-    N25 --> N27
-    N27 --> N28
-    N29 --> N26
-    N30 --> N26
-    N30 --> N28
-    N30 --> N1
-    N30 --> N6
-    N31 --> N2
-    N31 --> N5
+    N26 --> N80
+    N26 --> N3
+    N26 --> N13
+    N26 --> N31
+    N26 --> N28
+    N28 --> N29
+    N30 --> N27
+    N31 --> N27
+    N31 --> N29
     N31 --> N1
     N31 --> N6
-    N31 --> N3
+    N32 --> N2
+    N32 --> N5
+    N32 --> N1
+    N32 --> N6
     N32 --> N3
-    N32 --> N41
-    N32 --> N71
-    N32 --> N37
     N33 --> N3
-    N33 --> N20
-    N33 --> N71
-    N33 --> N37
+    N33 --> N42
+    N33 --> N80
+    N33 --> N38
     N34 --> N3
-    N34 --> N71
-    N34 --> N37
-    N36 --> N37
-    N37 --> N3
-    N37 --> N35
-    N38 --> N71
-    N38 --> N43
-    N38 --> N41
-    N38 --> N45
-    N39 --> N13
-    N39 --> N3
-    N39 --> N20
-    N39 --> N71
-    N39 --> N43
+    N34 --> N20
+    N34 --> N80
+    N34 --> N38
+    N35 --> N3
+    N35 --> N80
+    N35 --> N38
+    N37 --> N38
+    N38 --> N3
+    N38 --> N36
+    N39 --> N80
+    N39 --> N25
+    N39 --> N44
+    N39 --> N42
+    N39 --> N46
+    N40 --> N13
 ```
 
 ---
@@ -1812,17 +1982,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 232 |
-| Subsystems | 17 |
-| Total Lines of Code | 27024 |
-| Total Exports | 526 |
-| Total Re-exports | 99 |
+| Total Source Files | 247 |
+| Subsystems | 18 |
+| Total Lines of Code | 28611 |
+| Total Exports | 577 |
+| Total Re-exports | 121 |
 | Total Classes | 6 |
-| Total Interfaces | 100 |
-| Total Functions | 229 |
+| Total Interfaces | 116 |
+| Total Functions | 240 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 57 |
+| Type-only Imports | 60 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

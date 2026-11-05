@@ -74,7 +74,11 @@ export class RenderError extends Error {
   readonly column: number | undefined;
   constructor(code: RenderErrorCode, message: string, position?: RenderErrorPosition);
 }
+
+export function inputError(line: number, message: string): RenderError;
 ```
+
+`inputError` gives an `E_INPUT` error whose message starts with `line N:` and whose `line` is N.
 
 ## `src/registry.ts`
 
@@ -123,10 +127,22 @@ Purpose: renders a DOT source to SVG with the viz library. The module removes th
 ```ts
 export interface DotSvgResult { svg: string; warnings: string[] }
 export function dotToSvg(source: string, getViz?: () => Promise<Viz>): Promise<DotSvgResult>;
-export function dotSourceText(source: string | Uint8Array): string;
 ```
 
 `getViz` returns the viz instance. The default is the shared instance. A test passes a new instance for each source, so that the library gives its warnings for each source.
+
+## `src/graph/text.ts`
+
+Purpose: the text helpers of the adapters that write DOT. The Mermaid and SysML stages use them.
+
+```ts
+export function sourceText(source: string | Uint8Array): string;
+export function xmlSafe(text: string): string;
+export function escapeDot(text: string): string;
+export function escapeRecord(text: string): string;
+```
+
+`sourceText` reads a byte source as UTF-8. `xmlSafe` replaces each code point that XML 1.0 forbids with U+FFFD. `escapeDot` escapes text for a quoted DOT string. `escapeRecord` also escapes the record symbols `{ } | < >`.
 
 ## `src/graph/image.ts`
 
@@ -175,7 +191,6 @@ Purpose: the header and option reader of each Mermaid source. It reads the front
 ```ts
 export type DiagramKind = "class" | "state" | "sequence";
 export function prepare(source: string, options: Record<string, unknown>, extra?: readonly string[]): Source;
-export function sourceText(source: string | Uint8Array): string;
 ```
 
 `Source` holds the diagram kind, the header line, the content lines, the lenient flag and the warnings.
@@ -250,6 +265,64 @@ export function render(request: WorkerJob["request"]): Promise<BackendOutput>;
 ## `src/mermaid/index.ts`
 
 Purpose: the public entry of the `./mermaid` subpath. It re-exports the functions and the types of the Mermaid stage.
+
+## `src/sysml/tokens.ts`
+
+Purpose: splits a SysML source into tokens. It skips the comments and the white space. The longest symbol wins, so `:>`, `::` and `..` are one token each.
+
+```ts
+export type TokenKind = "name" | "number" | "string" | "symbol";
+export interface Token { readonly kind: TokenKind; readonly value: string; readonly line: number; readonly column: number }
+export function tokenize(source: string): Token[];
+```
+
+## `src/sysml/parse.ts`
+
+Purpose: the recursive-descent parser of the SysML subset. It reads the whole source, then resolves the names. Each rejection is `E_INPUT` with the line.
+
+```ts
+export interface SysmlModel {
+  partDefs: PartDef[]; portDefs: PlainDef[]; interfaceDefs: PlainDef[];
+  requirementDefs: RequirementDef[]; requirements: Requirement[]; satisfies: Satisfy[]; warnings: string[];
+}
+export interface Specializable { name: string; base: string | undefined; line: number }
+export function parseSysml(source: string, lenient: boolean): SysmlModel;
+export function baseChain<T extends Specializable>(defs: readonly T[], def: T): T[];
+```
+
+`baseChain` returns a definition and its bases. The parser and the views use it for the inherited parts, ports and connections.
+
+## `src/sysml/views.ts`
+
+Purpose: reads the options and builds the DOT source of one view.
+
+```ts
+export type SysmlView = "bdd" | "ibd" | "requirements";
+export interface SysmlOptions { view: SysmlView; root: string | undefined; lenient: boolean }
+export function readSysmlOptions(options: Record<string, unknown>): SysmlOptions;
+export function sysmlToDot(model: SysmlModel, options: SysmlOptions): string;
+```
+
+## `src/sysml/render.ts`
+
+Purpose: renders one SysML source to SVG: the options, the parser, the view and `dotToSvg`.
+
+```ts
+export interface SysmlSvg { svg: string; warnings: string[] }
+export function renderSysmlSvg(source: string, options: Record<string, unknown>): Promise<SysmlSvg>;
+```
+
+## `src/sysml/backend-svg.ts`, `src/sysml/backend-png.ts`, `src/sysml/backend-pdf.ts`
+
+Purpose: the backends of `sysml` to `svg`, `png` and `pdf`. The png backend reads `scale` and calls `svgDocumentToPng`. The pdf backend calls `drawSvgToPdf` in the browser stage.
+
+```ts
+export function render(request: WorkerJob["request"]): Promise<BackendOutput>;
+```
+
+## `src/sysml/index.ts`
+
+Purpose: the public entry of the `./sysml` subpath. It re-exports the functions and the types of the SysML stage.
 
 ## `src/math/tex.ts`
 

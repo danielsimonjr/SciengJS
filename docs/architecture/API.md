@@ -82,6 +82,7 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | `./graph` | DOT to SVG through the viz library. It exports `dotToSvg`. |
 | `./raster` | SVG to PNG through resvg. It exports `svgToPng` and `isFontFile`. |
 | `./mermaid` | The Mermaid parsers, the DOT builders, the sequence layout and the SVG render. It exports `prepare`, `parseClassDiagram`, `classToDot`, `parseStateDiagram`, `stateToDot`, `parseSequenceDiagram`, `layoutSequence` and `renderMermaidSvg`. |
+| `./sysml` | The SysML stage. It exports `tokenize`, `parseSysml`, `baseChain`, `readSysmlOptions`, `sysmlToDot`, `renderSysmlSvg` and their types. |
 | `./mesh` | The mesh stage. The subpath exports `readCad` (STEP, IGES and BREP through occt-import-js), `writeGlb`, `writeStl`, `readMeshOptions`, `parseCadDocument`, `checkCadDocument`, `buildCad`, the segment constants `DEFAULT_SEGMENTS`, `MIN_SEGMENTS` and `MAX_SEGMENTS`, the node types of a CAD document, and `cad`, the builder functions. |
 | `./math` | The math stage. It exports `mathToSvg` and the type `MathOptions`. |
 | `./plot` | The plot stage. It exports `plotToSvg`, `readPlotFigure`, `linearTicks`, `logTicks`, `paddedRange`, `bode`, `step`, `impulse`, `poleZero`, `nyquist`, `rootLocus`, `checkTransferFunction`, `polynomialRoots` and their types. |
