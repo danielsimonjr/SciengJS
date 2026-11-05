@@ -10,7 +10,7 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.6.0 holds five input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
+Release 0.7.0 holds eight input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, and to PNG. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
 
 | Input | Output | Engine |
 |---|---|---|
