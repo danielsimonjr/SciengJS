@@ -82,10 +82,10 @@ export function inputError(line: number, message: string): RenderError;
 
 ## `src/registry.ts`
 
-Purpose: maps `type:format` to a backend module.
+Purpose: maps `type:format` to a backend module. An entry can have a `preload` that runs in the parent process before the worker starts. The tikz entries run the package detection, then `texCoreFiles`. A source that the detection rejects loads no bundle.
 
 ```ts
-export interface BackendEntry { backend: string; moduleUrl: string; }
+export interface BackendEntry { backend: string; moduleUrl: string; preload?: (settings: BundleSettings, source: string | Uint8Array) => Promise<ReadonlyMap<string, Uint8Array> | undefined>; }
 export type Registry = Record<string, BackendEntry>;
 export const DEFAULT_REGISTRY: Registry;
 export function registryKey(type: string, format: string): string;
@@ -326,13 +326,14 @@ Purpose: the public entry of the `./sysml` subpath. It re-exports the functions 
 
 ## `src/tex/bundles.ts`
 
-Purpose: the bundle manager of the tex stage. `loadBundleBytes` resolves one bundle from the cache folder (`<cacheDir>/tex-bundles/<file>`) and hashes the file on every load. `loadBundleBytes` deletes a cached file with a wrong hash. A download needs `tex-bundles` in `allowNetwork`. `loadBundleBytes` reads `<texBundleUrl><file>` over `https:`, `http:` or `file:`. It writes a temporary file. It checks the size and the sha256. It renames the file into place. `loadBundleBytes` deletes a wrong file and rejects with `E_INTEGRITY`. If the cache does not hold a bundle and `allowNetwork` does not allow the download, `loadBundleBytes` rejects with `E_STAGE_MISSING`. The message names the bundle and the URL. `unpackBundle` reads the SCTB1 container that `tools/tex/bundles.mjs` writes.
+Purpose: the bundle manager of the tex stage. `loadBundleBytes` resolves one bundle from the cache folder (`<cacheDir>/tex-bundles/<file>`) and hashes the file on every load. `loadBundleBytes` deletes a cached file with a wrong hash. A download needs `tex-bundles` in `allowNetwork`. `loadBundleBytes` reads `<texBundleUrl><file>` over `https:`, `http:` or `file:`. It writes a temporary file. It checks the size and the sha256. It renames the file into place. `loadBundleBytes` deletes a wrong file and rejects with `E_INTEGRITY`. If the cache does not hold a bundle and `allowNetwork` does not allow the download, `loadBundleBytes` rejects with `E_STAGE_MISSING`. The message names the bundle and the URL. `unpackBundle` reads the SCTB1 container that `tools/tex/bundles.mjs` writes. `texCoreFiles` loads and unpacks the core bundle once in the parent process. A rejected load is not kept, so a later render tries again.
 
 ```ts
 export const BUNDLES: readonly BundleEntry[];
 export function loadBundleBytes(entry: BundleEntry, settings: BundleSettings): Promise<Uint8Array>;
 export function loadBundles(names: readonly BundleName[], settings: BundleSettings, bundles?: readonly BundleEntry[]): Promise<Map<BundleName, Map<string, Uint8Array>>>;
 export function unpackBundle(bytes: Uint8Array): Map<string, Uint8Array>;
+export function texCoreFiles(settings: BundleSettings, load?: (settings: BundleSettings) => Promise<ReadonlyMap<string, Uint8Array>>): Promise<ReadonlyMap<string, Uint8Array>>;
 ```
 
 ## `src/tex/bundles.json`
@@ -341,7 +342,7 @@ Purpose: the pinned list of the four bundles (name, file, sha256, bytes). `tools
 
 ## `src/tex/stage.ts`
 
-Purpose: the tikz render. `renderTikzSvg` calls `detectBundles`. `renderTikzSvg` loads the core bundle once per process: the engine files, the format and the core tree. Then `renderTikzSvg` forks the tree. `renderTikzSvg` adds the files of the other detected bundles. `renderTikzSvg` calls `renderTex`. `wrapSource` puts a bare picture in a `standalone` document with the class option `dvisvgm`, and adds that option to a source with its own `documentclass`. The option `margin` sets the border of the SVG.
+Purpose: the tikz render. `renderTikzSvg` calls `detectBundles`. `renderTikzSvg` calls `loadCore`. `loadCore` builds the engine files, the format and the core tree from `settings.texCore` when the parent gives the files. Without them, `loadCore` loads the core bundle once per process. Then `renderTikzSvg` forks the tree. `renderTikzSvg` adds the files of the other detected bundles. `renderTikzSvg` calls `renderTex`. `wrapSource` puts a bare picture in a `standalone` document with the class option `dvisvgm`, and adds that option to a source with its own `documentclass`. The option `margin` sets the border of the SVG.
 
 ## `src/tex/backend-svg.ts`, `src/tex/backend-png.ts`, `src/tex/backend-pdf.ts`
 

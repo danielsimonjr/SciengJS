@@ -4,6 +4,12 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- A tikz render loads the core TeX bundle once in the main thread. Each fresh render worker gets a copy of the files, so the worker does not read, hash and inflate the bundle again. A warm render takes about 295 ms; it took 360 to 530 ms before on the same machine.
+- A registry entry can have a `preload` that runs in the main thread before the worker starts. The tikz preload runs the package detection first. A source that the detection rejects loads no bundle. A failed preload does not fail the render: the worker loads the bundle itself, so the error codes and their order do not change.
+- The worker copy of the files lives in ArrayBuffer memory, as the bytes that the worker loaded did before. The heap limit `maxMemoryMb` measures the same memory as before.
+
 ## [0.10.0] - 2026-11-05
 
 ### Changed

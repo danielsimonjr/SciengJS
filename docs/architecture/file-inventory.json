@@ -131,7 +131,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 119
+      "loc": 126
     },
     {
       "file": "src/errors.ts",
@@ -544,7 +544,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 62
+      "loc": 83
     },
     {
       "file": "src/sysml/backend-pdf.ts",
@@ -628,7 +628,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 179
+      "loc": 204
     },
     {
       "file": "src/tex/detect.ts",
@@ -684,7 +684,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 111
+      "loc": 120
     },
     {
       "file": "src/tex/tfm.ts",
@@ -740,7 +740,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 58
+      "loc": 60
     },
     {
       "file": "src/worker/run.ts",
@@ -1027,7 +1027,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 22
+      "loc": 26
     },
     {
       "file": "test/support/stubs/stub-foreign-error.ts",

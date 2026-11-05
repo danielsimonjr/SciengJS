@@ -27,6 +27,8 @@ export interface BackendSettings {
   cacheDir: string;
   /** The base URL of the TeX bundles. */
   texBundleUrl: string;
+  /** The files of the core TeX bundle, checked and unpacked by the parent process. Only a tex render has them. */
+  texCore?: ReadonlyMap<string, Uint8Array>;
 }
 
 /** What the worker receives: one render request and the backend module that serves it. */

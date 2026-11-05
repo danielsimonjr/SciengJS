@@ -59,7 +59,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 77 |
 | `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 530 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 251 |
-| `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 119 |
+| `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 58 |
 | `src/graph/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 16 |
 | `src/graph/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 81 |
@@ -118,7 +118,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/ticks.ts` | @danielsimonjr/sciengjs | src | build-entry | 76 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 62 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 83 |
 | `src/sysml/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 12 |
 | `src/sysml/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
 | `src/sysml/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 9 |
@@ -130,7 +130,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/tex/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 11 |
 | `src/tex/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
 | `src/tex/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 9 |
-| `src/tex/bundles.ts` | @danielsimonjr/sciengjs | src | build-entry | 179 |
+| `src/tex/bundles.ts` | @danielsimonjr/sciengjs | src | build-entry | 204 |
 | `src/tex/detect.ts` | @danielsimonjr/sciengjs | src | build-entry | 263 |
 | `src/tex/dvi.ts` | @danielsimonjr/sciengjs | src | build-entry | 319 |
 | `src/tex/host.ts` | @danielsimonjr/sciengjs | src | build-entry | 338 |
@@ -138,7 +138,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/tex/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 132 |
 | `src/tex/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 93 |
 | `src/tex/specials.ts` | @danielsimonjr/sciengjs | src | build-entry | 166 |
-| `src/tex/stage.ts` | @danielsimonjr/sciengjs | src | build-entry | 111 |
+| `src/tex/stage.ts` | @danielsimonjr/sciengjs | src | build-entry | 120 |
 | `src/tex/tfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 38 |
 | `src/tex/type1.ts` | @danielsimonjr/sciengjs | src | build-entry | 401 |
 | `src/tex/vfs.ts` | @danielsimonjr/sciengjs | src | build-entry | 88 |
@@ -146,7 +146,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/types.ts` | @danielsimonjr/sciengjs | src | build-entry | 71 |
 | `src/version.ts` | @danielsimonjr/sciengjs | src | build-entry | 2 |
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
-| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 58 |
+| `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 60 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 183 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
@@ -187,7 +187,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/support/process-list.ts` | (root) | tests | test | 34 |
 | `test/support/rejections.ts` | (root) | tests | test | 51 |
 | `test/support/settings.ts` | (root) | tests | test | 24 |
-| `test/support/stubs/stub-dot.ts` | (root) | tests | test | 22 |
+| `test/support/stubs/stub-dot.ts` | (root) | tests | test | 26 |
 | `test/support/stubs/stub-foreign-error.ts` | (root) | tests | test | 14 |
 | `test/support/svg-compare.ts` | (root) | tests | test | 74 |
 | `test/support/sysml-corpus.ts` | (root) | tests | test | 11 |

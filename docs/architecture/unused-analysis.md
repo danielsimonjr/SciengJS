@@ -10,9 +10,9 @@
 - **Dormant files**: 8
   - **Orphaned (reachable from nothing)**: 8
   - **Test-only (only a test reaches them)**: 0
-- **Potentially unused exports**: 51
+- **Potentially unused exports**: 53
   - **Unreferenced anywhere**: 6
-  - **Referenced in their own module**: 45
+  - **Referenced in their own module**: 47
   - **Not classified**: 0
 
 ## Caveats
@@ -110,6 +110,7 @@ No other file imports these names, but their own module uses them.
 - `src/sysml/backend-png.ts`: `render`
 - `src/sysml/backend-svg.ts`: `render`
 - `src/sysml/parse.ts`: `Specializable`
+- `src/tex/stage.ts`: `LoadedCore`, `loadCore`
 - `src/worker/run.ts`: `WorkerExit`, `WorkerLimits`
 
 ## Exports not classified
