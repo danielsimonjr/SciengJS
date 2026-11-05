@@ -89,7 +89,7 @@ const COMMAND_RULES: ReadonlyArray<readonly [string, string]> = [
 /** Environments whose body the scan blanks. */
 const VERBATIM_BEGIN = /^\\begin\s*\{(verbatim\*?|lstlisting|minted)\}/;
 const VERB = /^\\verb\*?([^A-Za-z\s*])/;
-const PACKAGE_LINE = /\\(?:usepackage|RequirePackage(?:WithOptions)?)\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}/g;
+const PACKAGE_LINE = /\\(?:usepackage|RequirePackage(?:WithOptions)?)\s*(?:\[([^\]]*)\])?\s*\{([^}]*)\}/g;
 const LIBRARY_LINE = /\\usetikzlibrary\s*\{([^}]*)\}/g;
 
 const BUNDLE_OF = new Map<string, BundleName>();
@@ -102,6 +102,19 @@ for (const [bundle, names] of Object.entries(BUNDLE_PACKAGES) as Array<[BundleNa
 interface Finding {
   name: string;
   index: number;
+  /** The first font encoding of a `fontenc` line that is not OT1. */
+  encoding?: string;
+}
+
+/** The only font encoding that the bundles hold. Latin Modern, which T1 and the other encodings need, is in no bundle. */
+const BUNDLED_ENCODING = "OT1";
+
+/** The first option of a `fontenc` line that names an encoding other than OT1, or `undefined`. */
+function foreignEncoding(options: string | undefined): string | undefined {
+  return (options ?? "")
+    .split(",")
+    .map((option) => option.trim())
+    .find((option) => option !== "" && option !== BUNDLED_ENCODING);
 }
 
 /** Replaces the characters of a range with spaces and keeps the line breaks. */
@@ -169,10 +182,11 @@ function findPackages(text: string): { findings: Finding[]; extra: Set<BundleNam
   const findings: Finding[] = [];
   const extra = new Set<BundleName>();
   for (const m of text.matchAll(PACKAGE_LINE)) {
-    for (const part of (m[1] as string).split(",")) {
+    for (const part of (m[2] as string).split(",")) {
       const name = part.trim();
       if (name !== "") {
-        findings.push({ name, index: m.index });
+        const encoding = name === "fontenc" ? foreignEncoding(m[1]) : undefined;
+        findings.push(encoding === undefined ? { name, index: m.index } : { name, index: m.index, encoding });
       }
     }
   }
@@ -210,7 +224,8 @@ function lineOf(text: string, index: number): number {
 
 /**
  * Scans a TeX source and names the bundles that it needs.
- * Throws E_UNSUPPORTED for a package with the GPL as its only licence and for a package that no bundle holds.
+ * Throws E_UNSUPPORTED for a package with the GPL as its only licence, for a package that no bundle holds
+ * and for a `fontenc` option other than OT1.
  */
 export function detectBundles(source: string): Detection {
   const text = sanitize(source);
@@ -218,7 +233,14 @@ export function detectBundles(source: string): Detection {
   findings.sort((a, b) => a.index - b.index);
   const bundles = new Set<BundleName>(["core", ...extra]);
   const packages = new Set<string>();
-  for (const { name, index } of findings) {
+  for (const { name, index, encoding } of findings) {
+    if (encoding !== undefined) {
+      throw new RenderError(
+        "E_UNSUPPORTED",
+        `Font encoding "${encoding}" is not available: only the OT1 encoding is bundled, and the Latin Modern fonts that T1 needs are in no bundle. Use the OT1 encoding or remove the fontenc option.`,
+        { line: lineOf(text, index) },
+      );
+    }
     const replacement = Object.hasOwn(GPL_REPLACEMENTS, name) ? GPL_REPLACEMENTS[name] : undefined;
     const bundle = BUNDLE_OF.get(name);
     if (replacement !== undefined) {
