@@ -252,14 +252,14 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - `interface def Name ( ; | { attribute* } )`. `interface name : Def connect a.p to b.q ;`, with the ends of `connect`.
 - `requirement def Name (:> Base)? ( ; | { (attribute | requirement)* } )`. `requirement name (: Def)? ( ; | { (attribute | requirement)* } )`. A requirement usage is allowed in a package and in a requirement. A nested usage has the address `Owner.name`.
 - `satisfy Req by Path ;`. `Req` names a requirement definition, a top-level requirement usage, or a nested usage as `Owner.name`. `Path` is a `part def` name, or `Def.part` for a part usage. In a `part def`, `Path` can also be a part usage of that definition.
-- `:>` names the definition that a definition specializes. The base must be a definition of the same kind.
+- `:>` names the definition that a definition specializes. The base must be a definition of the same kind. A part def has the attributes, parts, ports and connections of its bases. A part usage has the ports of its type and of the bases of its type.
 - Any other keyword or symbol is outside the subset. `doc`, `import`, `alias`, `action`, `state` and `item` are outside the subset.
 
 #### SysML views and options
 
 - `view`: `bdd` (the default), `ibd` or `requirements`. `root`: the name of a `part def`. `ibd` needs `root`. `root` with another view rejects. `lenient`: true or false.
 - `bdd` draws each `part def`, `port def` and `interface def` as a record node: the kind in ASCII (`part def`), the name, the attributes and the ports. A part usage draws a composition edge from its owner to its type. The edge has a filled diamond at the owner, and the name and the multiplicity at the type. `:>` draws an edge with an empty triangle at the base. Requirements are not in `bdd`.
-- `ibd` draws the root as a cluster. Each part usage of the root is a record node with one field for each port of its type. Each port of the root is a node on the cluster. Each `connect` and `interface` is an edge between the two ports. An interface edge has the label `name : Def`.
+- `ibd` draws the root as a cluster, with the parts, ports and connections of the root and of its bases. Each part usage of the root is a record node with one field for each port of its type. Each port of the root is a node on the cluster. Each `connect` and `interface` is an edge between the two ports. An interface edge has the label `name : Def`.
 - `requirements` draws each requirement definition and each requirement usage as a record node with its attributes. A usage inside a requirement draws a containment edge from the owner. `: Def` draws a dashed edge to the definition. `:>` draws an edge with an empty triangle. Each `satisfy` draws a dashed edge from a node of its path to the requirement, with the label `<<satisfy>>`. Each path that a `satisfy` names is a node of this view: a `part def` as a record, and `Def.part` as `part : Type`.
 
 #### SysML rejections
@@ -269,6 +269,7 @@ Each rejection gives `E_INPUT` with the line:
 - an unknown keyword, an unknown symbol, or a statement in a place that the grammar does not allow;
 - an unclosed block, an unclosed comment or an unclosed string;
 - a name that is defined twice, a type that names no definition of the correct kind, or a base of another kind;
+- a specialization chain that is a cycle;
 - a `connect` end that names no part or no port;
 - a `satisfy` that names an unknown requirement or an unknown path;
 - a `root` that names no `part def`, `ibd` without `root`, or an unknown `view`.
