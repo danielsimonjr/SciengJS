@@ -45,6 +45,10 @@
       "types": "./dist/mesh/index.d.ts",
       "default": "./dist/mesh/index.js"
     },
+    "./sysml": {
+      "types": "./dist/sysml/index.d.ts",
+      "default": "./dist/sysml/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

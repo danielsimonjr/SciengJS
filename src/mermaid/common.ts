@@ -73,6 +73,16 @@ export function xmlSafe(text: string): string {
   );
 }
 
+/** Escapes text for a quoted DOT string: XML-safe, with each backslash and double quote escaped. */
+export function escapeDot(text: string): string {
+  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
+}
+
+/** Escapes text for a field of a DOT record label: XML-safe, with each record symbol escaped. */
+export function escapeRecord(text: string): string {
+  return xmlSafe(text).replace(/\\/g, "\\\\").replace(/[{}|<>"]/g, "\\$&");
+}
+
 /** An input error that names its source line. */
 export function inputError(line: number, message: string): RenderError {
   return new RenderError("E_INPUT", `line ${line}: ${message}`, { line });

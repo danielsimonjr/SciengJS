@@ -119,7 +119,11 @@ const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
 const md = await render({ type: "html", source: "<p>a <b>b</b></p>", format: "md" }, {});
 if (new TextDecoder().decode(md.bytes).trim() !== "a **b**") throw new Error("html to md returned the wrong markdown");
-for (const empty of ["tex", "sysml"]) {
+const sysml = await import("@danielsimonjr/sciengjs/sysml");
+if (typeof sysml.parseSysml !== "function" || typeof sysml.sysmlToDot !== "function") throw new Error("the sysml subpath did not load");
+const sysmlSvg = await render({ type: "sysml", source: "part def A { part b : B; } part def B;", format: "svg" }, {});
+if (!new TextDecoder().decode(sysmlSvg.bytes).includes("<svg")) throw new Error("sysml to svg returned no svg");
+for (const empty of ["tex"]) {
   let refused = false;
   try {
     await import("@danielsimonjr/sciengjs/" + empty);

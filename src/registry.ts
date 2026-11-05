@@ -48,6 +48,9 @@ export const DEFAULT_REGISTRY: Registry = {
   "cad:stl": { backend: "mesh/manifold+stl", moduleUrl: backendUrl("mesh/backend-stl") },
   "cad:html": { backend: "mesh/manifold+viewer", moduleUrl: backendUrl("mesh/backend-html") },
   "cad:png": { backend: "mesh/manifold+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
+  "sysml:svg": { backend: "sysml/graph", moduleUrl: backendUrl("sysml/backend-svg") },
+  "sysml:png": { backend: "sysml/graph+raster/resvg", moduleUrl: backendUrl("sysml/backend-png") },
+  "sysml:pdf": { backend: "sysml/graph+browser/chromium", moduleUrl: backendUrl("sysml/backend-pdf") },
 };
 
 /** Builds the registry key of a pair. */
