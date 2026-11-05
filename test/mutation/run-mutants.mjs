@@ -173,13 +173,17 @@ async function main() {
   for (const m of mutants) {
     const path = resolve(root, m.file);
     const original = readFileSync(path, "utf8");
-    const hits = original.split(m.original).length - 1;
+    // The list writes a line break as LF. A checkout with CRLF line ends gets the same line ends in the mutant text.
+    const eol = original.includes("\r\n") ? "\r\n" : "\n";
+    const from = m.original.replace(/\r?\n/g, eol);
+    const to = m.replacement.replace(/\r?\n/g, eol);
+    const hits = original.split(from).length - 1;
     if (hits !== 1) {
       results.push({ ...m, result: "invalid", detail: `the original text occurs ${hits} times` });
       continue;
     }
-    const index = original.indexOf(m.original);
-    const mutated = original.slice(0, index) + m.replacement + original.slice(index + m.original.length);
+    const index = original.indexOf(from);
+    const mutated = original.slice(0, index) + to + original.slice(index + from.length);
     const line = lineNumber(original, index);
     copyFileSync(path, backupOf(path));
     const mutatedBytes = Buffer.from(mutated, "utf8");

@@ -268,7 +268,7 @@ Purpose: the public entry of the `./mermaid` subpath. It re-exports the function
 
 ## `src/sysml/tokens.ts`
 
-Purpose: splits a SysML source into tokens. It skips the comments and the white space. The longest symbol wins, so `:>`, `::` and `..` are one token each.
+Purpose: splits a SysML source into tokens. The tokenizer skips the comments and the white space. The longest symbol wins, so `:>`, `::` and `..` are one token each.
 
 ```ts
 export type TokenKind = "name" | "number" | "string" | "symbol";
@@ -290,7 +290,7 @@ export function parseSysml(source: string, lenient: boolean): SysmlModel;
 export function baseChain<T extends Specializable>(defs: readonly T[], def: T): T[];
 ```
 
-`baseChain` returns a definition and its bases. The parser and the views use it for the inherited parts, ports and connections.
+`baseChain` returns a definition and its bases. The parser and the views use `baseChain` for the inherited parts, ports and connections.
 
 ## `src/sysml/views.ts`
 

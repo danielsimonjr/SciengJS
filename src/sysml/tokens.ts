@@ -18,7 +18,7 @@ const NAME = /[A-Za-z_][A-Za-z0-9_]*/y;
 const NUMBER = /[0-9]+(?:\.[0-9]+)?/y;
 
 /**
- * Splits a SysML source into tokens. Comments and white space are skipped. An unclosed comment, an unclosed string
+ * Splits a SysML source into tokens. The function skips comments and white space. An unclosed comment, an unclosed string
  * and a character outside the token set reject with E_INPUT and the line.
  */
 export function tokenize(source: string): Token[] {

@@ -6,17 +6,21 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Added
 
-- The input type `sysml` reads a subset of the SysML v2 text notation: `package`, `part def`, `part`, `attribute`, `port def`, `port`, `connect`, `interface def`, `interface`, `requirement def`, `requirement`, `satisfy`, `:>` and comments. The pairs `sysml` to `svg`, `png` and `pdf` render through `render()`.
+- The input type `sysml` reads a subset of the SysML v2 text notation. The subset holds `package`, `part def`, `part`, `attribute`, `port def`, `port`, `connect`, `interface def`, `interface`, `requirement def`, `requirement`, `satisfy`, `:>` and comments. The pairs `sysml` to `svg`, `png` and `pdf` render through `render()`.
 - The option `view` selects the block definition view (`bdd`, the default), the internal block view (`ibd`, with the option `root`) or the requirements view (`requirements`). Each view becomes DOT and goes through the graph stage.
-- A construct outside the subset rejects with `E_INPUT` and the line. With `lenient`, a statement with an unknown keyword is skipped with a warning.
+- A construct outside the subset rejects with `E_INPUT` and the line. With `lenient`, the engine skips a statement with an unknown keyword and gives a warning.
 - The `./sysml` subpath exports the tokenizer, the parser, the option reader, the views and the SVG render.
 - The SysML corpus holds 8 samples with expected SVGs. The review page is `docs/analysis/i11-sysml-corpus.html`.
 
 ### Changed
 
 - The DOT text helpers (`sourceText`, `xmlSafe`, `escapeDot`, `escapeRecord`) move to `src/graph/text.ts`, and `inputError` moves to `src/errors.ts`. The SysML stage does not import from the Mermaid stage. `sourceText` replaces the copy `dotSourceText`.
-- Five test files use the `rejection` helper of `test/support/rejections.ts` in place of their own copies.
+- Four test files use the `rejection` helper of `test/support/rejections.ts` in place of their own copies.
 - COMPONENTS.md describes each module of the math, plot, html and browser stages, with the exported signatures. API.md lists the `./math`, `./plot`, `./html` and `./browser` subpaths.
+
+### Fixed
+
+- The mutation runner gives the text of a mutant the line ends of its file. A mutant with a line break was invalid on a checkout with CRLF line ends.
 
 ## [0.8.0] - 2026-11-04
 
