@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-11-05
+
 ### Added
 
 - The package exports `BINARY_INPUT_TYPES`, the input types whose source is bytes. An adapter reads a file of these types as bytes, not as text.
