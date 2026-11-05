@@ -49,6 +49,10 @@
       "types": "./dist/sysml/index.d.ts",
       "default": "./dist/sysml/index.js"
     },
+    "./tex": {
+      "types": "./dist/tex/index.d.ts",
+      "default": "./dist/tex/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
