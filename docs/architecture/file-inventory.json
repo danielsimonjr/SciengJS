@@ -61,7 +61,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 215
+      "loc": 220
     },
     {
       "file": "src/browser/flags.ts",
@@ -117,7 +117,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 575
+      "loc": 581
     },
     {
       "file": "src/config.ts",
@@ -1132,7 +1132,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 147
+      "loc": 157
     },
     {
       "file": "test/unit/browser-flags.test.ts",
