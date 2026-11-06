@@ -2,7 +2,7 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 283
+  totalFiles: 284
   totalModules: 3
   totalExports: 694
 modules:
@@ -3904,6 +3904,26 @@ modules:
             - removeScratch
           typeOnly: false
       exports: []
+    test/unit/browser-capture.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/browser/cdp.ts
+          imports:
+            - CdpConnection
+            - CdpSocket
+          typeOnly: false
+        - file: src/browser/render.ts
+          imports:
+            - capturePage
+            - HtmlPageRequest
+          typeOnly: false
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+      exports: []
     test/unit/browser-cdp.test.ts:
       externalDependencies:
         - bun:test
@@ -5691,10 +5711,10 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 283
-  totalSourceFiles: 283
+  totalTypeScriptFiles: 284
+  totalSourceFiles: 284
   totalModules: 3
-  totalLinesOfCode: 32632
+  totalLinesOfCode: 32783
   totalExports: 694
   entryRoots: 101
   reachableFiles: 101
@@ -5705,7 +5725,7 @@ statistics:
   typeOnlyCircularDeps: 0
   totalTypeOnlyImports: 73
   noImporterFileCount: 8
-  unusedExportsCount: 52
+  unusedExportsCount: 51
   circularDepsTruncated: false
   runtimeCyclicComponents: 0
   typeOnlyCyclicComponents: 0

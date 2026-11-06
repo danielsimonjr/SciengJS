@@ -4,6 +4,11 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- The browser stage no longer waits until the deadline when it cannot guard the page. The guard of a new page can fail, for example when the browser refuses `Fetch.enable`. Before this fix, the capture then waited until the time limit and gave only "the page did not load in time". Now the capture rejects at once with the refusal of the browser.
+- A browser capture that runs out of time names its step and the time in that step, for example `the capture was at the step "waiting for the load event" for 54.1 s`.
+
 ## [1.0.1] - 2026-11-05
 
 ### Fixed

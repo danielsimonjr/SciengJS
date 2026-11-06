@@ -1,11 +1,11 @@
 {
-  "totalFiles": 283,
+  "totalFiles": 284,
   "byDisposition": {
     "reachable": 0,
     "build-entry": 101,
     "test-only": 0,
     "orphan": 8,
-    "test": 139,
+    "test": 140,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -14,10 +14,10 @@
   "byArea": {
     "tools": 35,
     "src": 109,
-    "tests": 139
+    "tests": 140
   },
   "byPackage": {
-    "(root)": 181,
+    "(root)": 182,
     "@danielsimonjr/sciengjs": 102
   },
   "files": [
@@ -117,7 +117,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 537
+      "loc": 568
     },
     {
       "file": "src/config.ts",
@@ -1119,6 +1119,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 131
+    },
+    {
+      "file": "test/unit/browser-capture.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 120
     },
     {
       "file": "test/unit/browser-cdp.test.ts",

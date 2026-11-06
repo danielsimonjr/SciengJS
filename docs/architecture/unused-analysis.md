@@ -10,9 +10,9 @@
 - **Dormant files**: 8
   - **Orphaned (reachable from nothing)**: 8
   - **Test-only (only a test reaches them)**: 0
-- **Potentially unused exports**: 52
+- **Potentially unused exports**: 51
   - **Unreferenced anywhere**: 6
-  - **Referenced in their own module**: 46
+  - **Referenced in their own module**: 45
   - **Not classified**: 0
 
 ## Caveats
@@ -81,7 +81,7 @@ No other file imports these names, but their own module uses them.
 
 - `src/browser/input.ts`: `PngOptions`
 - `src/browser/page.ts`: `scriptData`
-- `src/browser/render.ts`: `PAGE_URL`, `capturePage`
+- `src/browser/render.ts`: `PAGE_URL`
 - `src/errors.ts`: `RenderErrorPosition`
 - `src/graph/image.ts`: `ImageRemoval`, `StripResult`
 - `src/html/backend-md.ts`: `render`
