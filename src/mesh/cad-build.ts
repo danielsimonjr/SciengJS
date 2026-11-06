@@ -262,7 +262,7 @@ const SECTION_AXES = [
   { axis: "Z", index: 2, angles: [0, 0, 0] },
 ] as const;
 
-/** The segments of a full circle in the round joins of the wall check and the gap check. The joins shape only the corners of a section change. */
+/** The segments of a full circle in the round joins of the wall check and the gap check. The joins change only the corners of a section. */
 const OFFSET_SEGMENTS = 32;
 
 /** The number of sections of the wall check on each axis. */
@@ -354,8 +354,8 @@ function gapArea(build: Build, section: Section, minGap: number): number {
 
 /**
  * The area of the pieces of a difference that are narrow. The difference also holds the fill of each right-angle
- * corner. A piece is narrow when it is wider than a quarter of min, or when its bounding box is longer than 0.75 min on
- * one axis. A piece with an inscribed disc of radius min/8 is wide. The fill of a right-angle corner is at most
+ * corner. A piece is narrow when it is wider than a quarter of min. A piece is also narrow when its bounding box is
+ * longer than 0.75 min on one axis. A piece with an inscribed disc of radius min/8 is wide. The fill of a right-angle corner is at most
  * min/sqrt(2) long, so the length test keeps a hairline slot or fin and drops the corners. The subtraction leaves
  * slivers of zero width with a reversed winding. A shrink grows such a sliver, so the simplify step removes the
  * slivers before the tests.
@@ -373,7 +373,7 @@ function countedArea(build: Build, removed: Section, min: number): number {
 
 /**
  * The longest bounding box side of the parts of a piece. An opening by min/200 first removes the bridges of zero
- * width and the slivers of the offsets, so that two corners on one edge are two parts. A slot of min/50 stays.
+ * width and the slivers of the offsets. Then two corners on one edge are two parts. A slot of min/50 stays.
  */
 function longestPart(build: Build, piece: Section, min: number): number {
   const e = min / 200;
