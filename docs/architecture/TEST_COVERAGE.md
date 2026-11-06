@@ -9,7 +9,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 116 |
-| Total Test Files | 106 |
+| Total Test Files | 109 |
 | Source Files with Tests | 83 |
 | Source Files without Tests | 33 |
 | Coverage (raw, direct-import) | **71.6%** |
@@ -191,6 +191,7 @@ The following 33 source files are not directly imported by any test file:
 | Test File | Imports from Source |
 |-----------|---------------------|
 | `integration/browser-render.test.ts` | 6 files |
+| `integration/gallery.test.ts` | 0 files |
 | `integration/mermaid-browser-capture.test.ts` | 8 files |
 | `integration/mermaid-browser.test.ts` | 4 files |
 | `integration/mesh-viewer.test.ts` | 20 files |
@@ -220,6 +221,7 @@ The following 33 source files are not directly imported by any test file:
 | `unit/config-assets.test.ts` | 3 files |
 | `unit/config.test.ts` | 1 files |
 | `unit/errors.test.ts` | 1 files |
+| `unit/gallery-page.test.ts` | 0 files |
 | `unit/glb-writer.test.ts` | 2 files |
 | `unit/graph-corpus.test.ts` | 1 files |
 | `unit/graph-dot.test.ts` | 2 files |
@@ -274,6 +276,7 @@ The following 33 source files are not directly imported by any test file:
 | `unit/raster.test.ts` | 1 files |
 | `unit/readme-mermaid.test.ts` | 0 files |
 | `unit/render.test.ts` | 4 files |
+| `unit/review-page.test.ts` | 0 files |
 | `unit/svg-compare.test.ts` | 0 files |
 | `unit/sysml-backends.test.ts` | 0 files |
 | `unit/sysml-corpus.test.ts` | 1 files |

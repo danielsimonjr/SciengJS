@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 116,
-    "totalTestFiles": 106,
+    "totalTestFiles": 109,
     "testedCount": 83,
     "untestedCount": 33,
     "coveragePercent": "71.6",
@@ -592,6 +592,7 @@
       "src/browser/render.ts",
       "src/browser/profile.ts"
     ],
+    "test/integration/gallery.test.ts": [],
     "test/integration/mermaid-browser-capture.test.ts": [
       "src/index.ts",
       "src/errors.ts",
@@ -719,6 +720,7 @@
     "test/unit/errors.test.ts": [
       "src/errors.ts"
     ],
+    "test/unit/gallery-page.test.ts": [],
     "test/unit/glb-writer.test.ts": [
       "src/mesh/glb.ts",
       "src/mesh/read.ts"
@@ -949,6 +951,7 @@
       "src/config.ts",
       "src/types.ts"
     ],
+    "test/unit/review-page.test.ts": [],
     "test/unit/svg-compare.test.ts": [],
     "test/unit/sysml-backends.test.ts": [],
     "test/unit/sysml-corpus.test.ts": [

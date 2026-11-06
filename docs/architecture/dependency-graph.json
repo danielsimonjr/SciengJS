@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 297,
+    "totalFiles": 303,
     "totalModules": 3,
-    "totalExports": 747
+    "totalExports": 759
   },
   "modules": {
     "tools": {
@@ -4913,6 +4913,50 @@
       }
     },
     "tests": {
+      "test/corpus/gallery.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "INPUT_TYPES",
+              "InputType"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/version.ts",
+            "imports": [
+              "ENGINE_VERSION"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/gallery.ts",
+            "imports": [
+              "galleryPage",
+              "listFixtures",
+              "renderFixture",
+              "GalleryEnv",
+              "GalleryResult"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/tikz-corpus.ts",
+            "imports": [
+              "BUNDLE_DIR_VAR"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/corpus/regenerate-dot.ts": {
         "externalDependencies": [
           "@viz-js/viz"
@@ -4937,6 +4981,14 @@
             "file": "src/mermaid/render.ts",
             "imports": [
               "renderMermaidSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/review-page.ts",
+            "imports": [
+              "escapeHtml",
+              "reviewPage"
             ],
             "typeOnly": false
           }
@@ -4965,6 +5017,14 @@
               "SysmlApproval"
             ],
             "typeOnly": false
+          },
+          {
+            "file": "test/support/review-page.ts",
+            "imports": [
+              "escapeHtml",
+              "reviewPage"
+            ],
+            "typeOnly": false
           }
         ],
         "exports": []
@@ -4985,6 +5045,14 @@
               "svgCounts",
               "texConfig",
               "TikzApproval"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/review-page.ts",
+            "imports": [
+              "escapeHtml",
+              "reviewPage"
             ],
             "typeOnly": false
           }
@@ -5021,6 +5089,31 @@
             "file": "src/browser/profile.ts",
             "imports": [
               "PROFILE_PREFIX"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/integration/gallery.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:child_process",
+          "node:fs",
+          "node:os",
+          "node:path",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/gallery.ts",
+            "imports": [
+              "galleryPage",
+              "listFixtures",
+              "renderFixture",
+              "GalleryResult"
             ],
             "typeOnly": false
           }
@@ -5609,6 +5702,76 @@
           "assertNoBunGlobal"
         ]
       },
+      "test/support/gallery.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [
+          "node:fs",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "render",
+              "SciengConfig"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "BINARY_INPUT_TYPES",
+              "INPUT_TYPES",
+              "InputType",
+              "OutputFormat",
+              "RenderRequest"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "isRenderError",
+              "RenderErrorCode"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/pairs.ts",
+            "imports": [
+              "findPair",
+              "PAIRS"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/review-page.ts",
+            "imports": [
+              "escapeHtml",
+              "reviewPage"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/tikz-corpus.ts",
+            "imports": [
+              "texConfig"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "MAX_EMBED_BYTES",
+          "SKIP_REASONS",
+          "GalleryEntry",
+          "GalleryResult",
+          "GalleryEnv",
+          "GalleryMeta",
+          "listFixtures",
+          "renderFixture",
+          "galleryPage"
+        ]
+      },
       "test/support/glb-reader.ts": {
         "externalDependencies": [],
         "nodeDependencies": [],
@@ -5716,6 +5879,16 @@
           "rejectionOf",
           "returned",
           "resolved"
+        ]
+      },
+      "test/support/review-page.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "ReviewPageOptions",
+          "escapeHtml",
+          "reviewPage"
         ]
       },
       "test/support/settings.ts": {
@@ -6495,6 +6668,31 @@
               "isRenderError",
               "RenderError",
               "RENDER_ERROR_CODES"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/unit/gallery-page.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:os",
+          "node:path"
+        ],
+        "internalDependencies": [
+          {
+            "file": "test/support/gallery.ts",
+            "imports": [
+              "galleryPage",
+              "listFixtures",
+              "MAX_EMBED_BYTES",
+              "SKIP_REASONS",
+              "GalleryEntry",
+              "GalleryResult"
             ],
             "typeOnly": false
           }
@@ -8531,6 +8729,23 @@
         ],
         "exports": []
       },
+      "test/unit/review-page.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "test/support/review-page.ts",
+            "imports": [
+              "escapeHtml",
+              "reviewPage"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/svg-compare.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -9198,11 +9413,11 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 297,
-    "totalSourceFiles": 297,
+    "totalTypeScriptFiles": 303,
+    "totalSourceFiles": 303,
     "totalModules": 3,
-    "totalLinesOfCode": 35289,
-    "totalExports": 747,
+    "totalLinesOfCode": 35886,
+    "totalExports": 759,
     "entryRoots": 109,
     "reachableFiles": 109,
     "dormantFiles": 8,
@@ -9219,11 +9434,11 @@
     "runtimeFilesInCycles": 0,
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 7,
-    "totalInterfaces": 150,
-    "totalFunctions": 298,
+    "totalInterfaces": 154,
+    "totalFunctions": 303,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 76,
+    "totalConstants": 78,
     "totalReExports": 185
   },
   "reachability": {
