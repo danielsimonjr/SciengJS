@@ -10,6 +10,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 - The drawing has three views, three dimensions, a title block and the option `title`.
 - The views come from one solid build. The browser stage prints the drawing, so the render needs a browser.
 
+### Fixed
+
+- A PDF made from one SVG has one page. The `dot`, `mermaid`, `sysml` and `math` PDFs had a second, blank page. The page drew the SVG inline, so the line under it made the content taller than the page. The page now draws the SVG as a block.
+
 ## [1.0.7] - 2026-11-06
 
 ### Added
