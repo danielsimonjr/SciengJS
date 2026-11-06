@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "totalSourceFiles": 114,
-    "totalTestFiles": 104,
-    "testedCount": 81,
+    "totalSourceFiles": 116,
+    "totalTestFiles": 106,
+    "testedCount": 83,
     "untestedCount": 33,
-    "coveragePercent": "71.1",
+    "coveragePercent": "71.6",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 114,
-      "testedActive": 81,
+      "activeFiles": 116,
+      "testedActive": 83,
       "activeUntested": 33,
       "excludedTotal": 0,
-      "percent": "71.1",
+      "percent": "71.6",
       "breakdown": {
         "active_untested": 33
       }
@@ -94,11 +94,13 @@
     "src/mesh/backend-dxf.ts",
     "src/mesh/backend-glb.ts",
     "src/mesh/backend-html.ts",
+    "src/mesh/backend-pdf.ts",
     "src/mesh/backend-stl.ts",
     "src/mesh/cad-build.ts",
     "src/mesh/cad-builder.ts",
     "src/mesh/cad-document.ts",
     "src/mesh/dfm.ts",
+    "src/mesh/drawing.ts",
     "src/mesh/dxf.ts",
     "src/mesh/glb.ts",
     "src/mesh/index.ts",
@@ -186,6 +188,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/pdf-pages.test.ts",
       "test/integration/tikz-render.test.ts",
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
@@ -216,6 +219,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/pdf-pages.test.ts",
       "test/integration/tikz-render.test.ts",
       "test/unit/browser-capture.test.ts",
       "test/unit/cad-document.test.ts",
@@ -281,6 +285,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/pdf-pages.test.ts",
       "test/integration/tikz-render.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
@@ -358,6 +363,9 @@
     "src/mesh/backend-html.ts": [
       "test/unit/cad-build.test.ts"
     ],
+    "src/mesh/backend-pdf.ts": [
+      "test/unit/mesh-drawing.test.ts"
+    ],
     "src/mesh/backend-png.ts": [],
     "src/mesh/backend-stl.ts": [
       "test/unit/cad-build.test.ts",
@@ -365,7 +373,8 @@
     ],
     "src/mesh/cad-build.ts": [
       "test/integration/mesh-viewer.test.ts",
-      "test/unit/cad-build.test.ts"
+      "test/unit/cad-build.test.ts",
+      "test/unit/mesh-drawing.test.ts"
     ],
     "src/mesh/cad-builder.ts": [
       "test/integration/mesh-viewer.test.ts",
@@ -374,10 +383,15 @@
     "src/mesh/cad-document.ts": [
       "test/integration/mesh-viewer.test.ts",
       "test/unit/cad-build.test.ts",
-      "test/unit/cad-document.test.ts"
+      "test/unit/cad-document.test.ts",
+      "test/unit/mesh-drawing.test.ts"
     ],
     "src/mesh/dfm.ts": [
       "test/integration/mesh-viewer.test.ts"
+    ],
+    "src/mesh/drawing.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/mesh-drawing.test.ts"
     ],
     "src/mesh/dxf.ts": [
       "test/integration/mesh-viewer.test.ts",
@@ -416,6 +430,7 @@
       "test/unit/browser-pdf-pairs.test.ts",
       "test/unit/mesh-3mf.test.ts",
       "test/unit/mesh-dfm.test.ts",
+      "test/unit/mesh-drawing.test.ts",
       "test/unit/mesh-dxf.test.ts",
       "test/unit/tex-wiring.test.ts"
     ],
@@ -452,6 +467,7 @@
       "test/unit/graph-registry.test.ts",
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
+      "test/unit/mesh-drawing.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-large.test.ts",
       "test/unit/mesh-viewer.test.ts",
@@ -526,6 +542,7 @@
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/integration/pdf-pages.test.ts",
       "test/integration/tikz-render.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
@@ -547,6 +564,7 @@
       "test/unit/math-backends.test.ts",
       "test/unit/mesh-3mf.test.ts",
       "test/unit/mesh-dfm.test.ts",
+      "test/unit/mesh-drawing.test.ts",
       "test/unit/mesh-dxf.test.ts",
       "test/unit/mesh-limit.test.ts"
     ],
@@ -605,10 +623,17 @@
       "src/mesh/dfm.ts",
       "src/mesh/cad-document.ts",
       "src/mesh/cad-build.ts",
+      "src/mesh/drawing.ts",
       "src/mesh/cad-builder.ts",
       "src/mesh/viewer.ts"
     ],
     "test/integration/page-checker.test.ts": [],
+    "test/integration/pdf-pages.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
     "test/integration/tex-render.test.ts": [
       "src/tex/render.ts"
     ],
@@ -830,6 +855,15 @@
     "test/unit/mesh-dfm.test.ts": [
       "src/mesh/backend-dfm.ts",
       "src/pairs.ts",
+      "src/worker/protocol.ts"
+    ],
+    "test/unit/mesh-drawing.test.ts": [
+      "src/mesh/backend-pdf.ts",
+      "src/mesh/cad-build.ts",
+      "src/mesh/cad-document.ts",
+      "src/mesh/drawing.ts",
+      "src/pairs.ts",
+      "src/registry.ts",
       "src/worker/protocol.ts"
     ],
     "test/unit/mesh-dxf.test.ts": [

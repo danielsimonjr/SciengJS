@@ -3,7 +3,7 @@
   "classificationNote": "This report groups names by OWN definition, not by call graph, then classifies each flagged name (see DupEntryTag): TRUE_DUPLICATE (the actionable merge targets), DISPATCH_VARIANT (>=2 mathTyped(...) registrations of the same public name \u2014 distinct dispatch surfaces, not copy-paste bodies), ALIAS_DELEGATION (a const-alias forward to an imported symbol, not an independent body \u2014 excluded once fewer than 2 real bodies remain), and ALLOWLISTED (matches duplicate-allowlist.json: for example hot-path is* guards, mirrors in another language, per-package VERSION strings). NOT detected: same-file typed-dispatch overload polymorphism for different argument shapes within one registration \u2014 a human still triages TRUE_DUPLICATE entries using the defining files + public flags before merging anything.",
   "summary": {
     "duplicateCount": 1,
-    "totalSymbols": 384,
+    "totalSymbols": 397,
     "runtimeDuplicates": 1,
     "typeDuplicates": 0,
     "runtimeByTag": {
@@ -38,6 +38,7 @@
       "src/mesh/backend-dfm.ts",
       "src/mesh/backend-dxf.ts",
       "src/mesh/backend-glb.ts",
+      "src/mesh/backend-pdf.ts",
       "src/mesh/backend-stl.ts",
       "src/plot/backend-html.ts",
       "src/plot/backend-png.ts",
@@ -159,6 +160,12 @@
         },
         {
           "file": "src/mesh/backend-html.ts",
+          "package": "unknown",
+          "public": true,
+          "tag": "PLAIN"
+        },
+        {
+          "file": "src/mesh/backend-pdf.ts",
           "package": "unknown",
           "public": true,
           "tag": "PLAIN"

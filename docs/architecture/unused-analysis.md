@@ -10,9 +10,9 @@
 - **Dormant files**: 8
   - **Orphaned (reachable from nothing)**: 8
   - **Test-only (only a test reaches them)**: 0
-- **Potentially unused exports**: 50
+- **Potentially unused exports**: 52
   - **Unreferenced anywhere**: 6
-  - **Referenced in their own module**: 44
+  - **Referenced in their own module**: 46
   - **Not classified**: 0
 
 ## Caveats
@@ -96,6 +96,7 @@ No other file imports these names, but their own module uses them.
 - `src/mermaid/common.ts`: `Context`, `DiagramKind`
 - `src/mesh/cad-build.ts`: `loadManifold`
 - `src/mesh/cad-document.ts`: `CadNode`
+- `src/mesh/drawing.ts`: `DrawingLayout`, `SCALES`
 - `src/mesh/index.ts`: `cad`
 - `src/mesh/stl.ts`: `stlFacetCount`
 - `src/mesh/viewer.ts`: `ViewerOptions`
