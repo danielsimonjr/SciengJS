@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-11-05
+
 ### Fixed
 
 - When a browser capture times out after a guard fault, the timeout message names the fault. Before this fix, a fault that came after the capture had the page session went only to the fault list. An example is a refused `Runtime.runIfWaitingForDebugger`. The timeout message did not give the cause.
