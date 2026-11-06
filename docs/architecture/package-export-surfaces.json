@@ -182,6 +182,7 @@
       "difference",
       "drawCad",
       "drawCadViews",
+      "drawMeshes",
       "drawingByteLength",
       "dxfByteLength",
       "escapeXml",

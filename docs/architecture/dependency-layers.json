@@ -2548,7 +2548,7 @@
         ]
       },
       "src/mesh/backend-dxf.ts": {
-        "description": "Renders a CAD document to a DXF drawing in the X-Y plane. The worker calls this function. With no option, the",
+        "description": "Renders a CAD document, or a STEP, IGES or BREP file, to a DXF drawing in the X-Y plane. The worker calls this",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -2569,13 +2569,16 @@
           {
             "file": "./backend-glb.ts",
             "imports": [
-              "readCadRequest"
+              "GlbDeps",
+              "readCadRequest",
+              "readMeshes"
             ]
           },
           {
             "file": "./cad-build.ts",
             "imports": [
-              "drawCad"
+              "drawCad",
+              "drawMeshes"
             ]
           },
           {
@@ -2891,6 +2894,7 @@
           "loadManifold",
           "buildCad",
           "drawCad",
+          "drawMeshes",
           "drawCadViews",
           "WALL_SECTIONS",
           "measureCad"
@@ -2906,6 +2910,7 @@
           "loadManifold",
           "buildCad",
           "drawCad",
+          "drawMeshes",
           "drawCadViews",
           "measureCad"
         ],
@@ -3175,7 +3180,7 @@
         ]
       },
       "src/mesh/index.ts": {
-        "description": "Package entry point for mesh (re-exports 34 symbols)",
+        "description": "Package entry point for mesh (re-exports 35 symbols)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -3274,6 +3279,7 @@
               "buildCad",
               "drawCad",
               "drawCadViews",
+              "drawMeshes",
               "measureCad",
               "WALL_SECTIONS"
             ],
@@ -3339,6 +3345,7 @@
           "buildCad",
           "drawCad",
           "drawCadViews",
+          "drawMeshes",
           "measureCad",
           "WALL_SECTIONS",
           "CadBuildResult",
@@ -3375,6 +3382,7 @@
           "buildCad",
           "drawCad",
           "drawCadViews",
+          "drawMeshes",
           "measureCad",
           "WALL_SECTIONS",
           "CadBuildResult",
