@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- The two guard-fault tests of `test/unit/browser-capture.test.ts` assert that the message is not the timeout message. The old check `err.code !== "E_TIMEOUT"` also passed for an error with no code.
+
 ### Added
 
 - CI runs the two documentation gates of repo-tools in the job "Architecture docs": the architecture documents must match the source graph, and each exported symbol must have a doc comment. A stale count in `docs/architecture/OVERVIEW.md` now fails CI.
