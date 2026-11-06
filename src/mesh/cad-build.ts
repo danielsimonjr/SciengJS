@@ -313,9 +313,9 @@ export function measureCad(document: CadDocument, maxFacets: number, minWall: nu
       for (let i = 0; i < WALL_SECTIONS; i++) {
         const at = lo + (i + 0.5) * step;
         const section = build.keep(turned.slice(at));
-        const thinAt = thinPieces(build, section, minWall);
+        const thinAt = thinPieces(build, section, minWall).pieces;
         if (thinAt.length > 0 && persists(build, turned, at, thinAt, minWall, thinPieces)) thin.push({ axis, at, area: areaOf(thinAt) });
-        const gapAt = gapPieces(build, section, minGap);
+        const gapAt = gapPieces(build, section, minGap).pieces;
         if (gapAt.length > 0 && persists(build, turned, at, gapAt, minGap, gapPieces)) narrow.push({ axis, at, area: areaOf(gapAt) });
       }
     }
@@ -336,22 +336,34 @@ export function measureCad(document: CadDocument, maxFacets: number, minWall: nu
  * The thin pieces of a section: the regions that an opening by minWall removes, and that count. The opening shrinks
  * the section by a little less than half of minWall, so that a wall equal to minWall stays.
  */
-function thinPieces(build: Build, section: Section, minWall: number): Section[] {
+function thinPieces(build: Build, section: Section, minWall: number): Found {
   const segments = OFFSET_SEGMENTS;
   const half = (minWall / 2) * (1 - 1e-6);
   const opened = build.keep(build.keep(section.offset(-half, "Round", 2, segments)).offset(half, "Round", 2, segments));
-  return countedPieces(build, section, build.keep(section.subtract(opened)), minWall);
+  const wideIn = (shape: Section): number => build.keep(shape.intersect(opened)).area();
+  return { pieces: countedPieces(build, section, build.keep(section.subtract(opened)), minWall, wideIn), wideIn };
 }
 
 /**
  * The narrow pieces of a section: the regions that a closing by minGap fills, and that count. The closing grows the
  * section by a little less than half of minGap, so that a slot equal to minGap stays open.
  */
-function gapPieces(build: Build, section: Section, minGap: number): Section[] {
+function gapPieces(build: Build, section: Section, minGap: number): Found {
   const segments = OFFSET_SEGMENTS;
   const half = (minGap / 2) * (1 - 1e-6);
   const closed = build.keep(build.keep(section.offset(half, "Round", 2, segments)).offset(-half, "Round", 2, segments));
-  return countedPieces(build, section, build.keep(closed.subtract(section)), minGap);
+  const wideIn = (shape: Section): number => build.keep(shape.subtract(closed)).area();
+  return { pieces: countedPieces(build, section, build.keep(closed.subtract(section)), minGap, wideIn), wideIn };
+}
+
+/**
+ * The pieces that a check finds in a section, and a test against the section. The test gives the area of a piece
+ * that the section holds as a wide region. The wide region is wide solid for the wall check and wide space for the
+ * gap check.
+ */
+interface Found {
+  pieces: Section[];
+  wideIn(piece: Section): number;
 }
 
 /** A vertex of a section. A convex vertex turns left, seen along the contour. */
@@ -362,14 +374,15 @@ interface SectionVertex {
 }
 
 /**
- * The pieces of a removed region that count. The removed region is split into parts by an opening of min/200. A part
- * that holds one vertex of the section is a corner of the opening, at any angle. A part that holds two or more convex
- * vertices and is not longer than 2 min on each axis is the region near a vertex of the solid. A piece with no other
- * part does not count. A piece counts when a part is longer than 0.75 min, or when the piece holds a disc of radius
- * min/8. The slivers of zero width with a reversed winding are removed first: a shrink grows such a sliver, so the
- * simplify step removes the slivers before the tests.
+ * The pieces of a removed region that count. An opening of min/200 splits the removed region into parts. A part that
+ * holds one vertex of the section is a corner of the opening, at any angle. A part can hold two or more convex
+ * vertices and be not longer than 2 min on each axis. Such a part is the region near a vertex of the solid when it
+ * also touches the wide region of the section. A separate body or a pin cut on its own does not touch the wide
+ * region. A piece with no other part does not count. A piece counts when a part is longer than 0.75 min, or when the
+ * piece holds a disc of radius min/8. First, the simplify step removes the slivers of zero width with a reversed
+ * winding. A shrink grows such a sliver, so the slivers must go before the tests.
  */
-function countedPieces(build: Build, section: Section, removed: Section, min: number): Section[] {
+function countedPieces(build: Build, section: Section, removed: Section, min: number, wideIn: (shape: Section) => number): Section[] {
   const segments = OFFSET_SEGMENTS;
   const vertices = sectionVertices(build, section, min);
   const cleaned = simplified(build, removed, min);
@@ -382,7 +395,7 @@ function countedPieces(build: Build, section: Section, removed: Section, min: nu
       const held = heldVertices(build, part, vertices, min);
       if (held.length === 1) continue;
       const side = longestSide(part);
-      if (held.length >= 2 && held.every((v) => v.convex) && side <= 2 * min) continue;
+      if (held.length >= 2 && held.every((v) => v.convex) && side <= 2 * min && bordersWide(build, part, min, wideIn)) continue;
       wall = true;
       longest = Math.max(longest, side);
     }
@@ -390,6 +403,11 @@ function countedPieces(build: Build, section: Section, removed: Section, min: nu
     if (longest > 0.75 * min || build.keep(piece.offset(-min / 8, "Round", 2, segments)).area() > 0) pieces.push(piece);
   }
   return pieces;
+}
+
+/** True when a part touches the wide region of its section. A separate body or a pin cut on its own does not touch the wide region. */
+function bordersWide(build: Build, part: Section, min: number, wideIn: (shape: Section) => number): boolean {
+  return wideIn(build.keep(part.offset(min / 100, "Round", 2, OFFSET_SEGMENTS))) > 0;
 }
 
 /** A section or a region with the points of min/1000 removed. */
@@ -413,9 +431,15 @@ function sectionVertices(build: Build, section: Section, min: number): SectionVe
   return out;
 }
 
-/** The vertices of the section that a small square centred on the vertex meets in the part. The square has side min/4. */
+/**
+ * The vertices of the section that a small square centred on the vertex meets in the part. The square has side min/4.
+ * A vertex out of the bounding box of the part, grown by min/8, cannot meet the part, so the test skips the vertex.
+ */
 function heldVertices(build: Build, part: Section, vertices: SectionVertex[], min: number): SectionVertex[] {
+  const box = boundsOf(part);
+  const reach = min / 8;
   return vertices.filter((v) => {
+    if (v.x < box.minX - reach || v.x > box.maxX + reach || v.y < box.minY - reach || v.y > box.maxY + reach) return false;
     const square = build.keep(build.m.CrossSection.square([min / 4, min / 4], true));
     const tip = build.keep(square.translate([v.x, v.y]));
     return build.keep(tip.intersect(part)).area() > 0;
@@ -429,9 +453,8 @@ function openedParts(build: Build, piece: Section, min: number): Section[] {
   return opened.decompose().map((part) => build.keep(part));
 }
 
-/** The longest bounding box side of a part. */
-function longestSide(part: Section): number {
-  let longest = 0;
+/** The bounding box of a part. */
+function boundsOf(part: Section): { minX: number; minY: number; maxX: number; maxY: number } {
   let minX = Infinity;
   let minY = Infinity;
   let maxX = -Infinity;
@@ -444,6 +467,13 @@ function longestSide(part: Section): number {
       maxY = Math.max(maxY, y!);
     }
   }
+  return { minX, minY, maxX, maxY };
+}
+
+/** The longest bounding box side of a part. */
+function longestSide(part: Section): number {
+  const { minX, minY, maxX, maxY } = boundsOf(part);
+  let longest = 0;
   longest = Math.max(longest, maxX - minX, maxY - minY);
   return longest;
 }
@@ -454,9 +484,10 @@ function areaOf(pieces: Section[]): number {
 }
 
 /**
- * True when a piece of the section has a piece of the section at minWall/2 before or after it on the same axis,
- * within minWall/2 of it. A section that is empty does not count. A wall persists along the axis. An oblique cut of
- * an edge does not persist.
+ * True when a piece of the section is a real thin region, not the slant cut of an edge or a vertex. The test looks at
+ * the sections at min/2 before and after. A piece is a slant cut when one of these sections holds more than half of
+ * the piece as a wide region. Also, neither section has a found piece within min/2 of the piece. A wall or a pin that
+ * ends before the next section does not have a wide region there, so the wall or the pin counts.
  */
 function persists(
   build: Build,
@@ -464,19 +495,20 @@ function persists(
   at: number,
   pieces: Section[],
   min: number,
-  find: (build: Build, section: Section, min: number) => Section[],
+  find: (build: Build, section: Section, min: number) => Found,
 ): boolean {
+  const near = pieces.map((piece) => build.keep(piece.offset(min / 2, "Round", 2, OFFSET_SEGMENTS)));
+  const covered = pieces.map(() => false);
   for (const other of [at - min / 2, at + min / 2]) {
     const section = build.keep(turned.slice(other));
     if (section.area() === 0) continue;
     const found = find(build, section, min);
-    if (found.length === 0) continue;
-    for (const piece of pieces) {
-      const near = build.keep(piece.offset(min / 2, "Round", 2, OFFSET_SEGMENTS));
-      if (found.some((f) => build.keep(f.intersect(near)).area() > 0)) return true;
+    for (let i = 0; i < pieces.length; i++) {
+      if (found.pieces.some((f) => build.keep(f.intersect(near[i]!)).area() > 0)) return true;
+      if (found.wideIn(pieces[i]!) > pieces[i]!.area() / 2) covered[i] = true;
     }
   }
-  return false;
+  return covered.some((c) => !c);
 }
 
 /**
