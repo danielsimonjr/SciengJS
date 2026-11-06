@@ -5270,6 +5270,10 @@ modules:
           imports:
             - render
           typeOnly: false
+        - file: src/mesh/cad-build.ts
+          imports:
+            - drawMeshes
+          typeOnly: false
         - file: src/mesh/dxf.ts
           imports:
             - dxfByteLength
@@ -6161,7 +6165,7 @@ statistics:
   totalTypeScriptFiles: 297
   totalSourceFiles: 297
   totalModules: 3
-  totalLinesOfCode: 35231
+  totalLinesOfCode: 35289
   totalExports: 747
   entryRoots: 109
   reachableFiles: 109

@@ -100,7 +100,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mesh/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 51 |
 | `src/mesh/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 37 |
 | `src/mesh/backend-stl.ts` | @danielsimonjr/sciengjs | src | build-entry | 20 |
-| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 671 |
+| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 674 |
 | `src/mesh/cad-builder.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/mesh/cad-document.ts` | @danielsimonjr/sciengjs | src | build-entry | 462 |
 | `src/mesh/dfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 90 |
@@ -258,7 +258,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mesh-3mf.test.ts` | (root) | tests | test | 138 |
 | `test/unit/mesh-dfm.test.ts` | (root) | tests | test | 416 |
 | `test/unit/mesh-drawing.test.ts` | (root) | tests | test | 333 |
-| `test/unit/mesh-dxf.test.ts` | (root) | tests | test | 277 |
+| `test/unit/mesh-dxf.test.ts` | (root) | tests | test | 332 |
 | `test/unit/mesh-glb.test.ts` | (root) | tests | test | 111 |
 | `test/unit/mesh-large.test.ts` | (root) | tests | test | 53 |
 | `test/unit/mesh-limit.test.ts` | (root) | tests | test | 50 |

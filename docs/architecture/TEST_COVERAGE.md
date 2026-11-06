@@ -143,7 +143,7 @@ The following 33 source files are not directly imported by any test file:
 | `mesh/backend-html.ts` | `cad-build.test.ts` |
 | `mesh/backend-pdf.ts` | `mesh-drawing.test.ts` |
 | `mesh/backend-stl.ts` | `cad-build.test.ts`, `mesh-3mf.test.ts` |
-| `mesh/cad-build.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts`, `mesh-drawing.test.ts` |
+| `mesh/cad-build.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts`, `mesh-drawing.test.ts`, `mesh-dxf.test.ts` |
 | `mesh/cad-builder.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts` |
 | `mesh/cad-document.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts`, `cad-document.test.ts`, `mesh-drawing.test.ts` |
 | `mesh/dfm.ts` | `mesh-viewer.test.ts` |
@@ -253,7 +253,7 @@ The following 33 source files are not directly imported by any test file:
 | `unit/mesh-3mf.test.ts` | 7 files |
 | `unit/mesh-dfm.test.ts` | 3 files |
 | `unit/mesh-drawing.test.ts` | 7 files |
-| `unit/mesh-dxf.test.ts` | 7 files |
+| `unit/mesh-dxf.test.ts` | 8 files |
 | `unit/mesh-glb.test.ts` | 3 files |
 | `unit/mesh-large.test.ts` | 3 files |
 | `unit/mesh-limit.test.ts` | 3 files |
