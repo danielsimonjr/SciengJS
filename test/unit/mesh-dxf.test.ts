@@ -304,6 +304,8 @@ describe("step, iges and brep to dxf", () => {
     expect(drawing).toBeInstanceOf(Promise);
     await expect(drawing).rejects.toMatchObject({ code: "E_LIMIT", message: "the model has 8 facets; the limit is 7" });
     expect((await drawMeshes(meshes, 8)).contours.length).toBe(2);
+    // The sum is checked before any solid is built: the sliver would give E_INPUT at the build.
+    await expect(drawMeshes([tetra("a", 0), sliver], 4)).rejects.toMatchObject({ code: "E_LIMIT", message: "the model has 5 facets; the limit is 4" });
   });
 
   test("one coloured part and one part with no colour give the colour warning; no colour gives no warning", async () => {
