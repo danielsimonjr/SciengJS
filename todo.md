@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] step, iges and brep files to dxf in the mesh stage (idea of the text-to-cad row): design spec change (own commit), then the solid of each file, welded and unioned, as closed R12 POLYLINE contours on layer 0 (outline or the section at z), E_INPUT for a mesh that is not a closed solid, E_LIMIT before the build. Adapter (scieng-mcp) is a separate PR.
 - Build the engine. Follow the increments of `docs/superpowers/plans/2026-11-01-scieng-engine-build.md`. The first item is the trial builds.
 - [x] cad -> 3mf output in the mesh stage, beside stl (idea 3 of the text-to-cad row): design spec change (own commit), then a stored or deflated OPC zip with 3D/3dmodel.model, object names and basematerials colours, deterministic bytes, E_LIMIT before the write, round-trip test with three 3MFLoader. Adapter (scieng-mcp) is a separate PR.
 - [x] cad -> md minimum gap check (closing of sections; option minGap default 0.5 mm)
