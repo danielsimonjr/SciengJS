@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-11-05
+
 ### Added
 
 - `cad` documents render to `3mf`. The output is a 3MF Core package that keeps the colours and the names of the model. The writer stores each part without compression, with a fixed date, so the same model always gives the same bytes. The unit is millimeter. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts. The MIME type is `model/3mf`. `./mesh` exports `write3mf`.
