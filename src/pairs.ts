@@ -48,6 +48,7 @@ export const PAIRS: readonly PairSpec[] = [
   { type: "cad", format: "stl", stage: "mesh" },
   { type: "cad", format: "3mf", stage: "mesh" },
   { type: "cad", format: "dxf", stage: "mesh" },
+  { type: "cad", format: "md", stage: "mesh" },
   { type: "html", format: "png", stage: "browser" },
   { type: "html", format: "pdf", stage: "browser" },
   { type: "html", format: "md", stage: "html" },

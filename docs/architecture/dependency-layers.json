@@ -2493,6 +2493,60 @@
           "render"
         ]
       },
+      "src/mesh/backend-dfm.ts": {
+        "description": "Renders a CAD document to a Markdown report of the design for manufacture. The worker calls this function.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "readCadRequest"
+            ]
+          },
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "measureCad"
+            ]
+          },
+          {
+            "file": "./dfm.ts",
+            "imports": [
+              "DfmOptions"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./dfm.ts",
+            "imports": [
+              "DFM_DEFAULTS",
+              "writeDfmReport"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/mesh/backend-dxf.ts": {
         "description": "Renders a CAD document to a DXF drawing in the X-Y plane. The worker calls this function. With no option, the",
         "externalDependencies": [],
@@ -2780,16 +2834,24 @@
         "exports": [
           "loadManifold",
           "buildCad",
-          "drawCad"
+          "drawCad",
+          "WALL_SECTIONS",
+          "measureCad"
         ],
         "interfaces": [
           "CadBuildResult",
-          "CadDrawing"
+          "CadDrawing",
+          "ThinSection",
+          "CadMeasures"
         ],
         "functions": [
           "loadManifold",
           "buildCad",
-          "drawCad"
+          "drawCad",
+          "measureCad"
+        ],
+        "constants": [
+          "WALL_SECTIONS"
         ]
       },
       "src/mesh/cad-builder.ts": {
@@ -2916,6 +2978,42 @@
           "MAX_SEGMENTS"
         ]
       },
+      "src/mesh/dfm.ts": {
+        "description": "The area of the faces that need support when the model is printed upwards along +Z. A face needs support when",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "CadMeasures"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "WALL_SECTIONS"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "DFM_DEFAULTS",
+          "supportArea",
+          "writeDfmReport"
+        ],
+        "interfaces": [
+          "DfmOptions"
+        ],
+        "functions": [
+          "supportArea",
+          "writeDfmReport"
+        ],
+        "constants": [
+          "DFM_DEFAULTS"
+        ]
+      },
       "src/mesh/dxf.ts": {
         "description": "The DXF writer of the mesh stage (design section \"CAD\"). The output is ASCII DXF of release R12 (AC1009): a",
         "externalDependencies": [],
@@ -2966,7 +3064,7 @@
         ]
       },
       "src/mesh/index.ts": {
-        "description": "Package entry point for mesh (re-exports 21 symbols)",
+        "description": "Package entry point for mesh (re-exports 29 symbols)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -3024,6 +3122,23 @@
             "reExport": true
           },
           {
+            "file": "./dfm.ts",
+            "imports": [
+              "DFM_DEFAULTS",
+              "supportArea",
+              "writeDfmReport"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dfm.ts",
+            "imports": [
+              "DfmOptions"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          },
+          {
             "file": "./cad-document.ts",
             "imports": [
               "checkCadDocument",
@@ -3046,7 +3161,9 @@
             "file": "./cad-build.ts",
             "imports": [
               "buildCad",
-              "drawCad"
+              "drawCad",
+              "measureCad",
+              "WALL_SECTIONS"
             ],
             "reExport": true
           },
@@ -3054,7 +3171,9 @@
             "file": "./cad-build.ts",
             "imports": [
               "CadBuildResult",
-              "CadDrawing"
+              "CadDrawing",
+              "CadMeasures",
+              "ThinSection"
             ],
             "reExport": true,
             "typeOnly": true
@@ -3079,6 +3198,10 @@
           "writeStl",
           "write3mf",
           "writeDxf",
+          "DFM_DEFAULTS",
+          "supportArea",
+          "writeDfmReport",
+          "DfmOptions",
           "checkCadDocument",
           "parseCadDocument",
           "DEFAULT_SEGMENTS",
@@ -3086,8 +3209,12 @@
           "MIN_SEGMENTS",
           "buildCad",
           "drawCad",
+          "measureCad",
+          "WALL_SECTIONS",
           "CadBuildResult",
           "CadDrawing",
+          "CadMeasures",
+          "ThinSection",
           "cad"
         ],
         "reExported": [
@@ -3101,6 +3228,10 @@
           "writeStl",
           "write3mf",
           "writeDxf",
+          "DFM_DEFAULTS",
+          "supportArea",
+          "writeDfmReport",
+          "DfmOptions",
           "checkCadDocument",
           "parseCadDocument",
           "DEFAULT_SEGMENTS",
@@ -3109,8 +3240,12 @@
           "type * from ./cad-document.ts",
           "buildCad",
           "drawCad",
+          "measureCad",
+          "WALL_SECTIONS",
           "CadBuildResult",
           "CadDrawing",
+          "CadMeasures",
+          "ThinSection",
           "cad"
         ]
       },
@@ -5362,6 +5497,7 @@
       "name": "Mesh",
       "files": [
         "src/mesh/backend-3mf.ts",
+        "src/mesh/backend-dfm.ts",
         "src/mesh/backend-dxf.ts",
         "src/mesh/backend-glb.ts",
         "src/mesh/backend-html.ts",
@@ -5370,6 +5506,7 @@
         "src/mesh/cad-build.ts",
         "src/mesh/cad-builder.ts",
         "src/mesh/cad-document.ts",
+        "src/mesh/dfm.ts",
         "src/mesh/dxf.ts",
         "src/mesh/glb.ts",
         "src/mesh/index.ts",

@@ -8,37 +8,37 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 290
+**Total files**: 293
 
 ## Disposition counts
 
 | Disposition | Count | Meaning |
 | --- | --: | --- |
 | `reachable` | 0 | A `src`-area file that an entry root reaches. |
-| `build-entry` | 105 | A `src`-area file that is an entry root. |
+| `build-entry` | 107 | A `src`-area file that is an entry root. |
 | `test-only` | 0 | A `src`-area file that only a test reaches. |
 | `orphan` | 8 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 142 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 143 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 35 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **290** | |
+| **Total** | **293** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
-| `src` | 113 |
-| `tests` | 142 |
+| `src` | 115 |
+| `tests` | 143 |
 | `tools` | 35 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 184 |
-| `@danielsimonjr/sciengjs` | 106 |
+| `(root)` | 185 |
+| `@danielsimonjr/sciengjs` | 108 |
 
 ## All files
 
@@ -93,17 +93,19 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mermaid/sequence.ts` | @danielsimonjr/sciengjs | src | build-entry | 276 |
 | `src/mermaid/state.ts` | @danielsimonjr/sciengjs | src | build-entry | 178 |
 | `src/mesh/backend-3mf.ts` | @danielsimonjr/sciengjs | src | build-entry | 18 |
+| `src/mesh/backend-dfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 32 |
 | `src/mesh/backend-dxf.ts` | @danielsimonjr/sciengjs | src | build-entry | 40 |
 | `src/mesh/backend-glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 121 |
 | `src/mesh/backend-html.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/mesh/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 37 |
 | `src/mesh/backend-stl.ts` | @danielsimonjr/sciengjs | src | build-entry | 20 |
-| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 299 |
+| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 398 |
 | `src/mesh/cad-builder.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/mesh/cad-document.ts` | @danielsimonjr/sciengjs | src | build-entry | 462 |
+| `src/mesh/dfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 82 |
 | `src/mesh/dxf.ts` | @danielsimonjr/sciengjs | src | build-entry | 33 |
 | `src/mesh/glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 185 |
-| `src/mesh/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
+| `src/mesh/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 15 |
 | `src/mesh/occt-import-js.d.ts` | @danielsimonjr/sciengjs | src | orphan | 9 |
 | `src/mesh/pinned-three.ts` | @danielsimonjr/sciengjs | src | build-entry | 22 |
 | `src/mesh/read.ts` | @danielsimonjr/sciengjs | src | build-entry | 107 |
@@ -111,7 +113,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mesh/threemf.ts` | @danielsimonjr/sciengjs | src | build-entry | 194 |
 | `src/mesh/viewer-script.ts` | @danielsimonjr/sciengjs | src | build-entry | 206 |
 | `src/mesh/viewer.ts` | @danielsimonjr/sciengjs | src | build-entry | 52 |
-| `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 59 |
+| `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 60 |
 | `src/plot/backend-html.ts` | @danielsimonjr/sciengjs | src | build-entry | 14 |
 | `src/plot/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/plot/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 22 |
@@ -122,7 +124,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/ticks.ts` | @danielsimonjr/sciengjs | src | build-entry | 76 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 85 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 86 |
 | `src/sysml/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 12 |
 | `src/sysml/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
 | `src/sysml/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 9 |
@@ -181,7 +183,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/tex-timeout.node.mjs` | (root) | tests | test | 48 |
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 209 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 211 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 100 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/glb-reader.ts` | (root) | tests | test | 171 |
@@ -251,6 +253,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
 | `test/unit/mermaid-xml.test.ts` | (root) | tests | test | 191 |
 | `test/unit/mesh-3mf.test.ts` | (root) | tests | test | 138 |
+| `test/unit/mesh-dfm.test.ts` | (root) | tests | test | 196 |
 | `test/unit/mesh-dxf.test.ts` | (root) | tests | test | 143 |
 | `test/unit/mesh-glb.test.ts` | (root) | tests | test | 111 |
 | `test/unit/mesh-large.test.ts` | (root) | tests | test | 53 |

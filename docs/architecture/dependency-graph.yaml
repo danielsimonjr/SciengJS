@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 290
+  totalFiles: 293
   totalModules: 3
-  totalExports: 709
+  totalExports: 726
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1672,6 +1672,38 @@ modules:
           typeOnly: false
       exports:
         - render
+    src/mesh/backend-dfm.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - readCadRequest
+          typeOnly: false
+        - file: src/mesh/cad-build.ts
+          imports:
+            - measureCad
+          typeOnly: false
+        - file: src/mesh/dfm.ts
+          imports:
+            - DfmOptions
+          typeOnly: true
+        - file: src/mesh/dfm.ts
+          imports:
+            - DFM_DEFAULTS
+            - writeDfmReport
+          typeOnly: false
+      exports:
+        - render
     src/mesh/backend-dxf.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1847,6 +1879,10 @@ modules:
         - buildCad
         - CadDrawing
         - drawCad
+        - WALL_SECTIONS
+        - ThinSection
+        - CadMeasures
+        - measureCad
     src/mesh/cad-builder.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1934,6 +1970,23 @@ modules:
         - sphereFacets
         - checkCadDocument
         - parseCadDocument
+    src/mesh/dfm.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/cad-build.ts
+          imports:
+            - CadMeasures
+          typeOnly: true
+        - file: src/mesh/cad-build.ts
+          imports:
+            - WALL_SECTIONS
+          typeOnly: false
+      exports:
+        - DfmOptions
+        - DFM_DEFAULTS
+        - supportArea
+        - writeDfmReport
     src/mesh/dxf.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1993,6 +2046,16 @@ modules:
           imports:
             - writeDxf
           typeOnly: false
+        - file: src/mesh/dfm.ts
+          imports:
+            - DFM_DEFAULTS
+            - supportArea
+            - writeDfmReport
+          typeOnly: false
+        - file: src/mesh/dfm.ts
+          imports:
+            - DfmOptions
+          typeOnly: true
         - file: src/mesh/cad-document.ts
           imports:
             - checkCadDocument
@@ -2008,11 +2071,15 @@ modules:
           imports:
             - buildCad
             - drawCad
+            - measureCad
+            - WALL_SECTIONS
           typeOnly: false
         - file: src/mesh/cad-build.ts
           imports:
             - CadBuildResult
             - CadDrawing
+            - CadMeasures
+            - ThinSection
           typeOnly: true
         - file: src/mesh/cad-builder.ts
           imports:
@@ -2029,6 +2096,10 @@ modules:
         - writeStl
         - write3mf
         - writeDxf
+        - DFM_DEFAULTS
+        - supportArea
+        - writeDfmReport
+        - DfmOptions
         - checkCadDocument
         - parseCadDocument
         - DEFAULT_SEGMENTS
@@ -2036,8 +2107,12 @@ modules:
         - MIN_SEGMENTS
         - buildCad
         - drawCad
+        - measureCad
+        - WALL_SECTIONS
         - CadBuildResult
         - CadDrawing
+        - CadMeasures
+        - ThinSection
         - cad
     src/mesh/occt-import-js.d.ts:
       externalDependencies: []
@@ -5001,6 +5076,32 @@ modules:
             - '*'
           typeOnly: false
       exports: []
+    test/unit/mesh-dfm.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/backend-dfm.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/pairs.ts
+          imports:
+            - findPair
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
+      exports: []
     test/unit/mesh-dxf.test.ts:
       externalDependencies:
         - bun:test
@@ -5889,19 +5990,19 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 290
-  totalSourceFiles: 290
+  totalTypeScriptFiles: 293
+  totalSourceFiles: 293
   totalModules: 3
-  totalLinesOfCode: 33448
-  totalExports: 709
-  entryRoots: 105
-  reachableFiles: 105
+  totalLinesOfCode: 33863
+  totalExports: 726
+  entryRoots: 107
+  reachableFiles: 107
   dormantFiles: 8
   orphanedFiles: 8
   testOnlyFiles: 0
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 78
+  totalTypeOnlyImports: 83
   noImporterFileCount: 8
   unusedExportsCount: 50
   circularDepsTruncated: false
@@ -5910,12 +6011,12 @@ statistics:
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 7
-  totalInterfaces: 144
-  totalFunctions: 284
+  totalInterfaces: 147
+  totalFunctions: 288
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 72
-  totalReExports: 171
+  totalConstants: 74
+  totalReExports: 179
 reachability:
   roots:
     - src/index.ts
@@ -5970,6 +6071,7 @@ reachability:
     - src/mermaid/sequence.ts
     - src/mermaid/state.ts
     - src/mesh/backend-3mf.ts
+    - src/mesh/backend-dfm.ts
     - src/mesh/backend-dxf.ts
     - src/mesh/backend-glb.ts
     - src/mesh/backend-html.ts
@@ -5978,6 +6080,7 @@ reachability:
     - src/mesh/cad-build.ts
     - src/mesh/cad-builder.ts
     - src/mesh/cad-document.ts
+    - src/mesh/dfm.ts
     - src/mesh/dxf.ts
     - src/mesh/glb.ts
     - src/mesh/pinned-three.ts
@@ -6023,7 +6126,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 105
+  reachableCount: 107
   dormantCount: 8
   orphaned:
     - src/mesh/occt-import-js.d.ts
