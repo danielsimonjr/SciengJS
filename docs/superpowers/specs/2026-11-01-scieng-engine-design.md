@@ -40,7 +40,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 | `plot` | the Plotly JSON subset of section "PLOT" | svg, png, pdf, html | plot |
 | `sysml` | the SysML v2 textual subset of section "SysML" | svg, png, pdf | graph |
 | `step`, `iges`, `brep` | ISO 10303-21, IGES, OpenCascade BREP | html, png, glb | mesh, browser |
-| `cad` | the CSG document of section "CAD" | html, png, glb, stl, 3mf, dxf, md | mesh, browser |
+| `cad` | the CSG document of section "CAD" | html, png, glb, stl, 3mf, dxf, md, pdf | mesh, browser |
 | `html` | an HTML document | png, pdf, md | browser, html |
 
 `png` of an SVG that the engine draws comes from the raster stage (resvg), with no browser. `png` of an SVG that the browser stage draws comes from a browser screenshot. Those SVGs can hold `foreignObject` labels, and resvg does not render them. `pdf` needs the browser stage. The stage column of the table names the stage that decides whether a pair is ready on a machine. A pair that needs the browser stage lists `browser`. Any other pair lists the stage that draws its vector output, and a `png` that comes from the raster stage needs no other stage. So `dot` to `png` lists `graph`, and `dot` to `pdf` lists `browser`.
@@ -200,6 +200,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - A CAD document goes through `manifold-3d` for the solid operations.
 - Outputs: a glTF binary (`glb`), an STL file, an HTML viewer page, and a PNG of the page through the browser stage.
 - CAD documents only: a 3MF file (`3mf`), a DXF drawing (`dxf`) and a Markdown report of the design for manufacture (`md`).
+- CAD documents only: a one-page third-angle drawing (`pdf`).
 - A `glb` render estimates its peak memory after the read: the bytes of the positions, the normals and the indices, times four copies. An estimate over `maxMemoryMb` megabytes rejects with `E_LIMIT`. Geometry over 4 GiB also rejects with `E_LIMIT`, because the `glb` header holds the file length in 32 bits.
 - The viewer page loads Three.js and its orbit controls add-on. The page has section planes and an exploded view. The page embeds the `glb`. In a normal browser, the page requests only the pinned Three.js modules. Under the browser stage, the client fulfils those modules from the engine package.
 
@@ -316,6 +317,24 @@ The `dxf` output is a 2D drawing of the model in the X-Y plane:
 - The drawing has no colour and no name. A model with a colour gives a warning.
 - A drawing with no contour, for example a section above the model, rejects with `E_INPUT`.
 - An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
+
+The `pdf` output is a one-page third-angle drawing of the model on A4 landscape paper (297 by 210 millimetres):
+
+- The drawing has three views: the front view, the top view and the right view. The front view is at the bottom left. The top view is directly above the front view. The right view is directly to the right of the front view. The gap between two views is 15 millimetres.
+- The front view shows the X axis to the right and the Z axis up. The top view shows the X axis to the right and the Y axis up. The right view shows the Y axis to the right and the Z axis up.
+- Each closed contour of a view is one closed path. A hole is a path of its own.
+- Each view shows only the silhouette of the model: the outline and the through holes of the projection. The drawing does not show an edge inside the outline. So a blind hole, a pocket or a step inside the outline of a view is not visible in that view. The drawing has no hidden line.
+- The drawing has three dimensions, in millimetres: the width (X), the depth (Y) and the height (Z).
+- The width is under the front view. The depth is right of the top view. The height is right of the right view.
+- A title block at the bottom right gives the title, the scale, the unit (mm) and the projection (third angle). The title block is 90 by 24 millimetres.
+- The title text is 4.5 millimetres high. A longer title gets a smaller text height, so that the title fits the title block. A title of 80 characters is 1.4 millimetres high.
+- Each text has a fill and no stroke.
+- The drawing area is the sheet inside a margin of 10 millimetres, above the title block. The width dimension has 12 millimetres below the front view. The height dimension has 20 millimetres right of the right view. No dimension line or number crosses the title block or the margin.
+- The scales are 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02 and 0.01. The drawing uses the first scale at which the views and the dimensions fit the drawing area. A model that does not fit at 1:100 keeps the scale 1:100 and gives a warning.
+- The option `title` is a string of 1 to 80 characters. The default is the name of the model, or `model`. Any other option rejects with `E_INPUT`.
+- The render prints the drawing through the browser stage. The pdf has one page. A model with a colour gives a warning, because the pdf holds no colour.
+- A drawing with no contour rejects with `E_INPUT`. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
+- The drawing has no hidden line, no section view, no cone symbol and no dimension of a single feature.
 
 The `md` output is a report of the design for manufacture (DFM) of the model:
 
