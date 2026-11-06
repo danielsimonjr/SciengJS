@@ -1,6 +1,6 @@
 {
   "name": "@danielsimonjr/sciengjs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": false,
   "description": "A local rendering engine for science and engineering diagrams, documents and models",
   "license": "MIT",
