@@ -99,7 +99,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mesh/backend-html.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/mesh/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 37 |
 | `src/mesh/backend-stl.ts` | @danielsimonjr/sciengjs | src | build-entry | 20 |
-| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 422 |
+| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 449 |
 | `src/mesh/cad-builder.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/mesh/cad-document.ts` | @danielsimonjr/sciengjs | src | build-entry | 462 |
 | `src/mesh/dfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 90 |
@@ -253,7 +253,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mermaid-state.test.ts` | (root) | tests | test | 220 |
 | `test/unit/mermaid-xml.test.ts` | (root) | tests | test | 191 |
 | `test/unit/mesh-3mf.test.ts` | (root) | tests | test | 138 |
-| `test/unit/mesh-dfm.test.ts` | (root) | tests | test | 278 |
+| `test/unit/mesh-dfm.test.ts` | (root) | tests | test | 293 |
 | `test/unit/mesh-dxf.test.ts` | (root) | tests | test | 143 |
 | `test/unit/mesh-glb.test.ts` | (root) | tests | test | 111 |
 | `test/unit/mesh-large.test.ts` | (root) | tests | test | 53 |
