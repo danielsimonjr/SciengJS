@@ -369,6 +369,44 @@ describe("cad to md (design for manufacture)", () => {
     expect(row(await text(request(tab)), "Minimum wall").slice(1, 3)).toEqual(["pass", "0 of 96 sections have a thin region"]);
   });
 
+  test("a 0.3 mm square pin and a 0.4 mm round pin on a block fail the wall check, square to the axes and turned", async () => {
+    const block = { type: "cube", size: [20, 10, 5] };
+    const square = { type: "union", children: [block, { type: "translate", offset: [10, 5, 5], child: { type: "cube", size: [0.3, 0.3, 5] } }] };
+    const round = { type: "union", children: [block, { type: "translate", offset: [10, 5, 5], child: { type: "cylinder", radius: 0.2, height: 5 } }] };
+    expect(row(await text(request(square)), "Minimum wall")[2]).toBe("17 of 96 sections have a thin region");
+    for (const pin of [square, round]) {
+      expect(row(await text(request(pin)), "Minimum wall")[1]).toBe("fail");
+      expect(row(await text(request({ type: "rotate", angles: [20, 30, 0], child: pin })), "Minimum wall")[1]).toBe("fail");
+    }
+  }, 30000);
+
+  test("a 0.3 mm wall that leans 60 degrees on a block fails the wall check in 53 sections", async () => {
+    const lean = {
+      type: "union",
+      children: [
+        { type: "cube", size: [20, 10, 5] },
+        { type: "translate", offset: [0, 5, 5], child: { type: "rotate", angles: [60, 0, 0], child: { type: "cube", size: [20, 0.3, 4] } } },
+      ],
+    };
+    expect(row(await text(request(lean)), "Minimum wall").slice(1, 3)).toEqual(["fail", "53 of 96 sections have a thin region"]);
+  });
+
+  test("a square hole of 0.3 mm through a plate fails the gap check in 33 sections", async () => {
+    const holed = { type: "difference", children: [{ type: "cube", size: [20, 10, 2] }, { type: "translate", offset: [10, 5, -1], child: { type: "cube", size: [0.3, 0.3, 4] } }] };
+    expect(row(await text(request(holed)), "Minimum gap").slice(1, 3)).toEqual(["fail", "33 of 96 sections have a narrow gap"]);
+  });
+
+  test("a separate 0.3 mm plate 1.5 mm square fails the wall check in the X and Y sections", async () => {
+    const md = await text(request({ type: "cube", size: [1.5, 1.5, 0.3] }));
+    expect(row(md, "Minimum wall").slice(1, 3)).toEqual(["fail", "64 of 96 sections have a thin region"]);
+  });
+
+  test("a short 0.3 mm wall on a block turned on two axes fails the wall check", async () => {
+    const wall = { type: "union", children: [{ type: "cube", size: [20, 10, 5] }, { type: "translate", offset: [18, 0, 5], child: { type: "cube", size: [0.3, 0.5, 5] } }] };
+    expect(row(await text(request(wall)), "Minimum wall")[1]).toBe("fail");
+    expect(row(await text(request({ type: "rotate", angles: [20, 30, 0], child: wall })), "Minimum wall")[1]).toBe("fail");
+  });
+
   test("a 0.3 mm plate turned 60 degrees about X fails the wall check", async () => {
     const plate = { type: "translate", offset: [0, 0, 20], child: { type: "rotate", angles: [60, 0, 0], child: { type: "cube", size: [20, 10, 0.3] } } };
     const md = await text(request(plate));

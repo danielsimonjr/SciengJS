@@ -260,16 +260,16 @@
    "id": "dfm-33",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "side <= 2 * min) continue;",
-   "replacement": "side <= 200 * min) continue;",
+   "original": "side <= 2 * min && ",
+   "replacement": "side <= 200 * min && ",
    "equivalent": null
   },
   {
    "id": "dfm-34",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "side <= 2 * min) continue;",
-   "replacement": "side <= 0) continue;",
+   "original": "side <= 2 * min && ",
+   "replacement": "side <= 0 && ",
    "equivalent": null
   },
   {
@@ -326,6 +326,62 @@
    "test": "test/unit/mesh-dfm.test.ts",
    "original": "piece.offset(min / 2, \"Round\"",
    "replacement": "piece.offset(0, \"Round\"",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-42",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "> pieces[i]!.area() / 2) covered",
+   "replacement": "> pieces[i]!.area() * 2) covered",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-43",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "return covered.some((c) => !c);",
+   "replacement": "return false;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-44",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "return covered.some((c) => !c);",
+   "replacement": "return true;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-45",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "&& bordersWide(build, part, min, wideIn)) continue;",
+   "replacement": ") continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-46",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "&& bordersWide(build, part, min, wideIn)) continue;",
+   "replacement": "&& false) continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-47",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "build.keep(shape.subtract(closed)).area()",
+   "replacement": "build.keep(shape.intersect(closed)).area()",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-48",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "build.keep(shape.intersect(opened)).area()",
+   "replacement": "build.keep(shape.subtract(opened)).area()",
    "equivalent": null
   }
  ]

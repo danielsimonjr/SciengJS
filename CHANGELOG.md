@@ -10,7 +10,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Fixed
 
-- The wall check and the gap check of the `md` report no longer fail a model that is turned off the axes. A section that cuts a sharp edge or a vertex of the solid at a slant showed a region narrower than the solid. A 10 mm cube turned 30 degrees about X failed the wall check in 4 of 96 sections, and turned on two axes in 48. A corner of any angle does not count. A part near a vertex of the solid does not count. A region that the section at half the minimum does not show does not count.
+- The wall check and the gap check of the `md` report no longer fail a model that is turned off the axes. A section that cuts a sharp edge or a vertex of the solid at a slant showed a region narrower than the solid. A 10 mm cube turned 30 degrees about X failed the wall check in 4 of 96 sections. The same cube turned about two axes failed in 48 sections. A corner of any angle does not count. A part near a vertex of the solid does not count when it touches the wide region of the section. A region does not count when the next section holds most of it as a wide region. A thin pin, a short wall and a small separate plate still fail, as on 1.0.6. A turned model with a notch can still show a false thin region.
 
 ## [1.0.6] - 2026-11-06
 
