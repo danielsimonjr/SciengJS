@@ -1,0 +1,52 @@
+{
+ "mutants": [
+  {
+   "id": "dxf-1",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "input.merge();",
+   "replacement": "void input;",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-2",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "return build.checkFacets(build.keep(Manifold.union(parts)));",
+   "replacement": "return parts[0]!;",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-3",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "build.keep(z === undefined ? solid.project() : solid.slice(z)).toPolygons()",
+   "replacement": "build.keep(z !== undefined ? solid.project() : solid.slice(z!)).toPolygons()",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-4",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "if (triangles > maxFacets) {",
+   "replacement": "if (triangles >= maxFacets) {",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-5",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "mesh.faces.some((face) => face.color !== null)",
+   "replacement": "mesh.faces.some((face) => face.color === null)",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-6",
+   "file": "src/mesh/backend-dxf.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "request.type === \"cad\"",
+   "replacement": "request.type !== \"cad\"",
+   "equivalent": null
+  }
+ ]
+}

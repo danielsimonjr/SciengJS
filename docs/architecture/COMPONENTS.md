@@ -694,7 +694,7 @@ Purpose: the backend of `cad` to `3mf`. The package keeps the colours and the na
 
 ## `src/mesh/backend-dxf.ts`
 
-Purpose: the backend of `cad` to `dxf`. With no option, the drawing is the outline of the model. The option `z` gives the section at that height. A model with a colour gives a warning. A drawing with no contour rejects with `E_INPUT`. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
+Purpose: the backend of `cad`, `step`, `iges` and `brep` to `dxf`. With no option, the drawing is the outline of the solid. The option `z` gives the section at that height. A STEP, IGES or BREP mesh is read as a closed solid; a mesh that is not one rejects with `E_INPUT`. A model with a colour gives a warning. A drawing with no contour rejects with `E_INPUT`. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
 
 ## `src/mesh/dfm.ts`
 

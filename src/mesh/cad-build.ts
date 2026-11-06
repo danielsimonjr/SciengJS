@@ -72,8 +72,13 @@ interface ManifoldMesh {
   runOriginalID?: Uint32Array;
 }
 
+/** A manifold-3d Mesh input. merge() welds the vertices that share a position. */
+interface MeshInput {
+  merge(): boolean;
+}
+
 /** The constructor of a manifold-3d Mesh. */
-type MeshCtor = new (options: { numProp: number; vertProperties: Float32Array; triVerts: Uint32Array }) => unknown;
+type MeshCtor = new (options: { numProp: number; vertProperties: Float32Array; triVerts: Uint32Array }) => MeshInput;
 
 /** The one WASM module of this process. The module loads once, and every build shares the module. */
 let manifoldPromise: Promise<ManifoldModule & { Mesh: MeshCtor }> | undefined;
@@ -251,10 +256,55 @@ export interface CadDrawing {
  */
 export function drawCad(document: CadDocument, maxFacets: number, z?: number): Promise<CadDrawing> {
   return withSolid(document, maxFacets, (solid, build) => {
-    const section = build.keep(z === undefined ? solid.project() : solid.slice(z));
     const colored = [...build.colors.values()].some((c) => c !== null);
-    return { contours: section.toPolygons(), colored };
+    return { contours: contoursAt(solid, build, z), colored };
   });
+}
+
+/** The closed contours of the outline (no height) or of the section at a height, in the X-Y plane. */
+function contoursAt(solid: Solid, build: Build, z?: number): number[][][] {
+  return build.keep(z === undefined ? solid.project() : solid.slice(z)).toPolygons();
+}
+
+/**
+ * Draws the solid of imported meshes (STEP, IGES or BREP) in the X-Y plane, as drawCad does for a CAD document. Each
+ * mesh is welded, read as a closed solid and joined by a union. The triangle count is checked before any WASM call.
+ * A mesh that is not a closed solid rejects with E_INPUT. A result over maxFacets rejects with E_LIMIT.
+ */
+export function drawMeshes(meshes: CadMesh[], maxFacets: number, z?: number): Promise<CadDrawing> {
+  const triangles = meshes.reduce((n, mesh) => n + mesh.indices.length / 3, 0);
+  if (triangles > maxFacets) {
+    throw new RenderError("E_LIMIT", `the model has ${triangles} facets; the limit is ${maxFacets}`);
+  }
+  const colored = meshes.some((mesh) => mesh.faces.some((face) => face.color !== null));
+  return withSolidOf(
+    DEFAULT_SEGMENTS,
+    maxFacets,
+    (build) => importedSolid(build, meshes),
+    (solid, build) => ({ contours: contoursAt(solid, build, z), colored }),
+  );
+}
+
+/** Reads each mesh as a closed solid and joins the solids by a union. A mesh with no closed volume rejects with E_INPUT. */
+function importedSolid(build: Build, meshes: CadMesh[]): Solid {
+  const { Manifold, Mesh } = build.m;
+  const parts = meshes.map((mesh, index) => {
+    const name = mesh.name || String(index);
+    const input = new Mesh({ numProp: 3, vertProperties: mesh.positions, triVerts: mesh.indices });
+    input.merge();
+    let solid: Solid;
+    try {
+      solid = build.keep(Manifold.ofMesh(input));
+    } catch (error) {
+      throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    const status = solid.status();
+    if (status !== "NoError") throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: ${String(status)}`);
+    if (solid.volume() < 0) throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: its faces turn inward`);
+    return solid;
+  });
+  if (parts.length === 1) return parts[0]!;
+  return build.checkFacets(build.keep(Manifold.union(parts)));
 }
 
 /**
@@ -561,13 +611,26 @@ function persists(
  * Builds the solid of a checked document and gives the solid to the reader. The build frees every WASM object
  * after the reader returns. A failed operation rejects with E_INPUT. A solid over maxFacets rejects with E_LIMIT.
  */
-async function withSolid<T>(document: CadDocument, maxFacets: number, read: (solid: Solid, build: Build) => T): Promise<T> {
+function withSolid<T>(document: CadDocument, maxFacets: number, read: (solid: Solid, build: Build) => T): Promise<T> {
+  return withSolidOf(document.segments ?? DEFAULT_SEGMENTS, maxFacets, (build) => build.solid(document.model, null), read);
+}
+
+/**
+ * Builds a solid with make and gives the solid to the reader. The build frees every WASM object after the reader
+ * returns. A failed operation rejects with E_INPUT. A solid over maxFacets rejects with E_LIMIT.
+ */
+async function withSolidOf<T>(
+  segments: number,
+  maxFacets: number,
+  make: (build: Build) => Solid,
+  read: (solid: Solid, build: Build) => T,
+): Promise<T> {
   const m = await loadManifold();
-  const build = new Build(m, document.segments ?? DEFAULT_SEGMENTS, maxFacets);
+  const build = new Build(m, segments, maxFacets);
   try {
     let solid: Solid;
     try {
-      solid = build.solid(document.model, null);
+      solid = make(build);
     } catch (error) {
       if (error instanceof RenderError) throw error;
       throw new RenderError("E_INPUT", `the solid operations failed: ${error instanceof Error ? error.message : String(error)}`);

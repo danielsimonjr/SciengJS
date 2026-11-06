@@ -10,7 +10,7 @@ export { DFM_DEFAULTS, supportArea, writeDfmReport } from "./dfm.ts";
 export type { DfmOptions } from "./dfm.ts";
 export { checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS } from "./cad-document.ts";
 export type * from "./cad-document.ts";
-export { buildCad, drawCad, drawCadViews, measureCad, WALL_SECTIONS } from "./cad-build.ts";
+export { buildCad, drawCad, drawCadViews, drawMeshes, measureCad, WALL_SECTIONS } from "./cad-build.ts";
 export type { CadBuildResult, CadDrawing, CadMeasures, CadViews, ThinSection } from "./cad-build.ts";
 export { chooseScale, writeCadDrawingSvg } from "./drawing.ts";
 export type { DrawingOptions } from "./drawing.ts";

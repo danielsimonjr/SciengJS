@@ -6,6 +6,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Added
 
+- `step`, `iges` and `brep` files render to `dxf`: a 2D drawing of the solid in the X-Y plane. The outline is the default; the option `z` gives a section. Coordinates are in millimeters.
 - `cad` documents render to `pdf`: a one-page third-angle drawing on A4 landscape.
 - The drawing has three views, three dimensions, a title block and the option `title`.
 - The views come from one solid build. The browser stage prints the drawing, so the render needs a browser.
