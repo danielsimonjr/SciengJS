@@ -1,11 +1,11 @@
 {
-  "totalFiles": 290,
+  "totalFiles": 293,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 105,
+    "build-entry": 107,
     "test-only": 0,
     "orphan": 8,
-    "test": 142,
+    "test": 143,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 35,
-    "src": 113,
-    "tests": 142
+    "src": 115,
+    "tests": 143
   },
   "byPackage": {
-    "(root)": 184,
-    "@danielsimonjr/sciengjs": 106
+    "(root)": 185,
+    "@danielsimonjr/sciengjs": 108
   },
   "files": [
     {
@@ -365,6 +365,13 @@
       "loc": 18
     },
     {
+      "file": "src/mesh/backend-dfm.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 32
+    },
+    {
       "file": "src/mesh/backend-dxf.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -404,7 +411,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 299
+      "loc": 398
     },
     {
       "file": "src/mesh/cad-builder.ts",
@@ -419,6 +426,13 @@
       "area": "src",
       "disposition": "build-entry",
       "loc": 462
+    },
+    {
+      "file": "src/mesh/dfm.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 82
     },
     {
       "file": "src/mesh/dxf.ts",
@@ -439,7 +453,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 13
+      "loc": 15
     },
     {
       "file": "src/mesh/occt-import-js.d.ts",
@@ -495,7 +509,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 59
+      "loc": 60
     },
     {
       "file": "src/plot/backend-html.ts",
@@ -572,7 +586,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 85
+      "loc": 86
     },
     {
       "file": "src/sysml/backend-pdf.ts",
@@ -985,7 +999,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 209
+      "loc": 211
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -1469,6 +1483,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 138
+    },
+    {
+      "file": "test/unit/mesh-dfm.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 196
     },
     {
       "file": "test/unit/mesh-dxf.test.ts",

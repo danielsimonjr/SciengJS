@@ -21,6 +21,8 @@ interface Solid {
   getMesh(normalIdx?: number): ManifoldMesh;
   numTri(): number;
   volume(): number;
+  surfaceArea(): number;
+  boundingBox(): { min: number[]; max: number[] };
   status(): string;
   slice(height: number): Section;
   project(): Section;
@@ -30,6 +32,11 @@ interface Solid {
 /** A planar section of a solid. Each polygon is a closed contour of [x, y] points. */
 interface Section {
   toPolygons(): number[][][];
+  offset(delta: number, joinType: "Round", miterLimit: number, circularSegments: number): Section;
+  subtract(other: Section): Section;
+  simplify(epsilon: number): Section;
+  decompose(): Section[];
+  area(): number;
   delete(): void;
 }
 
@@ -246,6 +253,98 @@ export function drawCad(document: CadDocument, maxFacets: number, z?: number): P
     const colored = [...build.colors.values()].some((c) => c !== null);
     return { contours: section.toPolygons(), colored };
   });
+}
+
+/** The axes of the wall check. A rotation turns each axis into the Z axis, so that a slice of the turned solid cuts across the original axis. */
+const SECTION_AXES = [
+  { axis: "X", index: 0, angles: [0, -90, 0] },
+  { axis: "Y", index: 1, angles: [90, 0, 0] },
+  { axis: "Z", index: 2, angles: [0, 0, 0] },
+] as const;
+
+/** The segments of a full circle in the round joins of the wall check. The joins shape only the corners of an opening. */
+const OFFSET_SEGMENTS = 32;
+
+/** The number of sections of the wall check on each axis. */
+export const WALL_SECTIONS = 32;
+
+/** A section of the wall check with a thin region: the axis, the position on the axis and the thin area. */
+export interface ThinSection {
+  axis: "X" | "Y" | "Z";
+  at: number;
+  area: number;
+}
+
+/** The measures of a solid for the report of the design for manufacture. */
+export interface CadMeasures {
+  min: number[];
+  max: number[];
+  volume: number;
+  area: number;
+  /** The vertex positions (x, y, z) and the triangles (three vertex indices each) of the solid. */
+  positions: Float32Array;
+  triangles: Uint32Array;
+  thin: ThinSection[];
+}
+
+/**
+ * Measures a checked document for the report of the design for manufacture. The wall check cuts WALL_SECTIONS
+ * sections on each axis. An opening of each section by minWall removes each wall thinner than minWall. A model
+ * with no solid rejects with E_INPUT.
+ */
+export function measureCad(document: CadDocument, maxFacets: number, minWall: number): Promise<CadMeasures> {
+  return withSolid(document, maxFacets, (solid, build) => {
+    if (solid.numTri() === 0) throw new RenderError("E_INPUT", "the model holds no solid");
+    const { min, max } = solid.boundingBox();
+    const mesh = solid.getMesh();
+    const positions = new Float32Array(mesh.vertProperties.length / mesh.numProp * 3);
+    for (let v = 0; v < positions.length / 3; v++) {
+      for (let c = 0; c < 3; c++) positions[v * 3 + c] = mesh.vertProperties[v * mesh.numProp + c]!;
+    }
+    const thin: ThinSection[] = [];
+    for (const { axis, index, angles } of SECTION_AXES) {
+      const turned = index === 2 ? solid : build.keep(solid.rotate([...angles]));
+      const lo = min[index]!;
+      const step = (max[index]! - lo) / WALL_SECTIONS;
+      for (let i = 0; i < WALL_SECTIONS; i++) {
+        const at = lo + (i + 0.5) * step;
+        const area = thinArea(build, build.keep(turned.slice(at)), minWall);
+        if (area > 0) thin.push({ axis, at, area });
+      }
+    }
+    return {
+      min: [...min],
+      max: [...max],
+      volume: solid.volume(),
+      area: solid.surfaceArea(),
+      positions,
+      triangles: Uint32Array.from(mesh.triVerts),
+      thin,
+    };
+  });
+}
+
+/**
+ * The area of the regions of a section that an opening by minWall removes, less the corners of the opening. The
+ * opening shrinks the section by a little less than half of minWall, so that a wall equal to minWall stays. A
+ * removed region is thin when the region is wider than a quarter of minWall. A removed region is also thin when its
+ * area is more than the four corners of a square bar.
+ */
+function thinArea(build: Build, section: Section, minWall: number): number {
+  const segments = OFFSET_SEGMENTS;
+  const half = (minWall / 2) * (1 - 1e-6);
+  const corner = (1 - Math.PI / 4) * minWall * minWall;
+  const opened = build.keep(build.keep(section.offset(-half, "Round", 2, segments)).offset(half, "Round", 2, segments));
+  // The subtraction leaves slivers of zero width with a reversed winding. A shrink grows such a sliver, so the
+  // simplify step removes the slivers before the corner test.
+  const removed = build.keep(build.keep(section.subtract(opened)).simplify(minWall / 1000));
+  let area = 0;
+  for (const piece of removed.decompose()) {
+    build.keep(piece);
+    const pieceArea = piece.area();
+    if (pieceArea > corner || build.keep(piece.offset(-minWall / 8, "Round", 2, segments)).area() > 0) area += pieceArea;
+  }
+  return area;
 }
 
 /**

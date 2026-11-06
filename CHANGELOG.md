@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- `cad` documents render to `md`, a report of the design for manufacture. The report gives the size, the volume and the surface area of the model. The overhang check gives the area that needs support for a print along +Z (option `overhang`, default 45 degrees). The wall check finds the walls thinner than `minWall` (default 0.8 mm): an opening of 32 sections on each axis removes each thin wall. A failed check does not reject the render.
+
 ## [1.0.5] - 2026-11-06
 
 ### Added

@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
-- **mesh**: 19 files
+- **mesh**: 21 files
 - **plot**: 8 files
 - **raster**: 2 files
 - **sysml**: 8 files
@@ -954,6 +954,23 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/mesh/backend-dfm.ts` - Renders a CAD document to a Markdown report of the design for manufacture. The worker calls this function.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./backend-glb.ts` | `readCadRequest` | Import |
+| `./cad-build.ts` | `measureCad` | Import |
+| `./dfm.ts` | `DfmOptions` | Import (type-only) |
+| `./dfm.ts` | `DFM_DEFAULTS, writeDfmReport` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
 ### `src/mesh/backend-dxf.ts` - Renders a CAD document to a DXF drawing in the X-Y plane. The worker calls this function. With no option, the
 
 **Internal Dependencies:**
@@ -1046,8 +1063,9 @@ The codebase is organized into the following modules:
 | `./read.ts` | `CadFace, CadMesh` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `CadBuildResult`, `CadDrawing`
-- Functions: `loadManifold`, `buildCad`, `drawCad`
+- Interfaces: `CadBuildResult`, `CadDrawing`, `ThinSection`, `CadMeasures`
+- Functions: `loadManifold`, `buildCad`, `drawCad`, `measureCad`
+- Constants: `WALL_SECTIONS`
 
 ---
 
@@ -1092,6 +1110,21 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/mesh/dfm.ts` - The area of the faces that need support when the model is printed upwards along +Z. A face needs support when
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./cad-build.ts` | `CadMeasures` | Import (type-only) |
+| `./cad-build.ts` | `WALL_SECTIONS` | Import |
+
+**Exports:**
+- Interfaces: `DfmOptions`
+- Functions: `supportArea`, `writeDfmReport`
+- Constants: `DFM_DEFAULTS`
+
+---
+
 ### `src/mesh/dxf.ts` - The DXF writer of the mesh stage (design section "CAD"). The output is ASCII DXF of release R12 (AC1009): a
 
 **Exports:**
@@ -1113,7 +1146,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/mesh/index.ts` - Package entry point for mesh (re-exports 21 symbols)
+### `src/mesh/index.ts` - Package entry point for mesh (re-exports 29 symbols)
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1125,10 +1158,12 @@ The codebase is organized into the following modules:
 | `./stl.ts` | `writeStl` | Re-export |
 | `./threemf.ts` | `write3mf` | Re-export |
 | `./dxf.ts` | `writeDxf` | Re-export |
+| `./dfm.ts` | `DFM_DEFAULTS, supportArea, writeDfmReport` | Re-export |
+| `./dfm.ts` | `DfmOptions` | Re-export (type-only) |
 | `./cad-document.ts` | `checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS` | Re-export |
 | `./cad-document.ts` | `*` | Re-export (type-only) |
-| `./cad-build.ts` | `buildCad, drawCad` | Re-export |
-| `./cad-build.ts` | `CadBuildResult, CadDrawing` | Re-export (type-only) |
+| `./cad-build.ts` | `buildCad, drawCad, measureCad, WALL_SECTIONS` | Re-export |
+| `./cad-build.ts` | `CadBuildResult, CadDrawing, CadMeasures, ThinSection` | Re-export (type-only) |
 | `./cad-builder.ts` | `*` | Re-export |
 
 **Exports:**
@@ -1136,8 +1171,9 @@ The codebase is organized into the following modules:
 
   ```text
   readCad, CadFormat, CadFace, CadMesh, LinearUnit, writeGlb, readMeshOptions, writeStl, write3mf,
-  writeDxf, checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS,
-  type * from ./cad-document.ts, buildCad, drawCad, CadBuildResult, CadDrawing, cad
+  writeDxf, DFM_DEFAULTS, supportArea, writeDfmReport, DfmOptions, checkCadDocument, parseCadDocument,
+  DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS, type * from ./cad-document.ts, buildCad, drawCad,
+  measureCad, WALL_SECTIONS, CadBuildResult, CadDrawing, CadMeasures, ThinSection, cad
   ```
 
 
@@ -1932,23 +1968,24 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 53 files |
-| `src/worker/protocol` | 2 files | 31 files |
+| `src/errors` | 0 files | 54 files |
+| `src/worker/protocol` | 2 files | 32 files |
 | `src/graph/text` | 0 files | 17 files |
 | `src/browser/render` | 6 files | 7 files |
 | `src/mermaid/browser` | 6 files | 7 files |
+| `src/mesh/backend-glb` | 6 files | 7 files |
 | `src/graph/backend-png` | 7 files | 5 files |
-| `src/mesh/backend-glb` | 6 files | 6 files |
 | `src/tex/index` | 11 files | 0 files |
 | `src/browser/input` | 1 file | 9 files |
 | `src/mermaid/common` | 2 files | 8 files |
 | `src/mermaid/render` | 6 files | 4 files |
+| `src/mesh/index` | 10 files | 0 files |
 | `src/tex/stage` | 6 files | 4 files |
 | `src/config` | 3 files | 6 files |
-| `src/mesh/index` | 9 files | 0 files |
 | `src/core` | 7 files | 1 file |
 | `src/graph/dot` | 2 files | 6 files |
 | `src/mermaid/backend-png` | 8 files | 0 files |
+| `src/mesh/cad-build` | 3 files | 5 files |
 | `src/tex/render` | 6 files | 2 files |
 | `src/mesh/read` | 1 file | 6 files |
 | `src/sysml/render` | 3 files | 4 files |
@@ -1957,7 +1994,6 @@ The codebase is organized into the following modules:
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/mesh/backend-png` | 6 files | 0 files |
-| `src/mesh/cad-build` | 3 files | 3 files |
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/sysml/backend-png` | 6 files | 0 files |
 | `src/tex/backend-png` | 6 files | 0 files |
@@ -2059,16 +2095,16 @@ graph TD
 
     subgraph Mesh
         N50[backend-3mf]
-        N51[backend-dxf]
-        N52[backend-glb]
-        N53[backend-html]
-        N54[backend-png]
-        N55[backend-stl]
-        N56[cad-build]
-        N57[cad-builder]
-        N58[cad-document]
-        N59[dxf]
-        N60[...9 more]
+        N51[backend-dfm]
+        N52[backend-dxf]
+        N53[backend-glb]
+        N54[backend-html]
+        N55[backend-png]
+        N56[backend-stl]
+        N57[cad-build]
+        N58[cad-builder]
+        N59[cad-document]
+        N60[...11 more]
     end
 
     subgraph Plot
@@ -2221,17 +2257,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 290 |
+| Total Source Files | 293 |
 | Subsystems | 17 |
-| Total Lines of Code | 33448 |
-| Total Exports | 709 |
-| Total Re-exports | 171 |
+| Total Lines of Code | 33863 |
+| Total Exports | 726 |
+| Total Re-exports | 179 |
 | Total Classes | 7 |
-| Total Interfaces | 144 |
-| Total Functions | 284 |
+| Total Interfaces | 147 |
+| Total Functions | 288 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 78 |
+| Type-only Imports | 83 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

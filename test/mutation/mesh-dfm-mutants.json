@@ -1,0 +1,132 @@
+{
+ "mutants": [
+  {
+   "id": "dfm-1",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "const limit = -Math.sin(",
+   "replacement": "const limit = -Math.cos(",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-2",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "nz / length < limit",
+   "replacement": "nz / length <= -limit",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-3",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "positions[a + 2]! <= bed && positions[b + 2]! <= bed && positions[c + 2]! <= bed",
+   "replacement": "positions[a + 2]! <= bed || positions[b + 2]! <= bed || positions[c + 2]! <= bed",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-4",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "total += length / 2",
+   "replacement": "total += length",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-5",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "support > 0 ? \"fail\" : \"pass\"",
+   "replacement": "support > 1 ? \"fail\" : \"pass\"",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-6",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "const half = (minWall / 2) * (1 - 1e-6);",
+   "replacement": "const half = (minWall / 2) * (1 + 1e-6);",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-7",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "offset(-minWall / 8, \"Round\", 2, segments)",
+   "replacement": "offset(-minWall / 1000, \"Round\", 2, segments)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-8",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "simplify(minWall / 1000)",
+   "replacement": "simplify(0)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-9",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "lo + (i + 0.5) * step",
+   "replacement": "lo + i * step",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-10",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "{ axis: \"X\", index: 0, angles: [0, -90, 0] }",
+   "replacement": "{ axis: \"X\", index: 0, angles: [0, 0, 0] }",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-11",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "{ axis: \"Y\", index: 1, angles: [90, 0, 0] }",
+   "replacement": "{ axis: \"Y\", index: 1, angles: [0, 0, 0] }",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-12",
+   "file": "src/mesh/backend-dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "overhang > 0 && overhang < 90",
+   "replacement": "overhang >= 0 && overhang < 90",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-13",
+   "file": "src/mesh/backend-dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "minWall <= 0",
+   "replacement": "minWall < 0",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-14",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (pieceArea > corner || build",
+   "replacement": "if (false || build",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-15",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "const corner = (1 - Math.PI / 4) * minWall * minWall;",
+   "replacement": "const corner = ((1 - Math.PI / 4) * minWall * minWall) / 4;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-16",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (solid.numTri() === 0) throw",
+   "replacement": "if (solid.numTri() === -1) throw",
+   "equivalent": null
+  }
+ ]
+}

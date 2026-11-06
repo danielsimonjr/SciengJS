@@ -634,12 +634,13 @@ export function sphereFacets(segments: number): number;
 
 ## `src/mesh/cad-build.ts`
 
-Purpose: the solid operations of a checked document through manifold-3d. The WASM module loads once for each process. Each primitive becomes an original solid with its colour. Each run of output triangles keeps the colour of the primitive that made the run. The build frees every WASM object in a `finally` block. A result over the facet limit rejects with `E_LIMIT`. `drawCad` gives the closed contours of the outline of the solid, or of the section at a height.
+Purpose: the solid operations of a checked document through manifold-3d. The WASM module loads once for each process. Each primitive becomes an original solid with its colour. Each run of output triangles keeps the colour of the primitive that made the run. The build frees every WASM object in a `finally` block. A result over the facet limit rejects with `E_LIMIT`. `drawCad` gives the closed contours of the outline of the solid, or of the section at a height. `measureCad` gives the measures of the solid and the thin sections of the wall check.
 
 ```ts
 export function loadManifold(): Promise<ManifoldModule>;
 export function buildCad(document: CadDocument, maxFacets: number): Promise<CadBuildResult>;
 export function drawCad(document: CadDocument, maxFacets: number, z?: number): Promise<CadDrawing>;
+export function measureCad(document: CadDocument, maxFacets: number, minWall: number): Promise<CadMeasures>;
 ```
 
 ## `src/mesh/cad-builder.ts`
@@ -694,6 +695,19 @@ Purpose: the backend of `cad` to `3mf`. The package keeps the colours and the na
 ## `src/mesh/backend-dxf.ts`
 
 Purpose: the backend of `cad` to `dxf`. With no option, the drawing is the outline of the model. The option `z` gives the section at that height. A model with a colour gives a warning. A drawing with no contour rejects with `E_INPUT`. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
+
+## `src/mesh/dfm.ts`
+
+Purpose: the report of the design for manufacture. `supportArea` gives the area of the faces that need support for a print along +Z. A face on the lowest plane stands on the bed. `writeDfmReport` writes the measures and the two checks as GitHub Flavored Markdown.
+
+```ts
+export function supportArea(positions: Float32Array, triangles: Uint32Array, minZ: number, overhang: number): number;
+export function writeDfmReport(measures: CadMeasures, options: DfmOptions): Uint8Array;
+```
+
+## `src/mesh/backend-dfm.ts`
+
+Purpose: the backend of `cad` to `md`. The options are `overhang` (degrees, larger than 0 and smaller than 90) and `minWall` (millimetres, larger than 0). Any other option rejects with `E_INPUT`. A failed check does not reject the render.
 
 ## `src/types.ts`
 

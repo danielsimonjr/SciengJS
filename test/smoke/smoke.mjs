@@ -120,6 +120,8 @@ const cad3mf = await render({ type: "cad", source: cadSource, format: "3mf" }, {
 const cad3mfModel = new TextDecoder().decode(cad3mf.bytes);
 const cadDxf = await render({ type: "cad", source: cadSource, format: "dxf" }, {});
 if (cadDxf.mime !== "image/vnd.dxf" || !new TextDecoder().decode(cadDxf.bytes).includes("POLYLINE")) throw new Error("cad to dxf returned no DXF drawing");
+const cadDfm = await render({ type: "cad", source: cadSource, format: "md" }, {});
+if (!new TextDecoder().decode(cadDfm.bytes).startsWith("# Design for manufacture")) throw new Error("cad to md returned no report of the design for manufacture");
 if (cad3mf.mime !== "model/3mf" || cad3mf.bytes[0] !== 0x50 || cad3mf.bytes[1] !== 0x4b || !cad3mfModel.includes('unit="millimeter"')) throw new Error("cad to 3mf returned no 3MF package");
 const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
@@ -199,7 +201,7 @@ try {
   mathPdfCode = err.code;
 }
 if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes; cad to 3mf " + cad3mf.bytes.length + " bytes; cad to dxf " + cadDxf.bytes.length + " bytes");
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes; cad to 3mf " + cad3mf.bytes.length + " bytes; cad to dxf " + cadDxf.bytes.length + " bytes; cad to md " + cadDfm.bytes.length + " bytes");
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

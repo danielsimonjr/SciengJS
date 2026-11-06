@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "totalSourceFiles": 112,
-    "totalTestFiles": 103,
-    "testedCount": 79,
+    "totalSourceFiles": 114,
+    "totalTestFiles": 104,
+    "testedCount": 81,
     "untestedCount": 33,
-    "coveragePercent": "70.5",
+    "coveragePercent": "71.1",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 112,
-      "testedActive": 79,
+      "activeFiles": 114,
+      "testedActive": 81,
       "activeUntested": 33,
       "excludedTotal": 0,
-      "percent": "70.5",
+      "percent": "71.1",
       "breakdown": {
         "active_untested": 33
       }
@@ -90,6 +90,7 @@
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
     "src/mesh/backend-3mf.ts",
+    "src/mesh/backend-dfm.ts",
     "src/mesh/backend-dxf.ts",
     "src/mesh/backend-glb.ts",
     "src/mesh/backend-html.ts",
@@ -97,6 +98,7 @@
     "src/mesh/cad-build.ts",
     "src/mesh/cad-builder.ts",
     "src/mesh/cad-document.ts",
+    "src/mesh/dfm.ts",
     "src/mesh/dxf.ts",
     "src/mesh/glb.ts",
     "src/mesh/index.ts",
@@ -341,6 +343,9 @@
     "src/mesh/backend-3mf.ts": [
       "test/unit/mesh-3mf.test.ts"
     ],
+    "src/mesh/backend-dfm.ts": [
+      "test/unit/mesh-dfm.test.ts"
+    ],
     "src/mesh/backend-dxf.ts": [
       "test/unit/mesh-dxf.test.ts"
     ],
@@ -370,6 +375,9 @@
       "test/integration/mesh-viewer.test.ts",
       "test/unit/cad-build.test.ts",
       "test/unit/cad-document.test.ts"
+    ],
+    "src/mesh/dfm.ts": [
+      "test/integration/mesh-viewer.test.ts"
     ],
     "src/mesh/dxf.ts": [
       "test/integration/mesh-viewer.test.ts",
@@ -407,6 +415,7 @@
     "src/pairs.ts": [
       "test/unit/browser-pdf-pairs.test.ts",
       "test/unit/mesh-3mf.test.ts",
+      "test/unit/mesh-dfm.test.ts",
       "test/unit/mesh-dxf.test.ts",
       "test/unit/tex-wiring.test.ts"
     ],
@@ -537,6 +546,7 @@
       "test/unit/graph-svg-backend.test.ts",
       "test/unit/math-backends.test.ts",
       "test/unit/mesh-3mf.test.ts",
+      "test/unit/mesh-dfm.test.ts",
       "test/unit/mesh-dxf.test.ts",
       "test/unit/mesh-limit.test.ts"
     ],
@@ -592,6 +602,7 @@
       "src/mesh/stl.ts",
       "src/mesh/threemf.ts",
       "src/mesh/dxf.ts",
+      "src/mesh/dfm.ts",
       "src/mesh/cad-document.ts",
       "src/mesh/cad-build.ts",
       "src/mesh/cad-builder.ts",
@@ -815,6 +826,11 @@
       "src/types.ts",
       "src/worker/protocol.ts",
       "src/mesh/backend-glb.ts"
+    ],
+    "test/unit/mesh-dfm.test.ts": [
+      "src/mesh/backend-dfm.ts",
+      "src/pairs.ts",
+      "src/worker/protocol.ts"
     ],
     "test/unit/mesh-dxf.test.ts": [
       "src/mesh/backend-dxf.ts",
