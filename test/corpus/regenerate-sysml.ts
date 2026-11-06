@@ -9,13 +9,11 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderSysmlSvg } from "../../src/sysml/render.ts";
 import { svgProperties, type SysmlApproval } from "../support/sysml-corpus.ts";
+import { escapeHtml, reviewPage } from "../support/review-page.ts";
 
 const CORPUS = fileURLToPath(new URL("./sysml", import.meta.url));
 const REVIEW_PAGE = fileURLToPath(new URL("../../docs/analysis/i11-sysml-corpus.html", import.meta.url));
 
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
 
 const approval = JSON.parse(readFileSync(join(CORPUS, "approval.json"), "utf8")) as SysmlApproval;
 const sections: string[] = [];
@@ -40,25 +38,10 @@ for (const entry of approval.entries) {
 }
 
 const approved = approval.entries.filter((e) => e.approved).length;
-const page = [
-  "<!DOCTYPE html>",
-  '<html lang="en">',
-  "<head>",
-  '<meta charset="utf-8">',
-  "<title>SysML views: corpus review</title>",
-  "<style>",
-  "body { font-family: sans-serif; margin: 24px; }",
-  "pre { background: #f4f4f4; padding: 8px; }",
-  "section { margin-bottom: 32px; }",
-  "</style>",
-  "</head>",
-  "<body>",
-  "<h1>SysML views: corpus review</h1>",
-  `<p>Approval status: ${approved} of ${approval.entries.length} sources approved. The reviewer approves each source in test/corpus/sysml/approval.json.</p>`,
-  ...sections,
-  "</body>",
-  "</html>",
-  "",
-].join("\n");
+const page = reviewPage({
+  title: "SysML views: corpus review",
+  intro: `Approval status: ${approved} of ${approval.entries.length} sources approved. The reviewer approves each source in test/corpus/sysml/approval.json.`,
+  sections,
+});
 writeFileSync(REVIEW_PAGE, page);
 console.log(`review page: ${REVIEW_PAGE}`);
