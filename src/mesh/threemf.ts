@@ -61,7 +61,7 @@ function crc32(data: Uint8Array): number {
  * Escapes the characters that have a meaning in an XML attribute value. A tab and a line end become character
  * references, so a reader keeps them. A character that XML does not allow becomes U+FFFD.
  */
-function escapeXml(text: string): string {
+export function escapeXml(text: string): string {
   return text
     .replace(NOT_XML, "\uFFFD")
     .replace(/&/g, "&amp;")

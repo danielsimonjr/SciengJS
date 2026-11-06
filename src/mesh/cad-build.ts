@@ -257,6 +257,52 @@ export function drawCad(document: CadDocument, maxFacets: number, z?: number): P
   });
 }
 
+/**
+ * The three views of a drawing: the top view (X and Y), the front view (X and Z) and the right view (Y and Z), each
+ * a list of closed contours. The bounding box of the solid is min and max. The views are one build of the solid.
+ */
+export interface CadViews {
+  top: number[][][];
+  front: number[][][];
+  right: number[][][];
+  min: number[];
+  max: number[];
+  colored: boolean;
+}
+
+/** Drops the contours with no area. A contour with no area is an artefact of the projection. */
+function contoursWithArea(contours: number[][][]): number[][][] {
+  return contours.filter((c) => Math.abs(shoelace(c)) >= 1e-6);
+}
+
+/** The signed area of a closed contour by the shoelace formula. */
+function shoelace(points: number[][]): number {
+  let sum = 0;
+  for (let i = 0; i < points.length; i++) {
+    const [x1, y1] = points[i]!;
+    const [x2, y2] = points[(i + 1) % points.length]!;
+    sum += x1! * y2! - x2! * y1!;
+  }
+  return sum / 2;
+}
+
+/**
+ * Draws the three views of a checked document in one build. The front view projects the solid turned by -90 degrees
+ * about X, so that Z is up in the view. The right view turns the solid by -90 degrees about Z, then by -90 degrees
+ * about X, so that Y is to the right. A result over maxFacets rejects with E_LIMIT.
+ */
+export function drawCadViews(document: CadDocument, maxFacets: number): Promise<CadViews> {
+  return withSolid(document, maxFacets, (solid, build) => {
+    const { min, max } = solid.boundingBox();
+    const top = contoursWithArea(build.keep(solid.project()).toPolygons());
+    const front = contoursWithArea(build.keep(build.keep(solid.rotate([-90, 0, 0])).project()).toPolygons());
+    const turned = build.keep(solid.rotate([0, 0, -90]));
+    const right = contoursWithArea(build.keep(build.keep(turned.rotate([-90, 0, 0])).project()).toPolygons());
+    const colored = [...build.colors.values()].some((c) => c !== null);
+    return { top, front, right, min: [...min], max: [...max], colored };
+  });
+}
+
 /** The axes of the wall check and the gap check. A rotation turns each axis into the Z axis, so that a slice of the turned solid cuts across the original axis. */
 const SECTION_AXES = [
   { axis: "X", index: 0, angles: [0, -90, 0] },

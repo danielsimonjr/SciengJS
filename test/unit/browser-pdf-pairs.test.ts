@@ -24,7 +24,7 @@ test("dot to pdf and mermaid to pdf are built in, and their module files exist",
 
 test("every pdf pair that has a backend is reported not ready without a browser path", async () => {
   const caps = await capabilitiesWithRegistry({}, DEFAULT_REGISTRY, ISOLATED_CONFIG_DEPS);
-  for (const type of ["dot", "mermaid", "html"] as const) {
+  for (const type of ["dot", "mermaid", "html", "cad"] as const) {
     const cap = caps.find((c) => c.type === type && c.format === "pdf");
     expect(cap?.stage).toBe("browser");
     expect(cap?.ready).toBe(false);

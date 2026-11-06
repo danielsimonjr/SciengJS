@@ -201,7 +201,15 @@ try {
   mathPdfCode = err.code;
 }
 if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes; cad to 3mf " + cad3mf.bytes.length + " bytes; cad to dxf " + cadDxf.bytes.length + " bytes; cad to md " + cadDfm.bytes.length + " bytes");
+let cadPdfCode = "none";
+try {
+  await render({ type: "cad", source: cadSource, format: "pdf" }, {});
+} catch (err) {
+  if (!(err instanceof RenderError)) throw err;
+  cadPdfCode = err.code;
+}
+if (cadPdfCode !== "E_STAGE_MISSING") throw new Error("cad to pdf with no browser must reject with E_STAGE_MISSING, got " + cadPdfCode);
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes; cad to 3mf " + cad3mf.bytes.length + " bytes; cad to dxf " + cadDxf.bytes.length + " bytes; cad to md " + cadDfm.bytes.length + " bytes; cad to pdf rejected with " + cadPdfCode);
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

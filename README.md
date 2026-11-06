@@ -306,6 +306,7 @@ const { bytes } = await render({ type: "cad", source, format: "stl" }, {});
 - STL holds no colour and no name. A coloured model gives a warning in STL.
 - `format: "3mf"` gives a 3MF package that keeps the colours and the names. The unit is millimeter.
 - `format: "dxf"` gives a 2D drawing in the X-Y plane: the outline of the model, or with the option `z` the section at that height. Each closed contour is one closed polyline, in millimetres.
+- `format: "pdf"` gives a one-page third-angle drawing on A4 landscape: the front, top and right views, three dimensions and a title block. The option `title` (1 to 80 characters) sets the title. The browser stage prints the drawing, so the render needs `SCIENG_BROWSER`. The pdf holds no colour.
 - `format: "md"` gives a report of the design for manufacture in Markdown: the size, the volume and the surface area, and three checks. The overhang check gives the area that needs support for a print along +Z (option `overhang`, default 45 degrees from the vertical). The wall check finds the walls thinner than the option `minWall` (default 0.8 mm) in 32 sections on each axis. The gap check finds the slots, holes and clearances narrower than the option `minGap` (default 0.5 mm) in the same sections. A failed check does not reject the render.
 - A document with more than `maxCadNodes` nodes rejects with `E_LIMIT` before the solid operations start. A model with more than `maxCadFacets` facets also rejects with `E_LIMIT`.
 - A bad value rejects with `E_INPUT`. The message gives the JSON path, for example `model.children[1].radius`.
@@ -344,7 +345,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml, graph | svg, png and pdf: released in 0.9.0 |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
-| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: released in 1.0.5; md (design for manufacture): released in 1.0.6 |
+| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: released in 1.0.5; md (design for manufacture): released in 1.0.6; pdf (third-angle drawing): unreleased |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent

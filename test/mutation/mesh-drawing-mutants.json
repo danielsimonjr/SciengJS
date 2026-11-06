@@ -1,0 +1,100 @@
+{
+ "mutants": [
+  {
+   "id": "drw-1",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "build.keep(solid.rotate([-90, 0, 0])).project()",
+   "replacement": "build.keep(solid.rotate([90, 0, 0])).project()",
+   "equivalent": null
+  },
+  {
+   "id": "drw-2",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "build.keep(solid.rotate([0, 0, -90]))",
+   "replacement": "build.keep(solid.rotate([0, 0, 90]))",
+   "equivalent": null
+  },
+  {
+   "id": "drw-3",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "topBottom - (p[1]! - min[1]!) * scale",
+   "replacement": "topBottom + (p[1]! - min[1]!) * scale",
+   "equivalent": null
+  },
+  {
+   "id": "drw-4",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const fitsWidth = (width + depth) * scale + SHEET.gap <= DRAWING_AREA.width;",
+   "replacement": "const fitsWidth = (width + depth) * scale + SHEET.gap < DRAWING_AREA.width;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-5",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "topBottom: frontTop - SHEET.gap,",
+   "replacement": "topBottom: frontBottom + SHEET.gap,",
+   "equivalent": null
+  },
+  {
+   "id": "drw-6",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "rightLeft: frontRight + SHEET.gap,",
+   "replacement": "rightLeft: frontRight - SHEET.gap,",
+   "equivalent": null
+  },
+  {
+   "id": "drw-7",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "margin: 10, gap: 15,",
+   "replacement": "margin: 10, gap: 0,",
+   "equivalent": null
+  },
+  {
+   "id": "drw-8",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "String(Number(value.toFixed(2)))",
+   "replacement": "String(Number(value.toFixed(0)))",
+   "equivalent": null
+  },
+  {
+   "id": "drw-9",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "return points * BYTES_PER_POINT + contours * BYTES_PER_CONTOUR + FIXED_BYTES;",
+   "replacement": "return (points * BYTES_PER_POINT + contours * BYTES_PER_CONTOUR + FIXED_BYTES) / 2;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-10",
+   "file": "src/mesh/backend-pdf.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "if (needed > limitBytes) {",
+   "replacement": "if (needed < limitBytes) {",
+   "equivalent": null
+  },
+  {
+   "id": "drw-11",
+   "file": "src/mesh/backend-pdf.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const TITLE_MAX = 80;",
+   "replacement": "const TITLE_MAX = 800;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-12",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "return scale >= 1 ? `scale ${scale}:1` : `scale 1:${Math.round(1 / scale)}`;",
+   "replacement": "return scale < 1 ? `scale ${scale}:1` : `scale 1:${Math.round(1 / scale)}`;",
+   "equivalent": null
+  }
+ ]
+}
