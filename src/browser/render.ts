@@ -268,17 +268,23 @@ class Interceptor {
  * the navigation, so a load event of an earlier document does not count.
  */
 export async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, deadline: number): Promise<HtmlPageResult> {
-  const step: CaptureStep = { name: "Target.setAutoAttach", at: Date.now() };
+  const step: CaptureStep = { name: "Target.setAutoAttach", at: Date.now(), faults: [] };
   return withDeadline(capture(cdp, req, step), deadline, () => {
     const seconds = ((Date.now() - step.at) / 1000).toFixed(1);
-    return `the page did not load in time: the capture was at the step "${step.name}" for ${seconds} s`;
+    const fault = step.faults[0];
+    const cause = fault === undefined ? "" : `; the browser rejected a page request: ${fault.message}`;
+    return `the page did not load in time: the capture was at the step "${step.name}" for ${seconds} s${cause}`;
   });
 }
 
-/** The step of a capture that runs now, and its start time (a Date.now() time). A timeout message names it. */
+/**
+ * The step of a capture that runs now, its start time (a Date.now() time), and the guard faults of the capture.
+ * A timeout message names the step and the first fault.
+ */
 interface CaptureStep {
   name: string;
   at: number;
+  faults: Error[];
 }
 
 async function capture(cdp: CdpConnection, req: HtmlPageRequest, step: CaptureStep): Promise<HtmlPageResult> {
@@ -287,6 +293,7 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest, step: CaptureSt
     step.at = Date.now();
   };
   const guard = new Interceptor(cdp, req.html, req.pinned ?? new Map());
+  step.faults = guard.faults;
   // A new page that the page opens (window.open) is a new target of the browser. The browser-level auto-attach
   // pauses it until it is guarded. A target of the browser itself (for example a built-in extension) is not a
   // target of the page: the client lets it run, and the forced flags keep its connections on the proxy.
