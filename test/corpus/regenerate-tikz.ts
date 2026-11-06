@@ -9,15 +9,13 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BUNDLE_DIR_VAR, renderTikzSvg, svgCounts, texConfig, type TikzApproval } from "../support/tikz-corpus.ts";
+import { escapeHtml, reviewPage } from "../support/review-page.ts";
 
 const CORPUS = fileURLToPath(new URL("./tikz", import.meta.url));
 const REVIEW_PAGE = fileURLToPath(new URL("../../docs/analysis/i12-tikz-corpus.html", import.meta.url));
 const bundleDir = process.env[BUNDLE_DIR_VAR];
 if (!bundleDir) throw new Error(`${BUNDLE_DIR_VAR} is not set. It names the folder that \`node tools/tex/bundles.mjs pack\` wrote.`);
 
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
 
 const cfg = texConfig(bundleDir);
 const approval = JSON.parse(readFileSync(join(CORPUS, "approval.json"), "utf8")) as TikzApproval;
@@ -42,26 +40,11 @@ for (const entry of approval.entries) {
 }
 
 const approved = approval.entries.filter((e) => e.approved).length;
-const page = [
-  "<!DOCTYPE html>",
-  '<html lang="en">',
-  "<head>",
-  '<meta charset="utf-8">',
-  "<title>TikZ stage: corpus review</title>",
-  "<style>",
-  "body { font-family: sans-serif; margin: 24px; }",
-  "pre { background: #f4f4f4; padding: 8px; }",
-  "section { margin-bottom: 32px; }",
-  "svg { max-width: 100%; height: auto; border: 1px solid #ccc; }",
-  "</style>",
-  "</head>",
-  "<body>",
-  "<h1>TikZ stage: corpus review</h1>",
-  `<p>Approval status: ${approved} of ${approval.entries.length} sources approved. The reviewer approves each source in test/corpus/tikz/approval.json.</p>`,
-  ...sections,
-  "</body>",
-  "</html>",
-  "",
-].join("\n");
+const page = reviewPage({
+  title: "TikZ stage: corpus review",
+  intro: `Approval status: ${approved} of ${approval.entries.length} sources approved. The reviewer approves each source in test/corpus/tikz/approval.json.`,
+  style: ["svg { max-width: 100%; height: auto; border: 1px solid #ccc; }"],
+  sections,
+});
 writeFileSync(REVIEW_PAGE, page);
 console.log(`review page: ${REVIEW_PAGE}`);

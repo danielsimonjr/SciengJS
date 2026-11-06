@@ -8,16 +8,13 @@ import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderMermaidSvg } from "../../src/mermaid/render.ts";
+import { escapeHtml, reviewPage } from "../support/review-page.ts";
 
 const CORPUS = fileURLToPath(new URL("./mermaid", import.meta.url));
 const REVIEW_PAGE = fileURLToPath(new URL("../../docs/analysis/i3-mermaid-corpus.html", import.meta.url));
 
 interface Approval {
   entries: { source: string; approved: boolean }[];
-}
-
-function escapeHtml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 const sources = readdirSync(CORPUS).filter((f) => f.endsWith(".mmd")).sort();
@@ -39,25 +36,10 @@ for (const file of sources) {
   );
 }
 
-const page = [
-  "<!DOCTYPE html>",
-  '<html lang="en">',
-  "<head>",
-  '<meta charset="utf-8">',
-  "<title>Mermaid native layouts: corpus review</title>",
-  "<style>",
-  "body { font-family: sans-serif; margin: 24px; }",
-  "pre { background: #f4f4f4; padding: 8px; }",
-  "section { margin-bottom: 32px; }",
-  "</style>",
-  "</head>",
-  "<body>",
-  "<h1>Mermaid native layouts: corpus review</h1>",
-  `<p>Approval status: ${approved.size} of ${sources.length} sources approved. A maintainer approves each source in test/corpus/mermaid/approval.json.</p>`,
-  ...sections,
-  "</body>",
-  "</html>",
-  "",
-].join("\n");
+const page = reviewPage({
+  title: "Mermaid native layouts: corpus review",
+  intro: `Approval status: ${approved.size} of ${sources.length} sources approved. A maintainer approves each source in test/corpus/mermaid/approval.json.`,
+  sections,
+});
 writeFileSync(REVIEW_PAGE, page);
 console.log(`review page: ${REVIEW_PAGE}`);
