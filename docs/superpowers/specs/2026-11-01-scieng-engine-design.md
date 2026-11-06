@@ -39,7 +39,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 | `tikz` | a `tikzpicture` or a picture environment of a supported package | svg, png, pdf | tex |
 | `plot` | the Plotly JSON subset of section "PLOT" | svg, png, pdf, html | plot |
 | `sysml` | the SysML v2 textual subset of section "SysML" | svg, png, pdf | graph |
-| `step`, `iges`, `brep` | ISO 10303-21, IGES, OpenCascade BREP | html, png, glb | mesh, browser |
+| `step`, `iges`, `brep` | ISO 10303-21, IGES, OpenCascade BREP | html, png, glb, dxf | mesh, browser |
 | `cad` | the CSG document of section "CAD" | html, png, glb, stl, 3mf, dxf, md, pdf | mesh, browser |
 | `html` | an HTML document | png, pdf, md | browser, html |
 
@@ -199,7 +199,8 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - STEP, IGES and BREP go through `occt-import-js` (`ReadStepFile`, `ReadIgesFile`, `ReadBrepFile`). The result is a list of meshes in the form that Three.js loads.
 - A CAD document goes through `manifold-3d` for the solid operations.
 - Outputs: a glTF binary (`glb`), an STL file, an HTML viewer page, and a PNG of the page through the browser stage.
-- CAD documents only: a 3MF file (`3mf`), a DXF drawing (`dxf`) and a Markdown report of the design for manufacture (`md`).
+- CAD documents only: a 3MF file (`3mf`) and a Markdown report of the design for manufacture (`md`).
+- CAD documents, STEP, IGES and BREP files: a DXF drawing (`dxf`).
 - CAD documents only: a one-page third-angle drawing (`pdf`).
 - A `glb` render estimates its peak memory after the read: the bytes of the positions, the normals and the indices, times four copies. An estimate over `maxMemoryMb` megabytes rejects with `E_LIMIT`. Geometry over 4 GiB also rejects with `E_LIMIT`, because the `glb` header holds the file length in 32 bits.
 - The viewer page loads Three.js and its orbit controls add-on. The page has section planes and an exploded view. The page embeds the `glb`. In a normal browser, the page requests only the pinned Three.js modules. Under the browser stage, the client fulfils those modules from the engine package.
@@ -308,10 +309,14 @@ The `3mf` output is a 3MF Core package:
 - The colours are one `basematerials` group. A triangle without a colour takes the default grey of the `glb` output.
 - An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
 
-The `dxf` output is a 2D drawing of the model in the X-Y plane:
+The `dxf` output is a 2D drawing of a solid, in the X-Y plane. The solid is that of a CAD document, a STEP file, an IGES file or a BREP file:
 
-- With no option, the drawing is the outline of the model, seen from above (the projection onto the X-Y plane).
-- The option `z` (a finite number) gives the section of the model at the height `z` in place of the outline.
+- With no option, the drawing is the outline of the solid, seen from above (the projection onto the X-Y plane).
+- The option `z` (a finite number) gives the section of the solid at the height `z` in place of the outline.
+- The triangles of each STEP, IGES or BREP mesh are welded. Each mesh is read as a solid. The union joins the solids. Touching parts merge into one outline. Disjoint parts give separate contours.
+- A mesh that is not a closed solid rejects with `E_INPUT`. The message gives the mesh name in quotes, or the mesh index when the name is empty.
+- The triangles of a solid turn outward, as in Manifold. A closed mesh with its triangles turned inward (a negative volume) rejects with `E_INPUT`.
+- A sum of the triangles of all meshes over `maxCadFacets` rejects with `E_LIMIT` before the solid is built.
 - Each closed contour of the drawing is one closed `POLYLINE` on layer `0`. A hole is a contour of its own.
 - The file is ASCII DXF of release R12 (`AC1009`), with the coordinates in millimetres. Thus most CAD and laser-cut programs can open the file.
 - The drawing has no colour and no name. A model with a colour gives a warning.
@@ -355,6 +360,8 @@ The `md` output is a report of the design for manufacture (DFM) of the model:
 
 - Input: the file bytes. The option `linearUnit` sets the output unit (millimeter by default) for STEP and IGES.
 - The face colors of the source carry into the glTF materials.
+- The `dxf` output takes the option `z` only. Its coordinates are in millimeters, the default unit of the reader. The `linearUnit` option is not accepted by `dxf`.
+- The face colors of the source give the colour warning of the `dxf` output.
 
 ### HTML
 
