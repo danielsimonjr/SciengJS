@@ -156,8 +156,8 @@
    "id": "dfm-20",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "gapArea(build, section, minGap)",
-   "replacement": "gapArea(build, section, minWall)",
+   "original": "gapPieces(build, section, minGap)",
+   "replacement": "gapPieces(build, section, minWall)",
    "equivalent": null
   },
   {
@@ -204,7 +204,7 @@
    "id": "dfm-26",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "if (longestPart(build, piece, min) > 0.75 * min || ",
+   "original": "if (longest > 0.75 * min || ",
    "replacement": "if (",
    "equivalent": null
   },
@@ -238,6 +238,94 @@
    "test": "test/unit/mesh-dfm.test.ts",
    "original": "const e = min / 200;",
    "replacement": "const e = min / 40;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-31",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (held.length === 1) continue;",
+   "replacement": "if (held.length === 0) continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-32",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (held.length === 1) continue;",
+   "replacement": "if (held.length >= 1) continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-33",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "side <= 2 * min) continue;",
+   "replacement": "side <= 200 * min) continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-34",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "side <= 2 * min) continue;",
+   "replacement": "side <= 0) continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-35",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "convex: cross > 0",
+   "replacement": "convex: cross < 0",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-36",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "held.every((v) => v.convex)",
+   "replacement": "held.some((v) => v.convex)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-37",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "[at - min / 2, at + min / 2]",
+   "replacement": "[at - 2 * min, at + 2 * min]",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-38",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (section.area() === 0) continue;",
+   "replacement": "if (section.area() === 0) return true;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-39",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (!wall) continue;",
+   "replacement": "if (wall && false) continue;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-40",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "CrossSection.square([min / 4, min / 4], true)",
+   "replacement": "CrossSection.square([min / 400, min / 400], true)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-41",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "piece.offset(min / 2, \"Round\"",
+   "replacement": "piece.offset(0, \"Round\"",
    "equivalent": null
   }
  ]
