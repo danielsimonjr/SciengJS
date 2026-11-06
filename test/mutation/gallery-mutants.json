@@ -1,0 +1,76 @@
+{
+  "mutants": [
+    {
+      "id": "gallery-1",
+      "file": "test/support/review-page.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "\"&quot;\")",
+      "replacement": "\"&#34;\")",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-2",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "<p class=\"error\">${escapeHtml(r.code)}",
+      "replacement": "<p class=\"err\">${escapeHtml(r.code)}",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-3",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "const ordered = [...results].sort(compareEntries);",
+      "replacement": "const ordered = [...results];",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-4",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "const href = `data:${r.mime};base64,",
+      "replacement": "const href = `data:image/svg+xml;base64,",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-5",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (size > MAX_EMBED_BYTES) return",
+      "replacement": "if (size >= MAX_EMBED_BYTES) return",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-6",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (r.format === \"md\") return",
+      "replacement": "if (r.format === \"md\" && r.mime === \"\") return",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-7",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "return out.sort(compareEntries);",
+      "replacement": "return out;",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-8",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "<h3>${escapeHtml(r.file)}</h3>",
+      "replacement": "<h3>${r.file}</h3>",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-9",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (r.mime.startsWith(\"image/\")) return",
+      "replacement": "if (r.mime.startsWith(\"image/\") && r.mime === \"\") return",
+      "equivalent": null
+    }
+  ]
+}

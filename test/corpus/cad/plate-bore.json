@@ -1,0 +1,1 @@
+{"version":1,"model":{"type":"difference","children":[{"type":"cube","size":[40,20,5],"center":true},{"type":"cylinder","height":10,"radius":4,"center":true}]}}
