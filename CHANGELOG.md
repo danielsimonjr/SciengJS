@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- If the DevTools socket does not open in time, the error message gives the socket wait time. The message also gives the time from the browser launch to the port file, and whether the browser is still running. Before this change, the message gave only the address. Why: a Windows CI stall of the socket open did not recur, so the next one must report its own cause.
+
 ## [1.0.3] - 2026-11-05
 
 ### Fixed

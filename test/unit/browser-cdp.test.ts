@@ -144,4 +144,14 @@ describe("connectCdp", () => {
     await expect(opened).rejects.toMatchObject({ code: "E_TIMEOUT" });
     expect(socket.closed).toBe(true);
   });
+
+  test("the E_TIMEOUT message gives the time that the socket waited", async () => {
+    const opened = connectCdp("ws://x", Date.now() + 30, () => new FakeSocket());
+    await expect(opened).rejects.toThrow(/did not open in time: it waited \d+\.\d s/);
+  });
+
+  test("the E_TIMEOUT message ends with the context of the caller", async () => {
+    const opened = connectCdp("ws://x", Date.now() + 30, () => new FakeSocket(), () => "the browser is running");
+    await expect(opened).rejects.toThrow(/s; the browser is running$/);
+  });
 });

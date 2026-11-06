@@ -49,7 +49,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/assets.ts` | @danielsimonjr/sciengjs | src | build-entry | 88 |
 | `src/browser/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 16 |
 | `src/browser/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
-| `src/browser/cdp.ts` | @danielsimonjr/sciengjs | src | build-entry | 215 |
+| `src/browser/cdp.ts` | @danielsimonjr/sciengjs | src | build-entry | 220 |
 | `src/browser/flags.ts` | @danielsimonjr/sciengjs | src | build-entry | 38 |
 | `src/browser/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 5 |
 | `src/browser/input.ts` | @danielsimonjr/sciengjs | src | build-entry | 109 |
@@ -57,7 +57,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/browser/pinned.ts` | @danielsimonjr/sciengjs | src | build-entry | 63 |
 | `src/browser/profile.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
 | `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 77 |
-| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 575 |
+| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 581 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 251 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 58 |
@@ -202,7 +202,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/tex-tools/trip-gate.test.mjs` | (root) | tests | test | 80 |
 | `test/unit/assets.test.ts` | (root) | tests | test | 131 |
 | `test/unit/browser-capture.test.ts` | (root) | tests | test | 134 |
-| `test/unit/browser-cdp.test.ts` | (root) | tests | test | 147 |
+| `test/unit/browser-cdp.test.ts` | (root) | tests | test | 157 |
 | `test/unit/browser-flags.test.ts` | (root) | tests | test | 32 |
 | `test/unit/browser-input.test.ts` | (root) | tests | test | 109 |
 | `test/unit/browser-kill-tree.test.ts` | (root) | tests | test | 28 |

@@ -185,13 +185,16 @@ function runtimeSocket(address: string): CdpSocket {
 
 /**
  * Opens a DevTools socket and returns a connection on it. An error event, or a close before the open, rejects with
- * E_STAGE_MISSING. No open before the deadline closes the socket and rejects with E_TIMEOUT.
+ * E_STAGE_MISSING. No open before the deadline closes the socket and rejects with E_TIMEOUT. The E_TIMEOUT message
+ * gives the socket wait time. If the caller gives a context, the message also gives the text of `context`.
  */
 export function connectCdp(
   address: string,
   deadline: number,
   makeSocket: (address: string) => CdpSocket = runtimeSocket,
+  context?: () => string,
 ): Promise<CdpConnection> {
+  const started = Date.now();
   const socket = makeSocket(address);
   return new Promise<CdpConnection>((resolve, reject) => {
     let settled = false;
@@ -204,7 +207,9 @@ export function connectCdp(
     const timer = setTimeout(() => {
       settle(() => {
         socket.close();
-        reject(new RenderError("E_TIMEOUT", `the DevTools socket ${address} did not open in time`));
+        const waited = ((Date.now() - started) / 1000).toFixed(1);
+        const more = context === undefined ? "" : `; ${context()}`;
+        reject(new RenderError("E_TIMEOUT", `the DevTools socket ${address} did not open in time: it waited ${waited} s${more}`));
       });
     }, Math.max(0, deadline - Date.now()));
     socket.addEventListener("open", () => settle(() => resolve(new CdpConnection(socket))));

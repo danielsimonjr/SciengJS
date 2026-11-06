@@ -556,8 +556,14 @@ export async function renderHtmlPage(req: HtmlPageRequest): Promise<HtmlPageResu
       throw new RenderError("E_STAGE_MISSING", `cannot start the browser at ${req.browser}: ${(err as Error).message}`);
     }
     state = watchChild(child, req.browser);
+    const launched = Date.now();
     const address = await waitForBrowser(profile, state, deadline);
-    cdp = await connectCdp(address, deadline);
+    const portSeconds = ((Date.now() - launched) / 1000).toFixed(1);
+    const launch = state;
+    cdp = await connectCdp(address, deadline, undefined, () => {
+      const browser = launch.exited ? `exited with ${launch.code ?? launch.signal}` : "is still running";
+      return `the browser published its port ${portSeconds} s after the launch, and the browser ${browser}`;
+    });
     cdp.setDeadline(deadline);
     return await capturePage(cdp, req, deadline);
   } finally {
