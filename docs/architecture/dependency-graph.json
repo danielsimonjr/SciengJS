@@ -2882,6 +2882,13 @@
           {
             "file": "src/mesh/cad-build.ts",
             "imports": [
+              "ThinSection"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/mesh/cad-build.ts",
+            "imports": [
               "WALL_SECTIONS"
             ],
             "typeOnly": false
@@ -8936,7 +8943,7 @@
     "totalTypeScriptFiles": 293,
     "totalSourceFiles": 293,
     "totalModules": 3,
-    "totalLinesOfCode": 33863,
+    "totalLinesOfCode": 33980,
     "totalExports": 726,
     "entryRoots": 107,
     "reachableFiles": 107,
@@ -8945,7 +8952,7 @@
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 83,
+    "totalTypeOnlyImports": 84,
     "noImporterFileCount": 8,
     "unusedExportsCount": 50,
     "circularDepsTruncated": false,

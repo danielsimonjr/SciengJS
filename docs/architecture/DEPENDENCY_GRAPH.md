@@ -1116,6 +1116,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./cad-build.ts` | `CadMeasures` | Import (type-only) |
+| `./cad-build.ts` | `ThinSection` | Import (type-only) |
 | `./cad-build.ts` | `WALL_SECTIONS` | Import |
 
 **Exports:**
@@ -2259,7 +2260,7 @@ graph TD
 |----------|-------|
 | Total Source Files | 293 |
 | Subsystems | 17 |
-| Total Lines of Code | 33863 |
+| Total Lines of Code | 33980 |
 | Total Exports | 726 |
 | Total Re-exports | 179 |
 | Total Classes | 7 |
@@ -2267,7 +2268,7 @@ graph TD
 | Total Functions | 288 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 83 |
+| Type-only Imports | 84 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

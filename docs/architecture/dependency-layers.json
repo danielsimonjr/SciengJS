@@ -2993,6 +2993,13 @@
           {
             "file": "./cad-build.ts",
             "imports": [
+              "ThinSection"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./cad-build.ts",
+            "imports": [
               "WALL_SECTIONS"
             ]
           }

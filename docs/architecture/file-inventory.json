@@ -369,7 +369,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 32
+      "loc": 35
     },
     {
       "file": "src/mesh/backend-dxf.ts",
@@ -411,7 +411,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 398
+      "loc": 422
     },
     {
       "file": "src/mesh/cad-builder.ts",
@@ -432,7 +432,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 82
+      "loc": 90
     },
     {
       "file": "src/mesh/dxf.ts",
@@ -1489,7 +1489,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 196
+      "loc": 278
     },
     {
       "file": "test/unit/mesh-dxf.test.ts",

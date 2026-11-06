@@ -255,20 +255,20 @@ export function drawCad(document: CadDocument, maxFacets: number, z?: number): P
   });
 }
 
-/** The axes of the wall check. A rotation turns each axis into the Z axis, so that a slice of the turned solid cuts across the original axis. */
+/** The axes of the wall check and the gap check. A rotation turns each axis into the Z axis, so that a slice of the turned solid cuts across the original axis. */
 const SECTION_AXES = [
   { axis: "X", index: 0, angles: [0, -90, 0] },
   { axis: "Y", index: 1, angles: [90, 0, 0] },
   { axis: "Z", index: 2, angles: [0, 0, 0] },
 ] as const;
 
-/** The segments of a full circle in the round joins of the wall check. The joins shape only the corners of an opening. */
+/** The segments of a full circle in the round joins of the wall check and the gap check. The joins shape only the corners of a section change. */
 const OFFSET_SEGMENTS = 32;
 
 /** The number of sections of the wall check on each axis. */
 export const WALL_SECTIONS = 32;
 
-/** A section of the wall check with a thin region: the axis, the position on the axis and the thin area. */
+/** A section of the wall check or the gap check with a found region: the axis, the position on the axis and the area. */
 export interface ThinSection {
   axis: "X" | "Y" | "Z";
   at: number;
@@ -285,14 +285,15 @@ export interface CadMeasures {
   positions: Float32Array;
   triangles: Uint32Array;
   thin: ThinSection[];
+  narrow: ThinSection[];
 }
 
 /**
  * Measures a checked document for the report of the design for manufacture. The wall check cuts WALL_SECTIONS
  * sections on each axis. An opening of each section by minWall removes each wall thinner than minWall. A model
- * with no solid rejects with E_INPUT.
+ * with no solid rejects with E_INPUT. A closing of each section by minGap fills each gap narrower than minGap.
  */
-export function measureCad(document: CadDocument, maxFacets: number, minWall: number): Promise<CadMeasures> {
+export function measureCad(document: CadDocument, maxFacets: number, minWall: number, minGap: number): Promise<CadMeasures> {
   return withSolid(document, maxFacets, (solid, build) => {
     if (solid.numTri() === 0) throw new RenderError("E_INPUT", "the model holds no solid");
     const { min, max } = solid.boundingBox();
@@ -302,14 +303,18 @@ export function measureCad(document: CadDocument, maxFacets: number, minWall: nu
       for (let c = 0; c < 3; c++) positions[v * 3 + c] = mesh.vertProperties[v * mesh.numProp + c]!;
     }
     const thin: ThinSection[] = [];
+    const narrow: ThinSection[] = [];
     for (const { axis, index, angles } of SECTION_AXES) {
       const turned = index === 2 ? solid : build.keep(solid.rotate([...angles]));
       const lo = min[index]!;
       const step = (max[index]! - lo) / WALL_SECTIONS;
       for (let i = 0; i < WALL_SECTIONS; i++) {
         const at = lo + (i + 0.5) * step;
-        const area = thinArea(build, build.keep(turned.slice(at)), minWall);
-        if (area > 0) thin.push({ axis, at, area });
+        const section = build.keep(turned.slice(at));
+        const thinAt = thinArea(build, section, minWall);
+        if (thinAt > 0) thin.push({ axis, at, area: thinAt });
+        const gapAt = gapArea(build, section, minGap);
+        if (gapAt > 0) narrow.push({ axis, at, area: gapAt });
       }
     }
     return {
@@ -320,29 +325,48 @@ export function measureCad(document: CadDocument, maxFacets: number, minWall: nu
       positions,
       triangles: Uint32Array.from(mesh.triVerts),
       thin,
+      narrow,
     };
   });
 }
 
 /**
  * The area of the regions of a section that an opening by minWall removes, less the corners of the opening. The
- * opening shrinks the section by a little less than half of minWall, so that a wall equal to minWall stays. A
- * removed region is thin when the region is wider than a quarter of minWall. A removed region is also thin when its
- * area is more than the four corners of a square bar.
+ * opening shrinks the section by a little less than half of minWall, so that a wall equal to minWall stays.
  */
 function thinArea(build: Build, section: Section, minWall: number): number {
   const segments = OFFSET_SEGMENTS;
   const half = (minWall / 2) * (1 - 1e-6);
-  const corner = (1 - Math.PI / 4) * minWall * minWall;
   const opened = build.keep(build.keep(section.offset(-half, "Round", 2, segments)).offset(half, "Round", 2, segments));
-  // The subtraction leaves slivers of zero width with a reversed winding. A shrink grows such a sliver, so the
-  // simplify step removes the slivers before the corner test.
-  const removed = build.keep(build.keep(section.subtract(opened)).simplify(minWall / 1000));
+  return countedArea(build, build.keep(section.subtract(opened)), minWall);
+}
+
+/**
+ * The area of the regions that a closing by minGap adds to a section, less the concave corners of the closing. The
+ * closing grows the section by a little less than half of minGap, so that a slot equal to minGap stays open.
+ */
+function gapArea(build: Build, section: Section, minGap: number): number {
+  const segments = OFFSET_SEGMENTS;
+  const half = (minGap / 2) * (1 - 1e-6);
+  const closed = build.keep(build.keep(section.offset(half, "Round", 2, segments)).offset(-half, "Round", 2, segments));
+  return countedArea(build, build.keep(closed.subtract(section)), minGap);
+}
+
+/**
+ * The area of the pieces of a difference that are narrow. A piece is narrow when it is wider than a quarter of min,
+ * or when its area is more than (1 - pi/4) min², the four corners of a square bar. A piece with an inscribed disc of
+ * radius min/8 is wide. The subtraction leaves slivers of zero width with a reversed winding. A shrink grows such a
+ * sliver, so the simplify step removes the slivers before the tests.
+ */
+function countedArea(build: Build, removed: Section, min: number): number {
+  const segments = OFFSET_SEGMENTS;
+  const corner = (1 - Math.PI / 4) * min * min;
+  const cleaned = build.keep(removed.simplify(min / 1000));
   let area = 0;
-  for (const piece of removed.decompose()) {
+  for (const piece of cleaned.decompose()) {
     build.keep(piece);
     const pieceArea = piece.area();
-    if (pieceArea > corner || build.keep(piece.offset(-minWall / 8, "Round", 2, segments)).area() > 0) area += pieceArea;
+    if (pieceArea > corner || build.keep(piece.offset(-min / 8, "Round", 2, segments)).area() > 0) area += pieceArea;
   }
   return area;
 }

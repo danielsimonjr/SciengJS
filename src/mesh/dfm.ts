@@ -1,4 +1,5 @@
 import type { CadMeasures } from "./cad-build.ts";
+import type { ThinSection } from "./cad-build.ts";
 import { WALL_SECTIONS } from "./cad-build.ts";
 
 /** The options of the report of the design for manufacture. */
@@ -7,12 +8,14 @@ export interface DfmOptions {
   overhang: number;
   /** The minimum wall in millimetres. */
   minWall: number;
+  /** The minimum gap in millimetres. */
+  minGap: number;
 }
 
 /** The default options of the report. */
-export const DFM_DEFAULTS: DfmOptions = { overhang: 45, minWall: 0.8 };
+export const DFM_DEFAULTS: DfmOptions = { overhang: 45, minWall: 0.8, minGap: 0.5 };
 
-/** The largest number of thin sections that the report lists on each axis. */
+/** The largest number of thin or narrow sections that the report lists on each axis. */
 const LISTED_SECTIONS = 10;
 
 /**
@@ -50,7 +53,17 @@ function fixed(value: number): string {
   return String(rounded === 0 ? 0 : rounded);
 }
 
-/** Writes the report of the design for manufacture as GitHub Flavored Markdown. */
+/** Writes the list of the sections with a found region, under a heading, at most LISTED_SECTIONS on each axis. */
+function listSections(lines: string[], heading: string, sections: ThinSection[], word: string): void {
+  lines.push("", `## ${heading}`, "");
+  for (const axis of ["X", "Y", "Z"] as const) {
+    const onAxis = sections.filter((section) => section.axis === axis);
+    for (const s of onAxis.slice(0, LISTED_SECTIONS)) lines.push(`- ${axis} = ${fixed(s.at)} mm: ${fixed(s.area)} mm² ${word}`);
+    if (onAxis.length > LISTED_SECTIONS) lines.push(`- and ${onAxis.length - LISTED_SECTIONS} more sections on ${axis}`);
+  }
+}
+
+/** Writes the report of the design for manufacture as GitHub Flavored Markdown. The report gives three checks. */
 export function writeDfmReport(measures: CadMeasures, options: DfmOptions): Uint8Array {
   const size = measures.max.map((high, i) => fixed(high - measures.min[i]!)).join(" x ");
   const support = supportArea(measures.positions, measures.triangles, measures.min[2]!, options.overhang);
@@ -69,14 +82,9 @@ export function writeDfmReport(measures: CadMeasures, options: DfmOptions): Uint
     "| --- | --- | --- | --- |",
     `| Overhang | ${support > 0 ? "fail" : "pass"} | ${supportText} mm² needs support | ${fixed(options.overhang)}° from the vertical |`,
     `| Minimum wall | ${measures.thin.length === 0 ? "pass" : "fail"} | ${measures.thin.length} of ${sections} sections have a thin region | ${fixed(options.minWall)} mm |`,
+    `| Minimum gap | ${measures.narrow.length === 0 ? "pass" : "fail"} | ${measures.narrow.length} of ${sections} sections have a narrow gap | ${fixed(options.minGap)} mm |`,
   ];
-  if (measures.thin.length > 0) {
-    lines.push("", "## Thin walls", "");
-    for (const axis of ["X", "Y", "Z"] as const) {
-      const onAxis = measures.thin.filter((section) => section.axis === axis);
-      for (const s of onAxis.slice(0, LISTED_SECTIONS)) lines.push(`- ${axis} = ${fixed(s.at)} mm: ${fixed(s.area)} mm² thin`);
-      if (onAxis.length > LISTED_SECTIONS) lines.push(`- and ${onAxis.length - LISTED_SECTIONS} more sections on ${axis}`);
-    }
-  }
+  if (measures.thin.length > 0) listSections(lines, "Thin walls", measures.thin, "thin");
+  if (measures.narrow.length > 0) listSections(lines, "Narrow gaps", measures.narrow, "narrow");
   return new TextEncoder().encode(lines.join("\n") + "\n");
 }

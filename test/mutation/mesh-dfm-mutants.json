@@ -52,15 +52,15 @@
    "id": "dfm-7",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "offset(-minWall / 8, \"Round\", 2, segments)",
-   "replacement": "offset(-minWall / 1000, \"Round\", 2, segments)",
+   "original": "offset(-min / 8, \"Round\", 2, segments)",
+   "replacement": "offset(-min / 1000, \"Round\", 2, segments)",
    "equivalent": null
   },
   {
    "id": "dfm-8",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "simplify(minWall / 1000)",
+   "original": "simplify(min / 1000)",
    "replacement": "simplify(0)",
    "equivalent": null
   },
@@ -116,8 +116,8 @@
    "id": "dfm-15",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "const corner = (1 - Math.PI / 4) * minWall * minWall;",
-   "replacement": "const corner = ((1 - Math.PI / 4) * minWall * minWall) / 4;",
+   "original": "const corner = (1 - Math.PI / 4) * min * min;",
+   "replacement": "const corner = ((1 - Math.PI / 4) * min * min) / 4;",
    "equivalent": null
   },
   {
@@ -126,6 +126,78 @@
    "test": "test/unit/mesh-dfm.test.ts",
    "original": "if (solid.numTri() === 0) throw",
    "replacement": "if (solid.numTri() === -1) throw",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-17",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "const half = (minGap / 2) * (1 - 1e-6);",
+   "replacement": "const half = (minGap / 2) * (1 + 1e-6);",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-18",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "section.offset(half, \"Round\", 2, segments)).offset(-half, \"Round\", 2, segments)",
+   "replacement": "section.offset(-half, \"Round\", 2, segments)).offset(half, \"Round\", 2, segments)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-19",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "closed.subtract(section)",
+   "replacement": "section.subtract(closed)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-20",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "gapArea(build, section, minGap)",
+   "replacement": "gapArea(build, section, minWall)",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-21",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "measures.narrow.length === 0 ? \"pass\" : \"fail\"",
+   "replacement": "measures.narrow.length === 0 ? \"fail\" : \"pass\"",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-22",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "${measures.narrow.length} of ${sections} sections have a narrow gap",
+   "replacement": "${measures.thin.length} of ${sections} sections have a narrow gap",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-23",
+   "file": "src/mesh/dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "listSections(lines, \"Narrow gaps\", measures.narrow, \"narrow\")",
+   "replacement": "listSections(lines, \"Narrow gaps\", measures.thin, \"narrow\")",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-24",
+   "file": "src/mesh/backend-dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "minGap <= 0",
+   "replacement": "minGap < 0",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-25",
+   "file": "src/mesh/backend-dfm.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "&& key !== \"minGap\"",
+   "replacement": "&& key !== \"minGap\" && key !== \"z\"",
    "equivalent": null
   }
  ]
