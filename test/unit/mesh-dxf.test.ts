@@ -6,6 +6,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { render as renderDxf } from "../../src/mesh/backend-dxf.ts";
+import { drawMeshes } from "../../src/mesh/cad-build.ts";
 import { dxfByteLength, writeDxf } from "../../src/mesh/dxf.ts";
 import { findPair } from "../../src/pairs.ts";
 import { DEFAULT_REGISTRY, registryKey } from "../../src/registry.ts";
@@ -161,6 +162,15 @@ const inverted: CadMesh = {
   faces: [{ first: 0, last: 3, color: null }],
 };
 
+/** A closed unit tetrahedron with outward triangles, moved by dx along X. The colour applies to every face. */
+const tetra = (name: string, dx: number, color: [number, number, number] | null = null): CadMesh => ({
+  name,
+  positions: Float32Array.from([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1].map((v, i) => (i % 3 === 0 ? v + dx : v))),
+  normals: new Float32Array(12),
+  indices: Uint32Array.from([0, 2, 1, 0, 1, 3, 0, 3, 2, 1, 2, 3]),
+  faces: [{ first: 0, last: 3, color }],
+});
+
 /** One triangle: a mesh that is not a closed solid. */
 const sliver: CadMesh = {
   name: "sliver",
@@ -187,7 +197,7 @@ describe("step, iges and brep to dxf", () => {
     }
     const areas = lines.map((p) => Math.abs(area(p.points))).sort((a, b) => b - a);
     expect(areas[0]).toBeCloseTo(100, 3);
-    expect(areas[1]).toBeCloseTo(Math.PI * 25, 0);
+    expect(areas[1]).toBeCloseTo(78.4373, 3);
     const xs = lines.flatMap((p) => p.points.map((q) => q[0]!));
     expect([Math.min(...xs), Math.max(...xs)]).toEqual([-10, 15]);
   });
@@ -217,11 +227,11 @@ describe("step, iges and brep to dxf", () => {
     expect(await rejectionOf(renderDxf(fileRequest("iges", corpus("cube-10x10mm.igs"), { z: 10 })))).toMatchObject({ code: "E_INPUT" });
   });
 
-  test("the BREP outline is one contour of area 4 pi, and it gives no warning", async () => {
+  test("the BREP outline is one contour of area 12.5418 (a polygon on the circle of area 4 pi), and it gives no warning", async () => {
     const out = await renderDxf(fileRequest("brep", corpus("cylinder1.brep")));
     const lines = polylines(text(out.bytes));
     expect(lines.length).toBe(1);
-    expect(Math.abs(area(lines[0]!.points))).toBeCloseTo(Math.PI * 4, 0);
+    expect(Math.abs(area(lines[0]!.points))).toBeCloseTo(12.5418, 3);
     expect(out.warnings).toBeUndefined();
   });
 
@@ -273,5 +283,48 @@ describe("step, iges and brep to dxf", () => {
     const err = await rejectionOf(renderDxf(fileRequest("step", new Uint8Array([1])), { readCad } as never));
     expect(err).toMatchObject({ code: "E_INPUT" });
     expect((err as Error).message).toContain("inward");
+  });
+
+  test("an unnamed mesh that is not a closed solid gives its index in the message", async () => {
+    const readCad = async () => [tetra("a", 0), { ...sliver, name: "" }];
+    const err = await rejectionOf(renderDxf(fileRequest("step", new Uint8Array([1])), { readCad } as never));
+    expect(err).toMatchObject({ code: "E_INPUT" });
+    expect((err as Error).message).toStartWith("mesh 1 is not a closed solid: its vertices could not be welded into a closed solid (");
+  });
+
+  test("a named mesh that is not a closed solid gives its name in quotes", async () => {
+    const readCad = async () => [sliver];
+    const err = await rejectionOf(renderDxf(fileRequest("step", new Uint8Array([1])), { readCad } as never));
+    expect((err as Error).message).toStartWith('mesh "sliver" is not a closed solid: its vertices could not be welded into a closed solid (');
+  });
+
+  test("drawMeshes rejects, and does not throw, when the sum of the triangles of all meshes is over the limit", async () => {
+    const meshes = [tetra("a", 0), tetra("b", 5)];
+    const drawing = drawMeshes(meshes, 7);
+    expect(drawing).toBeInstanceOf(Promise);
+    await expect(drawing).rejects.toMatchObject({ code: "E_LIMIT", message: "the model has 8 facets; the limit is 7" });
+    expect((await drawMeshes(meshes, 8)).contours.length).toBe(2);
+  });
+
+  test("one coloured part and one part with no colour give the colour warning; no colour gives no warning", async () => {
+    const mixed = async () => [tetra("a", 0), tetra("b", 5, [1, 0, 0])];
+    const out = await renderDxf(fileRequest("step", new Uint8Array([1])), { readCad: mixed } as never);
+    expect(out.warnings).toEqual(["dxf holds no colour and no name; the colours of the model are dropped"]);
+    const plain = async () => [tetra("a", 0), tetra("b", 5)];
+    expect((await renderDxf(fileRequest("step", new Uint8Array([1])), { readCad: plain } as never)).warnings).toBeUndefined();
+  });
+
+  test("the section of an imported mesh is not its outline: a tetrahedron gives 0.5 from above and 0.125 at z = 0.5", async () => {
+    const readCad = async () => [tetra("a", 0)];
+    const outline = polylines(text((await renderDxf(fileRequest("step", new Uint8Array([1])), { readCad } as never)).bytes));
+    const section = polylines(text((await renderDxf(fileRequest("step", new Uint8Array([1]), { z: 0.5 }), { readCad } as never)).bytes));
+    expect(outline.map((p) => Math.abs(area(p.points)))).toEqual([expect.closeTo(0.5, 5)]);
+    expect(section.map((p) => Math.abs(area(p.points)))).toEqual([expect.closeTo(0.125, 5)]);
+  });
+
+  test("the IGES section at z = 0 is one contour of area 100", async () => {
+    const lines = polylines(text((await renderDxf(fileRequest("iges", corpus("cube-10x10mm.igs"), { z: 0 }))).bytes));
+    expect(lines.length).toBe(1);
+    expect(Math.abs(area(lines[0]!.points))).toBeCloseTo(100, 3);
   });
 });

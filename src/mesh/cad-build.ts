@@ -268,10 +268,11 @@ function contoursAt(solid: Solid, build: Build, z?: number): number[][][] {
 
 /**
  * Draws the solid of imported meshes (STEP, IGES or BREP) in the X-Y plane, as drawCad does for a CAD document. Each
- * mesh is welded, read as a closed solid and joined by a union. The triangle count is checked before any WASM call.
- * A mesh that is not a closed solid rejects with E_INPUT. A result over maxFacets rejects with E_LIMIT.
+ * mesh is welded, read as a closed solid and joined by a union. The triangle count of all meshes is checked before
+ * any WASM call. A mesh that is not a closed solid rejects with E_INPUT. A count or a result over maxFacets rejects
+ * with E_LIMIT. Every error is a rejection of the returned promise.
  */
-export function drawMeshes(meshes: CadMesh[], maxFacets: number, z?: number): Promise<CadDrawing> {
+export async function drawMeshes(meshes: CadMesh[], maxFacets: number, z?: number): Promise<CadDrawing> {
   const triangles = meshes.reduce((n, mesh) => n + mesh.indices.length / 3, 0);
   if (triangles > maxFacets) {
     throw new RenderError("E_LIMIT", `the model has ${triangles} facets; the limit is ${maxFacets}`);
@@ -285,26 +286,28 @@ export function drawMeshes(meshes: CadMesh[], maxFacets: number, z?: number): Pr
   );
 }
 
-/** Reads each mesh as a closed solid and joins the solids by a union. A mesh with no closed volume rejects with E_INPUT. */
+/**
+ * Reads each mesh as a closed solid and joins the solids by a union. A mesh with no closed volume rejects with E_INPUT.
+ * Manifold.ofMesh throws on every status other than NoError. withSolidOf checks the status and the facets of the union.
+ */
 function importedSolid(build: Build, meshes: CadMesh[]): Solid {
   const { Manifold, Mesh } = build.m;
   const parts = meshes.map((mesh, index) => {
-    const name = mesh.name || String(index);
+    const name = mesh.name === "" ? String(index) : JSON.stringify(mesh.name);
     const input = new Mesh({ numProp: 3, vertProperties: mesh.positions, triVerts: mesh.indices });
     input.merge();
     let solid: Solid;
     try {
       solid = build.keep(Manifold.ofMesh(input));
     } catch (error) {
-      throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: ${error instanceof Error ? error.message : String(error)}`);
+      const reason = error instanceof Error ? error.message : String(error);
+      throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: its vertices could not be welded into a closed solid (${reason})`);
     }
-    const status = solid.status();
-    if (status !== "NoError") throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: ${String(status)}`);
     if (solid.volume() < 0) throw new RenderError("E_INPUT", `mesh ${name} is not a closed solid: its faces turn inward`);
     return solid;
   });
   if (parts.length === 1) return parts[0]!;
-  return build.checkFacets(build.keep(Manifold.union(parts)));
+  return build.keep(Manifold.union(parts));
 }
 
 /**

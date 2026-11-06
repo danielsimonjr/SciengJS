@@ -12,7 +12,7 @@
    "id": "dxf-2",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dxf.test.ts",
-   "original": "return build.checkFacets(build.keep(Manifold.union(parts)));",
+   "original": "return build.keep(Manifold.union(parts));",
    "replacement": "return parts[0]!;",
    "equivalent": null
   },
@@ -46,6 +46,46 @@
    "test": "test/unit/mesh-dxf.test.ts",
    "original": "request.type === \"cad\"",
    "replacement": "request.type !== \"cad\"",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-7",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "meshes.reduce((n, mesh) => n + mesh.indices.length / 3, 0)",
+   "replacement": "Math.max(...meshes.map((mesh) => mesh.indices.length / 3))",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-8",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "meshes.some((mesh) => mesh.faces.some(",
+   "replacement": "meshes.every((mesh) => mesh.faces.some(",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-9",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "mesh.name === \"\" ? String(index) : JSON.stringify(mesh.name)",
+   "replacement": "JSON.stringify(mesh.name)",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-10",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "export async function drawMeshes(",
+   "replacement": "export function drawMeshes(",
+   "equivalent": null
+  },
+  {
+   "id": "dxf-11",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dxf.test.ts",
+   "original": "if (solid.volume() < 0) throw new RenderError(\"E_INPUT\", `mesh ${name}",
+   "replacement": "if (solid.volume() < -1) throw new RenderError(\"E_INPUT\", `mesh ${name}",
    "equivalent": null
   }
  ]
