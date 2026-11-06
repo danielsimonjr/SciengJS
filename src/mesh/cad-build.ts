@@ -353,22 +353,49 @@ function gapArea(build: Build, section: Section, minGap: number): number {
 }
 
 /**
- * The area of the pieces of a difference that are narrow. A piece is narrow when it is wider than a quarter of min,
- * or when its area is more than (1 - pi/4) min², the four corners of a square bar. A piece with an inscribed disc of
- * radius min/8 is wide. The subtraction leaves slivers of zero width with a reversed winding. A shrink grows such a
- * sliver, so the simplify step removes the slivers before the tests.
+ * The area of the pieces of a difference that are narrow. The difference also holds the fill of each right-angle
+ * corner. A piece is narrow when it is wider than a quarter of min, or when its bounding box is longer than 0.75 min on
+ * one axis. A piece with an inscribed disc of radius min/8 is wide. The fill of a right-angle corner is at most
+ * min/sqrt(2) long, so the length test keeps a hairline slot or fin and drops the corners. The subtraction leaves
+ * slivers of zero width with a reversed winding. A shrink grows such a sliver, so the simplify step removes the
+ * slivers before the tests.
  */
 function countedArea(build: Build, removed: Section, min: number): number {
   const segments = OFFSET_SEGMENTS;
-  const corner = (1 - Math.PI / 4) * min * min;
   const cleaned = build.keep(removed.simplify(min / 1000));
   let area = 0;
   for (const piece of cleaned.decompose()) {
     build.keep(piece);
-    const pieceArea = piece.area();
-    if (pieceArea > corner || build.keep(piece.offset(-min / 8, "Round", 2, segments)).area() > 0) area += pieceArea;
+    if (longestPart(build, piece, min) > 0.75 * min || build.keep(piece.offset(-min / 8, "Round", 2, segments)).area() > 0) area += piece.area();
   }
   return area;
+}
+
+/**
+ * The longest bounding box side of the parts of a piece. An opening by min/200 first removes the bridges of zero
+ * width and the slivers of the offsets, so that two corners on one edge are two parts. A slot of min/50 stays.
+ */
+function longestPart(build: Build, piece: Section, min: number): number {
+  const e = min / 200;
+  const opened = build.keep(build.keep(piece.offset(-e, "Round", 2, OFFSET_SEGMENTS)).offset(e, "Round", 2, OFFSET_SEGMENTS));
+  let longest = 0;
+  for (const part of opened.decompose()) {
+    build.keep(part);
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const polygon of part.toPolygons()) {
+      for (const [x, y] of polygon) {
+        minX = Math.min(minX, x!);
+        maxX = Math.max(maxX, x!);
+        minY = Math.min(minY, y!);
+        maxY = Math.max(maxY, y!);
+      }
+    }
+    longest = Math.max(longest, maxX - minX, maxY - minY);
+  }
+  return longest;
 }
 
 /**
