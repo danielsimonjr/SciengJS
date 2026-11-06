@@ -8,6 +8,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 - The `md` report of a `cad` document gives a third check, the minimum gap. A closing of each of the 32 sections on each axis fills each gap narrower than `minGap` (default 0.5 mm). The gaps are slots, holes and clearances between parts. A gap open to the edge of the model also fills. The report lists the narrow sections under `## Narrow gaps`. `measureCad` takes `minGap` as a fourth argument. `CadMeasures` has `narrow`.
 
+### Fixed
+
+- The wall check and the gap check of the `md` report no longer fail a model that is turned off the axes. A section that cuts a sharp edge or a vertex of the solid at a slant showed a region narrower than the solid. A 10 mm cube turned 30 degrees about X failed the wall check in 4 of 96 sections, and turned on two axes in 48. A corner of any angle does not count. A part near a vertex of the solid does not count. A region that the section at half the minimum does not show does not count.
+
 ## [1.0.6] - 2026-11-06
 
 ### Added

@@ -34,6 +34,8 @@ interface Section {
   toPolygons(): number[][][];
   offset(delta: number, joinType: "Round", miterLimit: number, circularSegments: number): Section;
   subtract(other: Section): Section;
+  intersect(other: Section): Section;
+  translate(v: number[]): Section;
   simplify(epsilon: number): Section;
   decompose(): Section[];
   area(): number;
@@ -57,7 +59,7 @@ interface ManifoldStatic {
 }
 
 interface CrossSectionStatic {
-  square(size: number[] | number, center: boolean): Profile;
+  square(size: number[] | number, center: boolean): Profile & Section;
   circle(radius: number, segments: number): Profile;
   ofPolygons(contours: number[][][]): Profile;
 }
@@ -311,10 +313,10 @@ export function measureCad(document: CadDocument, maxFacets: number, minWall: nu
       for (let i = 0; i < WALL_SECTIONS; i++) {
         const at = lo + (i + 0.5) * step;
         const section = build.keep(turned.slice(at));
-        const thinAt = thinArea(build, section, minWall);
-        if (thinAt > 0) thin.push({ axis, at, area: thinAt });
-        const gapAt = gapArea(build, section, minGap);
-        if (gapAt > 0) narrow.push({ axis, at, area: gapAt });
+        const thinAt = thinPieces(build, section, minWall);
+        if (thinAt.length > 0 && persists(build, turned, at, thinAt, minWall, thinPieces)) thin.push({ axis, at, area: areaOf(thinAt) });
+        const gapAt = gapPieces(build, section, minGap);
+        if (gapAt.length > 0 && persists(build, turned, at, gapAt, minGap, gapPieces)) narrow.push({ axis, at, area: areaOf(gapAt) });
       }
     }
     return {
@@ -331,71 +333,150 @@ export function measureCad(document: CadDocument, maxFacets: number, minWall: nu
 }
 
 /**
- * The area of the regions of a section that an opening by minWall removes, less the corners of the opening. The
- * opening shrinks the section by a little less than half of minWall, so that a wall equal to minWall stays.
+ * The thin pieces of a section: the regions that an opening by minWall removes, and that count. The opening shrinks
+ * the section by a little less than half of minWall, so that a wall equal to minWall stays.
  */
-function thinArea(build: Build, section: Section, minWall: number): number {
+function thinPieces(build: Build, section: Section, minWall: number): Section[] {
   const segments = OFFSET_SEGMENTS;
   const half = (minWall / 2) * (1 - 1e-6);
   const opened = build.keep(build.keep(section.offset(-half, "Round", 2, segments)).offset(half, "Round", 2, segments));
-  return countedArea(build, build.keep(section.subtract(opened)), minWall);
+  return countedPieces(build, section, build.keep(section.subtract(opened)), minWall);
 }
 
 /**
- * The area of the regions that a closing by minGap adds to a section, less the concave corners of the closing. The
- * closing grows the section by a little less than half of minGap, so that a slot equal to minGap stays open.
+ * The narrow pieces of a section: the regions that a closing by minGap fills, and that count. The closing grows the
+ * section by a little less than half of minGap, so that a slot equal to minGap stays open.
  */
-function gapArea(build: Build, section: Section, minGap: number): number {
+function gapPieces(build: Build, section: Section, minGap: number): Section[] {
   const segments = OFFSET_SEGMENTS;
   const half = (minGap / 2) * (1 - 1e-6);
   const closed = build.keep(build.keep(section.offset(half, "Round", 2, segments)).offset(-half, "Round", 2, segments));
-  return countedArea(build, build.keep(closed.subtract(section)), minGap);
+  return countedPieces(build, section, build.keep(closed.subtract(section)), minGap);
+}
+
+/** A vertex of a section. A convex vertex turns left, seen along the contour. */
+interface SectionVertex {
+  x: number;
+  y: number;
+  convex: boolean;
 }
 
 /**
- * The area of the pieces of a difference that are narrow. The difference also holds the fill of each right-angle
- * corner. A piece is narrow when it is wider than a quarter of min. A piece is also narrow when its bounding box is
- * longer than 0.75 min on one axis. A piece with an inscribed disc of radius min/8 is wide. The fill of a right-angle corner is at most
- * min/sqrt(2) long, so the length test keeps a hairline slot or fin and drops the corners. The subtraction leaves
- * slivers of zero width with a reversed winding. A shrink grows such a sliver, so the simplify step removes the
- * slivers before the tests.
+ * The pieces of a removed region that count. The removed region is split into parts by an opening of min/200. A part
+ * that holds one vertex of the section is a corner of the opening, at any angle. A part that holds two or more convex
+ * vertices and is not longer than 2 min on each axis is the region near a vertex of the solid. A piece with no other
+ * part does not count. A piece counts when a part is longer than 0.75 min, or when the piece holds a disc of radius
+ * min/8. The slivers of zero width with a reversed winding are removed first: a shrink grows such a sliver, so the
+ * simplify step removes the slivers before the tests.
  */
-function countedArea(build: Build, removed: Section, min: number): number {
+function countedPieces(build: Build, section: Section, removed: Section, min: number): Section[] {
   const segments = OFFSET_SEGMENTS;
-  const cleaned = build.keep(removed.simplify(min / 1000));
-  let area = 0;
+  const vertices = sectionVertices(build, section, min);
+  const cleaned = simplified(build, removed, min);
+  const pieces: Section[] = [];
   for (const piece of cleaned.decompose()) {
     build.keep(piece);
-    if (longestPart(build, piece, min) > 0.75 * min || build.keep(piece.offset(-min / 8, "Round", 2, segments)).area() > 0) area += piece.area();
+    let longest = 0;
+    let wall = false;
+    for (const part of openedParts(build, piece, min)) {
+      const held = heldVertices(build, part, vertices, min);
+      if (held.length === 1) continue;
+      const side = longestSide(part);
+      if (held.length >= 2 && held.every((v) => v.convex) && side <= 2 * min) continue;
+      wall = true;
+      longest = Math.max(longest, side);
+    }
+    if (!wall) continue;
+    if (longest > 0.75 * min || build.keep(piece.offset(-min / 8, "Round", 2, segments)).area() > 0) pieces.push(piece);
   }
-  return area;
+  return pieces;
+}
+
+/** A section or a region with the points of min/1000 removed. */
+function simplified(build: Build, shape: Section, min: number): Section {
+  return build.keep(shape.simplify(min / 1000));
+}
+
+/** The vertices of a section, each with the sign of its turn. A Manifold contour keeps the region to its left. */
+function sectionVertices(build: Build, section: Section, min: number): SectionVertex[] {
+  const out: SectionVertex[] = [];
+  for (const polygon of simplified(build, section, min).toPolygons()) {
+    const n = polygon.length;
+    for (let i = 0; i < n; i++) {
+      const a = polygon[(i + n - 1) % n]!;
+      const b = polygon[i]!;
+      const c = polygon[(i + 1) % n]!;
+      const cross = (b[0]! - a[0]!) * (c[1]! - b[1]!) - (b[1]! - a[1]!) * (c[0]! - b[0]!);
+      out.push({ x: b[0]!, y: b[1]!, convex: cross > 0 });
+    }
+  }
+  return out;
+}
+
+/** The vertices of the section that a small square centred on the vertex meets in the part. The square has side min/4. */
+function heldVertices(build: Build, part: Section, vertices: SectionVertex[], min: number): SectionVertex[] {
+  return vertices.filter((v) => {
+    const square = build.keep(build.m.CrossSection.square([min / 4, min / 4], true));
+    const tip = build.keep(square.translate([v.x, v.y]));
+    return build.keep(tip.intersect(part)).area() > 0;
+  });
+}
+
+/** The parts of a piece after an opening by min/200. The opening removes the bridges of zero width and the slivers. */
+function openedParts(build: Build, piece: Section, min: number): Section[] {
+  const e = min / 200;
+  const opened = build.keep(build.keep(piece.offset(-e, "Round", 2, OFFSET_SEGMENTS)).offset(e, "Round", 2, OFFSET_SEGMENTS));
+  return opened.decompose().map((part) => build.keep(part));
+}
+
+/** The longest bounding box side of a part. */
+function longestSide(part: Section): number {
+  let longest = 0;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const polygon of part.toPolygons()) {
+    for (const [x, y] of polygon) {
+      minX = Math.min(minX, x!);
+      maxX = Math.max(maxX, x!);
+      minY = Math.min(minY, y!);
+      maxY = Math.max(maxY, y!);
+    }
+  }
+  longest = Math.max(longest, maxX - minX, maxY - minY);
+  return longest;
+}
+
+/** The total area of a list of pieces. The pieces are disjoint. */
+function areaOf(pieces: Section[]): number {
+  return pieces.reduce((sum, piece) => sum + piece.area(), 0);
 }
 
 /**
- * The longest bounding box side of the parts of a piece. An opening by min/200 first removes the bridges of zero
- * width and the slivers of the offsets. Then two corners on one edge are two parts. A slot of min/50 stays.
+ * True when a piece of the section has a piece of the section at minWall/2 before or after it on the same axis,
+ * within minWall/2 of it. A section that is empty does not count. A wall persists along the axis. An oblique cut of
+ * an edge does not persist.
  */
-function longestPart(build: Build, piece: Section, min: number): number {
-  const e = min / 200;
-  const opened = build.keep(build.keep(piece.offset(-e, "Round", 2, OFFSET_SEGMENTS)).offset(e, "Round", 2, OFFSET_SEGMENTS));
-  let longest = 0;
-  for (const part of opened.decompose()) {
-    build.keep(part);
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (const polygon of part.toPolygons()) {
-      for (const [x, y] of polygon) {
-        minX = Math.min(minX, x!);
-        maxX = Math.max(maxX, x!);
-        minY = Math.min(minY, y!);
-        maxY = Math.max(maxY, y!);
-      }
+function persists(
+  build: Build,
+  turned: Solid,
+  at: number,
+  pieces: Section[],
+  min: number,
+  find: (build: Build, section: Section, min: number) => Section[],
+): boolean {
+  for (const other of [at - min / 2, at + min / 2]) {
+    const section = build.keep(turned.slice(other));
+    if (section.area() === 0) continue;
+    const found = find(build, section, min);
+    if (found.length === 0) continue;
+    for (const piece of pieces) {
+      const near = build.keep(piece.offset(min / 2, "Round", 2, OFFSET_SEGMENTS));
+      if (found.some((f) => build.keep(f.intersect(near)).area() > 0)) return true;
     }
-    longest = Math.max(longest, maxX - minX, maxY - minY);
   }
-  return longest;
+  return false;
 }
 
 /**
