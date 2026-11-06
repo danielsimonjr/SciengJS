@@ -4,6 +4,12 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- `cad` documents render to `pdf`: a one-page third-angle drawing on A4 landscape.
+- The drawing has three views, three dimensions, a title block and the option `title`.
+- The views come from one solid build. The browser stage prints the drawing, so the render needs a browser.
+
 ## [1.0.7] - 2026-11-06
 
 ### Added
