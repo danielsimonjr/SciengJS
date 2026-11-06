@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- CI runs the two documentation gates of repo-tools in the job "Architecture docs": the architecture documents must match the source graph, and each exported symbol must have a doc comment. A stale count in `docs/architecture/OVERVIEW.md` now fails CI.
+
 ## [1.0.2] - 2026-11-05
 
 ### Fixed
