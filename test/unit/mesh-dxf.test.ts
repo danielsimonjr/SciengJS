@@ -3,9 +3,13 @@
  * reader and measures the contours by the shoelace formula, so it does not trust the writer.
  */
 import { describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { render as renderDxf } from "../../src/mesh/backend-dxf.ts";
 import { dxfByteLength, writeDxf } from "../../src/mesh/dxf.ts";
 import { findPair } from "../../src/pairs.ts";
+import { DEFAULT_REGISTRY, registryKey } from "../../src/registry.ts";
+import type { CadMesh } from "../../src/mesh/read.ts";
 import { OUTPUT_FORMATS } from "../../src/types.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
 import { rejectionOf } from "../support/rejections.ts";
@@ -139,5 +143,135 @@ describe("cad to dxf", () => {
     const err = await rejectionOf(renderDxf(request(PLATE, {}, { ...testSettings(), maxMemoryMb: 0.0001 })));
     expect(err).toMatchObject({ code: "E_LIMIT" });
     expect((err as Error).message).toMatch(/^the dxf output needs \d+ bytes; the limit is \d+ bytes$/);
+  });
+});
+
+const CORPUS = fileURLToPath(new URL("../corpus/mesh/", import.meta.url));
+const corpus = (name: string): Uint8Array => new Uint8Array(readFileSync(CORPUS + name));
+
+const fileRequest = (type: "step" | "iges" | "brep", bytes: unknown, options: Record<string, unknown> = {}, settings = testSettings()): WorkerJob["request"] =>
+  ({ type, format: "dxf", source: bytes, options, settings }) as unknown as WorkerJob["request"];
+
+/** A closed tetrahedron with the triangles wound inward, so that its volume is negative. */
+const inverted: CadMesh = {
+  name: "inverted",
+  positions: Float32Array.from([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1]),
+  normals: new Float32Array(12),
+  indices: Uint32Array.from([0, 1, 2, 0, 3, 1, 0, 2, 3, 1, 3, 2]),
+  faces: [{ first: 0, last: 3, color: null }],
+};
+
+/** One triangle: a mesh that is not a closed solid. */
+const sliver: CadMesh = {
+  name: "sliver",
+  positions: Float32Array.from([0, 0, 0, 1, 0, 0, 0, 1, 0]),
+  normals: new Float32Array(9),
+  indices: Uint32Array.from([0, 1, 2]),
+  faces: [{ first: 0, last: 0, color: null }],
+};
+
+describe("step, iges and brep to dxf", () => {
+  test("the design lists the three pairs and the registry routes them to the dxf backend", () => {
+    for (const type of ["step", "iges", "brep"] as const) {
+      expect(findPair(type, "dxf")).toEqual({ type, format: "dxf", stage: "mesh" });
+      expect(DEFAULT_REGISTRY[registryKey(type, "dxf")]).toEqual({ backend: "mesh/occt+manifold+dxf", moduleUrl: expect.stringContaining("mesh/backend-dxf") });
+    }
+  });
+
+  test("the STEP outline holds two closed contours: the cube and the cylinder", async () => {
+    const lines = polylines(text((await renderDxf(fileRequest("step", corpus("red_cube_blue_cylinder.step")))).bytes));
+    expect(lines.length).toBe(2);
+    for (const p of lines) {
+      expect(p.closed).toBe(true);
+      expect(p.layer).toBe("0");
+    }
+    const areas = lines.map((p) => Math.abs(area(p.points))).sort((a, b) => b - a);
+    expect(areas[0]).toBeCloseTo(100, 3);
+    expect(areas[1]).toBeCloseTo(Math.PI * 25, 0);
+    const xs = lines.flatMap((p) => p.points.map((q) => q[0]!));
+    expect([Math.min(...xs), Math.max(...xs)]).toEqual([-10, 15]);
+  });
+
+  test("the STEP colours give the colour warning", async () => {
+    const out = await renderDxf(fileRequest("step", corpus("red_cube_blue_cylinder.step")));
+    expect(out.warnings).toEqual(["dxf holds no colour and no name; the colours of the model are dropped"]);
+  });
+
+  test("the STEP section at z = 5 holds two contours; z = 50 rejects with E_INPUT", async () => {
+    const section = polylines(text((await renderDxf(fileRequest("step", corpus("red_cube_blue_cylinder.step"), { z: 5 }))).bytes));
+    expect(section.length).toBe(2);
+    const err = await rejectionOf(renderDxf(fileRequest("step", corpus("red_cube_blue_cylinder.step"), { z: 50 })));
+    expect(err).toMatchObject({ code: "E_INPUT" });
+    expect((err as Error).message).toBe("the drawing at z = 50 holds no contour");
+  });
+
+  test("the IGES outline is one contour of area 100, and it warns about the black faces", async () => {
+    const out = await renderDxf(fileRequest("iges", corpus("cube-10x10mm.igs")));
+    const lines = polylines(text(out.bytes));
+    expect(lines.length).toBe(1);
+    expect(Math.abs(area(lines[0]!.points))).toBeCloseTo(100, 3);
+    expect(out.warnings).toEqual(["dxf holds no colour and no name; the colours of the model are dropped"]);
+  });
+
+  test("the IGES section above the cube rejects with E_INPUT", async () => {
+    expect(await rejectionOf(renderDxf(fileRequest("iges", corpus("cube-10x10mm.igs"), { z: 10 })))).toMatchObject({ code: "E_INPUT" });
+  });
+
+  test("the BREP outline is one contour of area 4 pi, and it gives no warning", async () => {
+    const out = await renderDxf(fileRequest("brep", corpus("cylinder1.brep")));
+    const lines = polylines(text(out.bytes));
+    expect(lines.length).toBe(1);
+    expect(Math.abs(area(lines[0]!.points))).toBeCloseTo(Math.PI * 4, 0);
+    expect(out.warnings).toBeUndefined();
+  });
+
+  test("the same BREP bytes give the same drawing", async () => {
+    const a = (await renderDxf(fileRequest("brep", corpus("cylinder1.brep")))).bytes;
+    const b = (await renderDxf(fileRequest("brep", corpus("cylinder1.brep")))).bytes;
+    expect(Buffer.from(a).equals(Buffer.from(b))).toBe(true);
+  });
+
+  test("option linearUnit rejects with E_INPUT, and a z that is not a number rejects too", async () => {
+    expect(await rejectionOf(renderDxf(fileRequest("step", corpus("red_cube_blue_cylinder.step"), { linearUnit: "meter" })))).toMatchObject({
+      code: "E_INPUT",
+      message: "step to dxf takes no option linearUnit",
+    });
+    expect(await rejectionOf(renderDxf(fileRequest("brep", corpus("cylinder1.brep"), { z: "1" })))).toMatchObject({
+      code: "E_INPUT",
+      message: "option z must be a finite number",
+    });
+  });
+
+  test("text source for BREP rejects with E_INPUT", async () => {
+    expect(await rejectionOf(renderDxf(fileRequest("brep", "not bytes")))).toMatchObject({ code: "E_INPUT", message: "brep takes bytes, not text" });
+  });
+
+  test("a BREP over maxCadFacets rejects with E_LIMIT before the solid is built", async () => {
+    const err = await rejectionOf(renderDxf(fileRequest("brep", corpus("cylinder1.brep"), {}, testSettings({ maxCadFacets: 10 }))));
+    expect(err).toMatchObject({ code: "E_LIMIT" });
+    expect((err as Error).message).toMatch(/^the model has 228 facets; the limit is 10$/);
+  });
+
+  test("a BREP with exactly maxCadFacets triangles renders", async () => {
+    const out = await renderDxf(fileRequest("brep", corpus("cylinder1.brep"), {}, testSettings({ maxCadFacets: 228 })));
+    expect(polylines(text(out.bytes)).length).toBe(1);
+  });
+
+  test("an output over maxMemoryMb rejects with E_LIMIT", async () => {
+    expect(await rejectionOf(renderDxf(fileRequest("brep", corpus("cylinder1.brep"), {}, testSettings({ maxMemoryMb: 0.0001 }))))).toMatchObject({ code: "E_LIMIT" });
+  });
+
+  test("a mesh with one triangle rejects with E_INPUT, because it is not a closed solid", async () => {
+    const readCad = async () => [sliver];
+    const err = await rejectionOf(renderDxf(fileRequest("step", new Uint8Array([1])), { readCad } as never));
+    expect(err).toMatchObject({ code: "E_INPUT" });
+    expect((err as Error).message).toContain("is not a closed solid");
+  });
+
+  test("a closed mesh wound inward rejects with E_INPUT at the volume check", async () => {
+    const readCad = async () => [inverted];
+    const err = await rejectionOf(renderDxf(fileRequest("step", new Uint8Array([1])), { readCad } as never));
+    expect(err).toMatchObject({ code: "E_INPUT" });
+    expect((err as Error).message).toContain("inward");
   });
 });

@@ -1,13 +1,13 @@
 import { RenderError } from "../errors.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
-import { readCadRequest } from "./backend-glb.ts";
-import { drawCad } from "./cad-build.ts";
+import { type GlbDeps, readCadRequest, readMeshes } from "./backend-glb.ts";
+import { drawCad, drawMeshes } from "./cad-build.ts";
 import { dxfByteLength, writeDxf } from "./dxf.ts";
 
 /** Reads the options of a dxf render. The one option is z, a finite number. An unknown key rejects with E_INPUT. */
-function readZ(options: Record<string, unknown>): number | undefined {
+function readZ(type: string, options: Record<string, unknown>): number | undefined {
   for (const key of Object.keys(options)) {
-    if (key !== "z") throw new RenderError("E_INPUT", `cad to dxf takes no option ${key}`);
+    if (key !== "z") throw new RenderError("E_INPUT", `${type} to dxf takes no option ${key}`);
   }
   const z = options.z;
   if (z !== undefined && (typeof z !== "number" || !Number.isFinite(z))) {
@@ -17,14 +17,18 @@ function readZ(options: Record<string, unknown>): number | undefined {
 }
 
 /**
- * Renders a CAD document to a DXF drawing in the X-Y plane. The worker calls this function. With no option, the
- * drawing is the outline of the model. The option z gives the section at that height. DXF holds no colour, so
- * the render warns when the model has a colour. An output over maxMemoryMb rejects with E_LIMIT before the
- * writer starts.
+ * Renders a CAD document, or a STEP, IGES or BREP file, to a DXF drawing in the X-Y plane. The worker calls this
+ * function. With no option, the drawing is the outline of the solid. The option z gives the section at that height.
+ * DXF holds no colour, so the render warns when the model has a colour. An output over maxMemoryMb rejects with
+ * E_LIMIT before the writer starts. The deps give the readers of a STEP, IGES or BREP file; a test gives fake readers.
  */
-export async function render(request: WorkerJob["request"]): Promise<BackendOutput> {
-  const z = readZ(request.options);
-  const { contours, colored } = await drawCad(readCadRequest(request), request.settings.maxCadFacets, z);
+export async function render(request: WorkerJob["request"], deps: Partial<GlbDeps> = {}): Promise<BackendOutput> {
+  const z = readZ(request.type, request.options);
+  const { maxCadFacets } = request.settings;
+  const { contours, colored } =
+    request.type === "cad"
+      ? await drawCad(readCadRequest(request), maxCadFacets, z)
+      : await drawMeshes(await readMeshes({ ...request, options: {} }, deps), maxCadFacets, z);
   if (contours.length === 0) {
     throw new RenderError("E_INPUT", z === undefined ? "the outline holds no contour" : `the drawing at z = ${z} holds no contour`);
   }

@@ -10,7 +10,7 @@ sciengjs turns diagram source into images on your own machine. It sends no sourc
 
 ## What this release does
 
-Release 0.9.0 holds ten input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, and to PNG. A **CAD document** (a CSG model in JSON) goes to GLB, STL, HTML and PNG. A **SysML v2** source in a textual subset goes to SVG, PNG and PDF. A **TikZ** picture goes to SVG, PNG and PDF through the tex stage. The `tikz` input type includes circuitikz, tikz-cd and chemfig. The first render downloads the TeX bundles. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
+Release 0.9.0 holds ten input types. They are **Graphviz DOT**, **Mermaid** (every diagram type) and **LaTeX math** (to SVG, PNG and PDF). They also include **Plotly plots** (to SVG, PNG and HTML) and **HTML** (to PNG, PDF and Markdown). The CAD files **STEP**, **IGES** and **BREP** go to GLB, to a viewer page in HTML, to PNG and to DXF. The DXF drawing takes the option `z` only, and its coordinates are in millimeters. A **CAD document** (a CSG model in JSON) goes to GLB, STL, HTML and PNG. A **SysML v2** source in a textual subset goes to SVG, PNG and PDF. A **TikZ** picture goes to SVG, PNG and PDF through the tex stage. The `tikz` input type includes circuitikz, tikz-cd and chemfig. The first render downloads the TeX bundles. The browser stage draws the Mermaid types other than class, state and sequence, and every PDF.
 
 | Input | Output | Engine |
 |---|---|---|
@@ -21,7 +21,7 @@ Release 0.9.0 holds ten input types. They are **Graphviz DOT**, **Mermaid** (eve
 | Mermaid (all other types) | SVG, PNG, PDF | The pinned Mermaid 11.17.2 build in the browser stage. The engine serves the build from the package. |
 | DOT, Mermaid | PDF | The SVG, printed by the browser stage |
 | HTML | PNG, PDF | The browser stage |
-| STEP, IGES, BREP | GLB, HTML, PNG | OpenCascade, compiled to WASM (`occt-import-js`); a Three.js viewer page |
+| STEP, IGES, BREP | GLB, HTML, PNG, DXF | OpenCascade, compiled to WASM (`occt-import-js`); a Three.js viewer page; the DXF outline through `manifold-3d` |
 | CAD document | GLB, STL, 3MF, HTML, PNG | The engine's own reader; the solid operations through `manifold-3d` (WASM) |
 | SysML v2 (a textual subset) | SVG, PNG, PDF | The engine's own parser and views, then Graphviz; PDF through the browser stage |
 | TikZ picture, circuitikz, tikz-cd, chemfig, mhchem, bussproofs, AMS math | SVG, PNG, PDF | An own WASM build of `tex.web` with `etex.ch`; the bundles download on first use (`SCIENG_TEX_BUNDLE_URL`, `SCIENG_CACHE_DIR`) and each has a pinned sha256; PNG through resvg; PDF through the browser stage |
@@ -344,7 +344,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | TikZ, circuitikz, LaTeX | tex (an own WASM build of `tex.web`) | tikz svg, png and pdf are built (unreleased); the bundles come from `texBundleUrl` |
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml, graph | svg, png and pdf: released in 0.9.0 |
-| STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
+| STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0; dxf: not released |
 | CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: released in 1.0.5; md (design for manufacture): released in 1.0.6; pdf (third-angle drawing): unreleased |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
