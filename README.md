@@ -348,9 +348,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: released in 1.0.5; md (design for manufacture): released in 1.0.6; pdf (third-angle drawing): released in 1.0.8 |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
-Planned, not started:
-
-- Viewer reload. The HTML viewer of a `cad` or STEP model loads the model again when the model is rendered again. A page that opens from disk cannot see a change to its file. The design must choose how the page gets the change, for example a local watch tool that listens on `127.0.0.1` only. That choice touches the network rule of the engine, so the design records it first.
+The [roadmap file](docs/ROADMAP.md) lists the work that is planned and not started.
 
 ## Use from an agent
 

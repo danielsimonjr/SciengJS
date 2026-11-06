@@ -6,7 +6,7 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ### Changed
 
-- The roadmap in the README lists viewer reload as planned: the HTML viewer loads the model again when the model is rendered again.
+- `docs/ROADMAP.md` lists the work that is planned and not started: viewer reload, hidden and interior edges in the cad drawing, and turned models with a notch in the design-for-manufacture report. The README links to it.
 
 ### Fixed
 
