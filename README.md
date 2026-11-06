@@ -305,6 +305,7 @@ const { bytes } = await render({ type: "cad", source, format: "stl" }, {});
 - The faces keep the colour of the primitive that made them. The cut face of a `difference` has the colour of the cutter.
 - STL holds no colour and no name. A coloured model gives a warning in STL.
 - `format: "3mf"` gives a 3MF package that keeps the colours and the names. The unit is millimeter.
+- `format: "dxf"` gives a 2D drawing in the X-Y plane: the outline of the model, or with the option `z` the section at that height. Each closed contour is one closed polyline, in millimetres.
 - A document with more than `maxCadNodes` nodes rejects with `E_LIMIT` before the solid operations start. A model with more than `maxCadFacets` facets also rejects with `E_LIMIT`.
 - A bad value rejects with `E_INPUT`. The message gives the JSON path, for example `model.children[1].radius`.
 
@@ -342,7 +343,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml, graph | svg, png and pdf: released in 0.9.0 |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
-| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4 |
+| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: unreleased |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent

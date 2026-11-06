@@ -634,11 +634,12 @@ export function sphereFacets(segments: number): number;
 
 ## `src/mesh/cad-build.ts`
 
-Purpose: the solid operations of a checked document through manifold-3d. The WASM module loads once for each process. Each primitive becomes an original solid with its colour. Each run of output triangles keeps the colour of the primitive that made the run. The build frees every WASM object in a `finally` block. A result over the facet limit rejects with `E_LIMIT`.
+Purpose: the solid operations of a checked document through manifold-3d. The WASM module loads once for each process. Each primitive becomes an original solid with its colour. Each run of output triangles keeps the colour of the primitive that made the run. The build frees every WASM object in a `finally` block. A result over the facet limit rejects with `E_LIMIT`. `drawCad` gives the closed contours of the outline of the solid, or of the section at a height.
 
 ```ts
 export function loadManifold(): Promise<ManifoldModule>;
 export function buildCad(document: CadDocument, maxFacets: number): Promise<CadBuildResult>;
+export function drawCad(document: CadDocument, maxFacets: number, z?: number): Promise<CadDrawing>;
 ```
 
 ## `src/mesh/cad-builder.ts`
@@ -663,11 +664,21 @@ export function write3mf(meshes: CadMesh[]): Uint8Array;
 export function threemfByteLength(meshes: CadMesh[]): number;
 ```
 
-## `src/mesh/backend-glb.ts`
+## `src/mesh/dxf.ts`
 
-Purpose: the backend of `step`, `iges`, `brep` and `cad` to `glb`. `readMeshes` reads the meshes of a mesh render: a CAD document through the reader and the build, a STEP, IGES or BREP file through occt-import-js. The html and png backends also call `readMeshes` through this render. An output over `maxMemoryMb` rejects with `E_LIMIT`.
+Purpose: the DXF writer. The output is ASCII DXF of release R12 (`AC1009`). Each contour is one closed `POLYLINE` on layer `0`. The lines end with CR LF.
 
 ```ts
+export function writeDxf(contours: number[][][]): Uint8Array;
+export function dxfByteLength(contours: number[][][]): number;
+```
+
+## `src/mesh/backend-glb.ts`
+
+Purpose: the backend of `step`, `iges`, `brep` and `cad` to `glb`. `readCadRequest` reads and checks the CAD document of a request; the glb and dxf backends share it. `readMeshes` reads the meshes of a mesh render: a CAD document through the reader and the build, a STEP, IGES or BREP file through occt-import-js. The html and png backends also call `readMeshes` through this render. An output over `maxMemoryMb` rejects with `E_LIMIT`.
+
+```ts
+export function readCadRequest(request: WorkerJob["request"]): CadDocument;
 export function readMeshes(request: WorkerJob["request"], deps?: Partial<GlbDeps>): Promise<CadMesh[]>;
 export function render(request: WorkerJob["request"], deps?: Partial<GlbDeps>): Promise<BackendOutput>;
 ```
@@ -679,6 +690,10 @@ Purpose: the backend of `cad` to `stl`. A model with a colour gives a warning, b
 ## `src/mesh/backend-3mf.ts`
 
 Purpose: the backend of `cad` to `3mf`. The package keeps the colours and the names. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
+
+## `src/mesh/backend-dxf.ts`
+
+Purpose: the backend of `cad` to `dxf`. With no option, the drawing is the outline of the model. The option `z` gives the section at that height. A model with a colour gives a warning. A drawing with no contour rejects with `E_INPUT`. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
 
 ## `src/types.ts`
 

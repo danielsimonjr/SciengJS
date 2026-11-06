@@ -17,7 +17,7 @@ export const INPUT_TYPES = [
 export type InputType = (typeof INPUT_TYPES)[number];
 
 /** The output formats of the design. */
-export const OUTPUT_FORMATS = ["svg", "png", "pdf", "html", "md", "glb", "stl", "3mf"] as const;
+export const OUTPUT_FORMATS = ["svg", "png", "pdf", "html", "md", "glb", "stl", "3mf", "dxf"] as const;
 
 /** One output format of the design. */
 export type OutputFormat = (typeof OUTPUT_FORMATS)[number];

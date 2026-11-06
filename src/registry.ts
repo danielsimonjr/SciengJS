@@ -68,6 +68,7 @@ export const DEFAULT_REGISTRY: Registry = {
   "cad:glb": { backend: "mesh/manifold+glb", moduleUrl: backendUrl("mesh/backend-glb") },
   "cad:stl": { backend: "mesh/manifold+stl", moduleUrl: backendUrl("mesh/backend-stl") },
   "cad:3mf": { backend: "mesh/manifold+3mf", moduleUrl: backendUrl("mesh/backend-3mf") },
+  "cad:dxf": { backend: "mesh/manifold+dxf", moduleUrl: backendUrl("mesh/backend-dxf") },
   "cad:html": { backend: "mesh/manifold+viewer", moduleUrl: backendUrl("mesh/backend-html") },
   "cad:png": { backend: "mesh/manifold+viewer+browser/chromium", moduleUrl: backendUrl("mesh/backend-png") },
   "tikz:svg": { backend: "tex/etex", moduleUrl: backendUrl("tex/backend-svg"), preload: texPreload },

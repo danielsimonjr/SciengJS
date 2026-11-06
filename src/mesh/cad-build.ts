@@ -22,6 +22,14 @@ interface Solid {
   numTri(): number;
   volume(): number;
   status(): string;
+  slice(height: number): Section;
+  project(): Section;
+  delete(): void;
+}
+
+/** A planar section of a solid. Each polygon is a closed contour of [x, y] points. */
+interface Section {
+  toPolygons(): number[][][];
   delete(): void;
 }
 
@@ -213,7 +221,38 @@ export interface CadBuildResult {
  * Builds the solid of a checked document and returns one mesh with flat normals at sharp edges.
  * The faces carry the colours of the primitives. A result over maxFacets rejects with E_LIMIT.
  */
-export async function buildCad(document: CadDocument, maxFacets: number): Promise<CadBuildResult> {
+export function buildCad(document: CadDocument, maxFacets: number): Promise<CadBuildResult> {
+  return withSolid(document, maxFacets, (solid, build) => {
+    const shaded = build.keep(solid.calculateNormals(NORMAL_CHANNEL, SHARP_ANGLE));
+    const out = shaded.getMesh(NORMAL_CHANNEL);
+    return { mesh: toCadMesh(out, build.colors, document.model.name ?? "model"), volume: solid.volume() };
+  });
+}
+
+/** The result of a drawing: the closed contours in the X-Y plane, and whether the model has a colour. */
+export interface CadDrawing {
+  contours: number[][][];
+  colored: boolean;
+}
+
+/**
+ * Draws a checked document in the X-Y plane. With no height, the drawing is the outline of the solid seen from
+ * above. With a height, the drawing is the section of the solid at that height. A result over maxFacets rejects
+ * with E_LIMIT.
+ */
+export function drawCad(document: CadDocument, maxFacets: number, z?: number): Promise<CadDrawing> {
+  return withSolid(document, maxFacets, (solid, build) => {
+    const section = build.keep(z === undefined ? solid.project() : solid.slice(z));
+    const colored = [...build.colors.values()].some((c) => c !== null);
+    return { contours: section.toPolygons(), colored };
+  });
+}
+
+/**
+ * Builds the solid of a checked document and gives the solid to the reader. The build frees every WASM object
+ * after the reader returns. A failed operation rejects with E_INPUT. A solid over maxFacets rejects with E_LIMIT.
+ */
+async function withSolid<T>(document: CadDocument, maxFacets: number, read: (solid: Solid, build: Build) => T): Promise<T> {
   const m = await loadManifold();
   const build = new Build(m, document.segments ?? DEFAULT_SEGMENTS, maxFacets);
   try {
@@ -229,9 +268,7 @@ export async function buildCad(document: CadDocument, maxFacets: number): Promis
       throw new RenderError("E_INPUT", `the solid operations failed: ${String(status)}`);
     }
     build.checkFacets(solid);
-    const shaded = build.keep(solid.calculateNormals(NORMAL_CHANNEL, SHARP_ANGLE));
-    const out = shaded.getMesh(NORMAL_CHANNEL);
-    return { mesh: toCadMesh(out, build.colors, document.model.name ?? "model"), volume: solid.volume() };
+    return read(solid, build);
   } finally {
     build.free();
   }
