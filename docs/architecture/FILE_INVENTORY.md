@@ -8,7 +8,7 @@ This report lists each source file that the map census finds, with a disposition
 
 **Language**: typescript
 
-**Total files**: 297
+**Total files**: 303
 
 ## Disposition counts
 
@@ -18,26 +18,26 @@ This report lists each source file that the map census finds, with a disposition
 | `build-entry` | 109 | A `src`-area file that is an entry root. |
 | `test-only` | 0 | A `src`-area file that only a test reaches. |
 | `orphan` | 8 | A `src`-area file that nothing reaches. Delete it, or wire it to a root. |
-| `test` | 145 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
+| `test` | 151 | A file in a `test/` or `tests/` folder, or a `*.test.ts` or `*.spec.ts` file. |
 | `tool` | 35 | A file in a `tools/` or `scripts/` folder outside `src/`. |
 | `config` | 0 | A `*.config.*` file of TypeScript or JavaScript. |
 | `example` | 0 | A file in `examples/` or `docs/`. |
 | `bench` | 0 | A file in `bench/` or `benchmarks/`, or a `*.bench.*` file. |
-| **Total** | **297** | |
+| **Total** | **303** | |
 
 ## Per-area counts
 
 | Area | Files |
 | --- | --: |
 | `src` | 117 |
-| `tests` | 145 |
+| `tests` | 151 |
 | `tools` | 35 |
 
 ## Per-package counts
 
 | Package | Files |
 | --- | --: |
-| `(root)` | 187 |
+| `(root)` | 193 |
 | `@danielsimonjr/sciengjs` | 110 |
 
 ## All files
@@ -156,11 +156,13 @@ This report lists each source file that the map census finds, with a disposition
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
 | `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 60 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 183 |
+| `test/corpus/gallery.ts` | (root) | tests | test | 83 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
-| `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 63 |
-| `test/corpus/regenerate-sysml.ts` | (root) | tests | test | 64 |
-| `test/corpus/regenerate-tikz.ts` | (root) | tests | test | 67 |
+| `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 45 |
+| `test/corpus/regenerate-sysml.ts` | (root) | tests | test | 47 |
+| `test/corpus/regenerate-tikz.ts` | (root) | tests | test | 50 |
 | `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |
+| `test/integration/gallery.test.ts` | (root) | tests | test | 58 |
 | `test/integration/mermaid-browser-capture.test.ts` | (root) | tests | test | 111 |
 | `test/integration/mermaid-browser.test.ts` | (root) | tests | test | 85 |
 | `test/integration/mesh-viewer.test.ts` | (root) | tests | test | 162 |
@@ -189,12 +191,14 @@ This report lists each source file that the map census finds, with a disposition
 | `test/smoke/smoke.mjs` | (root) | tests | test | 221 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 100 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
+| `test/support/gallery.ts` | (root) | tests | test | 191 |
 | `test/support/glb-reader.ts` | (root) | tests | test | 171 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
 | `test/support/page-checker.ts` | (root) | tests | test | 414 |
 | `test/support/png-decode.ts` | (root) | tests | test | 114 |
 | `test/support/process-list.ts` | (root) | tests | test | 34 |
 | `test/support/rejections.ts` | (root) | tests | test | 51 |
+| `test/support/review-page.ts` | (root) | tests | test | 48 |
 | `test/support/settings.ts` | (root) | tests | test | 24 |
 | `test/support/stubs/stub-dot.ts` | (root) | tests | test | 26 |
 | `test/support/stubs/stub-foreign-error.ts` | (root) | tests | test | 14 |
@@ -225,6 +229,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/config-assets.test.ts` | (root) | tests | test | 111 |
 | `test/unit/config.test.ts` | (root) | tests | test | 273 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 69 |
+| `test/unit/gallery-page.test.ts` | (root) | tests | test | 208 |
 | `test/unit/glb-writer.test.ts` | (root) | tests | test | 246 |
 | `test/unit/graph-corpus.test.ts` | (root) | tests | test | 47 |
 | `test/unit/graph-dot.test.ts` | (root) | tests | test | 79 |
@@ -279,6 +284,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/raster.test.ts` | (root) | tests | test | 118 |
 | `test/unit/readme-mermaid.test.ts` | (root) | tests | test | 21 |
 | `test/unit/render.test.ts` | (root) | tests | test | 174 |
+| `test/unit/review-page.test.ts` | (root) | tests | test | 61 |
 | `test/unit/svg-compare.test.ts` | (root) | tests | test | 74 |
 | `test/unit/sysml-backends.test.ts` | (root) | tests | test | 51 |
 | `test/unit/sysml-corpus.test.ts` | (root) | tests | test | 69 |
