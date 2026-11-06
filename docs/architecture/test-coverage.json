@@ -193,6 +193,7 @@
       "test/unit/assets.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/config.test.ts",
+      "test/unit/gallery-page.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
@@ -225,6 +226,7 @@
       "test/unit/cad-document.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
+      "test/unit/gallery-page.test.ts",
       "test/unit/graph-dot.test.ts",
       "test/unit/graph-png.test.ts",
       "test/unit/html-md-render.test.ts",
@@ -287,6 +289,7 @@
       "test/integration/mesh-viewer.test.ts",
       "test/integration/pdf-pages.test.ts",
       "test/integration/tikz-render.test.ts",
+      "test/unit/gallery-page.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts"
@@ -547,6 +550,7 @@
       "test/integration/mesh-viewer.test.ts",
       "test/integration/pdf-pages.test.ts",
       "test/integration/tikz-render.test.ts",
+      "test/unit/gallery-page.test.ts",
       "test/unit/html-md-render.test.ts",
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
@@ -720,7 +724,12 @@
     "test/unit/errors.test.ts": [
       "src/errors.ts"
     ],
-    "test/unit/gallery-page.test.ts": [],
+    "test/unit/gallery-page.test.ts": [
+      "src/index.ts",
+      "src/errors.ts",
+      "src/config.ts",
+      "src/types.ts"
+    ],
     "test/unit/glb-writer.test.ts": [
       "src/mesh/glb.ts",
       "src/mesh/read.ts"

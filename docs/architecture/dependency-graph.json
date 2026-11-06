@@ -5,7 +5,7 @@
     "language": "typescript",
     "totalFiles": 303,
     "totalModules": 3,
-    "totalExports": 759
+    "totalExports": 760
   },
   "modules": {
     "tools": {
@@ -4917,6 +4917,7 @@
         "externalDependencies": [],
         "nodeDependencies": [
           "node:fs",
+          "node:os",
           "node:path",
           "node:url"
         ],
@@ -5766,6 +5767,7 @@
           "GalleryEntry",
           "GalleryResult",
           "GalleryEnv",
+          "RenderFn",
           "GalleryMeta",
           "listFixtures",
           "renderFixture",
@@ -6685,11 +6687,28 @@
         ],
         "internalDependencies": [
           {
+            "file": "src/index.ts",
+            "imports": [
+              "RenderRequest",
+              "RenderResult",
+              "SciengConfig"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
             "file": "test/support/gallery.ts",
             "imports": [
               "galleryPage",
               "listFixtures",
               "MAX_EMBED_BYTES",
+              "renderFixture",
               "SKIP_REASONS",
               "GalleryEntry",
               "GalleryResult"
@@ -9416,8 +9435,8 @@
     "totalTypeScriptFiles": 303,
     "totalSourceFiles": 303,
     "totalModules": 3,
-    "totalLinesOfCode": 35886,
-    "totalExports": 759,
+    "totalLinesOfCode": 36073,
+    "totalExports": 760,
     "entryRoots": 109,
     "reachableFiles": 109,
     "dormantFiles": 8,
@@ -9425,7 +9444,7 @@
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 91,
+    "totalTypeOnlyImports": 92,
     "noImporterFileCount": 8,
     "unusedExportsCount": 52,
     "circularDepsTruncated": false,
