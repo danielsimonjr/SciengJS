@@ -137,10 +137,10 @@ async function waitForBrowser(profile: string, state: LaunchState, deadline: num
 }
 
 /** Rejects when the promise does not settle before the deadline. */
-async function withDeadline<T>(work: Promise<T>, deadline: number, message: string): Promise<T> {
+async function withDeadline<T>(work: Promise<T>, deadline: number, message: string | (() => string)): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   const expired = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => reject(new RenderError("E_TIMEOUT", message)), Math.max(0, deadline - Date.now()));
+    timer = setTimeout(() => reject(new RenderError("E_TIMEOUT", typeof message === "string" ? message : message())), Math.max(0, deadline - Date.now()));
   });
   try {
     return await Promise.race([work, expired]);
@@ -155,7 +155,8 @@ class Interceptor {
   readonly faults: Error[] = [];
   private readonly guarded = new Set<string>();
   private readonly sessions = new Map<string, string>();
-  private readonly sessionWaiters = new Map<string, (sessionId: string) => void>();
+  private readonly failedTargets = new Map<string, Error>();
+  private readonly sessionWaiters = new Map<string, { resolve: (sessionId: string) => void; reject: (err: Error) => void }>();
 
   constructor(
     private readonly cdp: CdpConnection,
@@ -188,17 +189,25 @@ class Interceptor {
     this.guard(sessionId, targetInfo.type)
       .then(() => {
         this.sessions.set(targetInfo.targetId, sessionId);
-        this.sessionWaiters.get(targetInfo.targetId)?.(sessionId);
+        this.sessionWaiters.get(targetInfo.targetId)?.resolve(sessionId);
         return this.cdp.send("Runtime.runIfWaitingForDebugger", {}, sessionId);
       })
-      .catch(this.record);
+      .catch((err: unknown) => {
+        // A target that cannot be guarded fails the render at once. Its waiter gets the cause, not the deadline.
+        const cause = err instanceof Error ? err : new Error(String(err));
+        this.failedTargets.set(targetInfo.targetId, cause);
+        this.sessionWaiters.get(targetInfo.targetId)?.reject(cause);
+        this.record(err);
+      });
   }
 
   /** The session of a target, once the target is attached and guarded. */
   sessionOf(targetId: string): Promise<string> {
     const known = this.sessions.get(targetId);
     if (known !== undefined) return Promise.resolve(known);
-    return new Promise((resolve) => this.sessionWaiters.set(targetId, resolve));
+    const failed = this.failedTargets.get(targetId);
+    if (failed !== undefined) return Promise.reject(failed);
+    return new Promise((resolve, reject) => this.sessionWaiters.set(targetId, { resolve, reject }));
   }
 
   private paused(sessionId: string, params: unknown): void {
@@ -259,10 +268,24 @@ class Interceptor {
  * the navigation, so a load event of an earlier document does not count.
  */
 export async function capturePage(cdp: CdpConnection, req: HtmlPageRequest, deadline: number): Promise<HtmlPageResult> {
-  return withDeadline(capture(cdp, req), deadline, "the page did not load in time");
+  const step: CaptureStep = { name: "Target.setAutoAttach", at: Date.now() };
+  return withDeadline(capture(cdp, req, step), deadline, () => {
+    const seconds = ((Date.now() - step.at) / 1000).toFixed(1);
+    return `the page did not load in time: the capture was at the step "${step.name}" for ${seconds} s`;
+  });
 }
 
-async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPageResult> {
+/** The step of a capture that runs now, and its start time (a Date.now() time). A timeout message names it. */
+interface CaptureStep {
+  name: string;
+  at: number;
+}
+
+async function capture(cdp: CdpConnection, req: HtmlPageRequest, step: CaptureStep): Promise<HtmlPageResult> {
+  const enter = (name: string): void => {
+    step.name = name;
+    step.at = Date.now();
+  };
   const guard = new Interceptor(cdp, req.html, req.pinned ?? new Map());
   // A new page that the page opens (window.open) is a new target of the browser. The browser-level auto-attach
   // pauses it until it is guarded. A target of the browser itself (for example a built-in extension) is not a
@@ -276,8 +299,10 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
     }
   });
   await cdp.send("Target.setAutoAttach", { autoAttach: true, waitForDebuggerOnStart: true, flatten: true });
+  enter("Target.createTarget");
   const target = (await cdp.send("Target.createTarget", { url: "about:blank" })) as { targetId: string };
   // The browser-level auto-attach attaches the new target and guards it. The client waits for that session.
+  enter("the guard of the page session");
   const s = await guard.sessionOf(target.targetId);
 
   const loads = new Set<string>();
@@ -289,21 +314,26 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
       onLoad?.();
     }
   });
+  enter("Page.enable");
   await cdp.send("Page.enable", {}, s);
+  enter("Page.setLifecycleEventsEnabled");
   await cdp.send("Page.setLifecycleEventsEnabled", { enabled: true }, s);
   if (req.format === "png" && req.awaitDone !== true) {
+    enter("Emulation.setDeviceMetricsOverride");
     await cdp.send(
       "Emulation.setDeviceMetricsOverride",
       { width: req.width, height: req.height, deviceScaleFactor: req.scale, mobile: false },
       s,
     );
   }
+  enter("Page.navigate");
   const nav = (await cdp.send("Page.navigate", { url: PAGE_URL }, s)) as { loaderId?: string; errorText?: string };
   if (nav.errorText !== undefined && nav.errorText !== "") {
     throw new RenderError("E_INTERNAL", `the browser did not load the page: ${nav.errorText}`);
   }
   const loaderId = nav.loaderId ?? "";
   // The load event can come before the reply of Page.navigate, so the seen loaders are checked first.
+  enter("waiting for the load event");
   if (!loads.has(loaderId)) {
     await new Promise<void>((resolve) => {
       onLoad = () => {
@@ -312,6 +342,7 @@ async function capture(cdp: CdpConnection, req: HtmlPageRequest): Promise<HtmlPa
     });
   }
 
+  enter("the output of the page");
   let bytes: Uint8Array;
   if (req.awaitReady === true) {
     const done = await awaitDoneReport(cdp, s);

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 108,
-    "totalTestFiles": 100,
+    "totalTestFiles": 101,
     "testedCount": 75,
     "untestedCount": 33,
     "coveragePercent": "69.4",
@@ -140,6 +140,7 @@
       "test/unit/browser-stage.test.ts"
     ],
     "src/browser/cdp.ts": [
+      "test/unit/browser-capture.test.ts",
       "test/unit/browser-cdp.test.ts"
     ],
     "src/browser/flags.ts": [
@@ -171,6 +172,7 @@
       "test/integration/browser-render.test.ts",
       "test/integration/mermaid-browser-capture.test.ts",
       "test/integration/mesh-viewer.test.ts",
+      "test/unit/browser-capture.test.ts",
       "test/unit/browser-kill-tree.test.ts"
     ],
     "src/config.ts": [
@@ -209,6 +211,7 @@
       "test/integration/mermaid-browser.test.ts",
       "test/integration/mesh-viewer.test.ts",
       "test/integration/tikz-render.test.ts",
+      "test/unit/browser-capture.test.ts",
       "test/unit/cad-document.test.ts",
       "test/unit/config-assets.test.ts",
       "test/unit/errors.test.ts",
@@ -585,6 +588,11 @@
     "test/unit/assets.test.ts": [
       "src/assets.ts",
       "src/config.ts"
+    ],
+    "test/unit/browser-capture.test.ts": [
+      "src/browser/cdp.ts",
+      "src/browser/render.ts",
+      "src/errors.ts"
     ],
     "test/unit/browser-cdp.test.ts": [
       "src/browser/cdp.ts"
