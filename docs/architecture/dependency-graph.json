@@ -5213,7 +5213,11 @@
           "bun:test"
         ],
         "nodeDependencies": [
-          "node:fs"
+          "node:fs",
+          "node:module",
+          "node:os",
+          "node:path",
+          "node:url"
         ],
         "internalDependencies": [
           {
@@ -9166,7 +9170,7 @@
     "totalTypeScriptFiles": 297,
     "totalSourceFiles": 297,
     "totalModules": 3,
-    "totalLinesOfCode": 35009,
+    "totalLinesOfCode": 35022,
     "totalExports": 745,
     "entryRoots": 109,
     "reachableFiles": 109,
