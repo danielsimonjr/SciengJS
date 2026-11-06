@@ -40,7 +40,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 | `plot` | the Plotly JSON subset of section "PLOT" | svg, png, pdf, html | plot |
 | `sysml` | the SysML v2 textual subset of section "SysML" | svg, png, pdf | graph |
 | `step`, `iges`, `brep` | ISO 10303-21, IGES, OpenCascade BREP | html, png, glb | mesh, browser |
-| `cad` | the CSG document of section "CAD" | html, png, glb, stl | mesh, browser |
+| `cad` | the CSG document of section "CAD" | html, png, glb, stl, 3mf | mesh, browser |
 | `html` | an HTML document | png, pdf, md | browser, html |
 
 `png` of an SVG that the engine draws comes from the raster stage (resvg), with no browser. `png` of an SVG that the browser stage draws comes from a browser screenshot. Those SVGs can hold `foreignObject` labels, and resvg does not render them. `pdf` needs the browser stage. The stage column of the table names the stage that decides whether a pair is ready on a machine. A pair that needs the browser stage lists `browser`. Any other pair lists the stage that draws its vector output, and a `png` that comes from the raster stage needs no other stage. So `dot` to `png` lists `graph`, and `dot` to `pdf` lists `browser`.
@@ -62,7 +62,7 @@ export type InputType =
   | "dot" | "mermaid" | "math" | "tikz" | "plot" | "sysml"
   | "step" | "iges" | "brep" | "cad" | "html";
 
-export type OutputFormat = "svg" | "png" | "pdf" | "html" | "md" | "glb" | "stl";
+export type OutputFormat = "svg" | "png" | "pdf" | "html" | "md" | "glb" | "stl" | "3mf";
 
 export interface RenderRequest {
   type: InputType;
@@ -100,7 +100,7 @@ The package exports one subpath per stage. A caller that imports `@danielsimonjr
 | `./tex` | WASM TeX, the bundle manager, DVI to SVG |
 | `./plot` | the SVG plotter and the Plotly JSON reader |
 | `./sysml` | the SysML v2 parser and its views |
-| `./mesh` | STEP, IGES, BREP and CAD to a mesh, glTF and STL writers, the Three.js page |
+| `./mesh` | STEP, IGES, BREP and CAD to a mesh, glTF, STL and 3MF writers, the Three.js page |
 | `./browser` | the Chrome DevTools Protocol client |
 | `./html` | HTML to Markdown |
 | `./raster` | SVG to PNG through resvg |
@@ -114,7 +114,7 @@ A stage is a shared service that several backends use. Each stage loads on first
 | graph | `@viz-js/viz` (Graphviz compiled to WASM) | wrapper MIT; Graphviz EPL-2.0 | the adapters that turn Mermaid, SysML into DOT |
 | math | `@mathjax/src` 4.x | Apache-2.0 | the request wrapper and the SVG clean-up |
 | tex | the engine compiles `tex.web` (the TeX program source) with `etex.ch` to WASM | `tex.web` and `etex.ch`: the licences of their authors; the TeX packages: LPPL; the outline fonts: OFL or GFL (see "tex") | the Pascal to WASM compiler, the change files, the WASM host functions, the format build, the bundle manager, the package detection, the DVI to SVG converter with glyph paths |
-| mesh | `occt-import-js` (OpenCascade, WASM); `manifold-3d` | LGPL-2.1; Apache-2.0 | the CSG document reader, the glTF and STL writers, the Three.js viewer page |
+| mesh | `occt-import-js` (OpenCascade, WASM); `manifold-3d` | LGPL-2.1; Apache-2.0 | the CSG document reader, the glTF, STL and 3MF writers, the Three.js viewer page |
 | browser | the installed Chromium or Chrome | (system program) | the Chrome DevTools Protocol client |
 | raster | `@resvg/resvg-wasm` | MPL-2.0 | the call wrapper |
 | html | `parse5` | MIT | the HTML to Markdown converter |
@@ -198,7 +198,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 
 - STEP, IGES and BREP go through `occt-import-js` (`ReadStepFile`, `ReadIgesFile`, `ReadBrepFile`). The result is a list of meshes in the form that Three.js loads.
 - A CAD document goes through `manifold-3d` for the solid operations.
-- Outputs: a glTF binary (`glb`), an STL file, an HTML viewer page, and a PNG of the page through the browser stage.
+- Outputs: a glTF binary (`glb`), an STL file, a 3MF file (`3mf`, CAD documents only), an HTML viewer page, and a PNG of the page through the browser stage.
 - A `glb` render estimates its peak memory after the read: the bytes of the positions, the normals and the indices, times four copies. An estimate over `maxMemoryMb` megabytes rejects with `E_LIMIT`. Geometry over 4 GiB also rejects with `E_LIMIT`, because the `glb` header holds the file length in 32 bits.
 - The viewer page loads Three.js and its orbit controls add-on. The page has section planes and an exploded view. The page embeds the `glb`. In a normal browser, the page requests only the pinned Three.js modules. Under the browser stage, the client fulfils those modules from the engine package.
 
@@ -295,7 +295,16 @@ With `lenient: true`, the engine skips a statement with an unknown keyword to it
 - An unknown key, a missing key, a wrong type, a number that is not finite, or a size that is not positive rejects with `E_INPUT`. The message gives the JSON path of the value, for example `model.children[1].radius`.
 - The reader counts the nodes before the solid operations start. A document with more than `maxCadNodes` nodes rejects with `E_LIMIT`.
 - The reader estimates the facets of each primitive from its segments before the solid operations start. An estimate over `maxCadFacets` rejects with `E_LIMIT`. The result of the solid operations is checked again, because an operation can add facets.
-- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with a colour. A face of the result keeps the colour of the primitive that made the face. Thus the cut face of a `difference` has the colour of the cutting solid. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name.
+- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with a colour. A face of the result keeps the colour of the primitive that made the face. Thus the cut face of a `difference` has the colour of the cutting solid. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name. The `3mf` output carries the colours and the names.
+
+The `3mf` output is a 3MF Core package:
+
+- The package is a ZIP archive with three parts: `[Content_Types].xml`, `_rels/.rels` and `3D/3dmodel.model`.
+- Each part is stored without compression, with a fixed date. Thus the same model always gives the same bytes.
+- The unit of the model is `millimeter`.
+- Each mesh is one `object` with its name. A mesh with no triangle is not written.
+- The colours are one `basematerials` group. A triangle without a colour takes the default grey of the `glb` output.
+- An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
 
 ### STEP, IGES, BREP
 
