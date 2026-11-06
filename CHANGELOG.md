@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Changed
+
+- The roadmap in the README lists viewer reload as planned: the HTML viewer loads the model again when the model is rendered again.
+
 ### Fixed
 
 - The review page of the Mermaid corpus (`docs/analysis/i3-mermaid-corpus.html`) shows the approval state of `approval.json`: 9 of 9 sources approved. The page was not written again after the approval and showed 0 of 9.
