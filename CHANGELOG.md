@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-11-06
+
 ### Added
 
 - `cad` documents render to `dxf`, a 2D drawing in the X-Y plane. With no option, the drawing is the outline of the model seen from above. The option `z` gives the section at that height. Each closed contour is one closed `POLYLINE` on layer `0`, in ASCII DXF of release R12, with the coordinates in millimetres. A model with a colour gives a warning. A drawing with no contour rejects with `E_INPUT`. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts. The MIME type is `image/vnd.dxf`. `./mesh` exports `writeDxf` and `drawCad`.
