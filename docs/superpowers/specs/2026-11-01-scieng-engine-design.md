@@ -40,7 +40,7 @@ The engine holds every renderer. The adapter holds no rendering logic. The adapt
 | `plot` | the Plotly JSON subset of section "PLOT" | svg, png, pdf, html | plot |
 | `sysml` | the SysML v2 textual subset of section "SysML" | svg, png, pdf | graph |
 | `step`, `iges`, `brep` | ISO 10303-21, IGES, OpenCascade BREP | html, png, glb | mesh, browser |
-| `cad` | the CSG document of section "CAD" | html, png, glb, stl, 3mf, dxf | mesh, browser |
+| `cad` | the CSG document of section "CAD" | html, png, glb, stl, 3mf, dxf, md | mesh, browser |
 | `html` | an HTML document | png, pdf, md | browser, html |
 
 `png` of an SVG that the engine draws comes from the raster stage (resvg), with no browser. `png` of an SVG that the browser stage draws comes from a browser screenshot. Those SVGs can hold `foreignObject` labels, and resvg does not render them. `pdf` needs the browser stage. The stage column of the table names the stage that decides whether a pair is ready on a machine. A pair that needs the browser stage lists `browser`. Any other pair lists the stage that draws its vector output, and a `png` that comes from the raster stage needs no other stage. So `dot` to `png` lists `graph`, and `dot` to `pdf` lists `browser`.
@@ -199,7 +199,7 @@ The `@viz-js/viz` npm package declares MIT and ships no Graphviz licence file. T
 - STEP, IGES and BREP go through `occt-import-js` (`ReadStepFile`, `ReadIgesFile`, `ReadBrepFile`). The result is a list of meshes in the form that Three.js loads.
 - A CAD document goes through `manifold-3d` for the solid operations.
 - Outputs: a glTF binary (`glb`), an STL file, an HTML viewer page, and a PNG of the page through the browser stage.
-- CAD documents only: a 3MF file (`3mf`) and a DXF drawing (`dxf`).
+- CAD documents only: a 3MF file (`3mf`), a DXF drawing (`dxf`) and a Markdown report of the design for manufacture (`md`).
 - A `glb` render estimates its peak memory after the read: the bytes of the positions, the normals and the indices, times four copies. An estimate over `maxMemoryMb` megabytes rejects with `E_LIMIT`. Geometry over 4 GiB also rejects with `E_LIMIT`, because the `glb` header holds the file length in 32 bits.
 - The viewer page loads Three.js and its orbit controls add-on. The page has section planes and an exploded view. The page embeds the `glb`. In a normal browser, the page requests only the pinned Three.js modules. Under the browser stage, the client fulfils those modules from the engine package.
 
@@ -296,7 +296,7 @@ With `lenient: true`, the engine skips a statement with an unknown keyword to it
 - An unknown key, a missing key, a wrong type, a number that is not finite, or a size that is not positive rejects with `E_INPUT`. The message gives the JSON path of the value, for example `model.children[1].radius`.
 - The reader counts the nodes before the solid operations start. A document with more than `maxCadNodes` nodes rejects with `E_LIMIT`.
 - The reader estimates the facets of each primitive from its segments before the solid operations start. An estimate over `maxCadFacets` rejects with `E_LIMIT`. The result of the solid operations is checked again, because an operation can add facets.
-- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with a colour. A face of the result keeps the colour of the primitive that made the face. Thus the cut face of a `difference` has the colour of the cutting solid. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name. The `3mf` output carries the colours and the names. The `dxf` output carries no colour and no name.
+- A `color` is three numbers from 0 to 1 (red, green, blue). A node without a colour takes the colour of the nearest parent with a colour. A face of the result keeps the colour of the primitive that made the face. Thus the cut face of a `difference` has the colour of the cutting solid. The `glb`, `html` and `png` outputs carry the colours. The `stl` output carries no colour and no name. The `3mf` output carries the colours and the names. The `dxf` output carries no colour and no name. The `md` output carries no colour and no name.
 
 The `3mf` output is a 3MF Core package:
 
@@ -316,6 +316,19 @@ The `dxf` output is a 2D drawing of the model in the X-Y plane:
 - The drawing has no colour and no name. A model with a colour gives a warning.
 - A drawing with no contour, for example a section above the model, rejects with `E_INPUT`.
 - An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
+
+The `md` output is a report of the design for manufacture (DFM) of the model:
+
+- The report is GitHub Flavored Markdown. The report gives the measures of the model: the size of the bounding box, the volume and the surface area, in millimetres.
+- The report gives two checks. Each check gives `pass` or `fail` and the measured value. A failed check does not reject the render and gives no warning.
+- The overhang check uses the build direction +Z. A face needs support when its normal points down and the face is more than the overhang angle from the vertical. A face on the lowest plane of the model stands on the bed and needs no support. The check fails when the area that needs support is more than zero.
+- The option `overhang` is the overhang angle in degrees, a number larger than 0 and smaller than 90. The default is 45.
+- The wall check finds the walls that are thinner than the minimum wall. The check cuts the model into sections on each of the three axes. An opening of each section shrinks the section by half the minimum wall, then grows the section by the same distance. The opening removes each wall that is thinner than the minimum wall. A removed region is thin when it is wider than a quarter of the minimum wall. A removed region is also thin when its area is more than (1 - π/4) × minWall², the four corners of a square bar. A smaller and narrower region is a corner of the opening and does not count. A wall equal to the minimum wall passes. The check fails when a section has a thin region.
+- The option `minWall` is the minimum wall in millimetres, a number larger than 0. The default is 0.8.
+- A model with no solid, for example the intersection of two separate cubes, rejects with `E_INPUT`.
+- The check cuts 32 sections on each axis, at the centres of 32 equal bands of the bounding box. The wall check does not find a thin wall between two sections.
+- Any other option, or a value that is not a finite number in the range of the option, rejects with `E_INPUT`.
+- The same model and the same options always give the same bytes.
 
 ### STEP, IGES, BREP
 
