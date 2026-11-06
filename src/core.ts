@@ -15,6 +15,7 @@ const MIME: Record<OutputFormat, string> = {
   md: "text/markdown; charset=utf-8",
   glb: "model/gltf-binary",
   stl: "model/stl",
+  "3mf": "model/3mf",
 };
 
 const encoder = new TextEncoder();

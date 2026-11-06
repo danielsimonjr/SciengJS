@@ -2452,6 +2452,47 @@
       }
     },
     "mesh": {
+      "src/mesh/backend-3mf.ts": {
+        "description": "Renders a CAD document to a 3MF Core package. The worker calls this function. The package keeps the colours and",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "readMeshes"
+            ]
+          },
+          {
+            "file": "./threemf.ts",
+            "imports": [
+              "threemfByteLength",
+              "write3mf"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "render"
+        ],
+        "functions": [
+          "render"
+        ]
+      },
       "src/mesh/backend-glb.ts": {
         "description": "The number of copies of the geometry that a glb render holds at its peak: the typed arrays of the",
         "externalDependencies": [],
@@ -2844,14 +2885,20 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "DEFAULT_COLOUR",
+          "triangleGroups",
           "writeGlb"
         ],
         "functions": [
+          "triangleGroups",
           "writeGlb"
+        ],
+        "constants": [
+          "DEFAULT_COLOUR"
         ]
       },
       "src/mesh/index.ts": {
-        "description": "Package entry point for mesh (re-exports 17 symbols)",
+        "description": "Package entry point for mesh (re-exports 18 symbols)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -2891,6 +2938,13 @@
             "file": "./stl.ts",
             "imports": [
               "writeStl"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./threemf.ts",
+            "imports": [
+              "write3mf"
             ],
             "reExport": true
           },
@@ -2946,6 +3000,7 @@
           "writeGlb",
           "readMeshOptions",
           "writeStl",
+          "write3mf",
           "checkCadDocument",
           "parseCadDocument",
           "DEFAULT_SEGMENTS",
@@ -2964,6 +3019,7 @@
           "writeGlb",
           "readMeshOptions",
           "writeStl",
+          "write3mf",
           "checkCadDocument",
           "parseCadDocument",
           "DEFAULT_SEGMENTS",
@@ -3076,6 +3132,42 @@
           "stlFacetCount",
           "stlByteLength",
           "writeStl"
+        ]
+      },
+      "src/mesh/threemf.ts": {
+        "description": "The 3MF writer of the mesh stage (design section \"CAD\"). The output is a 3MF Core package: a ZIP archive with",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "./glb.ts",
+            "imports": [
+              "DEFAULT_COLOUR",
+              "triangleGroups"
+            ]
+          },
+          {
+            "file": "./read.ts",
+            "imports": [
+              "CadMesh"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "threemfByteLength",
+          "write3mf"
+        ],
+        "functions": [
+          "threemfByteLength",
+          "write3mf"
         ]
       },
       "src/mesh/viewer-script.ts": {
@@ -5186,6 +5278,7 @@
     {
       "name": "Mesh",
       "files": [
+        "src/mesh/backend-3mf.ts",
         "src/mesh/backend-glb.ts",
         "src/mesh/backend-html.ts",
         "src/mesh/backend-png.ts",
@@ -5199,6 +5292,7 @@
         "src/mesh/pinned-three.ts",
         "src/mesh/read.ts",
         "src/mesh/stl.ts",
+        "src/mesh/threemf.ts",
         "src/mesh/viewer-script.ts",
         "src/mesh/viewer.ts"
       ]

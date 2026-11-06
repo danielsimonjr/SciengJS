@@ -10,9 +10,9 @@
 - **Dormant files**: 8
   - **Orphaned (reachable from nothing)**: 8
   - **Test-only (only a test reaches them)**: 0
-- **Potentially unused exports**: 51
+- **Potentially unused exports**: 50
   - **Unreferenced anywhere**: 6
-  - **Referenced in their own module**: 45
+  - **Referenced in their own module**: 44
   - **Not classified**: 0
 
 ## Caveats
@@ -94,7 +94,6 @@ No other file imports these names, but their own module uses them.
 - `src/mermaid/backend-png.ts`: `render`
 - `src/mermaid/backend-svg.ts`: `render`
 - `src/mermaid/common.ts`: `Context`, `DiagramKind`
-- `src/mesh/backend-glb.ts`: `GlbDeps`
 - `src/mesh/cad-build.ts`: `loadManifold`
 - `src/mesh/cad-document.ts`: `CadNode`
 - `src/mesh/index.ts`: `cad`

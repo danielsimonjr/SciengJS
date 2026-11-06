@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- `cad` documents render to `3mf`. The output is a 3MF Core package that keeps the colours and the names of the model. The writer stores each part without compression, with a fixed date, so the same model always gives the same bytes. The unit is millimeter. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts. The MIME type is `model/3mf`. `./mesh` exports `write3mf`.
+
 ### Changed
 
 - If the DevTools socket does not open in time, the error message gives the socket wait time. The message also gives the time from the browser launch to the port file, and whether the browser is still running. Before this change, the message gave only the address. Why: a Windows CI stall of the socket open did not recur, so the next one must report its own cause.

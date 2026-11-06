@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 284,
+    "totalFiles": 287,
     "totalModules": 3,
-    "totalExports": 694
+    "totalExports": 700
   },
   "modules": {
     "tools": {
@@ -2396,6 +2396,45 @@
           "stateToDot"
         ]
       },
+      "src/mesh/backend-3mf.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/mesh/backend-glb.ts",
+            "imports": [
+              "readMeshes"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/threemf.ts",
+            "imports": [
+              "threemfByteLength",
+              "write3mf"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "render"
+        ]
+      },
       "src/mesh/backend-glb.ts": {
         "externalDependencies": [],
         "nodeDependencies": [],
@@ -2743,6 +2782,8 @@
           }
         ],
         "exports": [
+          "DEFAULT_COLOUR",
+          "triangleGroups",
           "writeGlb"
         ]
       },
@@ -2785,6 +2826,13 @@
             "file": "src/mesh/stl.ts",
             "imports": [
               "writeStl"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/threemf.ts",
+            "imports": [
+              "write3mf"
             ],
             "typeOnly": false
           },
@@ -2835,6 +2883,7 @@
           "writeGlb",
           "readMeshOptions",
           "writeStl",
+          "write3mf",
           "checkCadDocument",
           "parseCadDocument",
           "DEFAULT_SEGMENTS",
@@ -2926,6 +2975,38 @@
           "stlFacetCount",
           "stlByteLength",
           "writeStl"
+        ]
+      },
+      "src/mesh/threemf.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/glb.ts",
+            "imports": [
+              "DEFAULT_COLOUR",
+              "triangleGroups"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/read.ts",
+            "imports": [
+              "CadMesh"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "threemfByteLength",
+          "write3mf"
         ]
       },
       "src/mesh/viewer-script.ts": {
@@ -7145,6 +7226,80 @@
         ],
         "exports": []
       },
+      "test/unit/mesh-3mf.test.ts": {
+        "externalDependencies": [
+          "bun:test",
+          "three/examples/jsm/libs/fflate.module.js"
+        ],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/mesh/backend-3mf.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/threemf.ts",
+            "imports": [
+              "threemfByteLength",
+              "write3mf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/backend-stl.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/pairs.ts",
+            "imports": [
+              "findPair"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/types.ts",
+            "imports": [
+              "OUTPUT_FORMATS"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "test/support/rejections.ts",
+            "imports": [
+              "rejectionOf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/settings.ts",
+            "imports": [
+              "testSettings"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/backend-glb.ts",
+            "imports": [
+              "*"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/mesh-glb.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -8493,21 +8648,21 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 284,
-    "totalSourceFiles": 284,
+    "totalTypeScriptFiles": 287,
+    "totalSourceFiles": 287,
     "totalModules": 3,
-    "totalLinesOfCode": 32825,
-    "totalExports": 694,
-    "entryRoots": 101,
-    "reachableFiles": 101,
+    "totalLinesOfCode": 33182,
+    "totalExports": 700,
+    "entryRoots": 103,
+    "reachableFiles": 103,
     "dormantFiles": 8,
     "orphanedFiles": 8,
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 73,
+    "totalTypeOnlyImports": 76,
     "noImporterFileCount": 8,
-    "unusedExportsCount": 51,
+    "unusedExportsCount": 50,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
@@ -8515,11 +8670,11 @@
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 7,
     "totalInterfaces": 143,
-    "totalFunctions": 275,
+    "totalFunctions": 279,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 71,
-    "totalReExports": 167
+    "totalConstants": 72,
+    "totalReExports": 168
   },
   "reachability": {
     "roots": [
@@ -8574,6 +8729,7 @@
       "src/mermaid/sequence-layout.ts",
       "src/mermaid/sequence.ts",
       "src/mermaid/state.ts",
+      "src/mesh/backend-3mf.ts",
       "src/mesh/backend-glb.ts",
       "src/mesh/backend-html.ts",
       "src/mesh/backend-png.ts",
@@ -8585,6 +8741,7 @@
       "src/mesh/pinned-three.ts",
       "src/mesh/read.ts",
       "src/mesh/stl.ts",
+      "src/mesh/threemf.ts",
       "src/mesh/viewer-script.ts",
       "src/mesh/viewer.ts",
       "src/pairs.ts",
@@ -8625,7 +8782,7 @@
       "src/worker/protocol.ts",
       "src/worker/run.ts"
     ],
-    "reachableCount": 101,
+    "reachableCount": 103,
     "dormantCount": 8,
     "orphaned": [
       "src/mesh/occt-import-js.d.ts",

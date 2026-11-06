@@ -7,9 +7,9 @@
     "`unreferencedAnywhereNotes`'s dynamic-import check (`_dynamic_import_referrers`) only sees `import(...)` calls with a LITERAL string specifier. A dynamic import built from a variable or template literal (e.g. `import(`./cmds/${name}.js`)`, a command-dispatcher pattern) is invisible to it -- 'found none' in a note means no LITERAL match was found, NOT that nothing imports the file."
   ],
   "summary": {
-    "unusedExportCount": 51,
+    "unusedExportCount": 50,
     "unreferencedAnywhereCount": 6,
-    "referencedInModuleCount": 45,
+    "referencedInModuleCount": 44,
     "unclassifiedExportCount": 0,
     "noImporterFileCount": 8
   },
@@ -107,9 +107,6 @@
     "src/mermaid/common.ts": [
       "Context",
       "DiagramKind"
-    ],
-    "src/mesh/backend-glb.ts": [
-      "GlbDeps"
     ],
     "src/mesh/cad-build.ts": [
       "loadManifold"

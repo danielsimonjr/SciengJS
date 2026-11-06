@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
-- **mesh**: 15 files
+- **mesh**: 17 files
 - **plot**: 8 files
 - **raster**: 2 files
 - **sysml**: 8 files
@@ -939,6 +939,21 @@ The codebase is organized into the following modules:
 
 ## Mesh Dependencies
 
+### `src/mesh/backend-3mf.ts` - Renders a CAD document to a 3MF Core package. The worker calls this function. The package keeps the colours and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./backend-glb.ts` | `readMeshes` | Import |
+| `./threemf.ts` | `threemfByteLength, write3mf` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
 ### `src/mesh/backend-glb.ts` - The number of copies of the geometry that a glb render holds at its peak: the typed arrays of the
 
 **Internal Dependencies:**
@@ -1070,11 +1085,12 @@ The codebase is organized into the following modules:
 | `./read.ts` | `CadFace, CadMesh` | Import (type-only) |
 
 **Exports:**
-- Functions: `writeGlb`
+- Functions: `triangleGroups`, `writeGlb`
+- Constants: `DEFAULT_COLOUR`
 
 ---
 
-### `src/mesh/index.ts` - Package entry point for mesh (re-exports 17 symbols)
+### `src/mesh/index.ts` - Package entry point for mesh (re-exports 18 symbols)
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1084,6 +1100,7 @@ The codebase is organized into the following modules:
 | `./glb.ts` | `writeGlb` | Re-export |
 | `./backend-glb.ts` | `readMeshOptions` | Re-export |
 | `./stl.ts` | `writeStl` | Re-export |
+| `./threemf.ts` | `write3mf` | Re-export |
 | `./cad-document.ts` | `checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS` | Re-export |
 | `./cad-document.ts` | `*` | Re-export (type-only) |
 | `./cad-build.ts` | `buildCad` | Re-export |
@@ -1094,7 +1111,7 @@ The codebase is organized into the following modules:
 - Re-exports:
 
   ```text
-  readCad, CadFormat, CadFace, CadMesh, LinearUnit, writeGlb, readMeshOptions, writeStl,
+  readCad, CadFormat, CadFace, CadMesh, LinearUnit, writeGlb, readMeshOptions, writeStl, write3mf,
   checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS,
   type * from ./cad-document.ts, buildCad, CadBuildResult, cad
   ```
@@ -1152,6 +1169,20 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `stlFacetCount`, `stlByteLength`, `writeStl`
+
+---
+
+### `src/mesh/threemf.ts` - The 3MF writer of the mesh stage (design section "CAD"). The output is a 3MF Core package: a ZIP archive with
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `./glb.ts` | `DEFAULT_COLOUR, triangleGroups` | Import |
+| `./read.ts` | `CadMesh` | Import (type-only) |
+
+**Exports:**
+- Functions: `threemfByteLength`, `write3mf`
 
 ---
 
@@ -1877,31 +1908,31 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 50 files |
-| `src/worker/protocol` | 2 files | 29 files |
+| `src/errors` | 0 files | 52 files |
+| `src/worker/protocol` | 2 files | 30 files |
 | `src/graph/text` | 0 files | 17 files |
 | `src/browser/render` | 6 files | 7 files |
 | `src/mermaid/browser` | 6 files | 7 files |
 | `src/graph/backend-png` | 7 files | 5 files |
+| `src/mesh/backend-glb` | 6 files | 5 files |
 | `src/tex/index` | 11 files | 0 files |
 | `src/browser/input` | 1 file | 9 files |
 | `src/mermaid/common` | 2 files | 8 files |
 | `src/mermaid/render` | 6 files | 4 files |
-| `src/mesh/backend-glb` | 6 files | 4 files |
 | `src/tex/stage` | 6 files | 4 files |
 | `src/config` | 3 files | 6 files |
 | `src/core` | 7 files | 1 file |
 | `src/graph/dot` | 2 files | 6 files |
 | `src/mermaid/backend-png` | 8 files | 0 files |
+| `src/mesh/index` | 8 files | 0 files |
 | `src/tex/render` | 6 files | 2 files |
-| `src/mesh/index` | 7 files | 0 files |
+| `src/mesh/read` | 1 file | 6 files |
 | `src/sysml/render` | 3 files | 4 files |
 | `src/assets` | 1 file | 5 files |
 | `src/html/backend-md` | 6 files | 0 files |
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/mesh/backend-png` | 6 files | 0 files |
-| `src/mesh/read` | 1 file | 5 files |
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/sysml/backend-png` | 6 files | 0 files |
 | `src/tex/backend-png` | 6 files | 0 files |
@@ -2003,17 +2034,17 @@ graph TD
     end
 
     subgraph Mesh
-        N50[backend-glb]
-        N51[backend-html]
-        N52[backend-png]
-        N53[backend-stl]
-        N54[cad-build]
-        N55[cad-builder]
-        N56[cad-document]
-        N57[glb]
-        N58[index]
-        N59[occt-import-js.d]
-        N60[...5 more]
+        N50[backend-3mf]
+        N51[backend-glb]
+        N52[backend-html]
+        N53[backend-png]
+        N54[backend-stl]
+        N55[cad-build]
+        N56[cad-builder]
+        N57[cad-document]
+        N58[glb]
+        N59[index]
+        N60[...7 more]
     end
 
     subgraph Plot
@@ -2166,17 +2197,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 284 |
+| Total Source Files | 287 |
 | Subsystems | 17 |
-| Total Lines of Code | 32825 |
-| Total Exports | 694 |
-| Total Re-exports | 167 |
+| Total Lines of Code | 33182 |
+| Total Exports | 700 |
+| Total Re-exports | 168 |
 | Total Classes | 7 |
 | Total Interfaces | 143 |
-| Total Functions | 275 |
+| Total Functions | 279 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 73 |
+| Type-only Imports | 76 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

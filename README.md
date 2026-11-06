@@ -22,7 +22,7 @@ Release 0.9.0 holds ten input types. They are **Graphviz DOT**, **Mermaid** (eve
 | DOT, Mermaid | PDF | The SVG, printed by the browser stage |
 | HTML | PNG, PDF | The browser stage |
 | STEP, IGES, BREP | GLB, HTML, PNG | OpenCascade, compiled to WASM (`occt-import-js`); a Three.js viewer page |
-| CAD document | GLB, STL, HTML, PNG | The engine's own reader; the solid operations through `manifold-3d` (WASM) |
+| CAD document | GLB, STL, 3MF, HTML, PNG | The engine's own reader; the solid operations through `manifold-3d` (WASM) |
 | SysML v2 (a textual subset) | SVG, PNG, PDF | The engine's own parser and views, then Graphviz; PDF through the browser stage |
 | TikZ picture, circuitikz, tikz-cd, chemfig, mhchem, bussproofs, AMS math | SVG, PNG, PDF | An own WASM build of `tex.web` with `etex.ch`; the bundles download on first use (`SCIENG_TEX_BUNDLE_URL`, `SCIENG_CACHE_DIR`) and each has a pinned sha256; PNG through resvg; PDF through the browser stage |
 
@@ -304,6 +304,7 @@ const { bytes } = await render({ type: "cad", source, format: "stl" }, {});
 
 - The faces keep the colour of the primitive that made them. The cut face of a `difference` has the colour of the cutter.
 - STL holds no colour and no name. A coloured model gives a warning in STL.
+- `format: "3mf"` gives a 3MF package that keeps the colours and the names. The unit is millimeter.
 - A document with more than `maxCadNodes` nodes rejects with `E_LIMIT` before the solid operations start. A model with more than `maxCadFacets` facets also rejects with `E_LIMIT`.
 - A bad value rejects with `E_INPUT`. The message gives the JSON path, for example `model.children[1].radius`.
 
@@ -341,7 +342,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml, graph | svg, png and pdf: released in 0.9.0 |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
-| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0 |
+| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: unreleased |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent
