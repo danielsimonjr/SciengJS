@@ -11,10 +11,10 @@ section { margin-bottom: 32px; }
 </head>
 <body>
 <h1>Mermaid native layouts: corpus review</h1>
-<p>Approval status: 0 of 9 sources approved. A maintainer approves each source in test/corpus/mermaid/approval.json.</p>
+<p>Approval status: 9 of 9 sources approved. A maintainer approves each source in test/corpus/mermaid/approval.json.</p>
 <section>
 <h2>class-generic.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>classDiagram
 class Shape~T~
 class Circle
@@ -56,7 +56,7 @@ Shape &lt;|.. Circle : draws
 </section>
 <section>
 <h2>class-inheritance.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>classDiagram
 class Animal {
   +int age
@@ -117,7 +117,7 @@ Animal &lt;|-- Cat
 </section>
 <section>
 <h2>class-relations.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>classDiagram
 direction LR
 class Order
@@ -194,7 +194,7 @@ Customer o-- Product
 </section>
 <section>
 <h2>sequence-activation.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>sequenceDiagram
 Alice-&gt;&gt;+Bob: Request
 Bob-&gt;&gt;+Carol: Forward
@@ -230,7 +230,7 @@ Bob--&gt;&gt;-Alice: Done
 </section>
 <section>
 <h2>sequence-basic.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>sequenceDiagram
 participant Alice
 participant Bob as Bob Smith
@@ -258,7 +258,7 @@ Alice-&gt;Bob: Plain arrow
 </section>
 <section>
 <h2>sequence-blocks.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>sequenceDiagram
 participant User
 participant Server
@@ -313,7 +313,7 @@ end
 </section>
 <section>
 <h2>sequence-notes.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>sequenceDiagram
 participant A
 participant B
@@ -343,7 +343,7 @@ Note over A,B: Shared view
 </section>
 <section>
 <h2>state-basic.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>stateDiagram-v2
 [*] --&gt; Still
 Still --&gt; Moving : push
@@ -430,7 +430,7 @@ Crash --&gt; [*]
 </section>
 <section>
 <h2>state-direction.mmd</h2>
-<p>Status: not approved.</p>
+<p>Status: approved.</p>
 <pre>stateDiagram-v2
 direction LR
 state &quot;Waiting for input&quot; as Wait
