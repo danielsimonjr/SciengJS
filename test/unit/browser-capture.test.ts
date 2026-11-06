@@ -106,7 +106,7 @@ describe("capturePage: a page that cannot be guarded fails at once with the caus
     const started = Date.now();
     const err = await captureError(new ScriptedBrowser({ failing: ["Fetch.enable"] }), 5000);
     expect(Date.now() - started).toBeLessThan(2000);
-    expect(err.code).not.toBe("E_TIMEOUT");
+    expect(err.message).not.toContain("did not load in time");
     expect(err.message).toContain("Fetch.enable refused");
   });
 
@@ -114,7 +114,7 @@ describe("capturePage: a page that cannot be guarded fails at once with the caus
     const started = Date.now();
     const err = await captureError(new ScriptedBrowser({ failing: ["Fetch.enable"], holdCreateReplyMs: 50 }), 5000);
     expect(Date.now() - started).toBeLessThan(2000);
-    expect(err.code).not.toBe("E_TIMEOUT");
+    expect(err.message).not.toContain("did not load in time");
     expect(err.message).toContain("Fetch.enable refused");
   });
 });
