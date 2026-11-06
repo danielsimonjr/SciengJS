@@ -971,15 +971,15 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/mesh/backend-dxf.ts` - Renders a CAD document to a DXF drawing in the X-Y plane. The worker calls this function. With no option, the
+### `src/mesh/backend-dxf.ts` - Renders a CAD document, or a STEP, IGES or BREP file, to a DXF drawing in the X-Y plane. The worker calls this
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `../errors.ts` | `RenderError` | Import |
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
-| `./backend-glb.ts` | `readCadRequest` | Import |
-| `./cad-build.ts` | `drawCad` | Import |
+| `./backend-glb.ts` | `GlbDeps, readCadRequest, readMeshes` | Import |
+| `./cad-build.ts` | `drawCad, drawMeshes` | Import |
 | `./dxf.ts` | `dxfByteLength, writeDxf` | Import |
 
 **Exports:**
@@ -1081,7 +1081,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `CadBuildResult`, `CadDrawing`, `CadViews`, `ThinSection`, `CadMeasures`
-- Functions: `loadManifold`, `buildCad`, `drawCad`, `drawCadViews`, `measureCad`
+- Functions: `loadManifold`, `buildCad`, `drawCad`, `drawMeshes`, `drawCadViews`, `measureCad`
 - Constants: `WALL_SECTIONS`
 
 ---
@@ -1179,7 +1179,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/mesh/index.ts` - Package entry point for mesh (re-exports 34 symbols)
+### `src/mesh/index.ts` - Package entry point for mesh (re-exports 35 symbols)
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1195,7 +1195,7 @@ The codebase is organized into the following modules:
 | `./dfm.ts` | `DfmOptions` | Re-export (type-only) |
 | `./cad-document.ts` | `checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS` | Re-export |
 | `./cad-document.ts` | `*` | Re-export (type-only) |
-| `./cad-build.ts` | `buildCad, drawCad, drawCadViews, measureCad, WALL_SECTIONS` | Re-export |
+| `./cad-build.ts` | `buildCad, drawCad, drawCadViews, drawMeshes, measureCad, WALL_SECTIONS` | Re-export |
 | `./cad-build.ts` | `CadBuildResult, CadDrawing, CadMeasures, CadViews, ThinSection` | Re-export (type-only) |
 | `./drawing.ts` | `chooseScale, writeCadDrawingSvg` | Re-export |
 | `./drawing.ts` | `DrawingOptions` | Re-export (type-only) |
@@ -1208,8 +1208,8 @@ The codebase is organized into the following modules:
   readCad, CadFormat, CadFace, CadMesh, LinearUnit, writeGlb, readMeshOptions, writeStl, write3mf,
   writeDxf, DFM_DEFAULTS, supportArea, writeDfmReport, DfmOptions, checkCadDocument, parseCadDocument,
   DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS, type * from ./cad-document.ts, buildCad, drawCad,
-  drawCadViews, measureCad, WALL_SECTIONS, CadBuildResult, CadDrawing, CadMeasures, CadViews,
-  ThinSection, chooseScale, writeCadDrawingSvg, DrawingOptions, cad
+  drawCadViews, drawMeshes, measureCad, WALL_SECTIONS, CadBuildResult, CadDrawing, CadMeasures,
+  CadViews, ThinSection, chooseScale, writeCadDrawingSvg, DrawingOptions, cad
   ```
 
 
@@ -2295,15 +2295,15 @@ graph TD
 |----------|-------|
 | Total Source Files | 297 |
 | Subsystems | 17 |
-| Total Lines of Code | 35022 |
-| Total Exports | 745 |
-| Total Re-exports | 184 |
+| Total Lines of Code | 35231 |
+| Total Exports | 747 |
+| Total Re-exports | 185 |
 | Total Classes | 7 |
 | Total Interfaces | 150 |
-| Total Functions | 297 |
+| Total Functions | 298 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 90 |
+| Type-only Imports | 91 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

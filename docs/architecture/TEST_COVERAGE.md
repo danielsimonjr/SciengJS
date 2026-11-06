@@ -152,7 +152,7 @@ The following 33 source files are not directly imported by any test file:
 | `mesh/glb.ts` | `mesh-viewer.test.ts`, `glb-writer.test.ts` |
 | `mesh/index.ts` | `mesh-viewer.test.ts` |
 | `mesh/pinned-three.ts` | `mesh-viewer.test.ts`, `mesh-viewer.test.ts` |
-| `mesh/read.ts` | `mesh-viewer.test.ts`, `glb-writer.test.ts`, `mesh-glb.test.ts`, `mesh-limit.test.ts` |
+| `mesh/read.ts` | `mesh-viewer.test.ts`, `glb-writer.test.ts`, `mesh-dxf.test.ts`, `mesh-glb.test.ts`, `mesh-limit.test.ts` |
 | `mesh/stl.ts` | `mesh-viewer.test.ts` |
 | `mesh/threemf.ts` | `mesh-viewer.test.ts`, `mesh-3mf.test.ts` |
 | `mesh/viewer.ts` | `mesh-viewer.test.ts`, `mesh-viewer.test.ts` |
@@ -163,7 +163,7 @@ The following 33 source files are not directly imported by any test file:
 | `plot/ticks.ts` | `plot-ticks.test.ts` |
 | `raster/index.ts` | `graph-network.test.ts`, `mermaid-xml.test.ts`, `raster.test.ts` |
 | `raster/warnings.ts` | `raster-warnings.test.ts` |
-| `src/registry.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-drawing.test.ts`, `mesh-glb.test.ts`, `mesh-large.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `tex-core-preload.test.ts`, `tex-wiring.test.ts` |
+| `src/registry.ts` | `browser-pdf-pairs.test.ts`, `browser-stage.test.ts`, `graph-png.test.ts`, `graph-registry.test.ts`, `math-registry.test.ts`, `mermaid-registry.test.ts`, `mesh-drawing.test.ts`, `mesh-dxf.test.ts`, `mesh-glb.test.ts`, `mesh-large.test.ts`, `mesh-viewer.test.ts`, `plot-html.test.ts`, `plot-registry.test.ts`, `tex-core-preload.test.ts`, `tex-wiring.test.ts` |
 | `sysml/parse.ts` | `sysml-parse.test.ts`, `sysml-views.test.ts` |
 | `sysml/render.ts` | `sysml-corpus.test.ts`, `sysml-views.test.ts` |
 | `sysml/tokens.ts` | `sysml-parse.test.ts` |
@@ -253,7 +253,7 @@ The following 33 source files are not directly imported by any test file:
 | `unit/mesh-3mf.test.ts` | 7 files |
 | `unit/mesh-dfm.test.ts` | 3 files |
 | `unit/mesh-drawing.test.ts` | 7 files |
-| `unit/mesh-dxf.test.ts` | 5 files |
+| `unit/mesh-dxf.test.ts` | 7 files |
 | `unit/mesh-glb.test.ts` | 3 files |
 | `unit/mesh-large.test.ts` | 3 files |
 | `unit/mesh-limit.test.ts` | 3 files |

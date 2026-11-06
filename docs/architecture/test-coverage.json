@@ -411,6 +411,7 @@
     "src/mesh/read.ts": [
       "test/integration/mesh-viewer.test.ts",
       "test/unit/glb-writer.test.ts",
+      "test/unit/mesh-dxf.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-limit.test.ts"
     ],
@@ -468,6 +469,7 @@
       "test/unit/math-registry.test.ts",
       "test/unit/mermaid-registry.test.ts",
       "test/unit/mesh-drawing.test.ts",
+      "test/unit/mesh-dxf.test.ts",
       "test/unit/mesh-glb.test.ts",
       "test/unit/mesh-large.test.ts",
       "test/unit/mesh-viewer.test.ts",
@@ -870,6 +872,8 @@
       "src/mesh/backend-dxf.ts",
       "src/mesh/dxf.ts",
       "src/pairs.ts",
+      "src/registry.ts",
+      "src/mesh/read.ts",
       "src/types.ts",
       "src/worker/protocol.ts"
     ],

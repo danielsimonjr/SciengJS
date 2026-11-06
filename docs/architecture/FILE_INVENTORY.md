@@ -94,13 +94,13 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mermaid/state.ts` | @danielsimonjr/sciengjs | src | build-entry | 178 |
 | `src/mesh/backend-3mf.ts` | @danielsimonjr/sciengjs | src | build-entry | 18 |
 | `src/mesh/backend-dfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
-| `src/mesh/backend-dxf.ts` | @danielsimonjr/sciengjs | src | build-entry | 40 |
+| `src/mesh/backend-dxf.ts` | @danielsimonjr/sciengjs | src | build-entry | 44 |
 | `src/mesh/backend-glb.ts` | @danielsimonjr/sciengjs | src | build-entry | 121 |
 | `src/mesh/backend-html.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/mesh/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 51 |
 | `src/mesh/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 37 |
 | `src/mesh/backend-stl.ts` | @danielsimonjr/sciengjs | src | build-entry | 20 |
-| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 608 |
+| `src/mesh/cad-build.ts` | @danielsimonjr/sciengjs | src | build-entry | 671 |
 | `src/mesh/cad-builder.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/mesh/cad-document.ts` | @danielsimonjr/sciengjs | src | build-entry | 462 |
 | `src/mesh/dfm.ts` | @danielsimonjr/sciengjs | src | build-entry | 90 |
@@ -115,7 +115,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/mesh/threemf.ts` | @danielsimonjr/sciengjs | src | build-entry | 194 |
 | `src/mesh/viewer-script.ts` | @danielsimonjr/sciengjs | src | build-entry | 206 |
 | `src/mesh/viewer.ts` | @danielsimonjr/sciengjs | src | build-entry | 52 |
-| `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 61 |
+| `src/pairs.ts` | @danielsimonjr/sciengjs | src | build-entry | 64 |
 | `src/plot/backend-html.ts` | @danielsimonjr/sciengjs | src | build-entry | 14 |
 | `src/plot/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 13 |
 | `src/plot/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 22 |
@@ -126,7 +126,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/plot/ticks.ts` | @danielsimonjr/sciengjs | src | build-entry | 76 |
 | `src/raster/index.ts` | @danielsimonjr/sciengjs | src | build-entry | 102 |
 | `src/raster/warnings.ts` | @danielsimonjr/sciengjs | src | build-entry | 181 |
-| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 87 |
+| `src/registry.ts` | @danielsimonjr/sciengjs | src | build-entry | 90 |
 | `src/sysml/backend-pdf.ts` | @danielsimonjr/sciengjs | src | build-entry | 12 |
 | `src/sysml/backend-png.ts` | @danielsimonjr/sciengjs | src | build-entry | 19 |
 | `src/sysml/backend-svg.ts` | @danielsimonjr/sciengjs | src | build-entry | 9 |
@@ -186,7 +186,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/node/tex-timeout.node.mjs` | (root) | tests | test | 48 |
 | `test/node/worker-execargv.node.mjs` | (root) | tests | test | 33 |
 | `test/node/worker.node.mjs` | (root) | tests | test | 45 |
-| `test/smoke/smoke.mjs` | (root) | tests | test | 219 |
+| `test/smoke/smoke.mjs` | (root) | tests | test | 221 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 100 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
 | `test/support/glb-reader.ts` | (root) | tests | test | 171 |
@@ -258,7 +258,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/mesh-3mf.test.ts` | (root) | tests | test | 138 |
 | `test/unit/mesh-dfm.test.ts` | (root) | tests | test | 416 |
 | `test/unit/mesh-drawing.test.ts` | (root) | tests | test | 333 |
-| `test/unit/mesh-dxf.test.ts` | (root) | tests | test | 143 |
+| `test/unit/mesh-dxf.test.ts` | (root) | tests | test | 277 |
 | `test/unit/mesh-glb.test.ts` | (root) | tests | test | 111 |
 | `test/unit/mesh-large.test.ts` | (root) | tests | test | 53 |
 | `test/unit/mesh-limit.test.ts` | (root) | tests | test | 50 |

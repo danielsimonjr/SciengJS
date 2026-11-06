@@ -4,7 +4,7 @@ metadata:
   language: typescript
   totalFiles: 297
   totalModules: 3
-  totalExports: 745
+  totalExports: 747
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1719,11 +1719,14 @@ modules:
           typeOnly: true
         - file: src/mesh/backend-glb.ts
           imports:
+            - GlbDeps
             - readCadRequest
+            - readMeshes
           typeOnly: false
         - file: src/mesh/cad-build.ts
           imports:
             - drawCad
+            - drawMeshes
           typeOnly: false
         - file: src/mesh/dxf.ts
           imports:
@@ -1913,6 +1916,7 @@ modules:
         - buildCad
         - CadDrawing
         - drawCad
+        - drawMeshes
         - CadViews
         - drawCadViews
         - WALL_SECTIONS
@@ -2134,6 +2138,7 @@ modules:
             - buildCad
             - drawCad
             - drawCadViews
+            - drawMeshes
             - measureCad
             - WALL_SECTIONS
           typeOnly: false
@@ -2181,6 +2186,7 @@ modules:
         - buildCad
         - drawCad
         - drawCadViews
+        - drawMeshes
         - measureCad
         - WALL_SECTIONS
         - CadBuildResult
@@ -5256,7 +5262,9 @@ modules:
     test/unit/mesh-dxf.test.ts:
       externalDependencies:
         - bun:test
-      nodeDependencies: []
+      nodeDependencies:
+        - node:fs
+        - node:url
       internalDependencies:
         - file: src/mesh/backend-dxf.ts
           imports:
@@ -5271,6 +5279,15 @@ modules:
           imports:
             - findPair
           typeOnly: false
+        - file: src/registry.ts
+          imports:
+            - DEFAULT_REGISTRY
+            - registryKey
+          typeOnly: false
+        - file: src/mesh/read.ts
+          imports:
+            - CadMesh
+          typeOnly: true
         - file: src/types.ts
           imports:
             - OUTPUT_FORMATS
@@ -6144,8 +6161,8 @@ statistics:
   totalTypeScriptFiles: 297
   totalSourceFiles: 297
   totalModules: 3
-  totalLinesOfCode: 35022
-  totalExports: 745
+  totalLinesOfCode: 35231
+  totalExports: 747
   entryRoots: 109
   reachableFiles: 109
   dormantFiles: 8
@@ -6153,7 +6170,7 @@ statistics:
   testOnlyFiles: 0
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 90
+  totalTypeOnlyImports: 91
   noImporterFileCount: 8
   unusedExportsCount: 52
   circularDepsTruncated: false
@@ -6163,11 +6180,11 @@ statistics:
   typeOnlyFilesInCycles: 0
   totalClasses: 7
   totalInterfaces: 150
-  totalFunctions: 297
+  totalFunctions: 298
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 76
-  totalReExports: 184
+  totalReExports: 185
 reachability:
   roots:
     - src/index.ts
