@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [1.0.7] - 2026-11-06
+
 ### Added
 
 - The `md` report of a `cad` document gives a third check, the minimum gap. A closing of each of the 32 sections on each axis fills each gap narrower than `minGap` (default 0.5 mm). The gaps are slots, holes and clearances between parts. A gap open to the edge of the model also fills. The report lists the narrow sections under `## Narrow gaps`. `measureCad` takes `minGap` as a fourth argument. `CadMeasures` has `narrow`.
