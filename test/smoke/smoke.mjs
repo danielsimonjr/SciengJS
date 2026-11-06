@@ -116,6 +116,9 @@ const stlFacets = new DataView(stl.bytes.buffer, stl.bytes.byteOffset, stl.bytes
 if (stlFacets === 0 || stl.bytes.byteLength !== 84 + 50 * stlFacets) throw new Error("cad to stl returned no binary STL");
 const cadGlb = await render({ type: "cad", source: cadSource, format: "glb" }, {});
 if (cadGlb.mime !== "model/gltf-binary") throw new Error("cad to glb returned no glTF binary");
+const cad3mf = await render({ type: "cad", source: cadSource, format: "3mf" }, {});
+const cad3mfModel = new TextDecoder().decode(cad3mf.bytes);
+if (cad3mf.mime !== "model/3mf" || cad3mf.bytes[0] !== 0x50 || cad3mf.bytes[1] !== 0x4b || !cad3mfModel.includes('unit="millimeter"')) throw new Error("cad to 3mf returned no 3MF package");
 const html = await import("@danielsimonjr/sciengjs/html");
 if (typeof html.htmlToMarkdown !== "function" || html.htmlToMarkdown("<h1>T</h1>").trim() !== "# T") throw new Error("the html subpath did not load");
 const md = await render({ type: "html", source: "<p>a <b>b</b></p>", format: "md" }, {});
@@ -194,7 +197,7 @@ try {
   mathPdfCode = err.code;
 }
 if (mathPdfCode !== "E_STAGE_MISSING") throw new Error("math to pdf with no browser must reject with E_STAGE_MISSING, got " + mathPdfCode);
-console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes");
+console.log("smoke ok: " + caps.length + " pairs; dot to svg " + svg.bytes.length + " bytes; dot to png " + png.bytes.length + " bytes; mermaid class, state and sequence to svg; mermaid sequence to png " + mermaidPng.bytes.length + " bytes; flowchart rejected with " + flowCode + "; math to svg " + mathSvg.bytes.length + " bytes; math to png " + mathPng.bytes.length + " bytes; math to pdf rejected with " + mathPdfCode + "; brep to glb " + glb.bytes.length + " bytes; brep to html " + viewer.bytes.length + " bytes; cad to stl " + stlFacets + " facets; cad to glb " + cadGlb.bytes.length + " bytes; cad to 3mf " + cad3mf.bytes.length + " bytes");
 `,
   );
   const out = run(process.execPath, ["check.mjs"], app);

@@ -1,11 +1,11 @@
 {
-  "totalFiles": 284,
+  "totalFiles": 287,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 101,
+    "build-entry": 103,
     "test-only": 0,
     "orphan": 8,
-    "test": 140,
+    "test": 141,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 35,
-    "src": 109,
-    "tests": 140
+    "src": 111,
+    "tests": 141
   },
   "byPackage": {
-    "(root)": 182,
-    "@danielsimonjr/sciengjs": 102
+    "(root)": 183,
+    "@danielsimonjr/sciengjs": 104
   },
   "files": [
     {
@@ -131,7 +131,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 126
+      "loc": 127
     },
     {
       "file": "src/errors.ts",
@@ -358,6 +358,13 @@
       "loc": 178
     },
     {
+      "file": "src/mesh/backend-3mf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 18
+    },
+    {
       "file": "src/mesh/backend-glb.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -418,7 +425,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 11
+      "loc": 12
     },
     {
       "file": "src/mesh/occt-import-js.d.ts",
@@ -449,6 +456,13 @@
       "loc": 54
     },
     {
+      "file": "src/mesh/threemf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 194
+    },
+    {
       "file": "src/mesh/viewer-script.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -467,7 +481,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 57
+      "loc": 58
     },
     {
       "file": "src/plot/backend-html.ts",
@@ -544,7 +558,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 83
+      "loc": 84
     },
     {
       "file": "src/sysml/backend-pdf.ts",
@@ -957,7 +971,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 204
+      "loc": 207
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -1434,6 +1448,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 191
+    },
+    {
+      "file": "test/unit/mesh-3mf.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 138
     },
     {
       "file": "test/unit/mesh-glb.test.ts",

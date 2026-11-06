@@ -654,6 +654,15 @@ export function writeStl(meshes: CadMesh[]): Uint8Array;
 export function stlByteLength(meshes: CadMesh[]): number;
 ```
 
+## `src/mesh/threemf.ts`
+
+Purpose: the 3MF writer. The output is a ZIP archive with three parts: `[Content_Types].xml`, `_rels/.rels` and `3D/3dmodel.model`. Each part is stored without compression, with a fixed date. The unit is millimeter. Each mesh is one object with its name. The colours are one `basematerials` group.
+
+```ts
+export function write3mf(meshes: CadMesh[]): Uint8Array;
+export function threemfByteLength(meshes: CadMesh[]): number;
+```
+
 ## `src/mesh/backend-glb.ts`
 
 Purpose: the backend of `step`, `iges`, `brep` and `cad` to `glb`. `readMeshes` reads the meshes of a mesh render: a CAD document through the reader and the build, a STEP, IGES or BREP file through occt-import-js. The html and png backends also call `readMeshes` through this render. An output over `maxMemoryMb` rejects with `E_LIMIT`.
@@ -666,6 +675,10 @@ export function render(request: WorkerJob["request"], deps?: Partial<GlbDeps>): 
 ## `src/mesh/backend-stl.ts`
 
 Purpose: the backend of `cad` to `stl`. A model with a colour gives a warning, because STL holds no colour. An output over `maxMemoryMb` rejects with `E_LIMIT`.
+
+## `src/mesh/backend-3mf.ts`
+
+Purpose: the backend of `cad` to `3mf`. The package keeps the colours and the names. An output over `maxMemoryMb` rejects with `E_LIMIT` before the writer starts.
 
 ## `src/types.ts`
 

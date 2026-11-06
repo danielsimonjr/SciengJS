@@ -8,7 +8,7 @@ const CHUNK_BIN = 0x004e4942; // "BIN" and a zero byte
 const COMPONENT_UINT32 = 5125;
 const COMPONENT_FLOAT32 = 5126;
 const MODE_TRIANGLES = 4;
-const DEFAULT_COLOUR: [number, number, number] = [0.8, 0.8, 0.8];
+export const DEFAULT_COLOUR: [number, number, number] = [0.8, 0.8, 0.8];
 
 /** One material of the output. */
 interface Material {
@@ -27,7 +27,7 @@ interface Accessor {
 }
 
 /** Maps each triangle of a mesh to the key of its material: a colour, or "default". */
-function triangleGroups(mesh: CadMesh): Map<string, number[]> {
+export function triangleGroups(mesh: CadMesh): Map<string, number[]> {
   const triangles = mesh.indices.length / 3;
   const keyOf = new Array<string>(triangles).fill("default");
   for (const face of mesh.faces as CadFace[]) {

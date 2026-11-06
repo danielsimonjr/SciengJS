@@ -4,6 +4,7 @@ export type { CadFormat, CadFace, CadMesh, LinearUnit } from "./read.ts";
 export { writeGlb } from "./glb.ts";
 export { readMeshOptions } from "./backend-glb.ts";
 export { writeStl } from "./stl.ts";
+export { write3mf } from "./threemf.ts";
 export { checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS } from "./cad-document.ts";
 export type * from "./cad-document.ts";
 export { buildCad } from "./cad-build.ts";

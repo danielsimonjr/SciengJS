@@ -67,7 +67,7 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | Type | Values |
 |---|---|
 | `InputType` | `dot`, `mermaid`, `math`, `tikz`, `plot`, `sysml`, `step`, `iges`, `brep`, `cad`, `html` |
-| `OutputFormat` | `svg`, `png`, `pdf`, `html`, `md`, `glb`, `stl` |
+| `OutputFormat` | `svg`, `png`, `pdf`, `html`, `md`, `glb`, `stl`, `3mf` |
 | `RenderRequest` | `{ type, source, format, options? }`. The `source` is text, or bytes for `step`, `iges` and `brep`. |
 | `RenderResult` | `{ bytes, mime, backend, warnings, assets? }` |
 | `RenderAsset` | `{ name, bytes, mime }` |
@@ -84,7 +84,7 @@ Resolves the configuration. Returns `Promise<SciengConfig>`. It rejects with `E_
 | `./mermaid` | The Mermaid parsers, the DOT builders, the sequence layout and the SVG render. It exports `prepare`, `parseClassDiagram`, `classToDot`, `parseStateDiagram`, `stateToDot`, `parseSequenceDiagram`, `layoutSequence` and `renderMermaidSvg`. |
 | `./sysml` | The SysML stage. It exports `tokenize`, `parseSysml`, `baseChain`, `readSysmlOptions`, `sysmlToDot`, `renderSysmlSvg` and their types. |
 | `./tex` | The TeX stage. It exports the runtime (`TexTree`, `TexHost`, `runProgram`, `readTfm`, `readType1`, `dviToSvg`, `createSpecials`, `renderTex`), the bundle manager (`BUNDLES`, `loadBundleBytes`, `loadBundles`, `unpackBundle`, `bundleUrl`, `cachePath`, `findBundle`), `detectBundles`, `renderTikzSvg`, `wrapSource` and their types. |
-| `./mesh` | The mesh stage. The subpath exports `readCad` (STEP, IGES and BREP through occt-import-js), `writeGlb`, `writeStl`, `readMeshOptions`, `parseCadDocument`, `checkCadDocument`, `buildCad`, the segment constants `DEFAULT_SEGMENTS`, `MIN_SEGMENTS` and `MAX_SEGMENTS`, the node types of a CAD document, and `cad`, the builder functions. |
+| `./mesh` | The mesh stage. The subpath exports `readCad` (STEP, IGES and BREP through occt-import-js), `writeGlb`, `writeStl`, `write3mf`, `readMeshOptions`, `parseCadDocument`, `checkCadDocument`, `buildCad`, the segment constants `DEFAULT_SEGMENTS`, `MIN_SEGMENTS` and `MAX_SEGMENTS`, the node types of a CAD document, and `cad`, the builder functions. |
 | `./math` | The math stage. It exports `mathToSvg` and the type `MathOptions`. |
 | `./plot` | The plot stage. It exports `plotToSvg`, `readPlotFigure`, `linearTicks`, `logTicks`, `paddedRange`, `bode`, `step`, `impulse`, `poleZero`, `nyquist`, `rootLocus`, `checkTransferFunction`, `polynomialRoots` and their types. |
 | `./html` | The html stage. It exports `htmlToMarkdown`. |
