@@ -28,8 +28,8 @@
    "id": "drw-4",
    "file": "src/mesh/drawing.ts",
    "test": "test/unit/mesh-drawing.test.ts",
-   "original": "const fitsWidth = (width + depth) * scale + SHEET.gap <= DRAWING_AREA.width;",
-   "replacement": "const fitsWidth = (width + depth) * scale + SHEET.gap < DRAWING_AREA.width;",
+   "original": "const fitsWidth = (width + depth) * scale + SHEET.gap + DIMENSION_ROOM.right <= DRAWING_AREA.width;",
+   "replacement": "const fitsWidth = (width + depth) * scale + SHEET.gap + DIMENSION_ROOM.right < DRAWING_AREA.width;",
    "equivalent": null
   },
   {
@@ -94,6 +94,142 @@
    "test": "test/unit/mesh-drawing.test.ts",
    "original": "return scale >= 1 ? `scale ${scale}:1` : `scale 1:${Math.round(1 / scale)}`;",
    "replacement": "return scale < 1 ? `scale ${scale}:1` : `scale 1:${Math.round(1 / scale)}`;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-13",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const fitsWidth = (width + depth) * scale + SHEET.gap + DIMENSION_ROOM.right <= DRAWING_AREA.width;",
+   "replacement": "const fitsWidth = (width + depth) * scale + SHEET.gap <= DRAWING_AREA.width;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-14",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const fitsHeight = (height + depth) * scale + SHEET.gap + DIMENSION_ROOM.below <= DRAWING_AREA.height;",
+   "replacement": "const fitsHeight = (height + depth) * scale + SHEET.gap <= DRAWING_AREA.height;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-15",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const fitsHeight = (height + depth) * scale + SHEET.gap + DIMENSION_ROOM.below <= DRAWING_AREA.height;",
+   "replacement": "const fitsHeight = (height + depth) * scale + SHEET.gap + DIMENSION_ROOM.below < DRAWING_AREA.height;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-16",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const DIMENSION_ROOM = { below: 12, right: 20 } as const;",
+   "replacement": "const DIMENSION_ROOM = { below: 11, right: 20 } as const;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-17",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const DIMENSION_ROOM = { below: 12, right: 20 } as const;",
+   "replacement": "const DIMENSION_ROOM = { below: 12, right: 19 } as const;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-18",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const frontBottom = SHEET.margin + DRAWING_AREA.height - DIMENSION_ROOM.below;",
+   "replacement": "const frontBottom = SHEET.margin + DRAWING_AREA.height;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-19",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "((width + depth) * scale + SHEET.gap + DIMENSION_ROOM.right)) / 2;",
+   "replacement": "((width + depth) * scale + SHEET.gap)) / 2;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-20",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "if (width <= room) return TITLE_SIZE;",
+   "replacement": "if (width < room) return TITLE_SIZE;",
+   "equivalent": "The estimated width is the number of characters times 3.375 mm, and the room is 84 mm. No whole number of characters gives 84 mm, so the width is never equal to the room."
+  },
+  {
+   "id": "drw-21",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "if (width <= room) return TITLE_SIZE;",
+   "replacement": "if (width <= room + 10) return TITLE_SIZE;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-22",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "return (TITLE_SIZE * room) / width;",
+   "replacement": "return (TITLE_SIZE * room) / width + 0.5;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-23",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const GLYPH_ADVANCE = 0.75;",
+   "replacement": "const GLYPH_ADVANCE = 0.6;",
+   "equivalent": null
+  },
+  {
+   "id": "drw-24",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const room = SHEET.title.width - 2 * TITLE_INSET;\n  const width",
+   "replacement": "const room = SHEET.title.width - TITLE_INSET;\n  const width",
+   "equivalent": null
+  },
+  {
+   "id": "drw-25",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const fit = i === 0 && size < TITLE_SIZE ?",
+   "replacement": "const fit = size < TITLE_SIZE ?",
+   "equivalent": null
+  },
+  {
+   "id": "drw-26",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "const fit = i === 0 && size < TITLE_SIZE ?",
+   "replacement": "const fit = i === 0 && size <= TITLE_SIZE ?",
+   "equivalent": null
+  },
+  {
+   "id": "drw-27",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "fill=\"#000\" stroke=\"none\">${escapeXml(line)}",
+   "replacement": "fill=\"#000\">${escapeXml(line)}",
+   "equivalent": null
+  },
+  {
+   "id": "drw-28",
+   "file": "src/mesh/drawing.ts",
+   "test": "test/unit/mesh-drawing.test.ts",
+   "original": "text-anchor=\"middle\" fill=\"#000\" stroke=\"none\">",
+   "replacement": "text-anchor=\"middle\" fill=\"#000\">",
+   "equivalent": null
+  },
+  {
+   "id": "drw-29",
+   "file": "src/browser/page.ts",
+   "test": "test/integration/pdf-pages.test.ts",
+   "original": "#sciengjs-diagram svg{display:block}",
+   "replacement": "#sciengjs-diagram svg{display:inline}",
    "equivalent": null
   }
  ]
