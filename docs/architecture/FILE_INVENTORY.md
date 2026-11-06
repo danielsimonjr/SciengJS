@@ -156,13 +156,13 @@ This report lists each source file that the map census finds, with a disposition
 | `src/worker/entry.ts` | @danielsimonjr/sciengjs | src | build-entry | 31 |
 | `src/worker/protocol.ts` | @danielsimonjr/sciengjs | src | build-entry | 60 |
 | `src/worker/run.ts` | @danielsimonjr/sciengjs | src | build-entry | 183 |
-| `test/corpus/gallery.ts` | (root) | tests | test | 83 |
+| `test/corpus/gallery.ts` | (root) | tests | test | 91 |
 | `test/corpus/regenerate-dot.ts` | (root) | tests | test | 24 |
 | `test/corpus/regenerate-mermaid.ts` | (root) | tests | test | 45 |
-| `test/corpus/regenerate-sysml.ts` | (root) | tests | test | 47 |
-| `test/corpus/regenerate-tikz.ts` | (root) | tests | test | 50 |
+| `test/corpus/regenerate-sysml.ts` | (root) | tests | test | 46 |
+| `test/corpus/regenerate-tikz.ts` | (root) | tests | test | 49 |
 | `test/integration/browser-render.test.ts` | (root) | tests | test | 170 |
-| `test/integration/gallery.test.ts` | (root) | tests | test | 58 |
+| `test/integration/gallery.test.ts` | (root) | tests | test | 93 |
 | `test/integration/mermaid-browser-capture.test.ts` | (root) | tests | test | 111 |
 | `test/integration/mermaid-browser.test.ts` | (root) | tests | test | 85 |
 | `test/integration/mesh-viewer.test.ts` | (root) | tests | test | 162 |
@@ -191,7 +191,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/smoke/smoke.mjs` | (root) | tests | test | 221 |
 | `test/support/assets-fixture.ts` | (root) | tests | test | 100 |
 | `test/support/bun-scan.ts` | (root) | tests | test | 62 |
-| `test/support/gallery.ts` | (root) | tests | test | 191 |
+| `test/support/gallery.ts` | (root) | tests | test | 198 |
 | `test/support/glb-reader.ts` | (root) | tests | test | 171 |
 | `test/support/network-guard.ts` | (root) | tests | test | 44 |
 | `test/support/page-checker.ts` | (root) | tests | test | 414 |
@@ -229,7 +229,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/unit/config-assets.test.ts` | (root) | tests | test | 111 |
 | `test/unit/config.test.ts` | (root) | tests | test | 273 |
 | `test/unit/errors.test.ts` | (root) | tests | test | 69 |
-| `test/unit/gallery-page.test.ts` | (root) | tests | test | 208 |
+| `test/unit/gallery-page.test.ts` | (root) | tests | test | 347 |
 | `test/unit/glb-writer.test.ts` | (root) | tests | test | 246 |
 | `test/unit/graph-corpus.test.ts` | (root) | tests | test | 47 |
 | `test/unit/graph-dot.test.ts` | (root) | tests | test | 79 |

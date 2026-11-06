@@ -810,7 +810,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 83
+      "loc": 91
     },
     {
       "file": "test/corpus/regenerate-dot.ts",
@@ -831,14 +831,14 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 47
+      "loc": 46
     },
     {
       "file": "test/corpus/regenerate-tikz.ts",
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 50
+      "loc": 49
     },
     {
       "file": "test/integration/browser-render.test.ts",
@@ -852,7 +852,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 58
+      "loc": 93
     },
     {
       "file": "test/integration/mermaid-browser-capture.test.ts",
@@ -1055,7 +1055,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 191
+      "loc": 198
     },
     {
       "file": "test/support/glb-reader.ts",
@@ -1321,7 +1321,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 208
+      "loc": 347
     },
     {
       "file": "test/unit/glb-writer.test.ts",
