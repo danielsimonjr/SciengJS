@@ -118,3 +118,17 @@ describe("capturePage: a page that cannot be guarded fails at once with the caus
     expect(err.message).toContain("Fetch.enable refused");
   });
 });
+
+describe("capturePage: a guard fault after the session is known is named by the timeout", () => {
+  test("Runtime.runIfWaitingForDebugger refused: E_TIMEOUT names the step and the refusal", async () => {
+    const err = await captureError(new ScriptedBrowser({ failing: ["Runtime.runIfWaitingForDebugger"] }));
+    expect(err.code).toBe("E_TIMEOUT");
+    expect(err.message).toContain("waiting for the load event");
+    expect(err.message).toContain("Runtime.runIfWaitingForDebugger refused");
+  });
+
+  test("no fault: the timeout message names no rejection", async () => {
+    const err = await captureError(new ScriptedBrowser());
+    expect(err.message).not.toContain("rejected");
+  });
+});

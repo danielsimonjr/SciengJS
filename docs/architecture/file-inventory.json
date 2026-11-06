@@ -117,7 +117,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 568
+      "loc": 575
     },
     {
       "file": "src/config.ts",
@@ -1125,7 +1125,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 120
+      "loc": 134
     },
     {
       "file": "test/unit/browser-cdp.test.ts",

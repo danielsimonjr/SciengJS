@@ -57,7 +57,7 @@ This report lists each source file that the map census finds, with a disposition
 | `src/browser/pinned.ts` | @danielsimonjr/sciengjs | src | build-entry | 63 |
 | `src/browser/profile.ts` | @danielsimonjr/sciengjs | src | build-entry | 35 |
 | `src/browser/proxy.ts` | @danielsimonjr/sciengjs | src | build-entry | 77 |
-| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 568 |
+| `src/browser/render.ts` | @danielsimonjr/sciengjs | src | build-entry | 575 |
 | `src/config.ts` | @danielsimonjr/sciengjs | src | build-entry | 251 |
 | `src/core.ts` | @danielsimonjr/sciengjs | src | build-entry | 126 |
 | `src/errors.ts` | @danielsimonjr/sciengjs | src | build-entry | 58 |
@@ -201,7 +201,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/tex-tools/tangle.test.mjs` | (root) | tests | test | 21 |
 | `test/tex-tools/trip-gate.test.mjs` | (root) | tests | test | 80 |
 | `test/unit/assets.test.ts` | (root) | tests | test | 131 |
-| `test/unit/browser-capture.test.ts` | (root) | tests | test | 120 |
+| `test/unit/browser-capture.test.ts` | (root) | tests | test | 134 |
 | `test/unit/browser-cdp.test.ts` | (root) | tests | test | 147 |
 | `test/unit/browser-flags.test.ts` | (root) | tests | test | 32 |
 | `test/unit/browser-input.test.ts` | (root) | tests | test | 109 |
