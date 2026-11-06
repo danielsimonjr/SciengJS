@@ -2699,6 +2699,62 @@
           "render"
         ]
       },
+      "src/mesh/backend-pdf.ts": {
+        "description": "Draws the SVG of the third-angle drawing of a CAD document. The views come from one solid build. A model that does",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../errors.ts",
+            "imports": [
+              "RenderError"
+            ]
+          },
+          {
+            "file": "../mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ]
+          },
+          {
+            "file": "../worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./backend-glb.ts",
+            "imports": [
+              "readCadRequest"
+            ]
+          },
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "drawCadViews"
+            ]
+          },
+          {
+            "file": "./drawing.ts",
+            "imports": [
+              "drawingByteLength",
+              "layoutViews",
+              "writeCadDrawingSvg"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "cadDrawingSvg",
+          "render"
+        ],
+        "functions": [
+          "cadDrawingSvg",
+          "render"
+        ]
+      },
       "src/mesh/backend-png.ts": {
         "description": "Renders a STEP, IGES or BREP file to png: the viewer page in the headless browser. The client fulfils the pinned",
         "externalDependencies": [],
@@ -2835,12 +2891,14 @@
           "loadManifold",
           "buildCad",
           "drawCad",
+          "drawCadViews",
           "WALL_SECTIONS",
           "measureCad"
         ],
         "interfaces": [
           "CadBuildResult",
           "CadDrawing",
+          "CadViews",
           "ThinSection",
           "CadMeasures"
         ],
@@ -2848,6 +2906,7 @@
           "loadManifold",
           "buildCad",
           "drawCad",
+          "drawCadViews",
           "measureCad"
         ],
         "constants": [
@@ -3021,6 +3080,51 @@
           "DFM_DEFAULTS"
         ]
       },
+      "src/mesh/drawing.ts": {
+        "description": "The third-angle drawing of a CAD model on one A4 landscape sheet, written as SVG in sheet millimetres. The",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./cad-build.ts",
+            "imports": [
+              "CadViews"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./threemf.ts",
+            "imports": [
+              "escapeXml"
+            ]
+          }
+        ],
+        "workspaceDependencies": [],
+        "exports": [
+          "SHEET",
+          "SCALES",
+          "chooseScale",
+          "layoutViews",
+          "drawingByteLength",
+          "titleSize",
+          "writeCadDrawingSvg"
+        ],
+        "interfaces": [
+          "DrawingOptions",
+          "DrawingLayout"
+        ],
+        "functions": [
+          "chooseScale",
+          "layoutViews",
+          "drawingByteLength",
+          "titleSize",
+          "writeCadDrawingSvg"
+        ],
+        "constants": [
+          "SHEET",
+          "SCALES"
+        ]
+      },
       "src/mesh/dxf.ts": {
         "description": "The DXF writer of the mesh stage (design section \"CAD\"). The output is ASCII DXF of release R12 (AC1009): a",
         "externalDependencies": [],
@@ -3071,7 +3175,7 @@
         ]
       },
       "src/mesh/index.ts": {
-        "description": "Package entry point for mesh (re-exports 29 symbols)",
+        "description": "Package entry point for mesh (re-exports 34 symbols)",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -3169,6 +3273,7 @@
             "imports": [
               "buildCad",
               "drawCad",
+              "drawCadViews",
               "measureCad",
               "WALL_SECTIONS"
             ],
@@ -3180,7 +3285,24 @@
               "CadBuildResult",
               "CadDrawing",
               "CadMeasures",
+              "CadViews",
               "ThinSection"
+            ],
+            "reExport": true,
+            "typeOnly": true
+          },
+          {
+            "file": "./drawing.ts",
+            "imports": [
+              "chooseScale",
+              "writeCadDrawingSvg"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./drawing.ts",
+            "imports": [
+              "DrawingOptions"
             ],
             "reExport": true,
             "typeOnly": true
@@ -3216,12 +3338,17 @@
           "MIN_SEGMENTS",
           "buildCad",
           "drawCad",
+          "drawCadViews",
           "measureCad",
           "WALL_SECTIONS",
           "CadBuildResult",
           "CadDrawing",
           "CadMeasures",
+          "CadViews",
           "ThinSection",
+          "chooseScale",
+          "writeCadDrawingSvg",
+          "DrawingOptions",
           "cad"
         ],
         "reExported": [
@@ -3247,12 +3374,17 @@
           "type * from ./cad-document.ts",
           "buildCad",
           "drawCad",
+          "drawCadViews",
           "measureCad",
           "WALL_SECTIONS",
           "CadBuildResult",
           "CadDrawing",
           "CadMeasures",
+          "CadViews",
           "ThinSection",
+          "chooseScale",
+          "writeCadDrawingSvg",
+          "DrawingOptions",
           "cad"
         ]
       },
@@ -3387,10 +3519,12 @@
         ],
         "workspaceDependencies": [],
         "exports": [
+          "escapeXml",
           "threemfByteLength",
           "write3mf"
         ],
         "functions": [
+          "escapeXml",
           "threemfByteLength",
           "write3mf"
         ]
@@ -5508,12 +5642,14 @@
         "src/mesh/backend-dxf.ts",
         "src/mesh/backend-glb.ts",
         "src/mesh/backend-html.ts",
+        "src/mesh/backend-pdf.ts",
         "src/mesh/backend-png.ts",
         "src/mesh/backend-stl.ts",
         "src/mesh/cad-build.ts",
         "src/mesh/cad-builder.ts",
         "src/mesh/cad-document.ts",
         "src/mesh/dfm.ts",
+        "src/mesh/drawing.ts",
         "src/mesh/dxf.ts",
         "src/mesh/glb.ts",
         "src/mesh/index.ts",

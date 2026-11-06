@@ -3,9 +3,9 @@
     "name": "@danielsimonjr/sciengjs",
     "schemaVersion": "2.0.0",
     "language": "typescript",
-    "totalFiles": 293,
+    "totalFiles": 297,
     "totalModules": 3,
-    "totalExports": 726
+    "totalExports": 745
   },
   "modules": {
     "tools": {
@@ -2627,6 +2627,61 @@
           "render"
         ]
       },
+      "src/mesh/backend-pdf.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/errors.ts",
+            "imports": [
+              "RenderError"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mermaid/browser.ts",
+            "imports": [
+              "drawSvgToPdf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "BackendOutput",
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/mesh/backend-glb.ts",
+            "imports": [
+              "readCadRequest"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/cad-build.ts",
+            "imports": [
+              "drawCadViews"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/drawing.ts",
+            "imports": [
+              "drawingByteLength",
+              "layoutViews",
+              "writeCadDrawingSvg"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "cadDrawingSvg",
+          "render"
+        ]
+      },
       "src/mesh/backend-png.ts": {
         "externalDependencies": [],
         "nodeDependencies": [],
@@ -2763,6 +2818,8 @@
           "buildCad",
           "CadDrawing",
           "drawCad",
+          "CadViews",
+          "drawCadViews",
           "WALL_SECTIONS",
           "ThinSection",
           "CadMeasures",
@@ -2901,6 +2958,37 @@
           "writeDfmReport"
         ]
       },
+      "src/mesh/drawing.ts": {
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "src/mesh/cad-build.ts",
+            "imports": [
+              "CadViews"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/mesh/threemf.ts",
+            "imports": [
+              "escapeXml"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": [
+          "SHEET",
+          "SCALES",
+          "DrawingOptions",
+          "chooseScale",
+          "DrawingLayout",
+          "layoutViews",
+          "drawingByteLength",
+          "titleSize",
+          "writeCadDrawingSvg"
+        ]
+      },
       "src/mesh/dxf.ts": {
         "externalDependencies": [],
         "nodeDependencies": [],
@@ -3029,6 +3117,7 @@
             "imports": [
               "buildCad",
               "drawCad",
+              "drawCadViews",
               "measureCad",
               "WALL_SECTIONS"
             ],
@@ -3040,7 +3129,23 @@
               "CadBuildResult",
               "CadDrawing",
               "CadMeasures",
+              "CadViews",
               "ThinSection"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/mesh/drawing.ts",
+            "imports": [
+              "chooseScale",
+              "writeCadDrawingSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/drawing.ts",
+            "imports": [
+              "DrawingOptions"
             ],
             "typeOnly": true
           },
@@ -3074,12 +3179,17 @@
           "MIN_SEGMENTS",
           "buildCad",
           "drawCad",
+          "drawCadViews",
           "measureCad",
           "WALL_SECTIONS",
           "CadBuildResult",
           "CadDrawing",
           "CadMeasures",
+          "CadViews",
           "ThinSection",
+          "chooseScale",
+          "writeCadDrawingSvg",
+          "DrawingOptions",
           "cad"
         ]
       },
@@ -3194,6 +3304,7 @@
           }
         ],
         "exports": [
+          "escapeXml",
           "threemfByteLength",
           "write3mf"
         ]
@@ -5093,6 +5204,31 @@
               "processesHolding"
             ],
             "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
+      "test/integration/pdf-pages.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/index.ts",
+            "imports": [
+              "RenderRequest"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": []
@@ -7533,6 +7669,93 @@
         ],
         "exports": []
       },
+      "test/unit/mesh-drawing.test.ts": {
+        "externalDependencies": [
+          "bun:test"
+        ],
+        "nodeDependencies": [
+          "node:fs",
+          "node:url"
+        ],
+        "internalDependencies": [
+          {
+            "file": "src/mesh/backend-pdf.ts",
+            "imports": [
+              "cadDrawingSvg",
+              "render"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/cad-build.ts",
+            "imports": [
+              "drawCadViews"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/cad-build.ts",
+            "imports": [
+              "CadViews"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "src/mesh/cad-document.ts",
+            "imports": [
+              "parseCadDocument"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/mesh/drawing.ts",
+            "imports": [
+              "SHEET",
+              "chooseScale",
+              "drawingByteLength",
+              "titleSize",
+              "writeCadDrawingSvg"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/pairs.ts",
+            "imports": [
+              "findPair"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/registry.ts",
+            "imports": [
+              "DEFAULT_REGISTRY"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "src/worker/protocol.ts",
+            "imports": [
+              "WorkerJob"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "test/support/rejections.ts",
+            "imports": [
+              "rejectionOf"
+            ],
+            "typeOnly": false
+          },
+          {
+            "file": "test/support/settings.ts",
+            "imports": [
+              "testSettings"
+            ],
+            "typeOnly": false
+          }
+        ],
+        "exports": []
+      },
       "test/unit/mesh-dxf.test.ts": {
         "externalDependencies": [
           "bun:test"
@@ -8940,33 +9163,33 @@
     }
   },
   "statistics": {
-    "totalTypeScriptFiles": 293,
-    "totalSourceFiles": 293,
+    "totalTypeScriptFiles": 297,
+    "totalSourceFiles": 297,
     "totalModules": 3,
-    "totalLinesOfCode": 34258,
-    "totalExports": 726,
-    "entryRoots": 107,
-    "reachableFiles": 107,
+    "totalLinesOfCode": 35009,
+    "totalExports": 745,
+    "entryRoots": 109,
+    "reachableFiles": 109,
     "dormantFiles": 8,
     "orphanedFiles": 8,
     "testOnlyFiles": 0,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "totalTypeOnlyImports": 84,
+    "totalTypeOnlyImports": 90,
     "noImporterFileCount": 8,
-    "unusedExportsCount": 50,
+    "unusedExportsCount": 52,
     "circularDepsTruncated": false,
     "runtimeCyclicComponents": 0,
     "typeOnlyCyclicComponents": 0,
     "runtimeFilesInCycles": 0,
     "typeOnlyFilesInCycles": 0,
     "totalClasses": 7,
-    "totalInterfaces": 147,
-    "totalFunctions": 288,
+    "totalInterfaces": 150,
+    "totalFunctions": 297,
     "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 74,
-    "totalReExports": 179
+    "totalConstants": 76,
+    "totalReExports": 184
   },
   "reachability": {
     "roots": [
@@ -9026,12 +9249,14 @@
       "src/mesh/backend-dxf.ts",
       "src/mesh/backend-glb.ts",
       "src/mesh/backend-html.ts",
+      "src/mesh/backend-pdf.ts",
       "src/mesh/backend-png.ts",
       "src/mesh/backend-stl.ts",
       "src/mesh/cad-build.ts",
       "src/mesh/cad-builder.ts",
       "src/mesh/cad-document.ts",
       "src/mesh/dfm.ts",
+      "src/mesh/drawing.ts",
       "src/mesh/dxf.ts",
       "src/mesh/glb.ts",
       "src/mesh/pinned-three.ts",
@@ -9078,7 +9303,7 @@
       "src/worker/protocol.ts",
       "src/worker/run.ts"
     ],
-    "reachableCount": 107,
+    "reachableCount": 109,
     "dormantCount": 8,
     "orphaned": [
       "src/mesh/occt-import-js.d.ts",
