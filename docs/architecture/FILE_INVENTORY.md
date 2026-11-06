@@ -165,7 +165,7 @@ This report lists each source file that the map census finds, with a disposition
 | `test/integration/mermaid-browser.test.ts` | (root) | tests | test | 85 |
 | `test/integration/mesh-viewer.test.ts` | (root) | tests | test | 162 |
 | `test/integration/page-checker.test.ts` | (root) | tests | test | 124 |
-| `test/integration/pdf-pages.test.ts` | (root) | tests | test | 56 |
+| `test/integration/pdf-pages.test.ts` | (root) | tests | test | 69 |
 | `test/integration/tex-render.test.ts` | (root) | tests | test | 61 |
 | `test/integration/tikz-corpus.test.ts` | (root) | tests | test | 65 |
 | `test/integration/tikz-render.test.ts` | (root) | tests | test | 35 |

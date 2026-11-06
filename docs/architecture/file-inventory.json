@@ -873,7 +873,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 56
+      "loc": 69
     },
     {
       "file": "test/integration/tex-render.test.ts",
