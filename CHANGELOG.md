@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Fixed
+
+- The review page of the Mermaid corpus (`docs/analysis/i3-mermaid-corpus.html`) shows the approval state of `approval.json`: 9 of 9 sources approved. The page was not written again after the approval and showed 0 of 9.
+
 ### Added
 
 - A fixture gallery renders every corpus fixture through the public render and writes one HTML page of the results: `bun test/corpus/gallery.ts --out <folder>`. The page shows each image, the error of each rejection and the reason of each skip.
