@@ -185,3 +185,28 @@ jobs:
       - name: Remove the network namespace (Linux)
         if: always() && runner.os == 'Linux'
         run: sudo ip netns del gates || true
+
+  # The two documentation gates of repo-tools. Both read the source: a count in docs/architecture that no
+  # longer matches the graph, or an exported symbol with no doc comment, fails here. The tool version is
+  # pinned. Change it by hand, in a pull request, after you read the release notes.
+  architecture-docs:
+    # This name is the branch protection context when the check is made required. Do not rename it.
+    name: Architecture docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Install repo-tools (pinned)
+        run: npm install --global --ignore-scripts --no-audit --no-fund @danielsimonjr/repo-tools@2.4.0
+
+      - name: Architecture documents match the source graph
+        run: repo-tools check . --docs=docs/architecture
+
+      - name: Exported symbols have doc comments
+        run: repo-tools docs check src
