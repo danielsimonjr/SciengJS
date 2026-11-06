@@ -25,19 +25,27 @@ const DRAWING_AREA = {
 /** The offset of a dimension line from the view it measures, in millimetres. */
 const DIMENSION_OFFSET = 6;
 
+/**
+ * The room of the dimensions in the drawing area, in millimetres. The width dimension is below the front view: the
+ * offset, the number and its descent. The height dimension is right of the right view: the offset, the number and
+ * half the width of a number of 8 characters. The depth dimension is right of the top view, above the right view.
+ */
+const DIMENSION_ROOM = { below: 12, right: 20 } as const;
+
 /** The line width of the drawing, in millimetres, and the height of the dimension numbers. */
 const STROKE = 0.35;
 const TEXT_SIZE = 3.5;
 
 /**
- * The largest scale at which the three views fit the drawing area. The width of the views is the front and the right
- * view with the gap between them. The height is the top and the front view with the gap between them. When no scale
- * fits, the result is the smallest scale with fits false.
+ * The largest scale at which the three views and their dimensions fit the drawing area. The width is the front and
+ * the right view, the gap between them and the room of the height dimension. The height is the top and the front
+ * view, the gap between them and the room of the width dimension. When no scale fits, the result is the smallest
+ * scale with fits false.
  */
 export function chooseScale(width: number, depth: number, height: number): { scale: number; fits: boolean } {
   for (const scale of SCALES) {
-    const fitsWidth = (width + depth) * scale + SHEET.gap <= DRAWING_AREA.width;
-    const fitsHeight = (height + depth) * scale + SHEET.gap <= DRAWING_AREA.height;
+    const fitsWidth = (width + depth) * scale + SHEET.gap + DIMENSION_ROOM.right <= DRAWING_AREA.width;
+    const fitsHeight = (height + depth) * scale + SHEET.gap + DIMENSION_ROOM.below <= DRAWING_AREA.height;
     if (fitsWidth && fitsHeight) return { scale, fits: true };
   }
   return { scale: SCALES[SCALES.length - 1], fits: false };
@@ -57,13 +65,17 @@ export interface DrawingLayout {
   size: number[];
 }
 
-/** Places the three views of the drawing: the front at the bottom left, the top above it and the right to its right. */
+/**
+ * Places the three views of the drawing: the front at the bottom left, the top above it and the right to its right.
+ * The views and the room of the height dimension are centred across the drawing area. The room of the width
+ * dimension is at the bottom of the drawing area.
+ */
 export function layoutViews(views: CadViews): DrawingLayout {
   const size = [views.max[0]! - views.min[0]!, views.max[1]! - views.min[1]!, views.max[2]! - views.min[2]!];
   const [width, depth, height] = size as [number, number, number];
   const { scale, fits } = chooseScale(width, depth, height);
-  const frontLeft = SHEET.margin + (DRAWING_AREA.width - ((width + depth) * scale + SHEET.gap)) / 2;
-  const frontBottom = SHEET.margin + DRAWING_AREA.height;
+  const frontLeft = SHEET.margin + (DRAWING_AREA.width - ((width + depth) * scale + SHEET.gap + DIMENSION_ROOM.right)) / 2;
+  const frontBottom = SHEET.margin + DRAWING_AREA.height - DIMENSION_ROOM.below;
   const frontTop = frontBottom - height * scale;
   const frontRight = frontLeft + width * scale;
   return {
@@ -124,12 +136,12 @@ function viewGroup(id: string, contours: number[][][], map: (point: number[]) =>
   return `<g id="${id}">\n${paths.join("\n")}\n</g>`;
 }
 
-/** A dimension line with its number. The line runs from the start point to the end point, with a tick at each end. */
+/** A dimension line with its number. The line runs from the start point to the end point. The number has no stroke. */
 function dimensionGroup(id: string, from: [number, number], to: [number, number], text: string, label: [number, number]): string {
   const [x1, y1] = from;
   const [x2, y2] = to;
   const line = `<path d="M ${coordinate(x1)} ${coordinate(y1)} L ${coordinate(x2)} ${coordinate(y2)}"/>`;
-  const number = `<text x="${coordinate(label[0])}" y="${coordinate(label[1])}" font-size="${TEXT_SIZE}" font-family="sans-serif" text-anchor="middle" fill="#000">${text}</text>`;
+  const number = `<text x="${coordinate(label[0])}" y="${coordinate(label[1])}" font-size="${TEXT_SIZE}" font-family="sans-serif" text-anchor="middle" fill="#000" stroke="none">${text}</text>`;
   return `<g id="${id}">\n  ${line}\n  ${number}\n</g>`;
 }
 
@@ -138,14 +150,40 @@ function scaleText(scale: number): string {
   return scale >= 1 ? `scale ${scale}:1` : `scale 1:${Math.round(1 / scale)}`;
 }
 
-/** The title block at the bottom right: the title, the scale, the unit and the projection. */
+/** The height of the title text in millimetres, and the inset of the text in the title block. */
+const TITLE_SIZE = 4.5;
+const TITLE_INSET = 3;
+
+/**
+ * The advance of a glyph of the sans-serif font as a fraction of the text height. The value is larger than the
+ * advance of most glyphs, so the estimated width of a text is not smaller than its true width.
+ */
+const GLYPH_ADVANCE = 0.75;
+
+/**
+ * The text height of the title. A title that fits the title block at 4.5 mm keeps 4.5 mm. A longer title gets the
+ * height at which its estimated width is the width of the block: 1.4 mm for the longest title of 80 characters.
+ */
+export function titleSize(title: string): number {
+  const room = SHEET.title.width - 2 * TITLE_INSET;
+  const width = Array.from(title).length * GLYPH_ADVANCE * TITLE_SIZE;
+  if (width <= room) return TITLE_SIZE;
+  return (TITLE_SIZE * room) / width;
+}
+
+/**
+ * The title block at the bottom right: the title, the scale, the unit and the projection. A title with a height
+ * below 4.5 mm also gets a text length of the width of the block, so the browser fits its glyphs into the block.
+ */
 function titleBlock(title: string, scale: number): string {
   const left = SHEET.width - SHEET.margin - SHEET.title.width;
   const top = SHEET.height - SHEET.margin - SHEET.title.height;
+  const room = SHEET.title.width - 2 * TITLE_INSET;
   const lines = [title, scaleText(scale), "units mm", "third angle"];
   const texts = lines.map((line, i) => {
-    const size = i === 0 ? 4.5 : TEXT_SIZE;
-    return `  <text x="${coordinate(left + 3)}" y="${coordinate(top + 7 + i * 5.5)}" font-size="${size}" font-family="sans-serif" fill="#000">${escapeXml(line)}</text>`;
+    const size = i === 0 ? titleSize(line) : TEXT_SIZE;
+    const fit = i === 0 && size < TITLE_SIZE ? ` textLength="${room}" lengthAdjust="spacingAndGlyphs"` : "";
+    return `  <text x="${coordinate(left + TITLE_INSET)}" y="${coordinate(top + 7 + i * 5.5)}" font-size="${Number(size.toFixed(3))}"${fit} font-family="sans-serif" fill="#000" stroke="none">${escapeXml(line)}</text>`;
   });
   const frame = `<rect x="${coordinate(left)}" y="${coordinate(top)}" width="${SHEET.title.width}" height="${SHEET.title.height}"/>`;
   return `<g id="title-block">\n  ${frame}\n${texts.join("\n")}\n</g>`;

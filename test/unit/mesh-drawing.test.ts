@@ -10,7 +10,7 @@ import { cadDrawingSvg, render as renderPdf } from "../../src/mesh/backend-pdf.t
 import { drawCadViews } from "../../src/mesh/cad-build.ts";
 import type { CadViews } from "../../src/mesh/cad-build.ts";
 import { parseCadDocument } from "../../src/mesh/cad-document.ts";
-import { SHEET, chooseScale, drawingByteLength, writeCadDrawingSvg } from "../../src/mesh/drawing.ts";
+import { SHEET, chooseScale, drawingByteLength, titleSize, writeCadDrawingSvg } from "../../src/mesh/drawing.ts";
 import { findPair } from "../../src/pairs.ts";
 import { DEFAULT_REGISTRY } from "../../src/registry.ts";
 import type { WorkerJob } from "../../src/worker/protocol.ts";
@@ -158,9 +158,12 @@ describe("cad to pdf drawing", () => {
 
   test("T4 chooseScale takes the largest scale that fits, and warns at 1:100 when no scale fits", () => {
     expect(chooseScale(20, 10, 5)).toEqual({ scale: 5, fits: true });
-    expect(chooseScale(300, 200, 100).scale).toBe(0.5);
+    expect(chooseScale(300, 200, 100).scale).toBe(0.2);
     expect(chooseScale(1000, 1000, 1000).scale).toBe(0.05);
-    expect(chooseScale(200, 62, 89)).toEqual({ scale: 1, fits: true });
+    // The room of the dimensions: 242 mm of views across and 139 mm of views down fit at 1:1.
+    expect(chooseScale(200, 42, 97)).toEqual({ scale: 1, fits: true });
+    expect(chooseScale(201, 42, 97).scale).toBe(0.5);
+    expect(chooseScale(200, 42, 98).scale).toBe(0.5);
     expect(chooseScale(1e6, 1e6, 1e6)).toEqual({ scale: 0.01, fits: false });
   });
 
@@ -255,5 +258,76 @@ describe("cad to pdf drawing", () => {
     const out = await renderPdf(request(PLATE, {}, testSettings({ browser: BROWSER })));
     expect(Buffer.from(out.bytes).subarray(0, 5).toString("latin1")).toBe("%PDF-");
     expect(out.bytes.length).toBeGreaterThan(1000);
+  });
+});
+
+/** The text elements of the whole drawing: the attributes and the text. */
+function textsOf(svg: string): { attrs: string; text: string }[] {
+  return [...svg.matchAll(/<text([^>]*)>([^<]*)<\/text>/g)].map((m) => ({ attrs: m[1]!, text: m[2]! }));
+}
+
+/** The value of one numeric attribute of a text element. */
+const attr = (attrs: string, name: string): number => Number(new RegExp(` ${name}="([^"]*)"`).exec(attrs)![1]);
+
+/** The sheet box of the title block, and the drawing area: the sheet inside the margins. */
+const TITLE_LEFT = SHEET.width - SHEET.margin - SHEET.title.width;
+const TITLE_TOP = SHEET.height - SHEET.margin - SHEET.title.height;
+
+/** A box crosses the title block when it overlaps the block in x and in y. */
+const crossesTitle = (b: { minX: number; maxX: number; minY: number; maxY: number }): boolean =>
+  b.maxX > TITLE_LEFT && b.maxY > TITLE_TOP;
+
+describe("cad to pdf drawing: the room of the dimensions and the title", () => {
+  const cube = (size: number[]) => ({ version: 1, segments: 64, model: { type: "cube", size } });
+
+  for (const size of [[250, 12, 50], [200, 62, 50], [200, 42, 97], [20, 10, 5], [1, 1, 1], [100, 100, 100]]) {
+    test(`T12 cube ${size.join(" x ")}: no dimension line or number crosses the title block or leaves the margins`, async () => {
+      const svg = writeCadDrawingSvg(await viewsOf(cube(size)), { title: "cube" });
+      for (const id of ["dim-width", "dim-depth", "dim-height", "view-top", "view-front", "view-right"]) {
+        const box = boxOf(groupPaths(svg, id).flat());
+        expect(crossesTitle(box)).toBe(false);
+        expect(box.maxY).toBeLessThanOrEqual(TITLE_TOP);
+        expect(box.minX).toBeGreaterThanOrEqual(SHEET.margin);
+        expect(box.maxX).toBeLessThanOrEqual(SHEET.width - SHEET.margin);
+        expect(box.minY).toBeGreaterThanOrEqual(SHEET.margin);
+      }
+      for (const id of ["dim-width", "dim-depth", "dim-height"]) {
+        const body = groupBody(svg, id);
+        const [t] = textsOf(body);
+        const size = attr(t!.attrs, "font-size");
+        // The number is centred on x. Its half width is at most 0.375 em per character; its descent is 0.25 em.
+        const half = (t!.text.length * 0.75 * size) / 2;
+        const box = { minX: attr(t!.attrs, "x") - half, maxX: attr(t!.attrs, "x") + half, minY: attr(t!.attrs, "y") - size, maxY: attr(t!.attrs, "y") + 0.25 * size };
+        expect(crossesTitle(box)).toBe(false);
+        expect(box.maxY).toBeLessThanOrEqual(TITLE_TOP);
+        expect(box.maxX).toBeLessThanOrEqual(SHEET.width - SHEET.margin);
+        expect(box.maxY).toBeLessThanOrEqual(SHEET.height - SHEET.margin);
+      }
+    });
+  }
+
+  test("T13 an 80-character title fits the title block; a short title keeps 4.5 mm", async () => {
+    const views = await viewsOf(PLATE);
+    const room = SHEET.title.width - 6;
+    const long = textsOf(writeCadDrawingSvg(views, { title: "W".repeat(80) }))[0 + 3]!;
+    expect(long.text).toBe("W".repeat(80));
+    expect(attr(long.attrs, "font-size")).toBeLessThan(4.5);
+    expect(attr(long.attrs, "textLength")).toBeLessThanOrEqual(room);
+    expect(attr(long.attrs, "x") - TITLE_LEFT).toBeGreaterThanOrEqual(3 - 1e-9);
+    expect(titleSize("W".repeat(80)) * 80 * 0.75).toBeLessThanOrEqual(room + 1e-9);
+    const short = textsOf(writeCadDrawingSvg(views, { title: "plate" })).find((t) => t.text === "plate")!;
+    expect(attr(short.attrs, "font-size")).toBe(4.5);
+    expect(short.attrs).not.toContain("textLength");
+    // Only the title line gets a text length; the scale, unit and projection lines keep their own width.
+    for (const t of textsOf(writeCadDrawingSvg(views, { title: "W".repeat(80) })).slice(4)) expect(t.attrs).not.toContain("textLength");
+    expect(titleSize("x".repeat(24))).toBe(4.5);
+    expect(titleSize("x".repeat(25))).toBeLessThan(4.5);
+    expect(titleSize("x".repeat(80))).toBeCloseTo(1.4, 9);
+  });
+
+  test("T14 every text has no stroke, so the glyphs are filled once", async () => {
+    const texts = textsOf(writeCadDrawingSvg(await viewsOf(PLATE), { title: "plate" }));
+    expect(texts.length).toBe(7);
+    for (const t of texts) expect(t.attrs).toContain('stroke="none"');
   });
 });

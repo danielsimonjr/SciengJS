@@ -1,4 +1,5 @@
-const PAGE_STYLE = "html,body{margin:0;background:#fff}";
+/** The style of every page. An inline svg leaves room for the text descent below it, so a pdf that has the page size of the svg spills onto a second page. A block svg leaves no such room. */
+const PAGE_STYLE = "html,body{margin:0;background:#fff}#sciengjs-diagram svg{display:block}";
 
 /** Writes a value as a JavaScript literal that cannot end a script element or break a line. */
 export function scriptJson(text: string): string {
