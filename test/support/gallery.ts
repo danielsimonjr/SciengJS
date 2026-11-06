@@ -70,7 +70,12 @@ export type GalleryResult = GalleryEntry &
 export interface GalleryEnv {
   browser?: string;
   texBundleDir?: string;
+  /** The TeX cache folder that all TikZ fixtures of one run share. Without it, each fixture gets a new folder. */
+  cacheDir?: string;
 }
+
+/** The render that renderFixture calls. Tests give a fake. */
+export type RenderFn = typeof render;
 
 /** The facts that the page states in its intro. */
 export interface GalleryMeta {
@@ -94,9 +99,11 @@ function compareEntries(a: GalleryEntry, b: GalleryEntry): number {
 function readOptions(dir: string): Record<string, Record<string, unknown>> {
   const manifest = join(dir, "approval.json");
   if (!existsSync(manifest)) return {};
-  const parsed = JSON.parse(readFileSync(manifest, "utf8")) as { entries: { source: string; options?: Record<string, unknown> }[] };
+  const parsed = JSON.parse(readFileSync(manifest, "utf8")) as { entries?: unknown };
+  if (!Array.isArray(parsed.entries)) throw new Error(`${manifest}: approval.json has no entries array`);
+  const entries = parsed.entries as { source: string; options?: Record<string, unknown> }[];
   const out: Record<string, Record<string, unknown>> = {};
-  for (const e of parsed.entries) if (e.options !== undefined) out[e.source] = e.options;
+  for (const e of entries) if (e.options !== undefined) out[e.source] = e.options;
   return out;
 }
 
@@ -124,21 +131,21 @@ export function listFixtures(corpusRoot: string): GalleryEntry[] {
 }
 
 /** Renders one fixture through the public render. A missing tool gives a skip; a render error gives a rejection. */
-export async function renderFixture(entry: GalleryEntry, env: GalleryEnv): Promise<GalleryResult> {
+export async function renderFixture(entry: GalleryEntry, env: GalleryEnv, renderFn: RenderFn = render): Promise<GalleryResult> {
   const stage = findPair(entry.type, entry.format)?.stage;
   if (stage === "browser" && env.browser === undefined) return { ...entry, status: "skipped", reason: SKIP_REASONS.browser };
   if (stage === "tex" && env.texBundleDir === undefined) return { ...entry, status: "skipped", reason: SKIP_REASONS.tex };
 
   const config: Partial<SciengConfig> = {};
   if (stage === "browser") config.browser = env.browser;
-  if (stage === "tex") Object.assign(config, texConfig(env.texBundleDir as string));
+  if (stage === "tex") Object.assign(config, texConfig(env.texBundleDir as string, env.cacheDir));
   const source = BINARY_INPUT_TYPES.includes(entry.type) ? new Uint8Array(readFileSync(entry.path)) : readFileSync(entry.path, "utf8");
   const request: RenderRequest = { type: entry.type, format: entry.format, source };
   if (entry.options !== undefined) request.options = entry.options;
 
   const started = performance.now();
   try {
-    const out = await render(request, config);
+    const out = await renderFn(request, config);
     return { ...entry, status: "rendered", mime: out.mime, backend: out.backend, bytes: out.bytes, ms: elapsed(started), warnings: out.warnings };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

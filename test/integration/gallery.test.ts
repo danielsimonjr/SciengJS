@@ -4,7 +4,7 @@
  */
 import { describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -49,8 +49,43 @@ describe("gallery on real fixtures without a browser or TeX", () => {
     try {
       const run = spawnSync(process.execPath, [CLI, "--out", folder, "--type", "plot"], { encoding: "utf8" });
       expect(run.status).toBe(0);
-      expect(run.stdout).toContain("total: 12 fixtures");
+      const plots = listFixtures(CORPUS).filter((e) => e.type === "plot").length;
+      expect(plots).toBeGreaterThan(0);
+      expect(run.stdout).toContain(`total: ${plots} fixtures`);
       expect(existsSync(join(folder, "gallery.html"))).toBe(true);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
+  });
+
+  test("the command line exits 2 when the value of --out is an option", () => {
+    const folder = mkdtempSync(join(tmpdir(), "gallery-flag-"));
+    try {
+      const run = spawnSync(process.execPath, [CLI, "--out", "--type", "plot"], { cwd: folder, encoding: "utf8" });
+      expect(run.status).toBe(2);
+      expect(run.stderr).toContain("--out needs a folder");
+      expect(readdirSync(folder)).toEqual([]);
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
+  });
+
+  test("the command line uses one TeX cache folder for the run and removes it at exit", () => {
+    const folder = mkdtempSync(join(tmpdir(), "gallery-cache-"));
+    const temp = join(folder, "temp");
+    const bundles = join(folder, "bundles");
+    mkdirSync(temp);
+    mkdirSync(bundles);
+    try {
+      const tikz = listFixtures(CORPUS).filter((e) => e.type === "tikz").length;
+      expect(tikz).toBeGreaterThan(1);
+      const run = spawnSync(process.execPath, [CLI, "--out", join(folder, "page"), "--type", "tikz"], {
+        encoding: "utf8",
+        env: { ...process.env, TEMP: temp, TMP: temp, TMPDIR: temp, SCIENG_TEX_BUNDLE_DIR: bundles },
+      });
+      expect(run.status).toBe(0);
+      expect(run.stdout).toContain(`total: ${tikz} fixtures`);
+      expect(readdirSync(temp)).toEqual([]);
     } finally {
       rmSync(folder, { recursive: true, force: true });
     }

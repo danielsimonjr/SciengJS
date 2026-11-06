@@ -16,7 +16,6 @@ const REVIEW_PAGE = fileURLToPath(new URL("../../docs/analysis/i12-tikz-corpus.h
 const bundleDir = process.env[BUNDLE_DIR_VAR];
 if (!bundleDir) throw new Error(`${BUNDLE_DIR_VAR} is not set. It names the folder that \`node tools/tex/bundles.mjs pack\` wrote.`);
 
-
 const cfg = texConfig(bundleDir);
 const approval = JSON.parse(readFileSync(join(CORPUS, "approval.json"), "utf8")) as TikzApproval;
 const sections: string[] = [];

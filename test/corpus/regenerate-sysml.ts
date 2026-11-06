@@ -14,7 +14,6 @@ import { escapeHtml, reviewPage } from "../support/review-page.ts";
 const CORPUS = fileURLToPath(new URL("./sysml", import.meta.url));
 const REVIEW_PAGE = fileURLToPath(new URL("../../docs/analysis/i11-sysml-corpus.html", import.meta.url));
 
-
 const approval = JSON.parse(readFileSync(join(CORPUS, "approval.json"), "utf8")) as SysmlApproval;
 const sections: string[] = [];
 for (const entry of approval.entries) {
