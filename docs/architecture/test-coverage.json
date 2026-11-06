@@ -374,7 +374,8 @@
     "src/mesh/cad-build.ts": [
       "test/integration/mesh-viewer.test.ts",
       "test/unit/cad-build.test.ts",
-      "test/unit/mesh-drawing.test.ts"
+      "test/unit/mesh-drawing.test.ts",
+      "test/unit/mesh-dxf.test.ts"
     ],
     "src/mesh/cad-builder.ts": [
       "test/integration/mesh-viewer.test.ts",
@@ -870,6 +871,7 @@
     ],
     "test/unit/mesh-dxf.test.ts": [
       "src/mesh/backend-dxf.ts",
+      "src/mesh/cad-build.ts",
       "src/mesh/dxf.ts",
       "src/pairs.ts",
       "src/registry.ts",
