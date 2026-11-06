@@ -4,6 +4,8 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+## [1.0.8] - 2026-11-06
+
 ### Added
 
 - `step`, `iges` and `brep` files render to `dxf`: a 2D drawing of the solid in the X-Y plane. The outline is the default; the option `z` gives a section. Coordinates are in millimeters.
