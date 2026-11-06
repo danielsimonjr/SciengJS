@@ -3,7 +3,11 @@
  * and reads the media box of the page. A cad drawing gives one A4 landscape page.
  */
 import { describe, expect, test } from "bun:test";
-import { existsSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync } from "node:fs";
+import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { render } from "../../src/index.ts";
 import type { RenderRequest } from "../../src/index.ts";
 
@@ -36,10 +40,19 @@ const CASES: { name: string; request: RenderRequest }[] = [
   { name: "math", request: { type: "math", format: "pdf", source: String.raw`\frac{a+b}{c-d}` } },
 ];
 
+/** A folder that holds the pinned Mermaid file, as the build copies it. A checkout with no build has no assets folder. */
+function assetsWithMermaid(): string {
+  const folder = join(mkdtempSync(join(tmpdir(), "sciengjs-pdf-assets-")), "assets");
+  mkdirSync(folder, { recursive: true });
+  copyFileSync(createRequire(import.meta.url).resolve("mermaid/dist/mermaid.min.js"), join(folder, "mermaid.min.js"));
+  return pathToFileURL(folder).href + "/";
+}
+
 describe.skipIf(!haveBrowser)("pdf of one SVG", () => {
+  const assetsUrl = haveBrowser ? assetsWithMermaid() : "";
   for (const c of CASES) {
     test(`${c.name} to pdf gives one page`, async () => {
-      const out = await render(c.request, { browser: browserPath });
+      const out = await render(c.request, { browser: browserPath, assetsUrl });
       const pages = pagesOf(out.bytes);
       expect(pages.count).toBe(1);
       expect(pages.boxes.length).toBe(1);
