@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **entry**: 1 file
 - **math**: 6 files
 - **mermaid**: 11 files
-- **mesh**: 17 files
+- **mesh**: 19 files
 - **plot**: 8 files
 - **raster**: 2 files
 - **sysml**: 8 files
@@ -954,6 +954,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/mesh/backend-dxf.ts` - Renders a CAD document to a DXF drawing in the X-Y plane. The worker calls this function. With no option, the
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../errors.ts` | `RenderError` | Import |
+| `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
+| `./backend-glb.ts` | `readCadRequest` | Import |
+| `./cad-build.ts` | `drawCad` | Import |
+| `./dxf.ts` | `dxfByteLength, writeDxf` | Import |
+
+**Exports:**
+- Functions: `render`
+
+---
+
 ### `src/mesh/backend-glb.ts` - The number of copies of the geometry that a glb render holds at its peak: the typed arrays of the
 
 **Internal Dependencies:**
@@ -963,12 +979,12 @@ The codebase is organized into the following modules:
 | `../worker/protocol.ts` | `BackendOutput, WorkerJob` | Import (type-only) |
 | `./glb.ts` | `writeGlb` | Import |
 | `./cad-build.ts` | `buildCad` | Import |
-| `./cad-document.ts` | `parseCadDocument` | Import |
+| `./cad-document.ts` | `parseCadDocument, CadDocument` | Import |
 | `./read.ts` | `readCad, CadFormat, CadMesh, LinearUnit` | Import |
 
 **Exports:**
 - Interfaces: `GlbDeps`
-- Functions: `estimateGlbBytes`, `readMeshOptions`, `readMeshes`, `render`
+- Functions: `estimateGlbBytes`, `readMeshOptions`, `readCadRequest`, `readMeshes`, `render`
 - Constants: `GLB_COPIES`
 
 ---
@@ -1030,8 +1046,8 @@ The codebase is organized into the following modules:
 | `./read.ts` | `CadFace, CadMesh` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `CadBuildResult`
-- Functions: `loadManifold`, `buildCad`
+- Interfaces: `CadBuildResult`, `CadDrawing`
+- Functions: `loadManifold`, `buildCad`, `drawCad`
 
 ---
 
@@ -1076,6 +1092,13 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/mesh/dxf.ts` - The DXF writer of the mesh stage (design section "CAD"). The output is ASCII DXF of release R12 (AC1009): a
+
+**Exports:**
+- Functions: `dxfByteLength`, `writeDxf`
+
+---
+
 ### `src/mesh/glb.ts` - Writes meshes as one glTF 2.0 binary file. Each mesh is one glTF mesh. Its triangles are grouped
 
 **Internal Dependencies:**
@@ -1090,7 +1113,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/mesh/index.ts` - Package entry point for mesh (re-exports 18 symbols)
+### `src/mesh/index.ts` - Package entry point for mesh (re-exports 21 symbols)
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -1101,10 +1124,11 @@ The codebase is organized into the following modules:
 | `./backend-glb.ts` | `readMeshOptions` | Re-export |
 | `./stl.ts` | `writeStl` | Re-export |
 | `./threemf.ts` | `write3mf` | Re-export |
+| `./dxf.ts` | `writeDxf` | Re-export |
 | `./cad-document.ts` | `checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS` | Re-export |
 | `./cad-document.ts` | `*` | Re-export (type-only) |
-| `./cad-build.ts` | `buildCad` | Re-export |
-| `./cad-build.ts` | `CadBuildResult` | Re-export (type-only) |
+| `./cad-build.ts` | `buildCad, drawCad` | Re-export |
+| `./cad-build.ts` | `CadBuildResult, CadDrawing` | Re-export (type-only) |
 | `./cad-builder.ts` | `*` | Re-export |
 
 **Exports:**
@@ -1112,8 +1136,8 @@ The codebase is organized into the following modules:
 
   ```text
   readCad, CadFormat, CadFace, CadMesh, LinearUnit, writeGlb, readMeshOptions, writeStl, write3mf,
-  checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS,
-  type * from ./cad-document.ts, buildCad, CadBuildResult, cad
+  writeDxf, checkCadDocument, parseCadDocument, DEFAULT_SEGMENTS, MAX_SEGMENTS, MIN_SEGMENTS,
+  type * from ./cad-document.ts, buildCad, drawCad, CadBuildResult, CadDrawing, cad
   ```
 
 
@@ -1908,23 +1932,23 @@ The codebase is organized into the following modules:
 
 | File | Imports From | Exports To |
 |------|--------------|------------|
-| `src/errors` | 0 files | 52 files |
-| `src/worker/protocol` | 2 files | 30 files |
+| `src/errors` | 0 files | 53 files |
+| `src/worker/protocol` | 2 files | 31 files |
 | `src/graph/text` | 0 files | 17 files |
 | `src/browser/render` | 6 files | 7 files |
 | `src/mermaid/browser` | 6 files | 7 files |
 | `src/graph/backend-png` | 7 files | 5 files |
-| `src/mesh/backend-glb` | 6 files | 5 files |
+| `src/mesh/backend-glb` | 6 files | 6 files |
 | `src/tex/index` | 11 files | 0 files |
 | `src/browser/input` | 1 file | 9 files |
 | `src/mermaid/common` | 2 files | 8 files |
 | `src/mermaid/render` | 6 files | 4 files |
 | `src/tex/stage` | 6 files | 4 files |
 | `src/config` | 3 files | 6 files |
+| `src/mesh/index` | 9 files | 0 files |
 | `src/core` | 7 files | 1 file |
 | `src/graph/dot` | 2 files | 6 files |
 | `src/mermaid/backend-png` | 8 files | 0 files |
-| `src/mesh/index` | 8 files | 0 files |
 | `src/tex/render` | 6 files | 2 files |
 | `src/mesh/read` | 1 file | 6 files |
 | `src/sysml/render` | 3 files | 4 files |
@@ -1933,6 +1957,7 @@ The codebase is organized into the following modules:
 | `src/math/tex` | 2 files | 4 files |
 | `src/mermaid/index` | 6 files | 0 files |
 | `src/mesh/backend-png` | 6 files | 0 files |
+| `src/mesh/cad-build` | 3 files | 3 files |
 | `src/plot/plotter` | 3 files | 3 files |
 | `src/sysml/backend-png` | 6 files | 0 files |
 | `src/tex/backend-png` | 6 files | 0 files |
@@ -1947,7 +1972,6 @@ The codebase is organized into the following modules:
 | `src/mermaid/class` | 3 files | 2 files |
 | `src/mermaid/sequence` | 2 files | 3 files |
 | `src/mermaid/state` | 3 files | 2 files |
-| `src/mesh/cad-build` | 3 files | 2 files |
 
 ---
 
@@ -2035,16 +2059,16 @@ graph TD
 
     subgraph Mesh
         N50[backend-3mf]
-        N51[backend-glb]
-        N52[backend-html]
-        N53[backend-png]
-        N54[backend-stl]
-        N55[cad-build]
-        N56[cad-builder]
-        N57[cad-document]
-        N58[glb]
-        N59[index]
-        N60[...7 more]
+        N51[backend-dxf]
+        N52[backend-glb]
+        N53[backend-html]
+        N54[backend-png]
+        N55[backend-stl]
+        N56[cad-build]
+        N57[cad-builder]
+        N58[cad-document]
+        N59[dxf]
+        N60[...9 more]
     end
 
     subgraph Plot
@@ -2197,17 +2221,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total Source Files | 287 |
+| Total Source Files | 290 |
 | Subsystems | 17 |
-| Total Lines of Code | 33182 |
-| Total Exports | 700 |
-| Total Re-exports | 168 |
+| Total Lines of Code | 33448 |
+| Total Exports | 709 |
+| Total Re-exports | 171 |
 | Total Classes | 7 |
-| Total Interfaces | 143 |
-| Total Functions | 279 |
+| Total Interfaces | 144 |
+| Total Functions | 284 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 76 |
+| Type-only Imports | 78 |
 | Runtime Cyclic Components | 0 |
 | Type-only Cyclic Components | 0 |
 | Files in Runtime Cycles | 0 |

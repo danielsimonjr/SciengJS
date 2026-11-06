@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "totalSourceFiles": 110,
-    "totalTestFiles": 102,
-    "testedCount": 77,
+    "totalSourceFiles": 112,
+    "totalTestFiles": 103,
+    "testedCount": 79,
     "untestedCount": 33,
-    "coveragePercent": "70.0",
+    "coveragePercent": "70.5",
     "effectiveCoverage": {
       "policyLoaded": false,
-      "activeFiles": 110,
-      "testedActive": 77,
+      "activeFiles": 112,
+      "testedActive": 79,
       "activeUntested": 33,
       "excludedTotal": 0,
-      "percent": "70.0",
+      "percent": "70.5",
       "breakdown": {
         "active_untested": 33
       }
@@ -90,12 +90,14 @@
     "src/mermaid/sequence.ts",
     "src/mermaid/state.ts",
     "src/mesh/backend-3mf.ts",
+    "src/mesh/backend-dxf.ts",
     "src/mesh/backend-glb.ts",
     "src/mesh/backend-html.ts",
     "src/mesh/backend-stl.ts",
     "src/mesh/cad-build.ts",
     "src/mesh/cad-builder.ts",
     "src/mesh/cad-document.ts",
+    "src/mesh/dxf.ts",
     "src/mesh/glb.ts",
     "src/mesh/index.ts",
     "src/mesh/pinned-three.ts",
@@ -339,6 +341,9 @@
     "src/mesh/backend-3mf.ts": [
       "test/unit/mesh-3mf.test.ts"
     ],
+    "src/mesh/backend-dxf.ts": [
+      "test/unit/mesh-dxf.test.ts"
+    ],
     "src/mesh/backend-glb.ts": [
       "test/integration/mesh-viewer.test.ts",
       "test/unit/cad-build.test.ts",
@@ -365,6 +370,10 @@
       "test/integration/mesh-viewer.test.ts",
       "test/unit/cad-build.test.ts",
       "test/unit/cad-document.test.ts"
+    ],
+    "src/mesh/dxf.ts": [
+      "test/integration/mesh-viewer.test.ts",
+      "test/unit/mesh-dxf.test.ts"
     ],
     "src/mesh/glb.ts": [
       "test/integration/mesh-viewer.test.ts",
@@ -398,6 +407,7 @@
     "src/pairs.ts": [
       "test/unit/browser-pdf-pairs.test.ts",
       "test/unit/mesh-3mf.test.ts",
+      "test/unit/mesh-dxf.test.ts",
       "test/unit/tex-wiring.test.ts"
     ],
     "src/plot/backend-html.ts": [],
@@ -512,6 +522,7 @@
       "test/unit/index-exports.test.ts",
       "test/unit/mermaid-route-lenient.test.ts",
       "test/unit/mesh-3mf.test.ts",
+      "test/unit/mesh-dxf.test.ts",
       "test/unit/render.test.ts"
     ],
     "src/version.ts": [
@@ -526,6 +537,7 @@
       "test/unit/graph-svg-backend.test.ts",
       "test/unit/math-backends.test.ts",
       "test/unit/mesh-3mf.test.ts",
+      "test/unit/mesh-dxf.test.ts",
       "test/unit/mesh-limit.test.ts"
     ],
     "src/worker/run.ts": [
@@ -579,6 +591,7 @@
       "src/mesh/backend-glb.ts",
       "src/mesh/stl.ts",
       "src/mesh/threemf.ts",
+      "src/mesh/dxf.ts",
       "src/mesh/cad-document.ts",
       "src/mesh/cad-build.ts",
       "src/mesh/cad-builder.ts",
@@ -802,6 +815,13 @@
       "src/types.ts",
       "src/worker/protocol.ts",
       "src/mesh/backend-glb.ts"
+    ],
+    "test/unit/mesh-dxf.test.ts": [
+      "src/mesh/backend-dxf.ts",
+      "src/mesh/dxf.ts",
+      "src/pairs.ts",
+      "src/types.ts",
+      "src/worker/protocol.ts"
     ],
     "test/unit/mesh-glb.test.ts": [
       "src/core.ts",

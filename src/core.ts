@@ -16,6 +16,7 @@ const MIME: Record<OutputFormat, string> = {
   glb: "model/gltf-binary",
   stl: "model/stl",
   "3mf": "model/3mf",
+  dxf: "image/vnd.dxf",
 };
 
 const encoder = new TextEncoder();

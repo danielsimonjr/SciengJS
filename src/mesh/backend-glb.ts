@@ -2,7 +2,7 @@ import { RenderError } from "../errors.ts";
 import type { BackendOutput, WorkerJob } from "../worker/protocol.ts";
 import { writeGlb } from "./glb.ts";
 import { buildCad } from "./cad-build.ts";
-import { parseCadDocument } from "./cad-document.ts";
+import { parseCadDocument, type CadDocument } from "./cad-document.ts";
 import { readCad, type CadFormat, type CadMesh, type LinearUnit } from "./read.ts";
 
 /** The linear units that the STEP and IGES readers accept. Each value has one definition, here. */
@@ -72,6 +72,16 @@ export interface GlbDeps {
 const DEFAULT_DEPS: GlbDeps = { readCad, buildCad };
 
 /**
+ * Reads the CAD document of a render request: JSON text, checked against the node and facet limits. A source that
+ * is not text rejects with E_INPUT.
+ */
+export function readCadRequest(request: WorkerJob["request"]): CadDocument {
+  if (typeof request.source !== "string") throw new RenderError("E_INPUT", "cad takes JSON text, not bytes");
+  const { maxCadNodes, maxCadFacets } = request.settings;
+  return parseCadDocument(request.source, { maxNodes: maxCadNodes, maxFacets: maxCadFacets }).document;
+}
+
+/**
  * Reads the meshes of a mesh render. A CAD document is JSON text, checked against the node and facet limits and
  * built through manifold-3d. A CAD render takes no option. STEP, IGES and BREP are bytes, read through occt-import-js.
  * A source with no triangles rejects with E_INPUT.
@@ -80,11 +90,8 @@ export async function readMeshes(request: WorkerJob["request"], deps: Partial<Gl
   const d = { ...DEFAULT_DEPS, ...deps };
   let meshes: CadMesh[];
   if (request.type === "cad") {
-    if (typeof request.source !== "string") throw new RenderError("E_INPUT", "cad takes JSON text, not bytes");
     for (const key of Object.keys(request.options)) throw new RenderError("E_INPUT", `cad takes no option ${key}`);
-    const { maxCadNodes, maxCadFacets } = request.settings;
-    const checked = parseCadDocument(request.source, { maxNodes: maxCadNodes, maxFacets: maxCadFacets });
-    meshes = [(await d.buildCad(checked.document, maxCadFacets)).mesh];
+    meshes = [(await d.buildCad(readCadRequest(request), request.settings.maxCadFacets)).mesh];
   } else {
     const format = request.type as CadFormat;
     if (!FORMATS.includes(format)) {

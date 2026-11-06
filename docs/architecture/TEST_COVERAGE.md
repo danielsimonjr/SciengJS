@@ -8,11 +8,11 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 110 |
-| Total Test Files | 102 |
-| Source Files with Tests | 77 |
+| Total Source Files | 112 |
+| Total Test Files | 103 |
+| Source Files with Tests | 79 |
 | Source Files without Tests | 33 |
-| Coverage (raw, direct-import) | **70.0%** |
+| Coverage (raw, direct-import) | **70.5%** |
 ---
 
 ## Source Files Not Imported By A Test
@@ -137,12 +137,14 @@ The following 33 source files are not directly imported by any test file:
 | `mermaid/sequence.ts` | `mermaid-sequence.test.ts`, `mermaid-xml.test.ts` |
 | `mermaid/state.ts` | `mermaid-state.test.ts`, `mermaid-xml.test.ts` |
 | `mesh/backend-3mf.ts` | `mesh-3mf.test.ts` |
+| `mesh/backend-dxf.ts` | `mesh-dxf.test.ts` |
 | `mesh/backend-glb.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts`, `mesh-3mf.test.ts`, `mesh-limit.test.ts` |
 | `mesh/backend-html.ts` | `cad-build.test.ts` |
 | `mesh/backend-stl.ts` | `cad-build.test.ts`, `mesh-3mf.test.ts` |
 | `mesh/cad-build.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts` |
 | `mesh/cad-builder.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts` |
 | `mesh/cad-document.ts` | `mesh-viewer.test.ts`, `cad-build.test.ts`, `cad-document.test.ts` |
+| `mesh/dxf.ts` | `mesh-viewer.test.ts`, `mesh-dxf.test.ts` |
 | `mesh/glb.ts` | `mesh-viewer.test.ts`, `glb-writer.test.ts` |
 | `mesh/index.ts` | `mesh-viewer.test.ts` |
 | `mesh/pinned-three.ts` | `mesh-viewer.test.ts`, `mesh-viewer.test.ts` |
@@ -150,7 +152,7 @@ The following 33 source files are not directly imported by any test file:
 | `mesh/stl.ts` | `mesh-viewer.test.ts` |
 | `mesh/threemf.ts` | `mesh-viewer.test.ts`, `mesh-3mf.test.ts` |
 | `mesh/viewer.ts` | `mesh-viewer.test.ts`, `mesh-viewer.test.ts` |
-| `src/pairs.ts` | `browser-pdf-pairs.test.ts`, `mesh-3mf.test.ts`, `tex-wiring.test.ts` |
+| `src/pairs.ts` | `browser-pdf-pairs.test.ts`, `mesh-3mf.test.ts`, `mesh-dxf.test.ts`, `tex-wiring.test.ts` |
 | `plot/control.ts` | `plot-control.test.ts` |
 | `plot/plotter.ts` | `plot-control.test.ts`, `plot-corpus.test.ts`, `plot-svg.test.ts` |
 | `plot/reader.ts` | `plot-reader.test.ts` |
@@ -173,9 +175,9 @@ The following 33 source files are not directly imported by any test file:
 | `tex/tfm.ts` | `tex-tfm.test.ts` |
 | `tex/type1.ts` | `tex-type1.test.ts` |
 | `tex/vfs.ts` | `tex-host-names.test.ts`, `tex-vfs.test.ts` |
-| `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `mesh-3mf.test.ts`, `render.test.ts` |
+| `src/types.ts` | `browser-render.test.ts`, `mermaid-browser-capture.test.ts`, `mermaid-browser.test.ts`, `mesh-viewer.test.ts`, `tikz-render.test.ts`, `html-md-render.test.ts`, `index-exports.test.ts`, `mermaid-route-lenient.test.ts`, `mesh-3mf.test.ts`, `mesh-dxf.test.ts`, `render.test.ts` |
 | `src/version.ts` | `config-assets.test.ts`, `version.test.ts` |
-| `worker/protocol.ts` | `browser-stage.test.ts`, `cad-build.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `math-backends.test.ts`, `mesh-3mf.test.ts`, `mesh-limit.test.ts` |
+| `worker/protocol.ts` | `browser-stage.test.ts`, `cad-build.test.ts`, `graph-png.test.ts`, `graph-svg-backend.test.ts`, `math-backends.test.ts`, `mesh-3mf.test.ts`, `mesh-dxf.test.ts`, `mesh-limit.test.ts` |
 | `worker/run.ts` | `worker-exec-argv.test.ts`, `worker-run.test.ts` |
 
 ---
@@ -187,7 +189,7 @@ The following 33 source files are not directly imported by any test file:
 | `integration/browser-render.test.ts` | 6 files |
 | `integration/mermaid-browser-capture.test.ts` | 8 files |
 | `integration/mermaid-browser.test.ts` | 4 files |
-| `integration/mesh-viewer.test.ts` | 17 files |
+| `integration/mesh-viewer.test.ts` | 18 files |
 | `integration/page-checker.test.ts` | 0 files |
 | `integration/tex-render.test.ts` | 1 files |
 | `integration/tikz-corpus.test.ts` | 0 files |
@@ -244,6 +246,7 @@ The following 33 source files are not directly imported by any test file:
 | `unit/mermaid-state.test.ts` | 3 files |
 | `unit/mermaid-xml.test.ts` | 9 files |
 | `unit/mesh-3mf.test.ts` | 7 files |
+| `unit/mesh-dxf.test.ts` | 5 files |
 | `unit/mesh-glb.test.ts` | 3 files |
 | `unit/mesh-large.test.ts` | 3 files |
 | `unit/mesh-limit.test.ts` | 3 files |

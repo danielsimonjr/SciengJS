@@ -2,9 +2,9 @@ metadata:
   name: '@danielsimonjr/sciengjs'
   schemaVersion: 2.0.0
   language: typescript
-  totalFiles: 287
+  totalFiles: 290
   totalModules: 3
-  totalExports: 700
+  totalExports: 709
 modules:
   tools:
     scripts/mermaid-licenses.mjs:
@@ -1672,6 +1672,34 @@ modules:
           typeOnly: false
       exports:
         - render
+    src/mesh/backend-dxf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/errors.ts
+          imports:
+            - RenderError
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - BackendOutput
+            - WorkerJob
+          typeOnly: true
+        - file: src/mesh/backend-glb.ts
+          imports:
+            - readCadRequest
+          typeOnly: false
+        - file: src/mesh/cad-build.ts
+          imports:
+            - drawCad
+          typeOnly: false
+        - file: src/mesh/dxf.ts
+          imports:
+            - dxfByteLength
+            - writeDxf
+          typeOnly: false
+      exports:
+        - render
     src/mesh/backend-glb.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1696,6 +1724,7 @@ modules:
         - file: src/mesh/cad-document.ts
           imports:
             - parseCadDocument
+            - CadDocument
           typeOnly: false
         - file: src/mesh/read.ts
           imports:
@@ -1709,6 +1738,7 @@ modules:
         - estimateGlbBytes
         - readMeshOptions
         - GlbDeps
+        - readCadRequest
         - readMeshes
         - render
     src/mesh/backend-html.ts:
@@ -1815,6 +1845,8 @@ modules:
         - loadManifold
         - CadBuildResult
         - buildCad
+        - CadDrawing
+        - drawCad
     src/mesh/cad-builder.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1902,6 +1934,13 @@ modules:
         - sphereFacets
         - checkCadDocument
         - parseCadDocument
+    src/mesh/dxf.ts:
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - dxfByteLength
+        - writeDxf
     src/mesh/glb.ts:
       externalDependencies: []
       nodeDependencies: []
@@ -1950,6 +1989,10 @@ modules:
           imports:
             - write3mf
           typeOnly: false
+        - file: src/mesh/dxf.ts
+          imports:
+            - writeDxf
+          typeOnly: false
         - file: src/mesh/cad-document.ts
           imports:
             - checkCadDocument
@@ -1964,10 +2007,12 @@ modules:
         - file: src/mesh/cad-build.ts
           imports:
             - buildCad
+            - drawCad
           typeOnly: false
         - file: src/mesh/cad-build.ts
           imports:
             - CadBuildResult
+            - CadDrawing
           typeOnly: true
         - file: src/mesh/cad-builder.ts
           imports:
@@ -1983,13 +2028,16 @@ modules:
         - readMeshOptions
         - writeStl
         - write3mf
+        - writeDxf
         - checkCadDocument
         - parseCadDocument
         - DEFAULT_SEGMENTS
         - MAX_SEGMENTS
         - MIN_SEGMENTS
         - buildCad
+        - drawCad
         - CadBuildResult
+        - CadDrawing
         - cad
     src/mesh/occt-import-js.d.ts:
       externalDependencies: []
@@ -4953,6 +5001,41 @@ modules:
             - '*'
           typeOnly: false
       exports: []
+    test/unit/mesh-dxf.test.ts:
+      externalDependencies:
+        - bun:test
+      nodeDependencies: []
+      internalDependencies:
+        - file: src/mesh/backend-dxf.ts
+          imports:
+            - render
+          typeOnly: false
+        - file: src/mesh/dxf.ts
+          imports:
+            - dxfByteLength
+            - writeDxf
+          typeOnly: false
+        - file: src/pairs.ts
+          imports:
+            - findPair
+          typeOnly: false
+        - file: src/types.ts
+          imports:
+            - OUTPUT_FORMATS
+          typeOnly: false
+        - file: src/worker/protocol.ts
+          imports:
+            - WorkerJob
+          typeOnly: true
+        - file: test/support/rejections.ts
+          imports:
+            - rejectionOf
+          typeOnly: false
+        - file: test/support/settings.ts
+          imports:
+            - testSettings
+          typeOnly: false
+      exports: []
     test/unit/mesh-glb.test.ts:
       externalDependencies:
         - bun:test
@@ -5806,19 +5889,19 @@ modules:
           typeOnly: false
       exports: []
 statistics:
-  totalTypeScriptFiles: 287
-  totalSourceFiles: 287
+  totalTypeScriptFiles: 290
+  totalSourceFiles: 290
   totalModules: 3
-  totalLinesOfCode: 33182
-  totalExports: 700
-  entryRoots: 103
-  reachableFiles: 103
+  totalLinesOfCode: 33448
+  totalExports: 709
+  entryRoots: 105
+  reachableFiles: 105
   dormantFiles: 8
   orphanedFiles: 8
   testOnlyFiles: 0
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  totalTypeOnlyImports: 76
+  totalTypeOnlyImports: 78
   noImporterFileCount: 8
   unusedExportsCount: 50
   circularDepsTruncated: false
@@ -5827,12 +5910,12 @@ statistics:
   runtimeFilesInCycles: 0
   typeOnlyFilesInCycles: 0
   totalClasses: 7
-  totalInterfaces: 143
-  totalFunctions: 279
+  totalInterfaces: 144
+  totalFunctions: 284
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 72
-  totalReExports: 168
+  totalReExports: 171
 reachability:
   roots:
     - src/index.ts
@@ -5887,6 +5970,7 @@ reachability:
     - src/mermaid/sequence.ts
     - src/mermaid/state.ts
     - src/mesh/backend-3mf.ts
+    - src/mesh/backend-dxf.ts
     - src/mesh/backend-glb.ts
     - src/mesh/backend-html.ts
     - src/mesh/backend-png.ts
@@ -5894,6 +5978,7 @@ reachability:
     - src/mesh/cad-build.ts
     - src/mesh/cad-builder.ts
     - src/mesh/cad-document.ts
+    - src/mesh/dxf.ts
     - src/mesh/glb.ts
     - src/mesh/pinned-three.ts
     - src/mesh/read.ts
@@ -5938,7 +6023,7 @@ reachability:
     - src/worker/entry.ts
     - src/worker/protocol.ts
     - src/worker/run.ts
-  reachableCount: 103
+  reachableCount: 105
   dormantCount: 8
   orphaned:
     - src/mesh/occt-import-js.d.ts

@@ -1,11 +1,11 @@
 {
-  "totalFiles": 287,
+  "totalFiles": 290,
   "byDisposition": {
     "reachable": 0,
-    "build-entry": 103,
+    "build-entry": 105,
     "test-only": 0,
     "orphan": 8,
-    "test": 141,
+    "test": 142,
     "tool": 35,
     "config": 0,
     "bench": 0,
@@ -13,12 +13,12 @@
   },
   "byArea": {
     "tools": 35,
-    "src": 111,
-    "tests": 141
+    "src": 113,
+    "tests": 142
   },
   "byPackage": {
-    "(root)": 183,
-    "@danielsimonjr/sciengjs": 104
+    "(root)": 184,
+    "@danielsimonjr/sciengjs": 106
   },
   "files": [
     {
@@ -131,7 +131,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 127
+      "loc": 128
     },
     {
       "file": "src/errors.ts",
@@ -365,11 +365,18 @@
       "loc": 18
     },
     {
+      "file": "src/mesh/backend-dxf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 40
+    },
+    {
       "file": "src/mesh/backend-glb.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 114
+      "loc": 121
     },
     {
       "file": "src/mesh/backend-html.ts",
@@ -397,7 +404,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 262
+      "loc": 299
     },
     {
       "file": "src/mesh/cad-builder.ts",
@@ -414,6 +421,13 @@
       "loc": 462
     },
     {
+      "file": "src/mesh/dxf.ts",
+      "package": "@danielsimonjr/sciengjs",
+      "area": "src",
+      "disposition": "build-entry",
+      "loc": 33
+    },
+    {
       "file": "src/mesh/glb.ts",
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
@@ -425,7 +439,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 12
+      "loc": 13
     },
     {
       "file": "src/mesh/occt-import-js.d.ts",
@@ -481,7 +495,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 58
+      "loc": 59
     },
     {
       "file": "src/plot/backend-html.ts",
@@ -558,7 +572,7 @@
       "package": "@danielsimonjr/sciengjs",
       "area": "src",
       "disposition": "build-entry",
-      "loc": 84
+      "loc": 85
     },
     {
       "file": "src/sysml/backend-pdf.ts",
@@ -971,7 +985,7 @@
       "package": "(root)",
       "area": "tests",
       "disposition": "test",
-      "loc": 207
+      "loc": 209
     },
     {
       "file": "test/support/assets-fixture.ts",
@@ -1455,6 +1469,13 @@
       "area": "tests",
       "disposition": "test",
       "loc": 138
+    },
+    {
+      "file": "test/unit/mesh-dxf.test.ts",
+      "package": "(root)",
+      "area": "tests",
+      "disposition": "test",
+      "loc": 143
     },
     {
       "file": "test/unit/mesh-glb.test.ts",

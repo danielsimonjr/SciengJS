@@ -150,6 +150,7 @@
     ],
     "mesh": [
       "CadBuildResult",
+      "CadDrawing",
       "CadFace",
       "CadFormat",
       "CadMesh",
@@ -168,6 +169,8 @@
       "cube",
       "cylinder",
       "difference",
+      "drawCad",
+      "dxfByteLength",
       "estimateGlbBytes",
       "extrude",
       "intersection",
@@ -178,6 +181,7 @@
       "polygon",
       "polyhedron",
       "readCad",
+      "readCadRequest",
       "readMeshOptions",
       "readMeshes",
       "rectangle",
@@ -195,6 +199,7 @@
       "union",
       "viewerPageHtml",
       "write3mf",
+      "writeDxf",
       "writeGlb",
       "writeStl"
     ],
