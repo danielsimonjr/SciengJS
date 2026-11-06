@@ -108,16 +108,16 @@
    "id": "dfm-14",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "if (pieceArea > corner || build",
-   "replacement": "if (false || build",
+   "original": "Math.max(longest, maxX - minX, maxY - minY)",
+   "replacement": "Math.max(longest, maxX - minX)",
    "equivalent": null
   },
   {
    "id": "dfm-15",
    "file": "src/mesh/cad-build.ts",
    "test": "test/unit/mesh-dfm.test.ts",
-   "original": "const corner = (1 - Math.PI / 4) * min * min;",
-   "replacement": "const corner = ((1 - Math.PI / 4) * min * min) / 4;",
+   "original": " || build.keep(piece.offset(-min / 8, \"Round\", 2, segments)).area() > 0",
+   "replacement": "",
    "equivalent": null
   },
   {
@@ -198,6 +198,46 @@
    "test": "test/unit/mesh-dfm.test.ts",
    "original": "&& key !== \"minGap\"",
    "replacement": "&& key !== \"minGap\" && key !== \"z\"",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-26",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "if (longestPart(build, piece, min) > 0.75 * min || ",
+   "replacement": "if (",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-27",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "> 0.75 * min ||",
+   "replacement": "> 7 * min ||",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-28",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "> 0.75 * min ||",
+   "replacement": "> 0.4 * min ||",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-29",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "const e = min / 200;",
+   "replacement": "const e = 0;",
+   "equivalent": null
+  },
+  {
+   "id": "dfm-30",
+   "file": "src/mesh/cad-build.ts",
+   "test": "test/unit/mesh-dfm.test.ts",
+   "original": "const e = min / 200;",
+   "replacement": "const e = min / 40;",
    "equivalent": null
   }
  ]

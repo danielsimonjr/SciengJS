@@ -225,6 +225,21 @@ describe("cad to md (design for manufacture)", () => {
     expect(row(await text(request(pair, { minGap: 0.3 })), "Minimum gap")[1]).toBe("pass");
   });
 
+  test("a hairline slot 0.01 mm wide fails the gap check; a hairline fin 0.01 mm thick fails the wall check; a 0.3 mm hole fails the gap check", async () => {
+    const slit = {
+      type: "difference",
+      children: [
+        { type: "cube", size: [20, 10, 2] },
+        { type: "translate", offset: [10 - 0.005, -1, -1], child: { type: "cube", size: [0.01, 4, 4] } },
+      ],
+    };
+    expect(row(await text(request(slit)), "Minimum gap")[1]).toBe("fail");
+    const fin = { ...FIN, children: [FIN.children[0], { type: "translate", offset: [18, 0, 5], child: { type: "cube", size: [0.01, 10, 5] } }] };
+    expect(row(await text(request(fin)), "Minimum wall")[1]).toBe("fail");
+    // A hole of diameter 0.3 mm has no side longer than 0.75 of the minimum gap: the inscribed disc finds it.
+    expect(row(await text(request(drilled(0.3))), "Minimum gap")[1]).toBe("fail");
+  });
+
   test("concave corners are not gaps", async () => {
     expect(row(await text(request(TEE)), "Minimum gap")[1]).toBe("pass");
     expect(row(await text(request(FIN)), "Minimum gap")[1]).toBe("pass");
