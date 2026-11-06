@@ -71,6 +71,94 @@
       "original": "if (r.mime.startsWith(\"image/\")) return",
       "replacement": "if (r.mime.startsWith(\"image/\") && r.mime === \"\") return",
       "equivalent": null
+    },
+    {
+      "id": "gallery-10",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (stage === \"browser\" && env.browser === undefined) return",
+      "replacement": "if (false) return",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-11",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (stage === \"tex\" && env.texBundleDir === undefined) return",
+      "replacement": "if (false) return",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-12",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (entry.options !== undefined) request.options = entry.options;",
+      "replacement": "",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-13",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "return { ...entry, status: \"rejected\", code: \"E_INTERNAL\", message",
+      "replacement": "return { ...entry, status: \"rejected\", code: \"E_INPUT\", message",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-14",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "texConfig(env.texBundleDir as string, env.cacheDir)",
+      "replacement": "texConfig(env.texBundleDir as string)",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-15",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "Backend: ${escapeHtml(r.backend)}",
+      "replacement": "Backend: ${r.backend}",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-16",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "<p class=\"skipped\">${escapeHtml(r.reason)}</p>",
+      "replacement": "<p class=\"skipped\">${r.reason}</p>",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-17",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "<p class=\"error\">${escapeHtml(r.code)}:",
+      "replacement": "<p class=\"error\">${r.code}:",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-18",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (!statSync(path).isFile()) continue;",
+      "replacement": "",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-19",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "extname(file).toLowerCase()",
+      "replacement": "extname(file).toString()",
+      "equivalent": null
+    },
+    {
+      "id": "gallery-20",
+      "file": "test/support/gallery.ts",
+      "test": "test/unit/gallery-page.test.ts",
+      "original": "if (!Array.isArray(parsed.entries)) throw",
+      "replacement": "if (false) throw",
+      "equivalent": null
     }
   ]
 }

@@ -1,8 +1,18 @@
 import { describe, expect, test } from "bun:test";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { galleryPage, listFixtures, MAX_EMBED_BYTES, SKIP_REASONS, type GalleryEntry, type GalleryResult } from "../support/gallery.ts";
+import type { RenderRequest, RenderResult, SciengConfig } from "../../src/index.ts";
+import { RenderError } from "../../src/errors.ts";
+import {
+  galleryPage,
+  listFixtures,
+  MAX_EMBED_BYTES,
+  renderFixture,
+  SKIP_REASONS,
+  type GalleryEntry,
+  type GalleryResult,
+} from "../support/gallery.ts";
 
 const META = { engine: "1.0.8", browser: false, tex: true };
 
@@ -101,6 +111,28 @@ describe("listFixtures", () => {
     }
   });
 
+  test("skips a folder whose name has a fixture extension, and reads an upper-case extension", () => {
+    root = mkdtempSync(join(tmpdir(), "gallery-case-"));
+    try {
+      mkdirSync(join(root, "dot", "folder.dot"), { recursive: true });
+      write("mesh/BIG.STEP");
+      expect(listFixtures(root).map((e) => `${e.type}/${e.file}/${e.format}`)).toEqual(["step/BIG.STEP/png", "step/BIG.STEP/glb", "step/BIG.STEP/dxf"]);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  test("rejects an approval.json without an entries array, with the file name", () => {
+    root = mkdtempSync(join(tmpdir(), "gallery-bad-"));
+    try {
+      write("sysml/s.sysml");
+      write("sysml/approval.json", JSON.stringify({ approved: true }));
+      expect(() => listFixtures(root)).toThrow(/approval.json has no entries array/);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   test("returns nothing for a folder that does not exist", () => {
     root = mkdtempSync(join(tmpdir(), "gallery-empty-"));
     try {
@@ -127,6 +159,13 @@ describe("galleryPage", () => {
     const page = galleryPage([skipped(SKIP_REASONS.tex)], META);
     expect(page).toContain(`<p class="skipped">${SKIP_REASONS.tex}</p>`);
     expect(page).not.toContain('class="error"');
+  });
+
+  test("escapes the backend, the error code and the skip reason", () => {
+    const ok = { ...rendered(), backend: "a<b" } as GalleryResult;
+    expect(galleryPage([ok], META)).toContain("Backend: a&lt;b.");
+    expect(galleryPage([rejected("E_<X>", "m")], META)).toContain('<p class="error">E_&lt;X&gt;: m</p>');
+    expect(galleryPage([skipped("no <tool>")], META)).toContain('<p class="skipped">no &lt;tool&gt;</p>');
   });
 
   test("lists the warnings escaped", () => {
@@ -203,6 +242,106 @@ describe("galleryPage", () => {
     });
     expect(page).toContain("<p>3 fixtures, 1 rendered, 1 rejected, 1 skipped. Engine 1.0.8. Browser: no. TeX bundles: yes.</p>");
     expect(page).toContain("<title>Fixture gallery</title>");
-    expect(readFileSync(new URL("../support/gallery.ts", import.meta.url), "utf8")).toContain("export function galleryPage");
   });
+});
+
+describe("renderFixture", () => {
+  let dir = "";
+  function source(name: string, text = "digraph { a }"): string {
+    const path = join(dir, name);
+    writeFileSync(path, text);
+    return path;
+  }
+  interface Call {
+    request: RenderRequest;
+    config: Partial<SciengConfig>;
+  }
+  function fake(calls: Call[], result?: Partial<RenderResult>, fail?: unknown) {
+    return async (request: RenderRequest, config: Partial<SciengConfig> = {}): Promise<RenderResult> => {
+      calls.push({ request, config });
+      if (fail !== undefined) throw fail;
+      return { mime: "image/svg+xml", backend: "fake", bytes: new Uint8Array([1]), warnings: [], ...result } as RenderResult;
+    };
+  }
+  function withDir(run: () => Promise<void>): () => Promise<void> {
+    return async () => {
+      dir = mkdtempSync(join(tmpdir(), "gallery-render-"));
+      try {
+        await run();
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
+      }
+    };
+  }
+
+  test(
+    "skips a tex fixture without bundles and never calls the render",
+    withDir(async () => {
+      const calls: Call[] = [];
+      const r = await renderFixture(entry({ type: "tikz", file: "t.tex", path: source("t.tex"), format: "svg" }), {}, fake(calls));
+      expect(r.status).toBe("skipped");
+      expect(r.status === "skipped" && r.reason).toBe(SKIP_REASONS.tex);
+      expect(calls.length).toBe(0);
+    }),
+  );
+
+  test(
+    "renders a tex fixture with bundles, with the one cache folder of the environment",
+    withDir(async () => {
+      const calls: Call[] = [];
+      const env = { texBundleDir: dir, cacheDir: join(dir, "cache") };
+      for (const file of ["t1.tex", "t2.tex"]) {
+        const r = await renderFixture(entry({ type: "tikz", file, path: source(file), format: "svg" }), env, fake(calls));
+        expect(r.status).toBe("rendered");
+      }
+      expect(calls.map((c) => c.config.cacheDir)).toEqual([env.cacheDir, env.cacheDir]);
+      expect(calls[0]?.config.texBundleUrl).toStartWith("file:");
+      expect(calls[0]?.config.browser).toBeUndefined();
+    }),
+  );
+
+  test(
+    "skips a browser fixture without a browser and never calls the render",
+    withDir(async () => {
+      const calls: Call[] = [];
+      const r = await renderFixture(entry({ format: "pdf", path: source("a.dot") }), { texBundleDir: dir }, fake(calls));
+      expect(r.status === "skipped" && r.reason).toBe(SKIP_REASONS.browser);
+      expect(calls.length).toBe(0);
+    }),
+  );
+
+  test(
+    "renders a browser fixture with the browser of the environment",
+    withDir(async () => {
+      const calls: Call[] = [];
+      const r = await renderFixture(entry({ format: "pdf", path: source("a.dot") }), { browser: "/bin/chrome" }, fake(calls, { mime: "application/pdf" }));
+      expect(r.status === "rendered" && r.mime).toBe("application/pdf");
+      expect(calls.map((c) => c.config.browser)).toEqual(["/bin/chrome"]);
+    }),
+  );
+
+  test(
+    "passes the options of the fixture to the render request",
+    withDir(async () => {
+      const calls: Call[] = [];
+      await renderFixture(entry({ type: "sysml", file: "s.sysml", path: source("s.sysml"), options: { view: "ibd" } }), {}, fake(calls));
+      await renderFixture(entry({ path: source("a.dot") }), {}, fake(calls));
+      expect(calls[0]?.request.options).toEqual({ view: "ibd" });
+      expect(calls[1]?.request).not.toHaveProperty("options");
+      expect(calls[1]?.request.source).toBe("digraph { a }");
+    }),
+  );
+
+  test(
+    "gives the code of a render error, and E_INTERNAL for any other throw",
+    withDir(async () => {
+      const path = source("a.dot");
+      const a = await renderFixture(entry({ path }), {}, fake([], undefined, new RenderError("E_LIMIT", "too big")));
+      expect(a.status === "rejected" && [a.code, a.message]).toEqual(["E_LIMIT", "too big"]);
+      const b = await renderFixture(entry({ path }), {}, fake([], undefined, new TypeError("boom")));
+      expect(b.status === "rejected" && [b.code, b.message]).toEqual(["E_INTERNAL", "boom"]);
+      const c = await renderFixture(entry({ path }), {}, fake([], undefined, "plain"));
+      expect(c.status === "rejected" && [c.code, c.message]).toEqual(["E_INTERNAL", "plain"]);
+    }),
+  );
 });
