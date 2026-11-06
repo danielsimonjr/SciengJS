@@ -4,6 +4,10 @@ This file records all notable changes to this project. Format: [Keep a Changelog
 
 ## [Unreleased]
 
+### Added
+
+- A fixture gallery renders every corpus fixture through the public render and writes one HTML page of the results: `bun test/corpus/gallery.ts --out <folder>`. The page shows each image, the error of each rejection and the reason of each skip.
+
 ## [1.0.8] - 2026-11-06
 
 ### Added

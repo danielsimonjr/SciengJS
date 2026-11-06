@@ -362,6 +362,7 @@ Install Bun 1.4.4 and Node 22 or later. Then run `bun install --frozen-lockfile`
 | `bun run typecheck` | typechecks `src/` and `test/` |
 | `bun run build` | writes the ESM package into `dist/` |
 | `bun run smoke` | packs the build, installs it in a new folder and runs it under Node |
+| `bun test/corpus/gallery.ts --out <folder>` | renders every corpus fixture and writes `gallery.html` to the folder. Set `SCIENG_BROWSER` and `SCIENG_TEX_BUNDLE_DIR` for the browser and TeX fixtures. Do not commit the page |
 
 | Path | Holds |
 |---|---|
@@ -370,6 +371,7 @@ Install Bun 1.4.4 and Node 22 or later. Then run `bun install --frozen-lockfile`
 | `docs/superpowers/` | the design and the build plan |
 | `docs/architecture/` | the architecture documents, gated by `repo-tools check` |
 | `docs/analysis/` | the reports of the trial builds and the reviews |
+| `test/corpus/` | the corpus fixtures, their regenerators and the fixture gallery command |
 | `trials/` | the trial builds of later stages. The package does not ship them |
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md). Report a security problem as [`SECURITY.md`](SECURITY.md) tells you.

@@ -1,0 +1,1 @@
+{"version":1,"model":{"type":"difference","children":[{"type":"cube","size":2,"center":true},{"type":"sphere","radius":1.2}]}}
