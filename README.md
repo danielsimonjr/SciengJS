@@ -344,7 +344,7 @@ The [build plan](docs/superpowers/plans/2026-11-01-scieng-engine-build.md) gives
 | Plots | plot | svg, png and html: released in 0.5.0; pdf is not planned |
 | SysML v2 | sysml, graph | svg, png and pdf: released in 0.9.0 |
 | STEP, IGES, BREP | mesh (OpenCascade WASM) | glb, html and png: released in 0.7.0 |
-| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: released in 1.0.5; md (design for manufacture): not released |
+| CAD documents | mesh (`manifold-3d`) | glb, stl, html and png: released in 0.8.0; 3mf: released in 1.0.4; dxf: released in 1.0.5; md (design for manufacture): released in 1.0.6 |
 | HTML to PNG, PDF and Markdown | html, browser | PNG and PDF: released in 0.3.0; Markdown: released in 0.6.0 |
 
 ## Use from an agent
